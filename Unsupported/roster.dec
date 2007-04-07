@@ -1,0 +1,101 @@
+@@ Faraday's Roster System
+@@ Coded by Linda Naughton O'Meara
+@@ http://www.wordsmyth.org/faraday
+@@
+@@ ===================
+@@ OVERVIEW
+@@ ===================
+@@
+@@ This is a roster system that allows players to view and claim pre-generated characters.
+@@
+@@ ===================
+@@ FEATURES
+@@ ===================
+@@
+@@ * Allows staff to add/remove characters from the roster.
+@@ * Allows players to request a character from the roster, submitting an application (which can be
+@@   as loose or detailed as you require) and an email address.
+@@ * Integrates with my background system so people can view backgrounds of rostered characters.
+@@
+@@ ===================
+@@ REQUIREMENTS
+@@ ===================
+@@
+@@ * PennMUSH
+@@ * Faraday's Global Utility Functions
+@@
+@@ * Faraday's Staff Jobs system (to notify you when characters are claimed/unclaimed)
+@@     Alternative:  Replace job stuff with @mail
+@@ * Faraday's Background system (to view bgs of rostered characters)
+@@     Alternative:  Don't allow bg views, or code something different.
+@@
+@@ ===================
+@@ INSTALLATION
+@@ ===================
+@@ 
+@@ Simply /quote this script to your MUSH via a MUSH client.  You can also cut and paste, but beware
+@@ of linebreaks.  There is no need to create any objects or do any manual editing of this script unless
+@@ your master room is something other than #2.
+@@
+@@
+@@ ===================
+@@ SETUP
+@@ ===================
+@@
+@@ None
+@@
+@@ ===================
+@@ USAGE
+@@ ===================
+@@ 
+@@ See +roster/help for usage instructions.
+@@
+@@ ===================
+@@ UPDATES
+@@ ===================
+@@
+@@ Join the mailing list (http://groups.yahoo.com/group/faradaycode) to keep up with the latest news.
+@@
+@@ * Version 1.0 - 6/12/04 - Initial version
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning Roster System Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
+
+@create Roster System
+@set Roster System = WIZARD
+@set Roster System = SAFE
+@set Roster System = !NO_COMMAND
+&CMD-+ROSTER-ADD Roster System=$+roster/add *:think pemit(%#,[setq(0,pmatch(%0))]switch(0,t(%q0),ansi(hr,That is not a valid player.),isstaff(%#),ansi(hr,This command is restricted to staff only.),not(match(v(roster_db),%q0)),ansi(hr,That player is already on the list.),ansi(hg,You add %0 to the list of available players.)[set(me,roster_db:[v(roster_db)]%q0%B)]))
+&CMD-+ROSTER-BG Roster System=$+roster/bg *:think pemit(%#,switch(0,not(match(%0,*/*)),,u(fun_display_bg,%0,1)))
+&CMD-+ROSTER-BG-PAGE Roster System=$+roster/bg */*:think pemit(%#,u(fun_display_bg,%0,%1))
+&CMD-+ROSTER-CLAIM Roster System=$+roster/claim *=*/*:think pemit(%#,[setq(0,pmatch(%0))]switch(0,t(%q0),ansi(hr,That is not a valid player.),match(v(roster_db),%q0),ansi(hr,That player is not on the list.),not(xget(%q0,roster_claimed)),ansi(hr,That character has already been claimed by someone else.),ansi(hg,You claim %0.)[set(%q0,roster_claimed:1)][create_job(BG,Roster Claim - [capstr(%0)],[capstr(%0)] has been claimed.%R%REmail: {%1}%R%R{%2},%#)]))
+&CMD-+ROSTER-HELP Roster System=$+roster/help:think pemit(%#,[line_with_text(Roster System)]%RThe roster system allows players to view a list of available characters and claim the one you want.  Staff members will be notified of the claim and review your application.  %R%RThe exact application process will vary by game.  It may be as simple as "I want to play this character" or it may require a lengthy application letter and/or RP tests or other things.  Review the policies on your game for details.%R%R[ansi(h,+roster)] - Views the first page of the roster.%R[ansi(h,+roster <page>)] - Views other pages of the roster.%R[ansi(h,+roster/claim <character>=<email>/<application>)] - Claims a character.%R[ansi(h,+roster/bg <character>)] - Views the first page of a character's background.%R[ansi(h,+roster/bg <character>/<page>)] - Views other pages of a character's background.%R[ansi(h,+roster/credits)] - Displays version and credits info.[switch(isstaff(%#),1,%R%R[ansi(hg,Staff-Only Commands:)]%R[ansi(h,+roster/add <character>)] - Adds a character to the roster list.%R[ansi(h,+roster/remove <character>)] - Removes a character from the roster list.%R[ansi(h,+roster/release <character>)] - Releases a claim on a character.)]%R[line_with_text(+roster/help)])
+&CMD-+ROSTER-LIST Roster System=$+roster:think pemit(%#,[setq(0,add(div(words(v(roster_db)),25),1))][u(fun_display_roster_page,1,%q0)])
+&CMD-+ROSTER-LIST2 Roster System=$+roster *:think pemit(%#,[setq(0,add(div(words(v(roster_db)),25),1))]switch(0,isnum(%0),ansi(hr,That is not a valid number.),gt(%0,0),ansi(hr,That is not a valid number.),lte(%0,%q0),ansi(hr,There aren't that many players.),u(fun_display_roster_page,%0,%1)))
+&CMD-+ROSTER-RELEASE Roster System=$+roster/release *:think pemit(%#,[setq(0,pmatch(%0))]switch(0,t(%q0),ansi(hr,That is not a valid player.),match(v(roster_db),%q0),ansi(hr,That player is not on the list.),isstaff(%#),ansi(hr,This command is restricted to staff.),ansi(hg,You release %0.)[set(%q0,roster_claimed:0)][create_job(BG,Roster Release - [capstr(%0)],%N has released the claim on [capstr(%0)].,%#)]))
+&CMD-+ROSTER-REMOVE Roster System=$+roster/remove *:think pemit(%#,[setq(0,pmatch(%0))]switch(0,t(%q0),ansi(hr,That is not a valid player.),isstaff(%#),ansi(hr,This command is restricted to staff only.),match(v(roster_db),%q0),ansi(hr,That player is not on the list.),ansi(hg,You remove %0 from the list of available players.)[set(me,roster_db:[remove(v(roster_db),%q0)])]))
+&cmd-+roster-credits Roster System=$+roster/credits:think pemit(%#,[line()]%RRoster System Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R[line()])
+@DESCRIBE Roster System=+roster/help
+@set Roster System/DESCRIBE=no_command visual prefixmatch
+&FUN_DISPLAY_BG Roster System=[setq(0,pmatch(%0))][setq(1,words(lattr(%q0/bg*)))]switch(0,t(%q0),ansi(hr,That is not a valid player.),match(v(roster_db),%q0),ansi(hr,That player is not on the list.),lte(%1,%q1),ansi(hr,That is not a valid background section.),gt(%1,0),ansi(hr,That is not a valid background section.),isnum(%1),ansi(hr,That is not a valid background section.),[line_with_text(Roster System)]%R[ansi(h,[capstr(%0)]'s Background - Page %1 of [words(lattr(%q0/bg*))])]%R[repeat(-,78)]%R[u(%q0/[extract(lattr(%q0/bg*),%1,1)])]%R[line_with_text(+roster/help)])
+&FUN_DISPLAY_ROSTER_PAGE Roster System=[line_with_text(Roster System)]%R[ansi(h,Available Characters)] - [ansi(hg,Page %0)]%R[iter(extract(v(roster_db),add(1,mul(sub(%0,1),25)),25),%R[switch(hasattr(##,roster_claimed),1,[ansi(hg,\(C\))]%B,%B%B%B%B)][ljust(name(##),25)][mid(xget(##,concept),0,50)])]%R%R[ansi(hg,\(C\) = Claim Pending)][switch(1,gt(%q0,%0),[rjust(Continued in [ansi(h,+roster [inc(%0)])],55)])]%R[line_with_text(+roster/help)]
+&ROSTER_DB Roster System=
+&VERSION Roster System=2.0
+
+@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
+
+@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 5=@tel Roster System=#2
+
+@pemit/silent %#=[ansi(hg,Make sure you have also installed the Global Utility Functions, Staff Jobs, and Background systems.)]
+
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
+
+@wait 5=@set me=!quiet
+

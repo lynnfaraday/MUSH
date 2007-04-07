@@ -1,0 +1,204 @@
+@@ Faraday's MUSH Tinyplot System
+@@ Coded by Linda Naughton O'Meara
+@@ http://www.wordsmyth.org/faraday
+@@
+@@ ===================
+@@ OVERVIEW
+@@ ===================
+@@ This system allows for the tracking of Tinyplots.
+@@
+@@ ===================
+@@ FEATURES
+@@ ===================
+@@
+@@ * Players can submit, view and edit tinyplots.
+@@ * Send mail to all TP participants.
+@@ * Configure whether staff approval is required for tinyplot submissions.
+@@ * TPs can be marked as 'private' so only participants can see the details.
+@@
+@@ +==~~~~~====~~~~====~~~~===~~~~~~~ TP System ~~~~~~~==~~~~====~~~~====~~~~~==+
+@@ The following TPs are approved:       Players
+@@ #  Title                              Needed       Status         Storyteller
+@@ ------------------------------------------------------------------------------
+@@ 1*   Another Test                      Yes         Active         TestDummy         
+@@ 2  U Test                              No          Upcoming       Faraday   
+@@ ------------------------------------------------------------------------------
+@@ The following TPs are pending approval:
+@@ 3*   Test                              Yes         Upcoming       Faraday   
+@@ 
+@@ * = not yet handled by a staffer
+@@ 
+@@ 'U' denotes an unread TP.
+@@ +==~~~~~====~~~~====~~~~===~~~~~~~~ +tphelp ~~~~~~~~==~~~~====~~~~====~~~~~==+
+@@ 
+@@ 
+@@ +==~~~~~====~~~~====~~~~===~~~~~~~ TP System ~~~~~~~==~~~~====~~~~====~~~~~==+
+@@ TP Title:  Test
+@@ Status:    Upcoming
+@@ 
+@@ Storyteller:    Faraday
+@@ Staff Contact:  Faraday
+@@ 
+@@ Private:  Yes
+@@ Participants Needed?:  No
+@@ 
+@@ Detailed Info:  
+@@ This is a test tinyplot.
+@@ 
+@@ Normally my plot information would go here.
+@@ 
+@@ Participants: Faraday Joe
+@@ +==~~~~~====~~~~====~~~~===~~~~~~~~ +tphelp ~~~~~~~~==~~~~====~~~~====~~~~~==+
+@@
+@@ ===================
+@@ REQUIREMENTS
+@@ ===================
+@@
+@@ * PennMUSH
+@@ * Faraday's Global Utility Functions
+@@
+@@ * Faraday's Staff Jobs system (to notify you when someone is eligible for awards)
+@@     Alternative:  Replace job stuff with @mail
+@@
+@@ ===================
+@@ INSTALLATION
+@@ ===================
+@@ 
+@@ Simply /quote this script to your MUSH via a MUSH client.  You can also cut and paste, but beware
+@@ of linebreaks.  There is no need to create any objects or do any manual editing of this script unless
+@@ your master room is something other than #2.
+@@
+@@ ===================
+@@ SETUP
+@@ ===================
+@@
+@@ You can customize whether or not TPs require staff approval before they appear in the list. 
+@@ Simply set the REQUIRE_APPROVAL attribute to 1 (to require approval) or 0 (to allow players to 
+@@ add TPs to the list without a approval. You can always delete them if they're out of line.)
+@@
+@@ ===================
+@@ USAGE
+@@ ===================
+@@ 
+@@ See +tphelp for usage instructions.
+@@
+@@ ===================
+@@ UPDATES
+@@ ===================
+@@
+@@ Join the mailing list (http://groups.yahoo.com/group/faradaycode) to keep up with the latest news.
+@@
+@@     * Version 1.0 - 6/12/04 - Initial version
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning Tinyplot System Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
+
+@create TP System
+@Desc TP System=This system allows for the tracking of Tinyplots. Players and staff members can submit TPs, view them, edit them, send mail to all the participants, find out the player interest and more. Everything is described in the +tphelp command. You can configure the system to require staff approval for all TPs, or to allow players to add TPs directly to the list without approval.
+&CMD-+TPAPPROVE TP System=$+tpapprove *:think [setq(0,u(#TPFUNC/fun_get_attribute,trim(%0)))]switch(1,gt(%0,u(#TPFUNC/fun_number_of_tps,%#)),pemit(%#,ansi(hr,There is no such TP to approve.)),not(isstaff(%#)),pemit(%#,ansi(r,That command is restricted to staff.)),pemit(%#,ansi(hg,You approve TP number %0.))[setq(1,1)][setq(2,u(#TPFUNC/fun_get_storyteller,%q0))][setq(3,u(#TPFUNC/fun_get_title,%q0))][set(#TPDB,[after(%q0,-)]:[xget(#TPDB,%q0)])][wipe(#TPDB/%q0)]));@switch %q1=1,{@trigger #TPCMD/TRIG-APPROVE=%N,%q2,%q3}
+&CMD-+TPCATCHUP TP System=$+tpcatchup:think [set(%#,read_tp:[iter(lattr(#TPDB/tp_*),after(##,_))])][pemit(%#,ansi(hg,You mark all TPs as read.))]
+&CMD-+TPCOMPOSE-++ TP System=$+tpcompose++ *:think [set(%#,prop-tp:[xget(%#,prop-tp)] [escape_cr(%0)])][pemit(%#,[ansi(hg,You continue your TP submission.)])]
+&CMD-+TPCOMPOSE-ABORT TP System=$+tpcompose/abort:think [set(%#,prop-tp:)][pemit(%#,[ansi(hg,You abort your TP submission.)])]
+&CMD-+TPCOMPOSE-FINISH TP System=$+tpcompose/finish:think [set(#TPDB,[switch(xget(#TPDB,require_approval),1,prop-)]tp_[xget(#TPDB,next_proposal)]:[xget(%#,prop-tp)])][pemit(%#,[ansi(hg,You finish your TP submission.)])][set(#TPDB,next_proposal:[inc(xget(#TPDB,next_proposal))])][set(%#,prop-tp:)]
+&CMD-+TPCOMPOSE-PROOF TP System=$+tpcompose/proof:think pemit(%#,[line_with_text(TP System)]%r[ansi(r,TP Title:%B%B)][extract(xget(%#,prop-tp),1,1,|)]%r[ansi(r,Participants Wanted?:%B%B)][switch(extract(xget(%#,prop-tp),2,1,|),y,Yes,No)]%r[ansi(r,Storyteller Person:%B%B)][extract(xget(%#,prop-tp),4,1,|)]%R[ansi(r,Private:%B%B)][switch(extract(xget(%#,prop-tp),6,1,|),y,Yes,No)]%r%r[ansi(r,Detailed Info:%B%B)]%r[extract(xget(%#,prop-tp),7,1,|)]%r[line_with_text(+tphelp)]))
+&CMD-+TPCOMPOSE-START TP System=$+tpcompose *=*/*/*:think [set(%#,prop-tp:%0|[switch(%1,y*,y,n)]|up|%N||%2|[escape_cr(%3)]|)][pemit(%#,[ansi(hg,You begin composing your TP submission:)]%rTitle: %0%rParticipants Wanted?: [switch(%1,y*,Yes,No)]%rPrivate: [switch(%2,y*,Yes,No)]%RDetailed Summary:%r%3)]
+&CMD-+TPDELETE TP System=$+tpdelete *:@switch/first [setq(0,u(#TPFUNC/fun_get_attribute,trim(%0)))]1=gt(%0,u(#TPFUNC/fun_number_of_tps,%#)),think pemit(%#,ansi(hr,There is no such TP to delete.)),not(or(isstaff(%#),match(%N,u(#TPFUNC/fun_get_storyteller,%q0)))),think pemit(%#,ansi(r,That command is restricted to the storyteller for a TP, or staff.)),{think pemit(%#,ansi(hg,You delete TP number %0.))[setq(1,u(#TPFUNC/fun_participant_names,%q0))][setq(2,u(#TPFUNC/fun_get_title,%q0))][wipe(#TPDB/%q0)][iter(lattr(#TPDB/sched-%q0_*),set(#TPDB,##:))];@fo %#=@mail %q1=TP Notice/%N has deleted tp "%q2".}
+&CMD-+TPEDIT TP System=$+tpedit *=*/*:@switch [setq(0,u(#TPFUNC/fun_get_attribute,trim(%0)))]1= gt(%0,u(#TPFUNC/fun_number_of_tps,%#)),think pemit(%#,ansi(hr,There is no such TP to modify.)),not(or(isstaff(%#),match(%N,u(#TPFUNC/fun_get_storyteller,%q0)))),think pemit(%#,ansi(r,That command is restricted to the storyteller for a TP, or staff.)),not(t(match(remove(xget(#TPFUNC,order),staffer),%1))),think pemit(%#,ansi(hr,That is not a valid category to modify. Choose one of: [remove(xget(#TPFUNC,order),staffer)])),{think pemit(%#,ansi(hg,You modify TP number %0.))[set(#TPDB,%q0:[replace(xget(#TPDB,%q0),match(xget(#TPFUNC,order),%1),[switch(%1,wanted,switch(%2,y*,y,n),private,switch(%2,y*,y,n),status,switch(%2,up*,up,*hold*,hold,act),%2)],|)])];@fo %#=+tpmail %0=TP Notice - [u(#TPFUNC/fun_get_title,%q0)]/%N has modified the \[ansi(hr,%1)\] field. The new value is:%R%2}
+&CMD-+TPHANDLE TP System=$+tphandle *:think switch(1,gt(%0,u(#TPFUNC/fun_number_of_tps,%#)),pemit(%#,ansi(hr,There is no such TP to handle.)),not(isstaff(%#)),pemit(%#,ansi(r,That command is restricted to staff members only.)),pemit(%#,ansi(hy,You handle TP number %0.))[setq(0,u(#TPFUNC/fun_get_attribute,trim(%0)))][set(#TPDB,%q0:[replace(xget(#TPDB,%q0),match(xget(#TPFUNC,order),staffer),%N,|)])])
+&CMD-+TPHELP TP System=$+tphelp:think pemit(%#,[line_with_text(TP System)]%R[center(ansi(h,Tinyplot System Help),78)]%R%R The MUX Tinyplot system provides a variety of commands for creating running and finding Tinyplots. Each command has its own help file. Choose one of the following:%R%R[space(7)][ansi(h,+tpview)] - View available TPs%R[space(7)][ansi(h,+tpjoin)] - Join or add players to a TP.%R%R[space(7)][ansi(h,+tpsubmit)] - Submit a TP all at once.%R[space(7)][ansi(h,+tpcompose)] - Compose a TP a little at a time and then submit it.%R[space(7)][ansi(h,+tpedit)] - Edits or deletes a submitted TP%R%R[space(7)][ansi(h,+tpmail)] - Keep in touch with TP participants[switch(xget(#TPDB,SUPPORT_TPROOMS),1,%R[space(7)][ansi(h,TP_Rooms)] - Information about rooms available for TPs.)][switch(isstaff(%#),1,%R[space(7)][ansi(h,+tpstaff)] - Information about staff commands.)]%R%RType [ansi(h,+tphelp <topic>)] for detailed help about a particular command.%R[line_with_text(+tphelp)])
+&CMD-+TPMAIL TP System=$+tpmail *=*/*:@switch [setq(0,u(#TPFUNC/fun_get_attribute,trim(%0)))]1=gt(%0,u(#TPFUNC/fun_number_of_tps,%#)),@pemit %#=ansi(hr,There is no such TP.)),@fo %#=@mail [u(#TPFUNC/fun_participant_names_for_mail,%q0)]=%1/TP Notice for [u(#TPFUNC/fun_get_title,%q0)]\%R\%R%2
+&CMD-+TPSUBMIT TP System=$+tpsubmit *=*/*/*:think [set(#TPDB,[switch(xget(#TPDB,require_approval),1,prop-)]tp_[xget(#TPDB,next_proposal)]:%0|[switch(%1,y*,y,n)]|up|%N||[switch(%2,y*,y,n)]|[escape_cr(%3)]|)][pemit(%#,[ansi(hg,You submit your TP[switch(xget(#TPDB,require_approval),1,%Bfor approval)]:)]%rTitle: %0%rParticipants Wanted?: [switch(%1,y*,Yes,No)]%RPrivate: [switch(%2,y*,Yes,No)]%RDetailed Summary:%r%3)][set(#TPDB,next_proposal:[inc(xget(#TPDB,next_proposal))])];@tr #TPCMD/TRIG-SUBMIT=%N,%0,%3
+&CMD-+TPSUBMIT-CATCHER TP System=$+tpsubmit *=*:think switch(gte(words(%1,/),3),1,,pemit(%#,[ansi(hr,You did not give enough options. The proper format is:)]%R[ansi(h,+tpsubmit <title>=<participants>/<private>/<details>)]))
+&CMD-+TPVIEW TP System=$+tpview *:think [setq(0,u(#TPFUNC/fun_get_attribute,trim(%0)))]switch(1,gt(%0,add(words(lattr(#TPDB/tp*)),switch(isstaff(%#),0,0,words(lattr(#TPDB/prop-tp*))))),pemit(%#,ansi(hr,There is no such TP to view.)),not(isnum(%0)),pemit(%#,ansi(hr,That is not a valid TP number.)),not(u(#TPFUNC/fun_can_see,%#,%q0)),pemit(%#,ansi(hr,That TP is private. You cannot view it.)),[set(%#,read_tp:[setunion(xget(%#,read_tp),after(%q0,_))])][pemit(%#,[line_with_text(TP System)]%r[ansi(r,TP Title:%B%B)][u(#TPFUNC/fun_get_title,%q0)]%r[ansi(r,Status:%B%B%B%B)][u(#TPFUNC/fun_get_Status,%q0)]%r%R[ansi(r,Storyteller:%B%B%B%B)][u(#TPFUNC/fun_get_storyteller,%q0)][switch(xget(#TPDB,require_approval),1,%r[ansi(r,Staff Contact:%B%B)][u(#TPFUNC/fun_get_staffer,%q0)])]%R%R[ansi(r,Private:%B%B)][u(#TPFUNC/fun_get_private,%q0)]%r[ansi(r,Participants Needed?:%B%B)][u(#TPFUNC/fun_get_participants,%q0)]%r%r[ansi(r,Detailed Info:%B%B)]%r[u(#TPFUNC/fun_get_details,%q0)]%r%R[ansi(r,Participants:)] [u(#TPFUNC/fun_participant_names,%q0)]%R[line_with_text(+tphelp)])])
+&CMD-+TPVIEW-ALL TP System=$+tpview:think pemit(%#,[line_with_text(TP System)]%r[ansi(r,The following TPs are approved:[space(7)]Players)]%r[ansi(r,#%b%bTitle[space(30)]Needed[space(7)]Status[space(9)]Storyteller%r)][repeat(-,78)][iter(sort(lattr(#TPDB/tp_*)),switch(u(#TPFUNC/fun_can_see,%#,##),1,%r[ljust(#@[switch(u(#TPFUNC/fun_get_staffer,##),,*,.)],3)][switch(match(xget(%#,read_tp),after(##,_)),0,U%B,%B%B)][padstr(u(#TPFUNC/fun_get_title,##),32)][space(2)][padstr(u(#TPFUNC/fun_get_participants,##),3)][space(9)][padstr(u(#TPFUNC/fun_get_status,##),13)][space(2)][padstr(u(#TPFUNC/fun_get_storyteller,##),10)]))][switch(and(isstaff(%#),xget(#TPDB,require_approval)),1,%r[repeat(-,78)]%r[ansi(r,The following TPs are pending approval:)][iter(sort(lattr(#TPDB/prop-tp_*)),%r[ljust([add(#@,words(lattr(#TPDB/tp*)))][switch(u(#TPFUNC/fun_get_staffer,##),,*,.)],5)][padstr(u(#TPFUNC/fun_get_title,##),31)][space(3)][padstr(u(#TPFUNC/fun_get_participants,##),3)][space(9)][padstr(u(#TPFUNC/fun_get_status,##),13)][space(2)][padstr(u(#TPFUNC/fun_get_storyteller,##),10)])]%r%r* = not yet handled by a staffer)]%r%R'U' denotes an unread TP.%r[line_with_text(+tphelp)])
+&NEXT_PROPOSAL TP System=1
+@Startup TP System=@set me=!no_command
+@set TP System/Startup = no_command
+&CMD-+TPHELP-TOPIC TP System=$+tphelp *:think pemit(%#,switch(1,and(strmatch(%0,TP_Rooms),not(xget(#TPDB,support_tprooms))),ansi(hr,That is not a valid help topic.),not(hasattr(#TPFUNC,help_[trim(%0)])),ansi(hr,That is not a valid help topic.),and(strmatch(%0,+tpstaff),not(isstaff(%#))),ansi(hr,That help topic is restricted to staff members.),[line_with_text(TP System)]%R[center(ansi(h,Tinyplot System Help - [trim(capstr(%0))]),78)]%R%R[u(#TPFUNC/help_[trim(%0)])]%R[line_with_text(+tphelp)]))
+&CMD-+TPJOIN TP System=$+tpjoin *:think [setq(1,0)][setq(0,u(#TPFUNC/fun_get_attribute,trim(%0)))]switch(1,gt(%0,u(#TPFUNC/fun_number_of_tps,%#)),pemit(%#,ansi(hr,There is no such TP to join.)),not(u(#TPFUNC/fun_can_see,%#,%q0)),pemit(%#,ansi(hr,That TP is private. You cannot join it.)),pemit(%#,ansi(hg,You join TP %0.))[setq(1,1)][set(#TPDB,sched-%q0_%#:1)]));@switch %q1=1,@fo %#={+tpmail %0=Joining TP/%N has joined this TP.}
+&CMD-+TPJOIN-LEAVE TP System=$+tpjoin/leave *:think [setq(1,0)][setq(0,u(#TPFUNC/fun_get_attribute,trim(%0)))]switch(1,gt(%0,u(#TPFUNC/fun_number_of_tps,%#)),pemit(%#,ansi(hr,There is no such TP.)),pemit(%#,ansi(hr,You leave TP %0.))[set(#TPDB,sched-%q0_%#:)][setq(1,1)]));@switch %q1=1,@fo %#={+tpmail %0=Leaving TP/%N has left the TP.}
+&CMD-+TPJOIN-ADD TP System=$+tpjoin/add *=*:think [setq(1,0)][setq(0,u(#TPFUNC/fun_get_attribute,trim(%1)))]switch(1,gt(%1,u(#TPFUNC/fun_number_of_tps,%#)),pemit(%#,ansi(hr,There is no such TP to join.)),not(pmatch(%0)),pemit(%#,ansi(hr,There is no such player.)),not(or(isstaff(%#),match(%N,u(#TPFUNC/fun_get_storyteller,%q0)))),pemit(%#,ansi(hr,Only the storyteller or staff can add a player to a TP.)),pemit(%#,ansi(hg,You add %0 to TP %1.))[setq(1,1)][set(#TPDB,sched-%q0_[pmatch(%0)]:1)]));@switch %q1=1,@fo %#={+tpmail %1=Added to TP/%N has added [capstr(%0)] to this TP.}
+&CMD-+TPJOIN-REMOVE TP System=$+tpjoin/remove *=*:think [setq(1,0)][setq(0,u(#TPFUNC/fun_get_attribute,trim(%1)))]switch(1,gt(%1,u(#TPFUNC/fun_number_of_tps,%#)),pemit(%#,ansi(hr,There is no such TP to join.)),not(pmatch(%0)),pemit(%#,ansi(hr,There is no such player.)),not(or(isstaff(%#),match(%N,u(#TPFUNC/fun_get_storyteller,%q0)))),pemit(%#,ansi(hr,Only the storyteller or staff can remove a player from a TP.)),pemit(%#,ansi(hg,You remove %0 from TP %1.))[setq(1,1)][set(#TPDB,sched-%q0_[pmatch(%0)]:)]));@switch %q1=1,@fo %#={+tpmail %1=Removed from TP/%N has removed [capstr(%0)] from this TP.}
+&CMD-+TPREJECT TP System=$+tpreject *=*:think [setq(1,0)][setq(0,u(#TPFUNC/fun_get_attribute,trim(%0)))]switch(1,gt(%0,u(#TPFUNC/fun_number_of_tps,%#)),pemit(%#,ansi(hr,There is no such TP to approve.)),not(isstaff(%#)),pemit(%#,ansi(r,That command is restricted to staff.)),pemit(%#,ansi(hg,You reject TP number %0.))[setq(1,1)]));@switch %q1=1,{@trigger #TPCMD/TRIG-REJECT=%N,[u(#TPFUNC/fun_get_storyteller,%q0)],%1,[u(#TPFUNC/fun_get_details,%q0)],[u(#TPFUNC/fun_get_title,%q0)];@wipe #TPDB/%q0}
+&TRIG-SUBMIT TP System=@mail "%0"=TP Submittal/Your TP "%1" has been successfully submitted and will be reviewed by staff soon. For your reference, your TP details are included below:\%R\%R%2;think create_job(TP,TP Submission1,%0 has submitted a new TP entitled %1.,pmatch(%0))
+&TRIG-REJECT TP System=@mail "%1" "%0"=TP Rejected/%0 has rejected your TP "%4" for the following reason:\%R%2\%R\%RA copy of your TP details is included below:\%R\%R%3;think create_job(TP,TP Rejected,%0 has rejected %1's TP "%4" for the following reason:%R%R%2,pmatch(%0))
+&TRIG-APPROVE TP System=@mail "%1"=TP Approval/%0 has approved your TP submission "%2".;think create_job(TP,TP Approved,%0 has approved %1's TP "%2".,pmatch(%0))
+@set TP System=WIZARD
+@set TP System=!NO_COMMAND
+@set TP System=SAFE
+
+
+@create TP DB
+@Desc TP DB=This object stores the TPs themselves. It is not set WIZARD in case some malicious player submits a TP containing code.
+&NEXT_PROPOSAL TP DB=1
+&REQUIRE_APPROVAL TP DB=1
+&SUPPORT_TPROOMS TP DB=0
+&VERSION TP DB=1.0
+@set TP DB=NO_COMMAND
+@set TP DB=SAFE
+
+
+@create TP Function Object
+@Desc TP Function Object=This object stores all the functions used in the TP System.
+&FUN_GET_ATTRIBUTE TP Function Object=extract([sort([switch(gt(%0,words(lattr(#TPDB/tp_*))),1,lattr(#TPDB/prop-tp*),lattr(#TPDB/tp_*))])],[switch(gt(%0,words(lattr(#TPDB/tp*))),1,[sub(%0,words(lattr(#TPDB/tp_*)))],%0)],1)
+&FUN_GET_DAY1 TP Function Object=[extract(xget(#TPDB,%0),match(xget(#TPFUNC,order),day1),1,|)]
+&FUN_GET_DAY2 TP Function Object=[extract(xget(#TPDB,%0),match(xget(#TPFUNC,order),day2),1,|)]
+&FUN_GET_DAY3 TP Function Object=[extract(xget(#TPDB,%0),match(xget(#TPFUNC,order),day3),1,|)]
+&FUN_GET_DETAILS TP Function Object=[extract(replace_cr(xget(#TPDB,%0)),match(xget(#TPFUNC,order),details),1,|)]
+&FUN_GET_PARTICIPANTS TP Function Object=[switch(extract(xget(#TPDB,%0),match(xget(#TPFUNC,order),participants),1,|),y,Yes,No)]
+&FUN_GET_STAFFER TP Function Object=[extract(xget(#TPDB,%0),match(xget(#TPFUNC,order),staffer),1,|)]
+&FUN_GET_STORYTELLER TP Function Object=[extract(xget(#TPDB,%0),match(xget(#TPFUNC,order),storyteller),1,|)]
+&FUN_GET_TITLE TP Function Object=[extract(xget(#TPDB,%0),match(xget(#TPFUNC,order),title),1,|)]
+&FUN_NUMBER_OF_TPS TP Function Object=add(words(lattr(#TPDB/tp_*)),switch(orflags(%0,WrJ),0,0,words(lattr(#TPDB/prop-tp_*))))
+&FUN_PARTICIPANT_NAMES TP Function Object=[u(#TPFUNC/fun_get_storyteller,%0)]%B[u(#TPFUNC/fun_get_staffer,%0)]%B[iter(lattr(#TPDB/sched-%0_*),name(after(after(##,_),_)))]
+&FUN_UNREAD_TP TP Function Object=words(trim(iter(lattr(#TPDB/TP_*),switch(t(match(xget(%0,read_tp),after(##,_))),0,##))))
+&HELP_+TPCOMPOSE TP Function Object=Instead of submitting the TP for review all at once using the +tpsubmit command, the +tpcompose command lets you compose it a little bit at a time, proofreading what you've got so far and then submitting it when everything's finished. %r%r[ansi(h,+tpcompose <title>=<participants>/<private>/<details>)] - Begins composing a TP submission. You can later add more info to the 'details' section with the commands below. The various options are explained in [ansi(r,+tphelp +tpsubmit)]. %r%r[ansi(h,+tpcompose++ <text>)] - Adds text to your TP composition %r[ansi(h,+tpcompose/abort)] - Cancels your TP composition %r[ansi(h,+tpcompose/proof)] - Reviews your TP composition %r[ansi(h,+tpcompose/finish)] - Submits your TP composition.
+&HELP_+TPEDIT TP Function Object=Once your TP is submitted, you can later edit the TP (this is usually done to change the status or provide TP upstatus) using the +tpedit command or delete it using the +tpdelete command. Note that only the storyteller or a staff member can edit or delete a Tinyplot. %r%rBoth of these commands will automatically send out a notice to all TP participants using the +tpmail command. %r%r[ansi(h,+tpdelete <tp#>)] - Deletes a TP. %r[ansi(h,+tpedit <tp#>=<option>/<new value>)] - Edits a TP. %r%rThe options are the same ones used when submitting the TP (title, participants, private, and details) plus another one for status. The status can either be: [ansi(h,act)] (active), [ansi(h,hold)] (on hold) or [ansi(h,up)] (upcoming). Note that this command will [ansi(h,replace)] the existing values with the new values.
+&HELP_+TPMAIL TP Function Object=The +tpmail command allows you to easily send messages to all of the participants in a TP. 'Participants' are the Storyteller, and those people who have joined the TP. It's a great way to maintain communication about what's going on in a particular TP. %r%r[ansi(h,+tpmail <tp#>=<subject>/<message>)] - Send a message to all TP participants. Note that the TP title will automatically be included at the top of the message.
+&HELP_TP_ROOMS TP Function Object=There will be times when a plot requires rooms that don't already exist on %rthe MUSH. The MUSH has a few rooms in the OOC Center set aside for use in such situations. These TP Rooms have a command to change their description so that you can make them into an evil mastermind's hideout, a seedy Waycross nightclub, or an ornate ballroom... whatever you need for your plot. They can even be locked, for private scenes.%R%RWith advanced notice, the staff can link TP rooms to regular rooms in the MUSH so players have easy access to them. However, even without notice you can always go to the OOC Center and roleplay in one of the TP Rooms.
+&HELP_+TPSTAFF TP Function Object=The "REQUIRE_APPROVAL" attribute on the TP Database allows you to configure whether TPs must receive staff approval before they appear on the TP list for all players. If you set this to 0, meaning you do not require approval on TPs, there are no special staff commands to approve or reject TPs. However, it is useful to note that only staff members and the TP's storyteller may edit or delete TPs.%R%RIf you set REQUIRE_APPROVAL to 1, then all TPs submitted by players will be considered "proposals" until the TP is approved. Proposal TPs appear on the standard +tpview list, and can be viewed, edited and deleted (by staff) just like any other TP on the list. The list also shows which TPs have not yet been 'handled' by a staff member. The +tpapprove command approves one.%r%rYou can also configure whether your MUSH supports TP Rooms by setting the SUPPORT_TPROOMS attribute on the database object.%R%RLastly, you can configure actions to be taken following TP submission, approval, and rejection by editing the TRIG-SUBMIT TRIG-APPROVE and TRIG-REJECT attributes. For example, you could configure these to send mail, or post to a BBS, or whatever.%R%R[ansi(h,+tpapprove <#>)] - Approves a proposal TP.%R[ansi(h,+tpreject <#>=<reason>)] - Rejects a proposal TP.%R%R[ansi(h,+tphandle <#>)] - Puts yourself down as 'handling' a TP.
+&HELP_+TPSUBMIT TP Function Object=The +tpsubmit command is used to add a TinyPlot to the system. You can submit the TP in one big chunk, or you can break it up into pieces using +tpsubmit multiple times for each section, but this is not necessary.%r%r[ansi(h,+tpsubmit <title>=<participants>/<private>/<details>)] %r%r[ansi(h,participants)] = Put yes or no to indicate whether you have roles (PC or NPC) to fill, or whether the TP already has all the people it needs %r%R[ansi(h,private)] = Put yes or no to indicate whether you would like this TP to remain private. Only you, the staff, and people you add to the TP can see it. %R%r[ansi(h,details)] = A detailed summary of your TP.
+&HELP_+TPVIEW TP Function Object=The +tpview commands allow you to view all current Tinyplots, including ones being planned and ones being run currently. The main screen gives the title, storyteller, status of the TP, and whether the storyteller needs more participants (either as PCs or NPCs). The detailed screen lists all of the information about the TP. TPs are marked as Unread if you have not yet looked at them.%R%RPrivate TPs only appear to those who are participating. Participants must be added by the storyteller. [switch(xget(#TPDB,require_approval),1,TPs that have just been submitted will not appear until they have been approved.)]%r%r[ansi(h,+tpview)] - Views a list of all TPs %r[ansi(h,+tpview <#>)] - Gets detailed info about a particular TP%R[ansi(h,+tpcatchup)] - Marks all TPs as read.
+&ORDER TP Function Object=title participants status storyteller staffer private details
+&FUN_GET_PRIVATE TP Function Object=[switch(extract(xget(#TPDB,%0),match(xget(#TPFUNC,order),private),1,|),y,Yes,No)]
+&FUN_CAN_SEE TP Function Object=switch(1,t(match(u(#TPFUNC/fun_get_private,%1),No)),1,isstaff(%#),1,t(match(u(#TPFUNC/fun_participant_names,%1),name(%0))),1,0)
+&HELP_+TPJOIN TP Function Object=The +tpjoin commands are used to aid Storytellers in keeping track of who's interested in participating in a TP. Players can join public TPs to express their interest, and storytellers or staff members can add players who they know will be involved. It is good to join TPs you are interested in so you receive upstatus with the +tpmail command.%R%RThe only way to join a private TP is to have the storyteller add you.%r%r[ansi(h,+tpjoin <tp#>)] - Join a TP%r[ansi(h,+tpjoin/leave <tp#>)] - Leave (unjoin) a TP.%R%r[ansi(h,+tpjoin/add <player>=<tp#>)] - Allows a storyteller to add a player to a TP.%R[ansi(h,+tpjoin/remove <player>=<tp#>)] - Allows a storyteller to remove a player from a TP.
+&FUN_PARTICIPANT_NAMES_FOR_MAIL TP Function Object=edit("[u(#TPFUNC/fun_get_storyteller,%0)]"%B"[u(#TPFUNC/fun_get_staffer,%0)]"%B[iter(lattr(#TPDB/sched-%0_*),"[name(after(after(##,_),_))]")],"",)
+&FUN_GET_STATUS TP Function Object=[switch(extract(xget(#TPDB,%0),match(xget(#TPFUNC,order),status),1,|),up,ansi(y,Upcoming),hold,ansi(h,On Hold),ansi(hy,Active))]
+@set TP Function Object=WIZARD
+@set TP Function Object=NO_COMMAND
+@set TP Function Object=SAFE
+
+
+@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
+
+@fo me=@edit TP System/*=#TPCMD,[num(TP System)]
+@fo me=@edit TP System/*=#TPDB,[num(TP DB)]
+@fo me=@edit Tp System/*=#TPFUNC,[num(TP Function Object)]
+
+@fo me=@edit TP DB/*=#TPCMD,[num(TP System)]
+@fo me=@edit TP DB/*=#TPDB,[num(TP DB)]
+@fo me=@edit Tp DB/*=#TPFUNC,[num(TP Function Object)]
+
+@fo me=@edit TP Function Object/*=#TPCMD,[num(TP System)]
+@fo me=@edit TP Function Object/*=#TPDB,[num(TP DB)]
+@fo me=@edit TP Function Object/*=#TPFUNC,[num(TP Function Object)]
+
+@wait 5=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 6=@tel TP Function Object=TP System
+@wait 7=@tel TP DB=TP System
+@wait 8=@tel TP System=#2
+
+@pemit/silent %#=[ansi(hg,Make sure you have also installed the Global Utility Functions system and Staff Notice system.)]
+
+@wait 9=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
+
+@wait 5=@set me=!quiet
+
+
+

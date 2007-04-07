@@ -1,0 +1,113 @@
+@@ Faraday's +help System
+@@ Coded by Linda Naughton O'Meara
+@@ http://www.wordsmyth.org/faraday
+@@
+@@ ===================
+@@ OVERVIEW
+@@ ===================
+@@ This system provides you with a global +help system. All you have to do is add text for the various 
+@@ help files, and you're off to the races.
+@@
+@@ ===================
+@@ FEATURES
+@@ ===================
+@@
+@@ * A complete family of +help commands, including the basic index (+help), the detailed help file 
+@@   view (+help <file>), and the search facility (+help/search).
+@@ * A staff help family of commands (+shelp) for your wizard/staff/admin-only commands.
+@@ * Help files can be stored so they aren't displayed in the basic index. That way files like 
+@@   +help +Finger2 don't clutter up your main page. 
+@@
+@@ +==~~~~~====~~~~====~~~~====~~~~=====~~~~=====~~~~====~~~~====~~~~====~~~~~==+
+@@                                  +help Topics                                 
+@@ 
+@@ +BG                       +FINGER                   +DESC
+@@ +HELP                     +LIST                     +MAIL
+@@ 
+@@ See +help  for more information about a topic.
+@@ +==~~~~~====~~~~====~~~~====~~~~=====~~~~=====~~~~====~~~~====~~~~====~~~~~==+
+@@ 
+@@ ===================
+@@ REQUIREMENTS
+@@ ===================
+@@
+@@ * PennMUSH
+@@ * Faraday's Global Utility Functions
+@@
+@@ ===================
+@@ INSTALLATION
+@@ ===================
+@@ 
+@@ Simply /quote this script to your MUSH via a MUSH client.  You can also cut and paste, but beware
+@@ of linebreaks.  There is no need to create any objects or do any manual editing of this script unless
+@@ your master room is something other than #2.
+@@
+@@ ===================
+@@ SETUP
+@@ ===================
+@@
+@@ You may wish to add the +events/rem command to your global ACONNECT so folks are notified of 
+@@ upcoming events. If you have some kind of MOTD command, you can add the event reminders to that 
+@@ using the FUN_GET_REMINDERS function on the events database object.
+@@
+@@ ===================
+@@ USAGE
+@@ ===================
+@@ 
+@@ See +help help and +shelp help for usage instructions.
+@@
+@@ ===================
+@@ UPDATES
+@@ ===================
+@@
+@@ Join the mailing list (http://groups.yahoo.com/group/faradaycode) to keep up with the latest news.
+@@
+@@     * Version 2.0 - 6/12/04 - Modified the system to require the global utility functions.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning +help Installation.   Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
+
+@create +help Commands
+@set +help Commands = !NO_COMMAND
+@set +help Commands = WIZARD
+@set +help Commands = SAFE
+
+&CMD-+HELP +help Commands=$+help:think pemit(%#,[line()]%R[center(ansi(h,+help Topics),78)]%R[iter(lattr(#HELPDB/help_*),[switch(mod(#@,3),1,%R)][ljust(after(##,_),25)])]%R%RSee [ansi(h,+help <topic>)] for more information about a topic.%R[line()]
+&CMD-+HELP-SEARCH +help Commands=$+help/search *:think pemit(%#,[line()]%R[center(ansi(h,+help files containing %0),78)]%R[iter([grepi(#HELPDB,help_*,%0)]%B[grepi(#HELPDB,more_help_*,%0)],[switch(mod(#@,3),1,%R)][ljust(last(##,_),25)])]%R[line()])
+&CMD-+HELP-TOPIC +help Commands=$+help *:think pemit(%#,switch(1,hasattr(#HELPDB,help_[trim(%0)]),[line()]%R[center(ansi(h,+help [trim(%0)]),78)]%R[u(#HELPDB/help_[trim(%0)])]%R[line()],hasattr(#HELPDB,more_help_[trim(%0)]),[line()]%R[center(ansi(h,+help [trim(%0)]),78)]%R[u(#HELPDB/more_help_[trim(%0)])]%R[line()],ansi(hr,There is no such help file.)))
+&CMD-+SHELP +help Commands=$+shelp:think switch(isstaff(%#),0,pemit(%#,ansi(hr,This command is for staff only.)),pemit(%#,[line()]%R[center(ansi(h,+shelp Topics),78)]%R[iter(lattr(#HELPDB/SHELP_*),[switch(mod(#@,3),1,%R)][ljust(after(##,_),25)])]%R%RSee [ansi(h,+shelp <topic>)] for more information about a topic.%R[line()])
+&CMD-+SHELP-SEARCH +help Commands=$+shelp/search *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),[line()]%R[center(ansi(h,+shelp files containing %0),78)]%R[iter([grepi(#HELPDB,SHELP_*,%0)]%B[grepi(#HELPDB,more_SHELP_*,%0)],[switch(mod(#@,3),1,%R)][ljust(last(##,_),25)])]%R[line()]))
+&CMD-+help-credits +help Commands=$+help/credits:think pemit(%#,[line()]%RHelp System Version [xget(#HELPDB,version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R[line()])
+
+&CMD-+SHELP-TOPIC +help Commands=$+shelp *:think pemit(%#,switch(1,not(isstaff(%#)),ansi(hr,This command is for staff only.),hasattr(#HELPDB,SHELP_[trim(%0)]),[line()]%R[center(ansi(h,+shelp [trim(%0)]),78)]%R[u(#HELPDB/SHELP_[trim(%0)])]%R[line()],hasattr(#HELPDB,more_SHELP_[trim(%0)]),[line()]%R[center(ansi(h,+shelp [trim(%0)]),78)]%R[u(#HELPDB/more_SHELP_[trim(%0)])]%R[line()],ansi(hr,There is no such help file.)))
+@DESCRIBE +help Commands=+help, +shelp
+@STARTUP +help Commands=@set me=!no_command
+
+@create +help Database
+@set +help Database=SAFE
+@DESCRIBE +help Database=+help, +shelp
+&HELP_+HELP +help Database=The +help system supplements the 'help' command by providing help files on MUSH softcode and systems.%R%RUsage:%R[ansi(h,+help)] - Displays main help index%R[ansi(h,+help <topic>)] - Views a help file topic%R[ansi(h,+help/search <keyword>)] - Searches the help files%R%R[ansi(h,+help/credits)] - Displays version and credits info.
+&SHELP_+SHELP +help Database=The +shelp system supplements the 'help' command by providing help files on MUSH softcode and systems.  It is only available to staff members.%R%RUsage:%R[ansi(h,+shelp)] - Displays main staff help index%R[ansi(h,+shelp <topic>)] - Views a staff help file topic%R[ansi(h,+shelp/search <keyword>)] - Searches the staff help files%R%R[ansi(h,+help/credits)] - Displays version and credits info.%R%R[ansi(h,Adding help files:)]%RTo add a new help file, simply add an attribute to object #HELPDB for each help file.  The attribute names determine how the help file will be displayed:%R%RHELP_XYZ - Shows up in the main +help index.%RSHELP_XYZ - Shows up in the main +shelp index (for staff only)%RMORE_HELP_XYZ - Does not show up in the main +help index, but you can still view it.  Perfect for multi-part help files, so only the first part appears in the index.%RMORE_SHELP_XYZ - Same as MORE_HELP_XYZ but for +shelp (for staff only)%R%RNote that the top and bottom lines are automatically included by the +help/+shelp commands.
+&version +help Database=2.0
+
+
+@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
+
+@fo me=@edit +help Commands/*=#HELPDB,[num(+help Database)]
+@fo me=@edit +help Database/*=#HELPDB,[num(+help Database)]
+
+@wait 5=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 5=@tel +help Database=+help Commands
+@wait 5=@tel +help Commands=#2
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
+@pemit/silent %#=[ansi(hg,Make sure you have also installed the Global Utility Functions system.)]
+
+@wait 5=@set me=!quiet
+
+
