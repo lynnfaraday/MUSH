@@ -1,0 +1,28 @@
+Faraday's MUSH Softcode Package
+
+~~~~~~~~~~~~~~~
+CONTACT
+~~~~~~~~~~~~~~~
+
+Author:      Linda O'Meara (aka Faraday)
+Website:   http://code.google.com/p/faramushcode/
+
+Visit the website for documentation, installation instructions, bug reports, and more.
+
+ORDER OF INSTALLATION IS IMPORTANT.  READ THE DOCUMENTATION!
+
+~~~~~~~~~~~~~~~
+DISCLAIMERS
+~~~~~~~~~~~~~~~
+
+Permission is given to use and distribute this code under the GNU Public License. (included with the release package)
+
+Although every effort has been made to test and debug this code, no warranty is provided for its use. By using this code, you agree that the author is not responsible for any ill effects on your MUSH.
+
+I will support the code as far as I can, but I make no guarantees that I will have time to do everything. RL comes first.   Submit bugs and feature requests via the webpage above.
+
+~~~~~~~~~~~~~~~~
+CHANGES
+~~~~~~~~~~~~~~~
+
+See the CHANGELOG file for a description of changes since the last release.
