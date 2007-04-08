@@ -1,0 +1,330 @@
+@@ DESCRIPTION
+@@
+@@ Supports chargen, +sheet, and skill checks for the new White Wolf WOD Storytelling system.
+@@
+@@ See +skills/help for full usage details.
+@@
+@@ -------------
+@@ INSTALL NOTES
+@@ -------------
+@@
+@@ Should be able to configure it for MUX or Penn.
+@@
+@@ For Penn:  Install as-is
+@@ For MUX: - Change EMPTY_SEP on the Data object to @@
+@@          - Change FUN_STRIP_SPACES on the Data object to strip(%0,%B)
+@@
+@@ -------------
+@@ CHARGEN SETUP
+@@ -------------
+@@
+@@ 1.  Be sure that +statinit <player> is executed when characters are created,
+@@     or when they first enter chargen.
+@@ 2.  The Chargen expects one room for each of the four phases: 
+@@     Basics, Attributes, Skills, Advantages
+@@     You must dig these rooms manually.
+@@ 3.  Each room gets its own object.  After installation they will be in 
+@@     your inventory. Once the rooms are dug, drop each object in the appropriate
+@@     room.
+@@ 4.  Lock the exits between each room to check that the player has completed
+@@     everything in that room. You can tell from the 'finished' attributes.
+@@     For example: FINISHED_BASICS will be set to a 1 when they
+@@     have finished all the stuff in that room.  FINISHED_SKILLS will be set to
+@@     1 when they've successfully finished their skills.
+@@ 5.  Each chargen object has the help file for that room in its description.
+@@
+@@ ---------------
+@@ SPENDING BLOOD
+@@ ---------------
+@@ 
+@@ The system doesn't have direct support for spending blood, but it does track blood
+@@ pool and current blood  on +sheet.  These are stored in 
+@@ the attributes BLOOD_POOL (for max blood) and BLOOD (for current blood).  There is
+@@ also an attribute BLOOD_POTENCY if you need it.
+@@
+@@ See also TEMPMODS below.
+@@
+@@ -------------
+@@ TEMPMODS
+@@ -------------
+@@
+@@ The system also supports the concept of temporary modifiers to stats for
+@@ various things, which can include blood spent to boost attributes or misc penalties.
+@@ If you write code to use this feature, simply have it set the TEMPMODS attribute
+@@ on the player.  It should be a pipe-separated list, in the form attr:mod
+@@ For example:
+@@    Strength:+2|Dexterity:-1
+@@ 
+@@ Note that wound penalties are automatically accounted for on top of any other
+@@ modifiers.
+@@
+@@ -------------
+@@ DAMAGE
+@@ -------------
+@@ 
+@@ The system supports damage tracking and wound penalties, which can be integrated
+@@ with a combat system if you so desire.  The character's total health pool is
+@@ stored in the HEALTH_POOL attribute.  His current health status is stored in 
+@@ the HEALTH attribute.
+@@
+@@ The HEALTH attribute is meant to keep track of damage boxes using a character
+@@ string.  
+@@     @ = Aggravated
+@@     X = Normal
+@@     / = Bruise
+@@     
+@@ For example, a character with 4 boxes of damage might have a HEALTH attribute
+@@ that looked like this:    
+@@     @X//
+@@ 
+@@ Undamaged boxes are not stored in the HEALTH attribute, so if you're healthy
+@@ that attribute will be empty.
+@@
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning WOD Skills Installation.   Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
+
+@create WW Chargen Basics
+@lock WW Chargen Basics=me
+&CMD-+RACE WW Chargen Basics=$+race *:think pemit(%#,switch(0,u(#WWFUN/fun_is_valid_stat,race,trim(%0)),ansi(hr,That is not a valid Race.%RTry one of these: [xget(#WWFUN,list_race)].),ansi(hg,You set your Race to [capstr(%0)].)[set(%#,race:[capstr(lcstr(trim(%0)))])])))
+&CMD-+CLAN WW Chargen Basics=$+clan *:think pemit(%#,switch(0,u(#WWFUN/fun_is_valid_stat,clan,trim(%0)),ansi(hr,That is not a valid Clan.%RTry one of these: [xget(#WWFUN,list_clan)]),match(xget(%#,race),Vampire),ansi(hr,Only vampires can set their Clan.),ansi(hg,You set your Clan to [capstr(%0)].)[set(%#,clan:[capstr(lcstr(trim(%0)))])])))
+&ROOM WW Chargen Basics=basics
+&CMD-+VIRTUE WW Chargen Basics=$+virtue *:think pemit(%#,switch(0,u(#WWFUN/fun_is_valid_stat,virtue,trim(%0)),ansi(hr,That is not a valid Virtue.%RTry one of these: [xget(#WWFUN,list_virtue)]),ansi(hg,You set your Virtue to [capstr(%0)].)[set(%#,virtue:[capstr(lcstr(trim(%0)))])])))
+&CMD-+VICE WW Chargen Basics=$+vice *:think pemit(%#,switch(0,u(#WWFUN/fun_is_valid_stat,vice,trim(%0)),ansi(hr,That is not a valid Vice.%RTry one of these: [xget(#WWFUN,list_vice)]),ansi(hg,You set your Vice to [capstr(%0)].)[set(%#,vice:[capstr(lcstr(trim(%0)))])])))
+&CMD-+COVENANT WW Chargen Basics=$+covenant *:think pemit(%#,switch(0,u(#WWFUN/fun_is_valid_stat,covenant,trim(%0)),ansi(hr,That is not a valid Covenant.%RTry one of these: [xget(#WWFUN,list_covenant)]),match(xget(%#,race),Vampire),ansi(hr,Only vampires can set their Covenant.),ansi(hg,You set your Covenant to [capstr(%0)].)[set(%#,covenant:[capstr(lcstr(trim(%0)))])])))
+&FUN_OK_TO_FINISH WW Chargen Basics=localize(trim([setq(0,1)][iter(virtue vice concept,switch(words(xget(%0,##)),0,[setq(0,0)][pemit(%0,ansi(hr,You have not set your ##.))]))][iter(clan covenant,switch(and(match(xget(%0,race),Vampire),eq(0,words(xget(%0,##)))),1,[setq(0,0)][pemit(%0,ansi(hr,You have not set your ##.))]))]%q0))
+@describe WW Chargen Basics=Set up your basics:%R%R&fullname me=<Your full name>%R+race <race>%R+virtue <virtue>%R+vice <vice>%R&concept me=<Your concept>%R+clan <clan> (Vampires only)%R+covenant <covenant> (Vampires only)%R%R+stats - Lists valid options for various stats%R+finish - You've set everything and are ready to proceed to the next room.
+@set WW Chargen Basics=WIZARD
+@set WW Chargen Basics=!NO_COMMAND
+@startup WW Chargen Basics=@set me=!no_command
+
+
+
+@create WW Chargen Attributes
+@lock WW Chargen Attributes=me
+&MAX_STAT_RATING WW Chargen Attributes=5
+&PRI_VAMPIRE WW Chargen Attributes=6 4 3
+&PRI_MORTAL WW Chargen Attributes=5 4 3
+&CATEGORIES WW Chargen Attributes=physical_attr mental_attr social_attr
+&MIN_STAT_RATING WW Chargen Attributes=1
+&FUN_RESET WW Chargen Attributes=[set(%0,stat_physical_attr:[iter(xget(#WWFUN,list_physical_attr),[switch(#@,>1,|)]##:1,,xget(#WWFUN,empty_sep))])][set(%0,stat_mental_attr:[iter(xget(#WWFUN,list_mental_attr),[switch(#@,>1,|)]##:1,,xget(#WWFUN,empty_sep))])][set(%0,stat_social_attr:[iter(xget(#WWFUN,list_social_attr),[switch(#@,>1,|)]##:1,,xget(#WWFUN,EMPTY_SEP))])]
+&ROOM WW Chargen Attributes=attributes
+&ALLOW_PHYSICAL_ATTR WW Chargen Attributes=1
+&ALLOW_MENTAL_ATTR WW Chargen Attributes=1
+&ALLOW_SOCIAL_ATTR WW Chargen Attributes=1
+@describe WW Chargen Attributes=+start <priority order>%R%TFor example: +start physical_attr mental_attr social_attr%R%TThis will also reset your abilities.%R+physicalAttr <stat>=<rating>%R+mentalAttr <stat>=<rating>%R+socialAttr <stat>=<rating>%R+pool - Shows pools%R+finish - You're done with this room.%R%RNOTE: The WOD rules specify that vampires get an extra dot in one of their clan's "favored" attributes. For simplicity's sake, this system just gives vampires one extra attribute dot.
+@set WW Chargen Attributes=WIZARD
+@set WW Chargen Attributes=!NO_COMMAND
+@startup WW Chargen Attributes=@set me=!no_command
+
+
+
+@create WW Chargen Skills
+@lock WW Chargen Skills=me
+&CATEGORIES WW Chargen Skills=mental_skills physical_skills social_skills
+&MAX_STAT_RATING WW Chargen Skills=5
+&PRI_VAMPIRE WW Chargen Skills=11 7 4
+&PRI_MORTAL WW Chargen Skills=11 7 4
+&MIN_STAT_RATING WW Chargen Skills=0
+&FUN_RESET WW Chargen Skills=[set(%0,stat_mental_skills:)][set(%0,stat_social_skills:)][set(%0,stat_physical_skills:)]
+&ALLOW_MENTAL_SKILLS WW Chargen Skills=1
+&ALLOW_PHYSICAL_SKILLS WW Chargen Skills=1
+&ALLOW_SOCIAL_SKILLS WW Chargen Skills=1
+&ROOM WW Chargen Skills=Skills
+@describe WW Chargen Skills=+start <priority order>%R%TFor example: +start mental_skills physical_skills social_skills%R%TThis will also reset your skills.%R+mentalSkill <stat>=<rating>%R+physicalSkill <stat>=<rating>%R+socialSkill <stat>=<rating>%R+pool - Shows pools%R+finish - You're done with this room%R%RNOTE: Skill specialties are done later.
+@set WW Chargen Skills=WIZARD
+@set WW Chargen Skills=!NO_COMMAND
+@startup WW Chargen Skills=@set me=!no_command
+
+
+
+@create WW Chargen Advantages
+@lock WW Chargen Advantages=me
+&CATEGORIES WW Chargen Advantages=Merits Disciplines Specialties
+&MAX_STAT_RATING WW Chargen Advantages=5
+&MIN_STAT_RATING WW Chargen Advantages=0
+&ALLOW_DISCIPLINES WW Chargen Advantages=1
+&ROOM WW Chargen Advantages=advantages
+&CMD-+START WW Chargen Advantages=$+start*:think pemit(%#,ansi(hg,You set up your pools.))[set(%#,disciplines_pool:[switch(xget(%#,race),vampire,3,0)])][set(%#,stat_disciplines:)][set(%#,specialties_pool:3)][set(%#,specialties:)][set(%#,merits_pool:7)][set(%#,stat_merits:)][set(%#,flaws:)][set(%#,finished_advantages:)][set(%#,blood_potency:1)]
+@describe WW Chargen Advantages=In this room, you can buy Merits, Flaws, Specialties, and Disciplines.%R%R[ansi(hr,Pool Commands)]%R+start - Sets up your pools%R%TThis will reset your advantages.%R+pool - Shows pools%R+finish - Done with this room.%R%R[ansi(hr,Merit Commands)]%R+merit <stat>=<rating>%R+language <language>=<rating>%R%TThis is a special merit. It can only be rating 1-3.%R+bloodPotency <rating> (Vampire only)%R%TThis costs 3 merit points per dot (you start with 1)%R%RNOTE: Some merits have prerequisites. This is not enforced by the system, but may be checked during approval.%R%R[ansi(hr,Flaw Commands)]%R+flaw <stat>%R+flaw/clear <flaw> - Removes a flaw.%R%RNOTE: Flaws do not have ratings, and you do not get points for them.%R%R[ansi(hr,Specialties Commands)]%R+specialty <skill>=<specialty>%R+specialty/clear <skill>=<specialty> - Removes a specialty%R%RNOTE: You can have multiple specialties in a single skill.%R%R[ansi(hr,Discipline Commands)]%R+discipline <stat>=<rating> (Vampire only)%R%RNOTE: Vampires must spend 2 of their 3 discipline points on "Clan" Disciplines. This system does not enforce that restriction, but it may be checked during approval.
+&ALLOW_MERITS WW Chargen Advantages=1
+&ALLOW_FLAWS WW Chargen Advantages=1
+&FUN_FINISH WW Chargen Advantages=[u(#WWFUN/fun_update_size,%0)][u(#WWFUN/fun_update_speed,%0)][u(#WWFUN/fun_update_initiative,%0)][u(#WWFUN/fun_update_defense,%0)][u(#WWFUN/fun_update_blood_pool,%0)][u(#WWFUN/fun_update_health_pool,%0)][u(#WWFUN/fun_update_will_pool,%0)][u([parent(me)]/fun_finish)]
+&ALLOW_SPECIALTIES WW Chargen Advantages=1
+@set WW Chargen Advantages=WIZARD
+@set WW Chargen Advantages=!NO_COMMAND
+@startup WW Chargen Advantages=@set me=!no_command
+
+
+@create WW Chargen Parent
+&FUN_HAS_ENOUGH_POINTS WW Chargen Parent=gte(xget(%0,%1_pool),%2)
+&FUN_DEDUCT_POINTS WW Chargen Parent=set(%0,%1_pool:[sub(xget(%0,%1_pool),%2)])
+&FUN_CMD_+STAT WW Chargen Parent=[setq(0,u(fun_point_cost,%2,trim(%0),trim(%1),%3))][pemit(%2,switch(0,t(v(allow_%3)),ansi(hr,That command is not allowed in this room.),u(#WWFUN/fun_is_valid_stat,%3,trim(%0)),ansi(hr,That is not a valid %3 stat. Try one of these: [xget(#WWFUN,list_%3)].),u(fun_has_enough_points,%2,%3,%q0),ansi(hr,You don't have enough points for that.),and(isnum(%1),gte(%1,u(min_stat_rating,%2,trim(%0),%3)),lte(%1,u(max_stat_rating,%2,trim(%0),%3))),ansi(hr,That is not a valid stat rating. It must be from [u(min_stat_rating,%2,trim(%0),%3)] to [u(max_stat_rating,%2,trim(%0),%3)].),ansi(hg,You set your [capstr(%0)] stat to %1.)[u(fun_deduct_points,%2,%3,%q0)][u(#WWFUN/fun_grant,%2,%3,%0,%1)]))]
+&CMD-+POOL WW Chargen Parent=$+pool:think pemit(%#,[ansi(h,Remaining Points:)]%R[iter(v(categories),%R[ljust(capstr(##),20,.)][xget(%#,##_pool)])])
+&CMD-+DISCIPLINE WW Chargen Parent=$+discipline *=*:think switch(xget(%#,race),vampire,u(fun_cmd_+stat,%0,%1,%#,disciplines),pemit(%#,ansi(hr,Only Vampires may set their disciplines.)))
+&CMD-+MERIT WW Chargen Parent=$+merit *=*:think switch(1,match(xget(%#,merits),[trim(%0)]:*),pemit(%#,ansi(hg,You already have that merit.)),not(u(#WWFUN/fun_is_valid_merit_rating,%0,%1)),pemit(%#,ansi(hr,That is not a valid rating for that particular merit. It is limited to: [grab(xget(#WWFUN,list_merits),%0:*)])),u(fun_cmd_+stat,%0,%1,%#,merits))
+&CMD-+FLAW WW Chargen Parent=$+flaw *:think pemit(%#,switch(0,t(v(allow_flaws)),ansi(hr,That is not permitted in this room.),u(#WWFUN/fun_is_valid_stat,flaws,trim(%0)),ansi(hr,That is not a valid flaw. Try one of these: [xget(#WWFUN,list_flaws)].),match(xget(%#,flaws),[trim(%0)]:*),ansi(hg,You add the %0 flaw.)[u(#WWFUN/fun_grant,%#,flaws,trim(%0),1)],ansi(hr,You already have that flaw.)))
+&CMD-+SPECIALTY WW Chargen Parent=$+specialty *=*:think pemit(%#,switch(0,t(v(allow_specialties)),ansi(hr,That command is not allowed in this room.),eq(words(%1),1),ansi(hr,Specialties may only have one word in them. Use underscores instead.),gt(u(#WWFUN/fun_get_stat_rating,%#,%0),0),ansi(hr,You don't have a rating in that skill.),or(u(#WWFUN/fun_is_valid_stat,physical_skills,%0),u(#WWFUN/fun_is_valid_stat,mental_skills,%0),u(#WWFUN/fun_is_valid_stat,social_skills,%0)),ansi(hr,That is not a valid stat.),match(xget(%#,specialties),[trim(%0)]:[trim(%1)]),switch(0,gt(xget(%#,specialties_pool),0),ansi(hr,You don't have enough points for that.),ansi(hg,You add a specialty for %0.)[u(#WWFUN/fun_grant,%#,specialties,trim(%0),capstr(trim(%1)))][u(fun_deduct_points,%#,specialties,1)]),ansi(hr,You already have that specialty!)))
+&CMD-+FLAW-CLEAR WW Chargen Parent=$+flaw/clear *:think pemit(%#,switch(1,not(v(allow_flaws)),ansi(hr,That is not permitted in this room.),t(match(xget(%#,flaws),[trim(%0)]:*,|)),ansi(hg,You remove your %0 flaw.)[u(#WWFUN/fun_grant,%#,flaws,trim(%0),0)],ansi(hr,You don't have that flaw.)))
+&CMD-+SPECIALTY-CLEAR WW Chargen Parent=$+specialty/clear *=*:think pemit(%#,switch(0,t(v(allow_specialties)),ansi(hr,That command is not allowed in this room.),match(xget(%#,specialties),[trim(%0)]:[trim(%1)],|),ansi(hr,You don't have a specialty in that stat.),ansi(hg,You remove your %0 specialty.)[set(%#,specialties:[remove(xget(%#,specialties),grab(xget(%#,specialties),[trim(%0)]:[trim(%1)],|),|)])][u(fun_deduct_points,%#,specialties,-1)]))
+&CMD-+START WW Chargen Parent=$+start * * *:think pemit(%#,switch(0,and(match(v(categories),%0),match(v(categories),%1),match(v(categories),%2)),ansi(hr,Use [v(categories)].),ansi(hg,You set your priorities to: %0 %1 %2.)[set(%#,finished_[v(room)]:)][u(fun_reset,%#)][set(%#,[trim(%0)]_pool:[extract(v(pri_[xget(%#,race)]),1,1)])][set(%#,[trim(%1)]_pool:[extract(v(pri_[xget(%#,race)]),2,1)])][set(%#,[trim(%2)]_pool:[extract(v(pri_[xget(%#,race)]),3,1)])]))
+&CMD-+PHYSICAL-ATTR WW Chargen Parent=$+physicalAttr *=*:think u(fun_cmd_+stat,%0,%1,%#,physical_attr)
+&CMD-+MENTAL-ATTR WW Chargen Parent=$+mentalAttr *=*:think u(fun_cmd_+stat,%0,%1,%#,mental_attr)
+&CMD-+SOCIAL-ATTR WW Chargen Parent=$+socialAttr *=*:think u(fun_cmd_+stat,%0,%1,%#,social_attr)
+&CMD-+FINISH WW Chargen Parent=$+finish:think pemit(%#,switch(u(fun_ok_to_finish,%#),0,,ansi(hg,You may now proceed to the next room.)[set(%#,finished_[v(room)]:1)][u(fun_finish,%#)][iter(v(categories),[set(%#,##_pool:)])]))
+&FUN_OK_TO_FINISH WW Chargen Parent=localize(trim([setq(0,1)][iter(v(categories),switch(eq(0,xget(%0,##_pool)),0,[pemit(%0,ansi(hr,You have not spent all your ## points.))][setq(0,0)]))]%q0))
+&FUN_POINT_COST WW Chargen Parent=sub(switch(%2,5,6,%2),switch(u(#WWFUN/fun_get_stat_rating,%0,%1),5,6,u(#WWFUN/fun_get_stat_rating,%0,%1)))
+&CMD-+PHYSICALSKILL WW Chargen Parent=$+physicalSkill *=*:think u(fun_cmd_+stat,%0,%1,%#,physical_skills)
+&CMD-+SOCIALSKILL WW Chargen Parent=$+socialSkill *=*:think u(fun_cmd_+stat,%0,%1,%#,social_skills)
+&CMD-+MENTALSKILL WW Chargen Parent=$+mentalSkill *=*:think u(fun_cmd_+stat,%0,%1,%#,mental_skills)
+&FUN_FINISH WW Chargen Parent=[iter(v(categories),set(%0,##_pool:))]
+&CMD-+BLOODPOTENCY WW Chargen Parent=$+bloodPotency *:think [setq(0,mul(3,sub(%0,xget(%#,blood_potency))))]pemit(%#,switch(0,t(v(allow_merits)),ansi(hr,That command is not permitted in this room.),isnum(%0),ansi(hr,That is not a valid rating),lte(%0,10),ansi(hr,That is not a valid rating.),gte(%0,1),ansi(hr,That is not a valid rating.),match(xget(%#,race),vampire),ansi(hr,Only Vampires can set this stat.),u(fun_has_enough_points,%#,merits,%q0),ansi(hr,You do not have enough merit points for that.),ansi(hg,You increase your blood potency.)[set(%#,blood_potency:[trim(%0)])][u(fun_deduct_points,%#,merits,%q0)][u(#WWFUN/fun_update_blood_pool,%#)]))
+&CMD-+LANGUAGE WW Chargen Parent=$+language *=*:think [setq(0,u(fun_point_cost,%1,language_[trim(%0)]))]pemit(%#,switch(0,t(v(allow_merits)),ansi(hr,That command is not permitted in this room.),isnum(%1),ansi(hr,That is not a valid rating),lte(%1,3),ansi(hr,That is not a valid rating.),gte(%1,0),ansi(hr,That is not a valid rating.),u(fun_has_enough_points,%#,merits,%q0),ansi(hr,You do not have enough merit points for that.),[u(fun_cmd_+stat,language_[trim(%0)],%1,%#,merits)]))
+@set WW Chargen Parent=WIZARD
+@set WW Chargen Parent=!NO_COMMAND
+@startup WW Chargen Parent=@set me=!no_command
+
+
+
+@create WW Sheet Data
+&ATTRIBUTES WW Sheet Data=%R[u(#SHEETDATA/section_break)]%R[u(#WWFUN/fun_print_3_column_lists,u(#WWFUN/fun_stat_list_with_dots_and_specs,xget(%0,stat_mental_attr),%0),u(#WWFUN/fun_stat_list_with_dots_and_specs,xget(%0,stat_physical_attr),%0),u(#WWFUN/fun_stat_list_with_dots_and_specs,xget(%0,stat_social_attr),%0),ansi(h,Mental Attrs),ansi(h,Physical Attrs),ansi(h,Social Attrs))]
+@describe WW Sheet Data=%r%r[iter(setdiff(lattr(me),Desc),ljust(##,18))]
+&FIELDS_MORTAL WW Sheet Data=TOP_MORTAL ATTRIBUTES OTHER_MORTAL
+&FIELDS_VAMPIRE WW Sheet Data=TOP_VAMPIRE ATTRIBUTES OTHER_VAMPIRE
+&OTHER_CENTER_MORTAL WW Sheet Data=[padstr(ansi(h,Merits),25,center)]|[u(#WWFUN/fun_stat_list_with_dots,xget(%0,stat_merits))]||[padstr(ansi(h,Flaws),25,center)]|[u(#WWFUN/fun_stat_list_no_dots,xget(%0,flaws))]||[padstr(ansi(h,Misc Stats),25,center)]|[u(#SHEETDATA/misc_stats,%0)]
+&OTHER_CENTER_VAMPIRE WW Sheet Data=[padstr(ansi(h,Merits),25,center)]|[u(#WWFUN/fun_stat_list_with_dots,xget(%0,stat_merits))]||[padstr(ansi(h,Flaws),25,center)]|[u(#WWFUN/fun_stat_list_no_dots,xget(%0,flaws))]||[padstr(ansi(h,Disciplines),25,center)]|[u(#WWFUN/fun_stat_list_with_dots,xget(%0,stat_disciplines))]||[padstr(ansi(h,Misc Stats),25,center)]|[u(#SHEETDATA/misc_stats,%0)]
+&OTHER_LEFT WW Sheet Data=[padstr(ansi(h,Mental Skills),25,center)]|[padstr(\(-3 unskilled\),25,center)]|[u(#WWFUN/fun_stat_list_with_dots_and_specs,xget(%0,stat_mental_skills),%0)]||[padstr(ansi(h,Physical Skills),25,center)]|[padstr(\(-1 unskilled\),25,center)]|[u(#WWFUN/fun_stat_list_with_dots_and_specs,xget(%0,stat_physical_skills),%0)]||[padstr(ansi(h,Social Skills),25,center)]|[padstr(\(-1 unskilled\),25,center)]|[u(#WWFUN/fun_stat_list_with_dots_and_specs,xget(%0,stat_social_skills),%0)]
+&OTHER_MORTAL WW Sheet Data=%R[u(#SHEETDATA/section_break)]%R[u(#WWFUN/fun_print_3_column_lists,u(#SHEETDATA/other_left,%0),u(#SHEETDATA/other_center_mortal,%0),u(#SHEETDATA/other_right_mortal,%0),,,)]
+&OTHER_VAMPIRE WW Sheet Data=%R[u(#SHEETDATA/section_break)]%R[u(#WWFUN/fun_print_3_column_lists,u(#SHEETDATA/other_left,%0),u(#SHEETDATA/other_center_vampire,%0),u(#SHEETDATA/other_right_vampire,%0),,,)]
+&SHEET_BOTTOM_LINE WW Sheet Data=repeat(=,78)
+&SHEET_TOP_LINE WW Sheet Data=-------------------==================(\\|/)==================------------------
+&TOP_MORTAL WW Sheet Data=[ansi(h,Name:)] [xget(%0,fullname)]%R[padstr([ansi(h,Virtue:)] [xget(%0,virtue)],34,left)][padstr([ansi(h,Vice:)] [xget(%0,vice)],34,left)]%R[ansi(h,Concept:)] [xget(%0,concept)]
+&TOP_VAMPIRE WW Sheet Data=[ansi(h,Name:)] [xget(%0,fullname)]%R[padstr([ansi(h,Virtue:)] [xget(%0,virtue)],34,left)][padstr([ansi(h,Vice:)] [xget(%0,vice)],34,left)]%R[padstr([ansi(h,Clan:)] [xget(%0,clan)],34,left)][padstr([ansi(h,Covenant:)] [xget(%0,covenant)],34,left)]%R[padstr([ansi(h,Concept:)] [xget(%0,concept)],34,left)]
+&OTHER_RIGHT_MORTAL WW Sheet Data=[padstr(ansi(h,Humanity),25,center)]|[padstr(u(#WWFUN/fun_print_10_dots,after(xget(%0,stat_humanity),:)),25,center)]||[padstr(ansi(h,Willpower),25,center)]|[padstr([u(#WWFUN/fun_print_var_dots,after(xget(%0,stat_willpower),:),after(xget(%0,stat_will_pool),:))],25,center)]|[padstr(%[[after([xget(%0,stat_willpower)],:)]/[after([xget(%0,stat_will_pool)],:)]%],25,center)]||[padstr(ansi(h,Health),25,center)]|[u(health,%0)]||[padstr(ansi(h,Experience),25,center)]|[padstr(xget(%0,xp),25,center)]
+&OTHER_RIGHT_VAMPIRE WW Sheet Data=[padstr(ansi(h,Humanity),25,center)]|[padstr(u(#WWFUN/fun_print_10_dots,after(xget(%0,stat_humanity),:)),25,center)]||[padstr(ansi(h,Willpower),25,center)]|[padstr([u(#WWFUN/fun_print_var_dots,after(xget(%0,stat_willpower),:),after(xget(%0,stat_will_pool),:))],25,center)]|[padstr(%[[after([xget(%0,stat_willpower)],:)]/[after([xget(%0,stat_will_pool)],:)]%],25,center)]||[padstr(ansi(h,Health),25,center)]|[u(health,%0)]||[padstr(ansi(h,Vitae),25,center)]|[padstr(u(#WWFUN/fun_print_var_dots,xget(%0,blood),xget(%#,blood_pool)),25,center)]|[padstr(%[[xget(%0,blood)]/[xget(%0,blood_pool)]%],25,center)]||[padstr(ansi(h,Blood Potency),25,center)]|[padstr(u(#WWFUN/fun_print_10_dots,xget(%0,blood_potency)),25,center)]||[padstr(ansi(h,Experience),25,center)]|[padstr(xget(%0,xp),25,center)]
+&MISC_STATS WW Sheet Data=[padstr(Size,18,left)][xget(%0,size)]|[padstr(Speed,18,left)][xget(%0,speed)]|[padstr(Initiative,18,left)][xget(%0,initiative)]|[padstr(Defense,18,left)][xget(%0,defense)]
+&HEALTH WW Sheet Data=[padstr(repeat(o,xget(%0,health_pool)),25,center)]|[padstr([xget(%0,health)][repeat(.,sub(xget(%0,health_pool),strlen(xget(%0,health))))],25,center)]
+@set WW Sheet Data=WIZARD
+@set WW Sheet Data=!NO_COMMAND
+@startup WW Sheet Data=@set me=!no_command
+
+
+
+@create WW Data WOD
+@describe WW Data WOD=%r%r[iter(setdiff(lattr(me),Desc),ljust(##,18))]
+&FUN_DICE_TO_ROLL WW Data WOD=[setq(8,0)][setq(9,0)][iter(edit(u(#WWFUN/fun_strip_spaces,%0),-,+-),switch(1,u(#WWFUN/fun_is_stat,%1,##),setq(8,add(%q8,u(#WWFUN/fun_get_stat_rating,%1,##))),and(isnum(##),lte(##,10)),setq(8,add(%q8,##)),setq(9,-1)),+,)][switch(%q9,-1,0,add(u(#WWFUN/fun_get_health_mod,%1),%q8))]
+&FUN_FORMAT_SHEET WW Data WOD=[u(#SHEETDATA/sheet_top_line)]%R[center([ansi(h,[name(%0)]'s Character Sheet)],78)]%R[iter(xget(#SHEETDATA,fields_[xget(%0,race)]),u(#SHEETDATA/##,%0))]%R[u(#SHEETDATA/sheet_bottom_line)]
+&FUN_GET_HEALTH_MOD WW Data WOD=localize([setq(0,add(u(#WWFUN/fun_get_stat_rating,%0,iron_stamina),switch(sub(xget(%0,health_pool),strlen(xget(%0,health))),<0,-3,0,-3,1,-2,2,-1,-0)))][switch(%q0,<0,%q0,0)])
+&FUN_GET_STAT_RATING WW Data WOD=[setq(6,)][u(#WWFUN/fun_strip_spaces,[u(#WWFUN/fun_strip_spaces,iter(lattr(%0/stat_*),[setq(6,strcat(%q6,[xget(%0,##)]|))]))][switch(match(%q6,[ucstr(%1)]:*,|),0,0,add(u(#WWFUN/fun_get_stat_tempmod,%0,%1),after(grab(%q6,[ucstr(%1)]:*,|),:)))])]
+&FUN_GET_STAT_SPEC WW Data WOD=switch(match(xget(%0,specialties),%1:*,|),0,0,iter(graball(xget(%0,specialties),%1:*,|),after(##,:),|))
+&FUN_GET_STAT_TEMPMOD WW Data WOD=[switch(grab(xget(%0,tempmods),[ucstr(%1)]:*,|),,0,after(grab(xget(%0,tempmods),[ucstr(%1)]:*,|),:))]
+&FUN_GET_SUCCESSES WW Data WOD=[setq(9,0)][u(#WWFUN/fun_strip_spaces,u(#WWFUN/fun_success_recursion,[switch(1,lte(%0,0),1,%0)],[switch(1,lte(%0,0),10,8)],0))][u(#WWFUN/fun_strip_spaces,%q9)] Successes ([trim(%q7)])
+&FUN_INIT_ATTR WW Data WOD=[set(%0,%1:)][atrlock(%0/%1,on)][set(%0/%1,mortal_dark)]
+&FUN_IS_STAT WW Data WOD=[u(#WWFUN/fun_strip_spaces,iter(lattr(%0/stat_*),[setq(6,strcat(%q6,[xget(%0,##)]|))]))][t(match(%q6,[ucstr(%1)]:*,|))]
+&FUN_PAD_STRING WW Data WOD=switch(%2,left,ljust(mid(%0,0,%1),%1,%3),right,rjust(mid(%0,0,%1),%1,%3),center,center(mid(%0,0,%1),%1,%3))
+&FUN_PRINT_10_DOTS WW Data WOD=[switch(%0,-,%B%B-%B%B,[repeat(o,%0)][repeat(.,sub(10,%0))])]
+&FUN_PRINT_3_COLUMN_LISTS WW Data WOD=[padstr(-%3-,23,center,~)]%B%B[padstr(-%4-,23,center,~)]%B%B[padstr(-%5-,25,center,~)][iter(lnum(max(words(%0,|),words(%1,|),words(%2,|),2)),%R[switch(extract(%0,#@,1,|),,[space(25)],[padstr(extract(%0,#@,1,|),25,left)])][switch(extract(%1,#@,1,|),,space(25),[padstr(extract(%1,#@,1,|),25,left)])][switch(extract(%2,#@,1,|),,space(25),[padstr(extract(%2,#@,1,|),25,left)])],,xget(#WWFUN,empty_sep))]
+&FUN_PRINT_DOTS WW Data WOD=[switch(%0,-,%B%B-%B%B,[repeat(o,%0)][repeat(.,sub(5,%0))])]
+&FUN_STAT_LIST_WITH_DOTS WW Data WOD=iter(%0,[switch(#@,>1,|)][padstr([before(##,:)],18,left)][u(#WWFUN/fun_print_dots,after(##,:))],|,)
+&FUN_STAT_LIST_WITH_DOTS_AND_SPECS WW Data WOD=iter(%0,[switch(#@,>1,|)][padstr([before(##,:)],18,left)][u(#WWFUN/fun_print_dots,after(##,:))][switch(t(u(#WWFUN/fun_get_stat_spec,%1,before(##,:))),1,[iter(u(#WWFUN/fun_get_stat_spec,%1,before(##,:)),|%B~[itext(0)])])],|,)
+&FUN_SUCCESS_RECURSION WW Data WOD=[iter(lnum(%0),[setq(8,add(rand(10),1))][setq(7,%q7%B%q8[switch(%2,1,*)])][switch(1,eq(%q8,10),[setq(9,inc(%q9))][u(fun_success_recursion,1,%1,1)],gte(%q8,%1),setq(9,inc(%q9)))])]
+&HELP_SKILLS WW Data WOD=This is an implementation of the White Wolf World of Darkness Storytelling Skills System. It provides a way to view your stats and perform stat checks. The following detailed help files are available:%R%R%T[ansi(h,SHEET)] - Character sheet.%R%T[ansi(h,CHECK)] - Info on stat checks[switch(isstaff(%0),1,%R%T[ansi(h,STAFF)] - Staff-only commands.)]%R%T[ansi(h,DIFF)]%B%B- How is this different from the old WOD system?%R%RSee [ansi(h,+skills/help <topic>)] for detailed help on one of the topics.%R%R[ansi(h,+skills/credits)] - Shows credits, copyright and version info
+&HELP_SKILLS_CHECK WW Data WOD=Skill checks allow you to gauge your character's success at various tasks. First you must choose a list of stats to use in the check. This determines how many dice the system will roll for you. You can use any skill/attribute combo. The stats are always separated by + or - signs. For example, you could check 'dexterity', or 'dexterity+firearms' or 'wits+alertness'. You can use more than two stats, but two is the most common.%r%RYou can add or subtract dice. For example, 'firearms+2' or 'firearms-2'. You can also just use a number of dice by itself, to simulate NPCs. For example, just '2'. You can't add more than 10 dice in this fashion.%r%rThe system will roll a number of dice based on the stats, and any dice that comes up bigger than the target number is a 'success'. In the new WOD system, the target number is always an 8. If modifiers cause you to have less than 1 die to roll, you still get to roll 1 die on a "Hail Mary" shot, but your target number is a 10. The system automatically accounts for this.%R%RIf you have a relevant specialty in one of the stats being checked, you can use the +scheck command. This will give you an extra die to roll for your specialty.%R%R[ansi(h,+check <stat list>)] - Basic check%R%R[ansi(h,+scheck <stat list>)] - Skill check with a specialty.%R%R[ansi(hr,Note:)] The skills system will automatically account for any temporary modifiers to your stats, including injuries.
+&HELP_SKILLS_SHEET WW Data WOD=Your character sheet shows basic information about your character, and all of his or her stat ratings. It also shows current health status and experience.%R%RSome stats may have specialties. These are listed under their relevant stat, like this:%R%TFirearms ooo..%R%T%B~Pistols%R%RTemporary stat modifications, such as bonuses from "pumping" blood, do not appear on your character sheet. You must use the +mods command to see them.%R%R[ansi(h,+sheet)] - Shows your character sheet.%R[ansi(h,+mods)] - Shows temporary stat modifications.
+&HELP_SKILLS_STAFF WW Data WOD=The system supports various commands for staff members.%R%R[ansi(h,+statinit <player>)] - Initializes a character's stats. This should be done before the character enters chargen.%R%R[ansi(h,+sheet <player>)] - Views a character's sheet.%R[ansi(h,+mods <player>)] - Views a character's temporary stat modifications.%R%R[ansi(h,+grant <player>/<category>=<stat>/<rating>)] - Grants a stat to a player.%R%RWhen using +grant, 'category' must be one of the following: [xget(#WWFUN,list_stats)]%RFor example: +grant Faraday/Physical_SKills=Athletics/3%R%RYou can also use +grant for some of the special attributes, like Merits and Flaws, because they also have ratings. It won't work with the items that don't have ratings at all, like Generation, Clan, Virtue, Specialties, etc. You'll have to set those up manually using their respective attributes.
+&LIST_DISCIPLINES WW Data WOD=Animalism Auspex Celerity Coils_Dragon Cruac Dominate Majesty Nightmare Obfuscate Protean Resilience Theban_Sorcery Vigor
+&LIST_OTHER WW Data WOD=Virtues Vices Clan Race Specialties Xp Tempmods Size Speed Initiative Defense Health Health_Pool Blood Blood_Pool Virtue Vice Blood_Potency Flaws
+&LIST_STATS WW Data WOD=Physical_Attr Social_Attr Mental_Attr Physical_Skills Social_Skills Mental_Skills Disciplines Humanity Willpower Will_Pool Merits
+&FUN_PRINT_VAR_DOTS WW Data WOD=[switch(%0,-,%B%B-%B%B,[repeat(o,%0)][repeat(.,sub(%1,%0))])]
+&LIST_RACE WW Data WOD=Vampire Mortal
+&FUN_IS_VALID_STAT WW Data WOD=switch(%0,merits,or(match(ucstr(xget(#WWFUN,list_merits)),[ucstr(%1)]:*),match(%1,language_*)),t(match(ucstr([xget(#WWFUN,list_%0)]),ucstr(%1))))
+&LIST_CLAN WW Data WOD=Daeva Gangrel Mekhet Nosferatu Ventrue
+&FUN_GRANT WW Data WOD=[setq(9,[switch(t(member(ucstr(xget(#WWFUN,list_other)),ucstr(trim(%1)))),1,,stat_)][trim(%1)])][set(%0,%q9:[switch(0,%3,remove(xget(%0,%q9),grab(xget(%0,%q9),[trim(%2)]:*,|),|),t(match(ucstr(xget(%0,%q9)),[ucstr(trim(%2))]:*,|)),[xget(%0,%q9)][switch(words(xget(%0,%q9)),>0,|)][capstr(lcstr(trim(%2)))]:[trim(%3)],replace(xget(%0,%q9),match(ucstr(xget(%0,%q9)),[ucstr(trim(%2))]:*,|),[capstr(lcstr(trim(%2)))]:[trim(%3)],|))])]
+&LIST_HUMANITY WW Data WOD=Humanity
+&LIST_WILLPOWER WW Data WOD=Willpower
+&LIST_WILL_POOL WW Data WOD=Will_Pool
+&LIST_MERITS WW Data WOD=Allies:1-5 Ambidextrous:3 Barfly:1 Boxing:1-5 Brawl_Dodge:1 Common_Sense:4 Contacts:1-5 Danger_Sense:2 Direct_Sense:1 Disarm:2 Eidetic_Mem:2 Encyclop_Know:4 Fame:1-5 Fast_Reflexes:1/2 Fighting_Finesse:2 Fleet_Of_Foot:1/2/3 Fresh_Start:1 Giant:4 Gunslinger:3 Haven:1-5 Herd:1-5 Holistic_Aware:3 Inspiring:4 Iron_Stamina:1/2/3 Iron_Stomach:2 Kung_Fu:1-5 Meditate_Mind:1 Mentor:1-5 Natural_Immune:1 Quick_Draw:1 Quick_Healer:4 Resources:1-5 Retainer:1-5 Status:1-5 Striking_Looks:2/4 Strong_Back:1 Strong_Lungs:3 Stunt_Driver:3 Toxin_Resist:2 Two_Weapons:1-5 Unseen_Sense:3 Weapon_Dodge:1
+&FUN_UPDATE_BLOOD_POOL WW Data WOD=[set(%0,blood_pool:[switch(xget(%0,blood_potency),1,10,2,11,3,12,4,13,5,14,6,15,7,20,8,30,9,50,100)])][set(%0,blood:[xget(%0,blood_pool)])]
+&LIST_MENTAL_SKILLS WW Data WOD=Academics Computer Crafts Investigation Medicine Occult Politics Science
+&LIST_PHYSICAL_SKILLS WW Data WOD=Athletics Brawl Drive Firearms Larceny Stealth Survival Weaponry
+&LIST_SOCIAL_SKILLS WW Data WOD=AnimalKen Empathy Expression Intimidation Persuasion Socialize Streetwise Subterfuge
+&LIST_MENTAL_ATTR WW Data WOD=Intelligence Wits Resolve
+&LIST_SOCIAL_ATTR WW Data WOD=Presence Manipulation Composure
+&LIST_PHYSICAL_ATTR WW Data WOD=Strength Dexterity Stamina
+&LIST_VIRTUE WW Data WOD=Charity Faith Fortitude Hope Justice Prudence Temperance
+&LIST_VICE WW Data WOD=Envy Gluttony Greed Lust Pride Sloth Wrath
+&LIST_COVENANT WW Data WOD=Carthians Circle_Crone Invictus Lancea_Sanctum Ordo_Dracul
+&HELP_SKILLS_DIFF WW Data WOD=This is a summary of what's different between the new WOD Storytelling system and the old White Wolf system in 1st-3rd editions. This is by no means an all-inclusive list, but should cover many of the highlights.%R%R[ansi(h,Die Rolls)]%R- You always re-roll 10's. Specialties now give you an extra die.%R- 1's no longer cancel successes.%R- The target numbers are now fixed at 8.%R- Modifiers affect your number of dice, not the target number. If modifiers take you below 1 die, you still get to roll 1, but at a target number 10.%R%R[ansi(h,Chargen)]%R- No more freebie points. All pools are fixed.%R- Vampires no longer get a lot more points than mortals. They get disciplines, and one extra attribute dot.%R- A Vampire's blood pool is determined from a new stat called "blood potency". Blood itself is now called "Vitae".%R- New stats and skills categories.%R- New misc stats like size, speed, initiative, and defense.%R- The old merits, backgrounds, etc. are now combined under "Merits" and have dot ratings. Some merits have limited dot options (e.g. the Ambidextrous merit can only have a rating 3). Other merits can be from 1-5 dots.%R- New disciplines, clans, and covenants (factions) for Vampires.%R- Flaws no longer get you any points to spend, but can be chosen for RP purposes.%R- Humanity was renamed "Morality" for mortals, but I just call it humanity in this system for simplicity.%R- Nature and Demeanor became Virtue and Vice. The old "virtues" (courage, conviction, etc.) are gone.%R%R[ansi(h,Combat)]%R- Health works differently. It's more like Willpower now, in that you have a total pool and take off boxes as points are "spent" (i.e. lost).%R- A character's Defense score subtracts from the attacker's die pool.%R- Initiative is simply 1d10 plus your Initiative modifier.
+&FUN_IS_VALID_MERIT_RATING WW Data WOD=localize([setq(0,after(grab(ucstr(xget(#WWFUN,list_merits)),[ucstr(%0)]:*),:))][member(0/[switch(%q0,*-*,lnum(before(%q0,-),after(%q0,-),/),*/*,%q0,%q0)],%1,/)])
+&LIST_FLAWS WW Data WOD=Addiction Aloof Amnesia Behavior_Blind Coward Crippled Deformity Dwarf Embarassing_Secret Forgetful Hard_of_Hearing Mute Notoriety One_Arm One_Eye Poor_Sight Racist Sexist Speech_Impediment
+&LIST_CHARGEN WW Data WOD=finished_basics finished_attributes finished_skills finished_advantages physical_attr_pool mental_attr_pool social_attr_pool physical_skill_pool mental_skill_pool social_skill_pool merits_pool disciplines_pool specialties_pool
+&FUN_UPDATE_SPEED WW Data WOD=set(%0,speed:[add(u(#WWFUN/fun_get_stat_rating,%0,strength),u(#WWFUN/fun_get_stat_rating,%0,dexterity),u(#WWFUN/fun_get_stat_rating,%0,fleet_of_foot),5)])
+&FUN_UPDATE_INITIATIVE WW Data WOD=set(%0,initiative:[add(u(#WWFUN/fun_get_stat_rating,%0,dexterity),u(#WWFUN/fun_get_stat_rating,%0,composure),u(#WWFUN/fun_get_stat_rating,%0,fast_reflexes))])
+&FUN_UPDATE_DEFENSE WW Data WOD=localize([setq(w,u(#WWFUN/fun_get_stat_rating,%0,wits))][setq(d,u(#WWFUN/fun_get_stat_rating,%0,dexterity))][set(%0,defense:[switch(gt(%qw,%qd),1,%qd,%qw)])])
+&FUN_UPDATE_HEALTH_POOL WW Data WOD=set(%0,health_pool:[add(xget(%0,size),u(#WWFUN/fun_get_stat_rating,%0,stamina))])
+&FUN_UPDATE_WILL_POOL WW Data WOD=[set(%0,stat_will_pool:Will_Pool:[add(u(#WWFUN/fun_get_stat_rating,%0,resolve),u(#WWFUN/fun_get_stat_rating,%0,composure))])][set(%0,stat_willpower:Willpower:[u(#WWFUN/fun_get_stat_rating,%0,will_pool)])]
+&FUN_STAT_LIST_NO_DOTS WW Data WOD=iter(%0,[before(##,:)]|,|,)
+&FUN_UPDATE_SIZE WW Data WOD=set(%0,size:[add(switch(u(#WWFUN/fun_get_stat_rating,%0,giant),0,0,1),5)])
+&FUN_STRIP_SPACES WW Data WOD=squish(%0)
+&EMPTY_SEP WW Data WOD=
+&VERSION WW Data WOD=1.0
+@set WW Data WOD=WIZARD
+@set WW Data=!NO_COMMAND
+@startup WW Data=@set me=!no_command
+
+
+
+@create WW Skills WOD
+&CMD-+CHECK WW Skills WOD=$+check *:think [setq(2,u(#WWFUN/fun_dice_to_roll,%0,%#))][pemit(%#,switch(0,%q2,ansi(hr,[capstr(%0)] is not a valid combination of stats or numbers.),[remit(%l,%N checks [ucstr(%0)] and gets:%R[u(#WWFUN/fun_get_successes,%q2)])]))]
+&CMD-+CHECK-SPEC WW Skills WOD=$+scheck *:think [setq(2,u(#WWFUN/fun_dice_to_roll,%0,%#))][setq(1,)][pemit(%#,[switch(0,%q2,[ansi(hr,[capstr(%0)] is not a valid combination of stats or numbers.)],t(u(#WWFUN/fun_strip_spaces,iter(edit(%0,-,+-),switch(0,u(#WWFUN/fun_get_stat_spec,%#,##),0,1[setq(1,%q1%b[u(#WWFUN/fun_get_stat_spec,%#,##)])]),+))),ansi(hr,You don't have a specialty in any of those items.),[remit(%l,%N checks [ucstr(%0)] and gets:%R[u(#WWFUN/fun_get_successes,%q2)]%RSpecialties used: [trim(%q1)])])])]
+&CMD-+GRANT WW Skills WOD=$+grant */*=*/*:think [setq(0,pmatch(%0))][setq(1,[switch(t(member(xget(#WWFUN,list_other),capstr(lcstr(trim(%1))))),1,,stat_)][trim(%1)]))][pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(%q0),ansi(hr,There is no such player.),hasattr(#WWFUN,list_[trim(%1)]),ansi(hr,That is not a valid category.),u(#WWFUN/fun_is_valid_stat,trim(%1),trim(%2)),ansi(hr,That is not a valid stat for the %1 category.),[ansi(hg,You grant %0 a %1 stat of [capstr(%2)] with rating %3.)][u(#WWFUN/fun_grant,pmatch(%0),%1,%2,%3)]))]
+&CMD-+MODS WW Skills WOD=$+mods:think pemit(%#,[line()]%R[ansi(h,Stat Modifications:)][iter(xget(%#,tempmods),%R##,|)]%R[line()])
+&CMD-+MODS-PLAYER WW Skills WOD=$+mods *:think [pemit(%#,[setq(0,pmatch(%0))][switch(0,isstaff(%#),ansi(hr,This command is restricted to staff.),t(%q0),ansi(hr,That is not a valid player.),[line()]%R[ansi(h,Stat Modifications For [name(%q0)]:)]%R[iter(xget(%q0,tempmods),##,|)]%R[line()])])]
+&CMD-+SHEET WW Skills WOD=$+sheet:think pemit(%#,u(#WWFUN/fun_format_sheet,%#))
+&CMD-+SHEET-OTHER WW Skills WOD=$+sheet *:@pemit %#=switch([t(pmatch(%0))],0,[ansi(h,There is no such player.)],[u(#WWFUN/fun_format_sheet,pmatch(%0))])
+&CMD-+SKILLS-CREDITS WW Skills WOD=$+skills/credits:think pemit(%#,[line()]%RWorld of Darkness Skills System Version [xget(#WWFUN,version)]%R%RThis code uses the White Wolf World of Darkness Storytelling system: Copyright 2004 by White Wolf Publishing, Inc. All rights reserved. This code may be used for non-profit online games under the terms of the White Wolf website: http://www.white-wolf.com%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R[line()])
+&CMD-+SKILLS-HELP WW Skills WOD=$+skills/help*:think pemit(%#,[line()]%R[switch(%0,,u(#WWFUN/help_skills,%#),u(#WWFUN/help_skills_[u(#WWFUN/fun_strip_spaces,%0)],%#))]%R[line()])
+&CMD-+STATINIT WW Skills WOD=$+statinit *:think [setq(0,pmatch(%0))][pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is only for staff.),t(%q0),ansi(hr,[capstr(%0)] is not a valid player.),ansi(hg,You initialize %0's stats.)[iter(xget(#WWFUN,list_stats),[u(#WWFUN/fun_init_attr,%q0,stat_##)])][iter([xget(#WWFUN,list_other)] [xget(#WWFUN,list_chargen)],[u(#WWFUN/fun_init_attr,%q0,##)])][set(%q0,stat_physical_attr:[iter(xget(#WWFUN,list_physical_attr),[switch(#@,>1,|)]##:1,,xget(#WWFUN,empty_sep))])][set(%q0,stat_mental_attr:[iter(xget(#WWFUN,list_mental_attr),[switch(#@,>1,|)]##:1,,xget(#WWFUN,empty_sep))])][set(%q0,stat_social_attr:[iter(xget(#WWFUN,list_social_attr),[switch(#@,>1,|)]##:1,,xget(#WWFUN,empty_sep))])][set(%q0,stat_humanity:Humanity:7)][set(%q0,health:)][set(%q0,health_pool:1)][set(%q0,blood:10)][set(%q0,blood_pool:10)][set(%q0,initiative:0)][set(%q0,size:5)][set(%q0,speed:0)][set(%q0,defense:1)][set(%q0,stat_will_pool:Will_Pool:1)][set(%q0,stat_willpower:Willpower:1)][set(%q0,race:Mortal)][set(%q0,blood_potency:1)][set(%q0,xp:0)]))]
+@describe WW Skills WOD=+skills/help
+&CMD-+STATS WW Skills WOD=$+stats:think pemit(%#,[line()]%R[ansi(h,Stat Lists)][iter(race virtue vice clan covenant physical_attr social_attr mental_attr,%R%R[ucstr(##)]: [xget(#WWFUN,list_##)])]%R%R[ansi(h,Continued in +stats2)]%R[line()])
+&CMD-+STATS3 WW Skills WOD=$+stats3:think pemit(%#,[line()]%R[ansi(h,Stat Lists)][iter(disciplines merits flaws,%R%R[ucstr(##)]: [xget(#WWFUN,list_##)])]%R[line()])
+&CMD-+STATS2 WW Skills WOD=$+stats2:think pemit(%#,[line()]%R[ansi(h,Stat Lists)][iter(physical_skills mental_skills social_skills,%R%R[ucstr(##)]: [xget(#WWFUN,list_##)])]%R%R[ansi(h,Continued in +stats3)]%R[line()])
+@set WW Skills WOD=WIZARD
+@set WW Skills WOD=!NO_COMMAND
+@Startup WW Skills WOD=@set me=!no_command;@dol [iter([u(#WWFUN/list_stats)],stat_##)] [u(#WWFUN/list_other)]=@pemit %#=##;@attribute/access ##=hidden wizard
+
+
+@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
+
+@wait 5=@parent WW Chargen Basics=WW Chargen Parent
+@wait 5=@parent WW Chargen Attributes=WW Chargen Parent
+@wait 5=@parent WW Chargen Skills=WW Chargen Parent
+@wait 5=@parent WW Chargen Advantages=WW Chargen Parent
+
+
+@wait 5=@fo me=@edit WW Chargen Basics/*=#WWFUN,[num(WW Data WOD)]
+@wait 6=@fo me=@edit WW Chargen Attributes/*=#WWFUN,[num(WW Data WOD)]
+@wait 7=@fo me=@edit WW Chargen Skills/*=#WWFUN,[num(WW Data WOD)]
+@wait 8=@fo me=@edit WW Chargen Advantages/*=#WWFUN,[num(WW Data WOD)]
+@wait 9=@fo me=@edit WW Chargen Parent/*=#WWFUN,[num(WW Data WOD)
+@wait 10=@fo me=@edit WW Skills WOD/*=#WWFUN,[num(WW Data WOD)]
+@wait 11=@fo me=@edit WW Sheet Data/*=#WWFUN,[num(WW Data WOD)]
+@wait 12=@fo me=@edit WW Data WOD/*=#WWFUN,[num(WW Data WOD)]
+@wait 13=@fo me=@edit WW Data WOD/*=#SHEETDATA,[num(WW Sheet Data)]
+@wait 13=@fo me=@edit WW Sheet Data/*=#SHEETDATA,[num(WW Sheet Data)]
+
+@wait 14=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 14=@tel WW Sheet Data=WW Skills WOD
+@wait 14=@tel WW Data WOD=WW Skills WOD
+@wait 14=@tel WW Chargen Parent=WW Skills WOD
+@wait 16=@tel WW Skills WOD=#2
+
+@wait 17=@pemit/silent me=[ansi(hg,%RInstall Complete!  See install notes for additional steps to setup chargen.)]
+@wait 18=@set me=!quiet
+
+
