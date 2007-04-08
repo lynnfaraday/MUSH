@@ -1,0 +1,57 @@
+@@ Faraday's Player Setup System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning Player Setup Object Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
+
+@create Player Setup Object
+@set Player Setup Object = DARK
+@set Player Setup Object = WIZARD
+@set Player Setup Object = MONITOR
+@set Player Setup Object = !NO_COMMAND
+@startup Player Setup Object = @set me=!NO_COMMAND;@fun SETUP_ATTR=[num(me)]/FUN_SETUP_ATTR
+@AHEAR Player Setup Object=@switch 0=hasattr(%#,status),{@tr #PLAYERDB/ADDITIONAL_SETUP=%#;think [iter(lattr(#PLAYERDB/hattr_*),[setq(0,after(##,_))][set(%#,%q0:[u(#PLAYERDB/##,%#)])][set(%#/%q0,mortal_dark)][atrlock(%#/%q0,on)])][iter(lattr(#PLAYERDB/vattr_*),[setq(0,after(##,_))][set(%#,%q0:[u(#PLAYERDB/##,%#)])])]}
+&FUN_SETUP_ATTR Player Setup Object=switch(%0,h,[set(#PLAYERDB,HATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:%2))][set(##/%1,mortal_dark)][atrlock(##/%1,on)])][ansi(h,You set up a Hidden Locked attribute named %1)],v,[set(#PLAYERDB,VATTR_%1:%2)][ansi(h,You set up a Visible Unlocked attribute named %1)],[ansi(hb,%0 is not a valid setting.)])
+@DESCRIBE Player Setup Object=Stores initial attributes for all new players.%R%R[u(credits)]
+@LISTEN Player Setup Object=* has connected.
+&SHELP_PLAYER_SETUP Player Setup Object=In the welcome room (#0), there is a dark "Player Setup Object" (#PLAYERDB) that does initial player setup. It initializes things like their starting IC location, status, etc. If any coded systems require attributes to be locked/initialized, add an attribute to the setup object. Use HATTR_<name> for attributes that should be hidden and locked, and VATTR_<name> for attributes that should be visible and unlocked.%R%RFor example:%R%R%T&HATTR_ICLOC Player Setup=#66%R%RThis will set an "ICLOC" attribute on every player with a starting value of #66. That attribute will be locked and invisible to players.%R%R%T&VATTR_ADESC Player Setup=think <OOC> %N looked at you.%R%RThis will set up an @adesc attribute that the player can see and change.%R%RNote: The player's DB# is passed to each attribute as \%0.%R%RThe player setup object also registers a global function SETUP_ATTR(<h or v>,name,value) that you can use in code to set up the attributes.
+&CREDITS Player Setup Object=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&VERSION Player Setup Object=3.0
+
+
+@create Player Setup Data
+@desc Player Setup Data=Stores player setup attributes.
+@set Player Setup Data=WIZ
+@set Player Setup Data=!NO_COMMAND
+@startup Player Setup Data=@set me=!NO_COMMAND
+
+&VATTR_ADESCRIBE Player Setup Data=think <OOC> \%N looked at you.
+&HATTR_CREATE_DATE Player Setup Data=[time()]
+&HATTR_STATUS Player Setup Data=NEW
+&ADDITIONAL_SETUP Player Setup Data=@fo %0=@chan/on newbie;@fo %0=@chan/on public;@dolist lwho()=@pemit ##=[ansi(hg,<Newbie>)] [name(%0)] has just created a character!  Welcome to [mudname()]!;@set %0=unregistered;@fo %0=@lock me=me
+
+@wait 2=@fo me=@edit Player Setup Object/*=#PLAYERDB,[num(Player Setup Data)]
+@wait 2=@fo me=@edit Player Setup Data/*=#PLAYERDB,[num(Player Setup Data)]
+
+@wait 4=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
+@wait 4=@fo %#=+copyhelp [num(Player Setup Object)]
+@wait 4=@tr Player Setup Object/startup
+
+@wait 5=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 5=@tel Player Setup Data=Player Setup Object
+@wait 6=@tel Player Setup Object=#0
+
+
+@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 10=@set me=!quiet
+
