@@ -1,78 +1,57 @@
 @@ Faraday's Multi-Descer System
-@@ Coded by Linda Naughton O'Meara
-@@ http://www.wordsmyth.org/faraday
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
 @@
-@@ ===================
-@@ OVERVIEW
-@@ ===================
-@@ A simple and flexible multi-descer.
-@@
-@@ ===================
-@@ FEATURES
-@@ ===================
-@@
-@@ * Allows you to store multiple descs and mix-and-match them to your heart's content
-@@ * Escapes %r's in descs so you can easily /grab them later.
-@@ * Can be used as a personal system or a global system.
-@@
-@@ ===================
-@@ REQUIREMENTS
-@@ ===================
-@@
-@@ * PennMUSH
-@@
-@@ ===================
-@@ INSTALLATION
-@@ ===================
-@@ 
-@@ Simply /quote this script to your MUSH via a MUSH client.  You can also cut and paste, but beware
-@@ of linebreaks.  There is no need to create any objects or do any manual editing of this script unless
-@@ your master room is something other than #2.
-@@
-@@ ===================
-@@ SETUP
-@@ ===================
-@@
-@@ No setup is required to use this as a personal multi-descer object.  To use as a global, set it WIZARD
-@@ and put it in the master room.
-@@
-@@ ===================
-@@ USAGE
-@@ ===================
-@@ 
-@@ See +desc/help for usage instructions.
-@@
-@@ ===================
-@@ UPDATES
-@@ ===================
-@@
-@@ Join the mailing list (http://groups.yahoo.com/group/faradaycode) to keep up with the latest news.
-@@
-@@ * Version 1.1 - 6/12/04 - Cleaned up help file and added separate credits command. 
-@@      Changed 'wear' command so it will set the "DESCRIBE" attribute instead of the "DESC" attribute 
-@@      since PennMUSH doesn't seem to like "DESC" anymore.
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning Multi-Descer Installation...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
 
 @create Multi-Descer
-@set multi-descer=inherit
+@set multi-descer=WIZARD
 @set multi-descer=!no_command
 @startup multi-descer=@set me=!no_command
-&CMD-+DESC Multi-Descer=$+desc:think pemit(%#,[u(top_line)]%r[center(Descs Available,78)]%r[iter(lattr(%#/desc_*),[switch(mod(#@,5),1,%r)][u(padstr,after(##,_),15)])]%r[u(bottom_line)])
+&CMD-+DESC Multi-Descer=$+desc:think pemit(%#,[u(top_line)]%r[center(Your Descs,78)]%r[iter(lattr(%#/desc_*),[switch(mod(#@,5),1,%r)][u(padstr,after(##,_),15)])]%r%R[center(Pre-Made Descs,78)]%r[iter(lattr(me/desc_*),[switch(mod(#@,5),1,%r)][u(padstr,after(##,_),15)])]%r[u(bottom_line)])
 &CMD-+DESC-CREATE Multi-Descer=$+desc/create *=*:think switch(words(trim(%0)),1,pemit(%#,ansi(hg,You create a desc entitled "%0".))[set(%#,desc_[trim(%0)]:[u(escape_cr,%1)])],pemit(%#,ansi(hr,Please do not use spaces in your description title.)))
 &CMD-+DESC-DELETE Multi-Descer=$+desc/delete *:think switch(0,hasattr(%#,desc_[trim(%0)]),pemit(%#,ansi(hr,You don't have a desc entitled "%0".)),pemit(%#,ansi(hg,You delete desc "%0".))[wipe(%#/desc_[trim(%0)])])
 &CMD-+DESC-EDIT Multi-Descer=$+desc/edit *=*/*:think switch(0,hasattr(%#,desc_[trim(%0)]),pemit(%#,ansi(hr,You do not have a desc entitled "%0".)),pemit(%#,ansi(hg,You edit desc "%0".))[set(%#,desc_[trim(%0)]:[edit(xget(%#,desc_[trim(%0)]),%1,%2)])])
 &CMD-+DESC-SAVE Multi-Descer=$+desc/save *:think switch(words(trim(%0)),1,pemit(%#,ansi(hg,You save your current desc as "%0"))[set(%#,desc_[trim(%0)]:[xget(%#,describe)])],pemit(%#,ansi(hr,Please do not put spaces in your description title.)))
-&CMD-+DESC-VIEW Multi-Descer=$+desc/view *:think switch(0,hasattr(%#,desc_[trim(%0)]),pemit(%#,ansi(hr,You don't have a desc entitled "%0".)),pemit(%#,ansi(hg,Desc "%0":%r)[u(%#/desc_[trim(%0)])]))
-&CMD-+DESC-WEAR Multi-Descer=$+desc *:think [setq(0,ucstr(iter(%0,desc_[trim(##)])))][setq(1,setdiff(%q0,lattr(%#/desc_*)))][switch(words(%q1),>0,pemit(%#,ansi(hr,Description [iter(%q1,after(##,_))] not available!)),[pemit(%#,[ansi(hg,Description set to %0.)])][set(%#,describe:[iter(%0,[u(replace_cr,xget(%#,desc_##))])][switch(words(lattr(%#/detail_*)),>0,%B%B\(+detail\))])])]
-&cmd-+desc-credits Multi-Descer=$+desc/credits:think pemit(%#,[line()]%RMulti-Descer System Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R[line()])
+&cmd-+desc-view multi-descer=$+desc/view *:think [setq(0,trim(%0))]switch(0,or(hasattr(me,desc_%q0),hasattr(%#,desc_%q0)),pemit(%#,ansi(hr,There is no desc entitled "%0".)),pemit(%#,ansi(hg,Desc "%0":%r)[u([switch(0,hasattr(%#,desc_%q0),num(me),%#)]/desc_%q0)]))
+&CMD-+DESC-WEAR Multi-Descer=$+desc *:think [setq(0,ucstr(iter(%0,desc_[trim(##)])))][setq(1,setdiff(%q0,[lattr(%#/desc_*)]%B[lattr(me/desc_*)]))][switch(words(%q1),>0,pemit(%#,ansi(hr,Description [iter(%q1,after(##,_))] not available!)),[pemit(%#,[ansi(hg,Description set to %0.)])][set(%#,describe:[iter(%0,[u(replace_cr,xget([switch(0,hasattr(%#,desc_##),num(me),%#)],desc_##))])][switch(words(lattr(%#/detail_*)),>0,%B%B\(+detail\))])])]
 &ESCAPE_CR Multi-Descer=[setq(9,edit(%0,%r,\\\%r))][edit(%q9,%R,\\\%R)]
 &REPLACE_CR Multi-Descer=[setq(9,edit(%0,\\\%r,%r))][edit(%q9,\\\%R,%R)]
 &LINE Multi-Descer=repeat(-,78)
 &PADSTR Multi-Descer=[switch(%2,center,center(mid({%0},0,%1),%1,%3),right,rjust(mid({%0},0,%1),%1,%3),ljust(mid({%0},0,%1),%1,%3))]
-&HELP_+DESC Multi-Descer=The MUSH multi-descer allows you to create a wardrobe for your character, storing multiple descriptions to reflect mood shifts, changes of clothing, injuries, or whatever. You can mix-and-match the descriptions whenever you need them. %r%rWhen using +desc to set your description, you may specify just one stored desc title, or a number of them separated by spaces. The title you specify will be tacked together and stored in your current description. %r%r[ansi(h,+desc)] - Views a list of all your stored descriptions.%r[ansi(h,+desc <list of desc titles>)] - Sets your current description. %r[ansi(h,+desc/create <title>=<desc>)] - Creates a new description. %r[ansi(h,+desc/view <title>)] - Views one of your stored descriptions. %r[ansi(h,+desc/save <title>)] - Saves your current description as "title". %r[ansi(h,+desc/delete <title>)] - Deletes a saved desc. %r[ansi(h,+desc/edit <title>=<text to find>/<text to replace>)] - Edits a saved desc.%R[ansi(h,+desc/credits)] - Displays version and credits info.%r%rThe system will handle \%r's and \%t's automatically. If you want to use ansi(), space(), or other special functions in your descriptions, you should store the descriptions manually by typing [ansi(h,&desc_<title> me=<description>)]. Otherwise they might not show up right.%R%RMore information in [ansi(h,+desc/help example)]
-&HELP_+DESC_EXAMPLE Multi-Descer=Here is an example of how the system can be used, given some pretty simplistic descs and a sample character Thomas. %r%rTo create a "wardrobe" for Thomas: %r+desc/create base=Thomas is a tall man with brown hair and eyes. %R+desc/create casual=Today Tom is dressed casually, in blue jeans and a T-shirt. %R+desc/create suit=Tom is wearing a blue pin-stripe suit, with a tacky yellow tie. %R+desc/create ring=On the ring finger of Tom's left hand is a wedding ring. %r%rTo set up Tom's description so he's wearing his suit and wedding ring:%R [ansi(g,+desc base suit ring)] %r%rTo set up his description so he's wearing his casual clothes, but not his ring:%R [ansi(g,+desc base casual)]
-&CMD-+DESC-HELP Multi-Descer=$+desc/help*:think pemit(%#,[u(top_line)]%R[switch(%0,,u(help_+desc),u(help_+desc_[trim(%0)]))]%R[u(bottom_line)])
-&BOTTOM_LINE Multi-Descer=ansi(h,[repeat(=,33)] +desc/help [repeat(=,33)])
+&HELP_+DESC Multi-Descer=The MUSH multi-descer allows you to create a wardrobe for your character, storing multiple descriptions to reflect mood shifts, changes of clothing, injuries, or whatever. You can mix-and-match the descriptions whenever you need them. %r%rWhen using +desc to set your description, you may specify just one stored desc title, or a number of them separated by spaces. The title you specify will be tacked together and stored in your current description. %r%r[ansi(h,+desc)] - Views a list of all your stored descriptions.%r[ansi(h,+desc <list of desc titles>)] - Sets your current description. %r[ansi(h,+desc/create <title>=<desc>)] - Creates a new description. %r[ansi(h,+desc/view <title>)] - Views one of your stored descriptions. %r[ansi(h,+desc/save <title>)] - Saves your current description as "title". %r[ansi(h,+desc/delete <title>)] - Deletes a saved desc. %r[ansi(h,+desc/edit <title>=<text to find>/<text to replace>)] - Edits a saved desc.%r%rThe system will handle \%r's and \%t's automatically. If you want to use ansi(), space(), or other special functions in your descriptions, you should store the descriptions manually by typing [ansi(h,&desc_<title> me=<description>)]. Otherwise they might not show up right.%R%RYour MUSH may have pre-made descs for military uniforms and the like.  You can view and set these as normal (though they will show up in a separate section).%R%RSee [ansi(h,+desc/example)] for an example desc.
+&cmd-+desc-example Multi-Descer=$+desc/example:think pemit(%#,[u(top_line)]%RHere is an example of how the system can be used, given some pretty simplistic descs and a sample character Thomas. %r%rTo create a "wardrobe" for Thomas: %r+desc/create base=Thomas is a tall man with brown hair and eyes. %R+desc/create casual=Today Tom is dressed casually, in blue jeans and a T-shirt. %R+desc/create suit=Tom is wearing a blue pin-stripe suit, with a tacky yellow tie. %R+desc/create ring=On the ring finger of Tom's left hand is a wedding ring. %r%rTo set up Tom's description so he's wearing his suit and wedding ring:%R [ansi(g,+desc base suit ring)] %r%rTo set up his description so he's wearing his casual clothes, but not his ring:%R [ansi(g,+desc base casual)]%R[u(bottom_line)])
+&CMD-+DESC-HELP Multi-Descer=$+desc/help*:think pemit(%#,[u(top_line)]%R[switch(%0,,u(help_+desc),u(more_help_[trim(%0)]))]%R[u(bottom_line)])
+&SHELP_+DESC Multi-Descer=You can set up global pre-made descriptions just by adding attributes to the Multi-Descer object.  Then players can use it as if it were their own desc.%R%R%T&DESC_<TITLE> #DESCER=<DESC>
+&BOTTOM_LINE Multi-Descer=ansi(h,[repeat(=,78)])
 &TOP_LINE Multi-Descer=ansi(h,[repeat(=,29)] Multi-Desc System [repeat(=,30)])
-&VERSION Multi-Descer=1.1
-@Desc Multi-Descer=+desc/help
+&VERSION Multi-Descer=3.0
+@Desc Multi-Descer=Lets characters store multiple descriptions and switch between them easily.%RSee [ansi(hr,+desc/help)] for instrictions.%R%R[u(credits)]
+&CREDITS Multi-Descer=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&desc_example multi-descer=This is an example of a pre-made description:%R%RThe [switch(xget(me,sex),M*,man,F*,woman,person)] before you is decked out in white combat armor.  Normally there would be a much more elaborate description of the armor here.
+
+
+
+@wait 2=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
+@wait 2=@fo %#=+copyhelp [num(Multi-Descer)]
+
+@wait 3=@fo %#=@edit Multi-Descer/*=#DESCER,[num(Multi-Descer)]
+
+@wait 3=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 3=@tel Multi-Descer=#2
+
+
+@wait 4=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
+@wait 4=@pemit/silent %#=%R%T[ansi(hg,- You probably want to remove the DESC_EXAMPLE attribute.%R%T%B%BIt's just an example.)]
+@wait 5=@set me=!quiet
 

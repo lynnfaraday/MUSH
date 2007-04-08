@@ -1,0 +1,91 @@
+@@ Faraday's +cookie System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning +cookie Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
+
+@create Cookie System
+@set Cookie System = WIZARD
+@set Cookie System = !NO_COMMAND
+@set Cookie System = SAFE
+&CMD-+COOKIE Cookie System=$+cookie *:think switch(words(%0),1,[setq(0,pmatch(%0))][pemit(%#,switch(0,t(%q0),ansi(hr,That is not a valid player.),not(match(%#,%q0)),ansi(hr,You can't give yourself a cookie!),not(match(xget(%#,cookies_given),[name(%q0)])),ansi(hr,You have already given %0 a cookie this week.),not(match(xget(%#,alts),%q0)),ansi(hr,You can't give your alt a cookie!),ansi(hg,You give [name(%q0)] a cookie.)[set(%#,cookies_given:[xget(%#,cookies_given)][name(%q0)]%B)][set(%q0,cookies_received:[xget(%q0,cookies_received)]%N%B)]))])
+&CMD-+COOKIE-HERE Cookie System=$+cookie/here:@dolist remove(lcon(%l),%#)=@switch [conn(##)]=>0,@fo %#=+cookie [name(##)]
+&CMD-+COOKIE-LIST Cookie System=$+cookie *:@switch words(%0)=>1,@dolist %0=@fo %#=+cookie ##
+&CMD-+COOKIE-MAIL Cookie System=$+cookie/mail *:think pemit(%#,switch(0,match(on off,%0),ansi(hr,You must specify ON or OFF.),switch(%0,on,ansi(hg,You turn on the cookie mail.)[set(%#,cookie_mail:1)],off,[set(%#,cookie_mail:0)]ansi(hg,You turn off the cookie mail.))
+&CMD-+COOKIE-REMIND Cookie System=$+cookie/remind *:think pemit(%#,switch(0,match(on off,%0),ansi(hr,You must specify ON or OFF.),switch(%0,on,ansi(hg,You turn on the cookie reminder.)[set(%#,cookie_remind:1)],off,[set(%#,cookie_remind:0)]ansi(hg,You turn off the cookie reminder.))
+&CMD-+COOKIES Cookie System=$+cookies:think pemit(%#,[line()]%R[ansi(h,You have given out the following cookies this week:)]%R%R[switch(xget(%#,cookies_given),,[ansi(hr,No Cookies Given)],iter(sort(setdiff(xget(%#,cookies_given),)),%R[ljust(##:,15)][words(graball(xget(%#,cookies_given),##))]))]%R[line()])
+&COOKIE_LOG Cookie System=
+@DESCRIBE Cookie System=Cookie system for player rewards.%R[u(credits)]
+&CREDITS Cookie System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&VERSION Cookie System=3.0
+@set Cookie System/DESCRIBE=no_command visual prefixmatch public nearby
+&CMD-+LUCK Cookie System=$+luck:think pemit(%#,ansi(hg,[line()]%RYou have [xget(%#,luck_points)] luck [switch(xget(%#,luck_points),1,point,points)].%R%RYou can save up a maximum of [xget(#COOKIEDB,max_lp)] luck points.%R[line()]))
+&CMD-+LUCK-SPEND Cookie System=$+luck/spend *=*:think switch(0,gte(xget(%#,luck_points),%0),pemit(%#,ansi(hr,You don't have that many luck points)),isnum(%0),pemit(%#,ansi(hr,That is not a number.)),[remit(%l,ansi(h,%N spends %0 luck points on %1.))][create_job(REQ,Luck - %N,%N has spent %0 luck points on %1,%#)][set(%#,luck_points:[sub(xget(%#,luck_points),%0)])])
+&CMD-+LUCK-SPEND2 Cookie System=$+luck/spend *:think pemit(%#,switch(%0,*=*,,ansi(hr,You forgot the reason.)))
+&CMD-+LUCK-INFO Cookie System=$+luck/info:think pemit(%#,[line()]%R[ansi(h,+luck Uses)]%R%R[u(#COOKIEDB/LUCK_INFO)]%R[line()])
+&HELP_+COOKIE Cookie System=Cookies are a way of rewarding players for fun RP.  If you enjoyed a scene, give the other player(s) a cookie.  It's that simple.  Cookies are anonymous, so other players will not see any messages to let them know they got a cookie.  Cookies are tallied weekly, and those with the most cookies are recognized on the public BBS.%R%RYou can give out as many cookies as you want per week, but only one to each character.  Each week you will receive a mail saying how many cookies you got, unless you turn it off.%R%RCookies also grant 'luck points' (see +help +luck).%R%R[ansi(h,+cookie <player>)] - Gives someone a cookie.%R[ansi(h,+cookie/here)] - Gives everyone in the room a cookie.%R[ansi(h,+cookies)] - Show who all you've given cookies to this week.%R[ansi(h,+cookie/levels)] - Shows the cookie level awards.%R%R[ansi(h,+cookie/remind <on or off>)] - Turns the hourly cookie reminder on or off.%R[ansi(h,+cookie/mail <on or off>)] - Turns the weekly cookie mail on or off.
+&HELP_+LUCK Cookie System=Luck Points, which are obtained through cookies (see +help +cookie) can be used to generate various lucky effects, at staff's discretion.  There is a max cap on the number of luck points you can store up.%R%R[ansi(h,+luck)] - Views your luck points.%R[ansi(h,+luck/spend <points>=<reason>)] - Spends luck points.%R[ansi(h,+luck/info)] - Views what you can spend luck points on.
+&SHELP_+COOKIE Cookie System=Cookies are given out automatically, so there are no staff commands.  The list of who got cookies from whom is posted to the staff jobs BBS every week when cookies are awarded.%R%RThe cookie award levels are stored on #COOKIEDB in attributes named COOKIE_LEVEL_XX.  You can have anywhere from one to 99 cookie levels, but they must be numbered with two digits so they sort right.  Each level should specify:  NAME|# OF COOKIES REQUIRED|ANSI COLOR%RFor example: Bronze|10|hy%R%RYou'll also want to set up the LUCK_INFO attribute to describe what luck points can be spent on.
+@STARTUP Cookie System=@set me=!no_command;@fun COOKIE_AWARD=[num(me)],FUN_COOKIE_AWARD
+@set Cookie System/STARTUP=no_command prefixmatch
+&tr-cookie-award Cookie System=think [set(me,cookie_log:)];@dolist sort_names(lsearch(all,type,player))={think [setq(0,xget(##,cookies_received))][setq(1,words(%q0))][set(##,cookies:[add(xget(##,cookies),%q1)])][set(##,luck_points:[min(xget(#COOKIEDB,max_LP),add(xget(##,luck_points),mul(%q1,xget(#COOKIEDB,lp_per_cookie))))])][switch(%q1,>0,set(me,cookie_log:[v(cookie_log)][switch(words(v(cookie_log)),>0,|)]##:%q1-%q0))][set(##,cookies_received:)][set(##,cookies_given:)];@switch [xget(##,cookie_mail)]=1,{+mail [name(##)]=Cookies!/You received %q1 cookies this week!  You now have [xget(##,luck_points)] luck points.}};@wait 30={+bbpost Staff Job Notices/Cookie Awards For [timefmt($x,secs())]=[ljust(Player,15)]Cookies Received%R[line2()][iter(v(cookie_log),%R[ljust(name(before(##,:)),15)]%B[before(after(##,:),-)] from [after(after(##,:),-)],|)];+bbpost Cookie Notices/Top Cookie Earners for [timefmt($x,secs())]=[iter(v(cookie_log),[setq(3,%q3[rjust(before(after(##,:),-),4,0)]:[before(##,:)]_[before(after(##,:),-)]%B)],|)][iter(extract(revwords(sort(%q3)),1,5,),%R#@. [ljust(name(before(after(##,:),_)),15)] - [after(after(##,:),_)] cookies)]} 
+&TR-COOKIE-REMINDER Cookie System=@dolist lwho()=@switch xget(##,cookie_remind)=1,@pemit ##=ansi(hg,<OOC> Remember to +cookie.  Cookies will be awarded on Sunday at midnight server time.)
+&CMD-+COOKIE-LEVELS Cookie System=$+cookie/levels:think pemit(%#,[line()]%R[ansi(h,Cookie award levels)][iter(sort(lattr(#COOKIEDB/COOKIE_LEVEL_*)),%R[ljust(u(fun_format_cookie_level_name,#@),20)][ansi(h,[u(fun_cookie_level_cookies,#@)] cookies)])]%R%RYou have a total of [xget(%#,cookies)] cookies[switch(cookie_award(%#),,.,\,%Bwhich gives you the [cookie_award(%#)] cookie award.)]%R[line()])
+&FUN_COOKIE_LEVEL_NAME Cookie System=extract(xget(#COOKIEDB,COOKIE_LEVEL_[rjust(%0,2,0)]),1,1,|)
+&FUN_COOKIE_LEVEL_COOKIES Cookie System=extract(xget(#COOKIEDB,COOKIE_LEVEL_[rjust(%0,2,0)]),2,1,|)
+&FUN_COOKIE_LEVEL_COLOR Cookie System=extract(xget(#COOKIEDB,COOKIE_LEVEL_[rjust(%0,2,0)]),3,1,|)
+&FUN_FORMAT_COOKIE_LEVEL_NAME Cookie System=ansi(u(fun_cookie_level_color,%0),u(fun_cookie_level_name,%0))
+&FUN_COOKIE_LEVEL Cookie System=localize([setq(9,0)][iter(sort(lattr(#COOKIEDB/COOKIE_LEVEL_*)),switch(gte(xget(%0,cookies),u(fun_cookie_level_cookies,#@)),1,setq(9,#@)),,)]%q9)
+&FUN_COOKIE_AWARD Cookie System=u(fun_format_cookie_level_name,u(fun_cookie_level,%0))
+
+&CRON_JOB_COOKIEAWARD Cookie System=@tr #COOKIESYS/tr-cookie-award
+&CRON_JOB_COOKIEREMIND Cookie System=@tr #COOKIESYS/tr-cookie-reminder
+&CRON_TIME_COOKIEAWARD Cookie System=||Sun|23|59|
+&CRON_TIME_COOKIEREMIND Cookie System=|||01 03 05 07 09 11 13 15 17 19 21 23|00|
+
+@create Cookie DB
+@desc Cookie DB=Stores data for the cookie system.
+&LP_PER_COOKIE Cookie DB=0.1
+&MAX_LP Cookie DB=5
+&COOKIE_LEVEL_01 Cookie DB=Copper|10|m
+&COOKIE_LEVEL_02 Cookie DB=Bronze|25|y
+&COOKIE_LEVEL_03 Cookie DB=Silver|50|h
+&COOKIE_LEVEL_04 Cookie DB=Gold|100|hy
+&COOKIE_LEVEL_05 Cookie DB=Platinum|200|hb
+&COOKIE_LEVEL_06 Cookie DB=Palladium|500|hg
+&LUCK_INFO Cookie DB=Pester your staff to fill in what you can use luck points on.
+
+@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
+
+@wait 4=@fo me=@edit Cookie System/*=#COOKIEDB,[num(Cookie DB)]
+@wait 4=@fo me=@edit Cookie System/*=#COOKIESYS,[num(Cookie System)]
+
+@wait 4=think setup_attr(h,cookies_given,)
+@wait 4=think setup_attr(h,cookies_received,)
+@wait 4=think setup_attr(h,cookie_remind,1)
+@wait 4=think setup_attr(h,cookie_mail,1)
+@wait 4=think setup_attr(h,cookies,0)
+@wait 4=think setup_attr(h,luck_points,1)
+
+@wait 5=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
+@wait 5=@fo me=+copyhelp [num(Cookie System)]
+@wait 5=+bbnewgroup Cookie Notices
+
+@wait 7=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 7=@tel Cookie DB=Cookie System
+@wait 7=@tel Cookie System=#2
+
+@wait 8=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
+@wait 8=@pemit/silent %#=%R%R[ansi(hr,Be sure to copy the CRON job attributes to the MUSHCron system.)]
+
+@wait 8=@set me=!quiet
+

@@ -1,56 +1,9 @@
-@@ Faraday's Events System
-@@ Coded by Linda Naughton O'Meara
-@@ http://www.wordsmyth.org/faraday
+@@ Faraday's MUSH Postmaster System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
 @@
-@@ ===================
-@@ OVERVIEW
-@@ ===================
-@@ This system allows you to track upcoming MUSH events.
-@@
-@@ ===================
-@@ FEATURES
-@@ ===================
-@@
-@@ * Lets players submit and view upcoming events.
-@@ * Supports a reminder that you can add to an @aconnect. 
-@@
-@@ ===================
-@@ REQUIREMENTS
-@@ ===================
-@@
-@@ * PennMUSH
-@@ * Faraday's Global Utility Functions
-@@
-@@ ===================
-@@ INSTALLATION
-@@ ===================
-@@ 
-@@ Simply /quote this script to your MUSH via a MUSH client.  You can also cut and paste, but beware
-@@ of linebreaks.  There is no need to create any objects or do any manual editing of this script unless
-@@ your master room is something other than #2.
-@@
-@@ ===================
-@@ SETUP
-@@ ===================
-@@
-@@ You may wish to add the +events/rem command to your global ACONNECT so folks are notified of 
-@@ upcoming events. If you have some kind of MOTD command, you can add the event reminders to that 
-@@ using the FUN_GET_REMINDERS function on the events database object.
-@@
-@@ ===================
-@@ USAGE
-@@ ===================
-@@ 
-@@ See +events/help for usage instructions.
-@@
-@@ ===================
-@@ UPDATES
-@@ ===================
-@@
-@@ Join the mailing list (http://groups.yahoo.com/group/faradaycode) to keep up with the latest news.
-@@
-@@     * Version 1.0 - 6/12/04 - Initial version
-
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
 
 @set me=quiet
 
@@ -63,30 +16,30 @@
 @set Events System = WIZARD
 @set Events System = !NO_COMMAND
 &CMD-+EVENT-ALIAS Events System=$+event *:@fo %#=+events %0
-&CMD-+EVENTS Events System=$+events:think pemit(%#,[line_with_text(Events System)]%R[ansi(h,#%B%B%BEvent[space(40)]Date/Time)]%R[repeat(-,78)][iter(sortby(#EVENTDB/sortby_events,lattr(#EVENTDB/event_*)),[setq(0,switch(u(#EVENTDB/fun_event_distance,##),<0,hx,n))]%R[ljust(#@.,3)] [padstr(ansi(%q0,u(#EVENTDB/fun_get_name,##)),45)][ansi(%q0,u(#EVENTDB/fun_get_datetime,##))])]%R[line_with_text(+events/help)])
-&CMD-+EVENTS-CREDITS Events System=$+events/credits:think pemit(%#,[line()]%REvents System Version [xget(#EVENTDB,version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R[line()])
-&CMD-+EVENTS-DELETE Events System=$+events/delete *:think pemit(%#,switch(1,lte(%0,0),ansi(hr,That is not a valid event.),gt(%0,words(lattr(#42/event_*))),ansi(hr,That is not a valid event.),[setq(0,extract(sortby(#42/sortby_events,lattr(#42/event_*)),%0,1))]or(isstaff(%#),strmatch(u(#42/fun_get_contact,%q0),%N)),ansi(hg,You delete event #%0)[wipe(#42/%q0)],ansi(hr,Only the submitter may delete an event.))
-&CMD-+EVENTS-HELP Events System=$+events/help:think pemit(%#,[line_with_text(Events System)]%R[u(#EVENTDB/HELP_+EVENTS)]%R[line()]
-&cmd-+events-REM Events System=$+events/rem:think pemit(%#,[line_with_text(Events This Week)][u(#EVENTDB/fun_get_reminders)]%R[line_with_text(+events/help)])
-&CMD-+EVENTS-SUBMIT Events System=$+events/submit *=*/*:think [set(#EVENTDB,event_[xget(#EVENTDB,next_event)]:%N|%0|%1|[escape_cr(%2)])][pemit(%#,ansi(hg,You submit your event %0.))][set(#EVENTDB,next_event:[inc(xget(#EVENTDB,next_event))])]
-&CMD-+EVENTS-VIEW Events System=$+events *:think pemit(%#,switch(1,lte(%0,0),ansi(hr,That is not a valid event.),gt(%0,words(lattr(#EVENTDB/event_*))),ansi(hr,That is not a valid event.),[setq(0,extract(sortby(#EVENTDB/sortby_events,lattr(#EVENTDB/event_*)),%0,1))][line_with_text(Events System)]%R[center(ansi(hr,u(#EVENTDB/fun_get_name,%q0)),78)]%R%R[ansi(h,Date/Time:)]%B[u(#EVENTDB/fun_get_datetime,%q0)]%R[ansi(h,Contact:)]%B%B%B[u(#EVENTDB/fun_get_contact,%q0)]%R%R[ansi(h,Details:)]%R[u(#EVENTDB/fun_get_details,%q0)]%R[line_with_text(+events/help)])
-@DESCRIBE Events System=+events/help
-@set Events System/DESCRIBE=no_command visual prefixmatch public nearby
-@STARTUP Events System=@set me=!no_command
-@set Events System/STARTUP=no_command prefixmatch
+&CMD-+EVENTS Events System=$+events:think pemit(%#,[line_with_text(Events System)]%R[ansi(h,#%B%B%BEvent[space(40)]Date/Time)]%R[repeat(-,78)][iter(sortby(sortby_events,lattr(#EVENTDB/event_*)),[setq(0,switch(u(fun_event_distance,##),<0,hx,n))]%R[ljust(#@.,3)] [padstr(ansi(%q0,u(fun_get_name,##)),45)][ansi(%q0,u(fun_get_datetime,##))])]%R[line_with_text(+help +events)])
+&CMD-+EVENTS-DELETE Events System=$+events/delete *:think pemit(%#,switch(1,lte(%0,0),ansi(hr,That is not a valid event.),gt(%0,words(lattr(#EVENTDB/event_*))),ansi(hr,That is not a valid event.),[setq(0,extract(sortby(sortby_events,lattr(#EVENTDB/event_*)),%0,1))]or(isstaff(%#),strmatch(u(fun_get_contact,%q0),%N)),ansi(hg,You delete event #%0)[wipe(#EVENTDB/%q0)],ansi(hr,Only the submitter may delete an event.))
+&cmd-+events-REM Events System=$+events/rem:think pemit(%#,[line_with_text(Events This Week)][u(fun_get_reminders)]%R[line_with_text(+help +events)])
+&CMD-+EVENTS-SUBMIT Events System=$+events/submit *=*/*:think switch(0,u(fun_is_valid_date,%1),pemit(%#,ansi(hr,That is not a valid date.  The format must be: Sun Aug 08 2006 @ 5pm EST)),[set(#EVENTDB,event_[xget(#EVENTDB,next_event)]:%N|%0|%1|[escape_cr(%2)])][pemit(%#,ansi(hg,You submit your event %0.))][set(#EVENTDB,next_event:[inc(xget(#EVENTDB,next_event))])])
+&CMD-+EVENTS-VIEW Events System=$+events *:think pemit(%#,switch(1,lte(%0,0),ansi(hr,That is not a valid event.),gt(%0,words(lattr(#EVENTDB/event_*))),ansi(hr,That is not a valid event.),[setq(0,extract(sortby(sortby_events,lattr(#EVENTDB/event_*)),%0,1))][line_with_text(Events System)]%R[center(ansi(hr,u(fun_get_name,%q0)),78)]%R%R[ansi(h,Date/Time:)]%B[u(fun_get_datetime,%q0)]%R[ansi(h,Contact:)]%B%B%B[u(fun_get_contact,%q0)]%R%R[ansi(h,Details:)]%R[u(fun_get_details,%q0)]%R[line_with_text(+help +events)])
+@DESCRIBE Events System=This system tracks upcoming MUSH events and reminds people about them.%R%R[u(credits)]
+@STARTUP Events System=@set me=!no_command;@function event_reminders=[num(me)],fun_get_reminders
+&VERSION Events System=3.0
+&CREDITS Events System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&FUN_EVENT_DISTANCE Events System=sub(u(fun_event_time,u(fun_get_datetime,%0)),secs())
+&FUN_EVENT_TIME Events System=convtime([extract(%0,1,3)]%B23:59:59%B[extract(%0,4,1)])
+&FUN_IS_VALID_DATE Events System=gt(u(fun_event_time,%0),0)
+&FUN_GET_CONTACT Events System=extract(xget(#EVENTDB,%0),1,1,|)
+&FUN_GET_DATETIME Events System=extract(xget(#EVENTDB,%0),3,1,|)
+&FUN_GET_DETAILS Events System=extract(replace_cr(xget(#EVENTDB,%0)),4,1,|)
+&FUN_GET_NAME Events System=extract(xget(#EVENTDB,%0),2,1,|)
+&FUN_GET_REMINDERS Events System=[squish(iter(sortby(sortby_events,lattr(#EVENTDB/event_*)),[setq(9,u(fun_event_distance,##))][switch(and(gte(%q9,0),lte(%q9,2409600)),1,[setq(8,%q8%R[center("[u(fun_get_name,##)]" on [u(fun_get_datetime,##)],78)])])]))][switch(words(%q8),0,%R[center(None Scheduled,78)],%q8)]
+&HELP_+EVENTS Events System=Tinyplot scenes and other events can be listed using the +events command so everyone will be reminded of them.%R%R[ansi(h,+events)] - List all events.%R[ansi(h,+events <#>)] - Views details for a particular event.%R[ansi(h,+events/delete <#>)] - Deletes an event.  Only the submitter can do this.%R[ansi(h,+events/submit <title>=<date-time>/<detailed description>)] - Adds a new event.%R%TNOTE: The date/time must be in the form: Day Month Date Year @ Time%R%TExample: Sun Jun 02 2007 @ 7pm EST%R%TIt is strongly suggested that you list the timezone to avoid confusion.
+&SORTBY_EVENTS Events System=sub(u(fun_event_distance,%0),u(fun_event_distance,%1))
+
 
 @create Events Database
-@set Events Database = NO_COMMAND
-&FUN_EVENT_DISTANCE Events Database=sub(convtime([extract(u(#EVENTDB/fun_get_datetime,%0),1,3)]%B23:59:59%B[last(time())]),secs())
-&FUN_GET_CONTACT Events Database=extract(xget(#EVENTDB,%0),1,1,|)
-&FUN_GET_DATETIME Events Database=extract(xget(#EVENTDB,%0),3,1,|)
-&FUN_GET_DETAILS Events Database=extract(replace_cr(xget(#EVENTDB,%0)),4,1,|)
-&FUN_GET_NAME Events Database=extract(xget(#EVENTDB,%0),2,1,|)
-&FUN_GET_REMINDERS Events Database=[squish(iter(sortby(#EVENTDB/sortby_events,lattr(#EVENTDB/event_*)),[setq(9,u(#EVENTDB/fun_event_distance,##))][switch(and(gte(%q9,0),lte(%q9,2409600)),1,[setq(8,%q8%R[center("[u(#EVENTDB/fun_get_name,##)]" on [u(#EVENTDB/fun_get_datetime,##)],78)])])]))][switch(words(%q8),0,%R[center(None Scheduled,78)],%q8)]
-&HELP_+EVENTS Events Database=Tinyplot scenes and other events can be listed using the +events command so everyone will be reminded of them.%R%R[ansi(h,+events)] - List all events.%R[ansi(h,+events <#>)] - Views details for a particular event.%R[ansi(h,+events/delete <#>)] - Deletes an event.  Only the submitter can do this.%R[ansi(h,+events/submit <title>=<date-time>/<detailed description>)] - Adds a new event.%R%TNOTE: The date/time must be in the form: Day Month Date @ Time%R%TExample: Sun Jun 02 @ 7pm EST%R%TIt is strongly suggested that you list the timezone to avoid confusion.%R[ansi(h,+events/credits)] - Shows version info and credits.
+@describe Events Database=Stores data for the events system.
 &NEXT_EVENT Events Database=1
-&SORTBY_EVENTS Events Database=sub(u(#EVENTDB/fun_event_distance,%0),u(#EVENTDB/fun_event_distance,%1))
-&VERSION Events Database=1.0
 
 
 @pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
@@ -95,13 +48,19 @@
 @wait 4=@fo me=@edit Events Database/*=#EVENTDB,[num(Events Database)]
 
 
-@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
 
-@wait 5=@tel Events Database=Events System
-@wait 6=@tel Events System=#2
+@wait 5=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
+@wait 5=@fo %#=+copyhelp [num(Events System)]
 
-@pemit/silent %#=[ansi(hg,Make sure you have also installed the Global Utility Functions system.)]
 
-@wait 7=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
+@wait 5=@fo me=@tr Events System/startup
 
-@wait 7=@set me=!quiet
+@wait 6=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 7=@tel Events Database=Events System
+@wait 8=@tel Events System=#2
+
+@wait 8=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
+@wait 8=@pemit/silent %#=%R%T[ansi(hr,If you're not using the MOTD system, you should create a global ACONNECT for the +events/rem command, so people are reminded of upcoming events.)]%R
+
+@wait 9=@set me=!quiet

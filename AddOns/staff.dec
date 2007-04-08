@@ -1,0 +1,55 @@
+@@ Faraday's Misc Staff Commands
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning Staff Command System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
+
+
+@create Staff Commands
+@lock/Use Staff Commands=ISSTAFF/1
+@set Staff Commands = WIZARD
+@set Staff Commands = !NO_COMMAND
+@STARTUP Staff Commands=@set me=!no_command
+&ISSTAFF Staff Commands=isstaff(%#)
+
+&CMD-+FINDSITE Staff Commands=$+findsite *:think pemit(%#,[setq(0,switch(t(pmatch(%0)),1,xget(pmatch(%0),lastsite),%0))][setq(1,mid(%q0,0,4))][squish(iter(lsearch(all,type,player),switch(1,strmatch(xget(##,lastsite),*%q0*),setq(2,%q2##%B),strmatch(xget(##,lastsite),*%q1*),setq(3,%q3##%B))))][line()]%R[ansi(hr,Search String:  %q0%R)]%R[ansi(hg,Exact Matches:)][iter(%q2,%R[name(##)] - [xget(##,lastsite)])]%R%R[ansi(hb,Partial Matches:)][iter(%q3,%R[name(##)] - [xget(##,lastsite)])]%R[line()]
+&FUN_FINDSITE Staff Commands=[setq(0,switch(t(pmatch(%0)),1,xget(pmatch(%0),lastsite),%0))][iter(lsearch(all,type,player),switch(strmatch(xget(##,lastsite),*%q0*),1,%R[name(##)] - [xget(##,lastsite)]))]
+&SHELP_+FINDSITE Staff Commands=The findsite command is used to find people who may be playing multiple characters.  If you give it a player name, it will find any other players who login from the same site.  If you give it a site name (or part of a name), it will find any other players whose site matches.  It will identify exact matches and also partial matches (which is important since many ISPs change IP addresses).%R%R +findsite <player name or site name>
+
+&CMD-+HOP Staff Commands=$+hop *:think [setq(0,lsearch(all,type,room))][setq(1,1)][squish(iter(%q0,switch(and(strmatch(name(##),*%0*),%q1),1,[setq(1,0)][tel(%#,##)])))][switch(%q1,1,pemit(%#,ansi(hr,That is not a valid location))]
+&CMD-+HOP-DIR Staff Commands=$+hop/dir:think [setq(0,lsearch(all,type,room))][setq(0,sort_names(%q0))]pemit(%#,iter(%q0,[switch(mod(#@,2),1,%R,space(5))][ljust(##,4)] - [ljust([name(##)],28)]))
+&CMD-+HOP-DIR-SEARCH Staff Commands=$+hop/dir *:think [setq(0,lsearch(all,eroom,\[strmatch(name(##),*%0*)\]))][setq(0,sort_names(%q0))]pemit(%#,iter(%q0,[switch(mod(#@,2),1,%R,space(5))][ljust(##,4)] - [ljust([name(##)],28)]))
+&SHELP_+HOP Staff Commands=The +hop command is used to teleport easily to a particular room on the MUSH.  Instead of having to search for the DB#, you just give it the name and it does the searching.%R%RLimitations:  If two rooms have similar names, it will jump you to the first one that matches.   If your MUSH has too many rooms, you may need to increase your function invocation limit to make the command work.%R%R+hop <location name>%R+hop/dir - shows all locations and their DB#s.%R+hop/dir <search> - searches the +hop directory
+
+&CMD-+JOIN Staff Commands=$+join *:@remit loc(pmatch(%0))=[ansi(h,<OOC> %N is about to join your location.)];@wait 5={@fo %#=@tel loc(pmatch(%0));@remit loc(pmatch(%0))=[ansi(h,<OOC> %N hops into the room.)]}
+&SHELP_+JOIN Staff Commands=The +join command will @tel you to a player's location.  There is an OOC warning to the room you're jumping to and a 5 second delay.%R%R+join <playername> - Joins a player
+
+&CMD-+SUMMON Staff Commands=$+summon *:@switch [setq(0,pmatch(%0))][t(%q0)]=0,{@pemit %#=ansi(hr,There is no such player.)},{@remit [loc(%q0)]=[ansi(h,<OOC> [name(%q0)] is being summoned away.)];@pemit %#=[ansi(h,You summon %0)];@switch [xget(%q0,status)]=IC,&ICLOC %q0=[loc(%q0)];&STATUS %q0=OOC}
+&SHELP_SUMMON Staff Commands=The +summon command will teleport a player to your location.  It will set them OOC so that they can return to where they were by going IC.%R%R+summon <playername> - Summons a player.
+
+@DESCRIBE Staff Commands=Miscellaneous staff commands.%R%R[u(credits)]
+&VERSION Staff Commands=3.0
+&CREDITS Staff Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+
+
+
+@wait 4=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
+@wait 4=@fo %#=+copyhelp [num(Staff Commands)]
+
+
+@wait 5=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 6=@tel Staff Commands=#2
+
+@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 10=@set me=!quiet
+
