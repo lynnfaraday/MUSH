@@ -38,6 +38,7 @@
 @set FUDGE Skill Functions = WIZARD
 @set FUDGE Skill Functions = NO_COMMAND
 @DESCRIBE FUDGE Skill Functions=Functions for the FUDGE skills system.
+@STARTUP FUDGE Skill Functions=@fun TRAIT_NUM=[num(me)],FUN_GET_TRAIT_LVL_NUM;@fun TRAIT_NAME=[num(me)],FUN_GET_TRAIT_LVL_NAME;@fun ROLL_TRAIT=[num(me)],FUN_GET_ROLLED_DEGREE;@FUN ROLL_PLAYER_TRAIT=[num(me)],FUN_ROLL_PLAYER_TRAIT;@fun LEVEL_NUM=[num(me)],FUN_LEVEL_NUM;@fun LEVEL_NAME=[num(me)],FUN_LEVEL_NAME;@fun PRETTY_LEVEL_NUM=[num(me)],FUN_PRINT_NUM
 &FUN_ATTR_LIST FUDGE Skill Functions=iter(lattr(#SKILLDB/ATTR_DESC_*),capstr_all(lcstr(after(after(##,_),_)),_))
 &FUN_SKILLS_LIST FUDGE Skill Functions=iter(lattr(#SKILLDB/SKILL_DESC_*),capstr_all(lcstr(after(after(##,_),_)),_))
 &FUN_NOTIFY_ROLL_RESULTS FUDGE Skill Functions=[remit(%0,%1)][cemit(SkillRolls,<[ansi(hc,SkillRolls)]> %1
@@ -47,6 +48,7 @@
 &FUN_GET_ROLLED_DEGREE FUDGE Skill Functions=add(%0,u(fun_roll_fudge_dice),%1)
 &FUN_GET_TRAIT_LVL_NAME FUDGE Skill Functions=u(fun_level_name,u(fun_get_trait_lvl_num,%0,%1))
 &FUN_GET_TRAIT_LVL_NUM FUDGE Skill Functions=localize([setq(9,grab(xget(%0,[switch(u(#SKILLFUNC/FUN_IS_VALID_ATTR,%1),1,attributes,skills)]),%1:*))][switch(%q9,*:*,after(%q9,:),[xget(#SKILLDB,MIN_TRAIT_LEVEL)])])
+&FUN_ROLL_PLAYER_TRAIT FUDGE Skill Functions=u(fun_get_rolled_degree,u(fun_get_trait_lvl_num,%0,%1),%2)
 &FUN_IS_VALID_ATTR FUDGE Skill Functions=hasattr(#SKILLDB,ATTR_DESC_%0)
 &FUN_IS_VALID_LEVEL_NAME FUDGE Skill Functions=t(match(xget(#SKILLDB,trait_levels),%0:*))
 &FUN_IS_VALID_LEVEL_NUM FUDGE Skill Functions=t(match(xget(#SKILLDB,trait_levels),*:%0))
@@ -70,7 +72,8 @@
 &MORE_HELP_PACKAGES FUDGE Skill Functions=The skill package system lets you automatically pick skills (and minimum levels) your character should have based on his chosen profession.  Packages are just suggestions, so you can move points around after you've taken one to customize your character.  However, bear in mind that the suggestions are there for a reason.  Be prepared to have a good justification in your background if you start ditching skills.%R%RTaking a package will never LOWER any of your skills.  If you already have a skill at the minimum level or higher, it will just skip that one.  You get no point benefit from picking a package.  It costs the same as it would if you just manually took the skills.  It's just a convenience.%R%RNote that many careers will have multiple packages.  For example, it takes a lot of work to be a fighter pilot, or a doctor, so you won't have as many points for other things as most characters.%R%R[ansi(h,+package/<faction>)] - Shows faction-based skill packages%R%R[ansi(h,+package <package>)] - Views details on a package, including the skills and cost.%R[ansi(h,+package/take <package>)] - Takes a package, raising any skills you don't already have to the minimum suggested level.%R%RNOTE: You can only take a package in chargen.
 &MORE_HELP_ROLLS FUDGE Skill Functions=FUDGE uses a unique die system.  You roll "FUDGE dice", which are 6-siders with the sides labeled either -1, +0, or +1.  You add the dice together to get a result from -4 to +4.  You add that to your trait level and get the final result (which is called the Rolled Degree). The degrees have the same names as the traits.  Most tasks require only a Fair degree. Others will be easier or harder.%R%RExample: Mary is trying to jump across a chasm. Its not that wide, so she only needs a Fair success (3). Her jumping skill is Good (4) and she rolls a -1. Adding the skill and roll together gives a rolled degree of Fair (3). She succeeded, but barely. If it had been a wide chasm, with a difficulty level of Good, she would have failed.%R%RA similar mechanic applies for opposed checks. Each player rolls, and you compare their rolled degrees.%R%RExample: Jane and Joe are playing tug-of-war. Theres no particular skill involved, so they both roll strength. Jane gets a rolled degree of Mediocre (2) and Joe gets a rolled degree of Good (4). Joe wins and rolled 2 levels higher than Janes roll.%R%RSometimes there are action modifiers that affect the roll. +1/-1 is normal, +2/-2 is a large modifier, and +3/-3 is an extreme modifier.%R%RIts possible to roll better than Superb and worse than Terrible. Those rolls are generally labeled with *'s BeyondSuperb*, BeyondSuperb**, etc.
 &MORE_HELP_TRAITS FUDGE Skill Functions=Traits (skills and attributes) are rated in descriptive levels.  Each rating is given a number (0 to 6).%R%R[ansi(h,Level)][space(11)][ansi(h,Skill Meaning)][space(13)][ansi(h,Attribute Meaning)]%R[ljust(ansi(r,(0) Terrible),15)] [ljust(No training,25)] Near-handicapped%R[ljust(ansi(b,(1) Poor),15)] [ljust(Very basic training,25)] Seriously below average%R[ljust(ansi(m,(2) Mediocre),15)] [ljust(Casual hobbyist/student,25)] Below average%R[ljust(ansi(y,(3) Fair),15)] [ljust(Junior professional,25)] Average%R[ljust(ansi(g,(4) Good),15)] [ljust(Normal professional,25)] Above Average%R[ljust(ansi(c,(5) Great),15)] [ljust(Seasoned/Veteran,25)] Gifted%R[ljust(ansi(r,(6) Superb),15)] [ljust(World-class expert,25)] Savant %R%R[ansi(h,+skills)] - Shows the list of skills (and their descriptions)%R[ansi(h,+attributes)] - Shows you the list of attributes (and their descriptions)
-&SHELP_SKILLS FUDGE Skill Functions=Staff members can use the [ansi(h,+sheet <char>)] command to view any player's +sheet.  They can also use the +roll commands to simulate NPC rolls when judging scenes.%R%RThe [ansi(h,+checkskills <player>)] command is used to review a character's skills compared to the skill packages they should have.%R%RPLEASE NOTE:  Although the trait numbers are displayed from 0-6 to the players, internally they are tracked as -3 to +3 because that's how FUDGE works.  Bear that in mind when editing attributes and/or tweaking the code.%R%RSkill roll results are emitted to a [ansi(h,SkillRolls)] channel, if one is configured.  Staff members can subscribe to that channel to see rolls from afar.%R%RYou can see who has what skills with the skill census:  [ansi(h,+skillcensus <skill>)] or [ansi(h,+skillcensus <skill>=<level name: good, fair, etc.>)] (to see who has the skill above a certain level).%R%RCustomize skill and attribute data on object #SKILLDB.  Look at that object for more info.  [ansi(hr,Important:)] Do not use spaces or hyphens in skill or attribute names.%R%RSet up a weekly cron job to run the TR-WEEKLY-XP command on the XP system.
+&SHELP_SKILLS FUDGE Skill Functions=Staff skill commands:%R%R[ansi(h,+sheet <char>)] - Views another player's sheet.%R%R[ansi(h,+skillcensus <skill>)] - See who has that skill.%R[ansi(h,+skillcensus <skill>=<level name: good, fair, etc>)] - Sees who has that skill above that level.%R%R[ansi(h,+checkskills <player>)] - Checks a player's skills versus the packages set up for their position.  Informs you if any are too low.%R%RStaff can also use the basic +roll commands (see +help skills) to simulate rolls for NPCs.  Roll results are emitted to the [ansi(hc,SkillRolls)] channel if there is one.  Staff members can join that channel to see skill rolls from afar.%R%RSee also [ansi(h,+shelp skills_config)]
+&MORE_SHELP_SKILLS_CONFIG Skill Functions=Customize skill and attribute data on object #SKILLDB.  Look at that object for more info.%R[ansi(hr,Important:)] Do not use spaces or hyphens in skill or attribute names.%R%RNOTE:  Although the trait numbers are displayed from 0-6 to the players, internally they are tracked as -3 to +3 because that's how FUDGE works.  Bear that in mind when editing attributes and/or tweaking the code.%R%RYou'll also need to set up a weekly cron job to run the TR-WEEKLY-XP command on the XP system.%R%RYou can integrate the skills system into your other code using the following global functions:%R%RTRAIT_NUM(<playerDB#>,<trait>) - Gets the trait value, as a number%RTRAIT_NAME(<playerDB#>,<trait>) - Gets the trait value, as a name (Good, Fair, etc)%RROLL_TRAIT(<level number - -2, 0, etc.>,<modifier>) - Rolls skill dice and reports the result (from -3 to +3 before modifiers)%RROLL_PLAYER_TRAIT(<playerDB#>,<trait>,<modifier>) - Same as roll trait, but gets the player's trait number for you.%RLEVEL_NAME(<level number>) - Given a level number (like 0), returns the name of that level (Fair)%RLEVEL_NUM(<level name>) - Given a level name (like fair), returns the level number (0)%RPRETTY_LEVEL_NUM(<level num>) - Converts a raw level num (-3 to +3) to a pretty player-friendly level (0 to 6)
 
 @create FUDGE Skill Data
 @set FUDGE Skill Data = NO_COMMAND
@@ -157,7 +160,7 @@
 
 &MAX_SKILLS_ABOVE_2 FUDGE Skill Data=1
 &MAX_SKILLS_ABOVE_1 FUDGE Skill Data=2
-&MAX_SKILLS_ABOVE_0 FUDGE Skill Data=6
+&MAX_SKILLS_ABOVE_0 FUDGE Skill Data=5
 &MAX_ATTRIBUTES_ABOVE_2 FUDGE Skill Data=1
 &MAX_ATTRIBUTES_ABOVE_1 FUDGE Skill Data=1
 &MAX_ATTRIBUTES_ABOVE_0 FUDGE Skill Data=3
@@ -208,9 +211,9 @@
 @set Chargen Info Commands = DARK
 @set Chargen Info Commands = WIZARD
 @set Chargen Info Commands = !NO_COMMAND
-@DESCRIBE Chargen Info Commands=Stores Chargen Info Commands
+@DESCRIBE Chargen Info Commands=Part of the FUDGE skills system.
 
-&cmd-+limits Chargen Info Commands=$+limits:think pemit(%#,[line()]%R[ansi(h,Attribute Limits)][iter(lattr(#SKILLDB/MAX_ATTRIBUTES_ABOVE_*),%RAbove [u(#SKILLFUNC/fun_level_name,[last(##,_)])] - [u(#SKILLFUNC/FUN_MAX_ATTRS_ABOVE_LVL,[last(##,_)])])]%R%R[ansi(h,Skill Limits)][iter(lattr(#SKILLDB/MAX_SKILLS_ABOVE_*),%RAbove [u(#SKILLFUNC/fun_level_name,[last(##,_)])] - [u(#SKILLFUNC/FUN_MAX_SKILLS_ABOVE_LVL,[last(##,_)])])]%R[line()])
+&cmd-+limits Chargen Info Commands=$+limits:think pemit(%#,[line()]%R[ansi(h,Attribute Limits)][iter(lattr(#SKILLDB/MAX_ATTRIBUTES_ABOVE_*),%RAbove [u(#SKILLFUNC/fun_level_name,[last(##,_)])] - [u(#SKILLFUNC/FUN_MAX_ATTRS_ABOVE_LVL,[last(##,_)])])]%R%R[ansi(h,Skill Limits)][iter(lattr(#SKILLDB/MAX_SKILLS_ABOVE_*),%RAbove [u(#SKILLFUNC/fun_level_name,[last(##,_)])] - [u(#SKILLFUNC/FUN_MAX_SKILLS_ABOVE_LVL,[last(##,_)])])]%R%RPlease note that the numbers above are TOTALS. So if it says you can only have 5 skills above Fair, that means you can have 1 Superb/1 Great/3 Good, or 5 Good, or 1 Great/4 Good, or any other combination that adds up to 5.%R[line()])
 &CMD-+PACKAGES-alias1 Chargen Info Commands=$+package:@fo %#=+package/[xget(%#,faction)]
 &CMD-+PACKAGES-alias2 Chargen Info Commands=$+packages:@fo %#=+package/[xget(%#,faction)]
 &cmd-+packages-alias3 Chargen Info Commands=$+packages/all:@fo %#=+package/all
@@ -248,6 +251,7 @@
 @set XP System = WIZARD
 @set XP System = SAFE
 @set XP System=!no_command
+@describe XP System=Part of the FUDGE skills system.
 
 &CMD-+PRACTICE XP System=$+practice *:think [setq(1,switch(u(#SKILLFUNC/fun_is_valid_skill,%0),1,skills,attributes))][setq(2,u(#SKILLFUNC/fun_get_trait_lvl_num,%#,%0,%q1))][setq(6,switch(%q2,<-1,1,-1,.75,0,.5,1,.25,>1,.25))]pemit(%#,switch(0,or(u(#SKILLFUNC/fun_is_valid_skill,%0),u(#SKILLFUNC/fun_is_valid_attr,%0)),ansi(hr,That is not a valid skill or attribute.),not(xget(%#,has_practiced)),ansi(hr,You have already practiced once this week.),ansi(hg,You practice [capstr_all(%0,_)].  You gain %q6 XP.  Please remember to only use this command when it makes sense ICly.)[set(%#,has_practiced:1)][set(#XPDATA,log_practice:[xget(#XPDATA,log_practice)]|%N practiced %0 for %q6 XP.)][u(fun_add_xp,%#,trim(%0),%q6)])
 &CMD-+TRAIN XP System=$+train *=*:think [setq(0,pmatch(%0))][setq(1,switch(u(#SKILLFUNC/fun_is_valid_skill,%1),1,skills,attributes))][setq(2,u(#SKILLFUNC/fun_get_trait_lvl_num,%#,%1,%q1))][setq(3,u(#SKILLFUNC/fun_get_trait_lvl_num,%q0,%1,%q1))][setq(4,u(#SKILLFUNC/fun_get_trait_lvl_num,%#,teaching,skills))][setq(5,u(#SKILLFUNC/fun_get_rolled_degree,%q4,0))][setq(6,switch(%q5,<-1,0,-1,.25,0,.5,1,.75,>1,1))]pemit(%#,switch(0,or(u(#SKILLFUNC/fun_is_valid_skill,%1),u(#SKILLFUNC/fun_is_valid_attr,%1)),ansi(hr,That is not a valid skill or attribute.),t(%q0),ansi(hr,That is not a valid player.),not(match(%q0,%#)),ansi(hr,You can't train yourself silly!),match(lcon(%l),%q0),ansi(hr,You can't train someone who's not here.),hasflag(%q0,connected),ansi(hr,You can't train someone who's not here.),gte(%q2,%q3),ansi(hr,You can't teach someone who knows more than you.),not(xget(%#,has_trained)),ansi(hr,You have already trained someone this week.),not(xget(%q0,has_been_trained)),ansi(hr,That person has already been trained this week.),ansi(hg,You train [capstr(%0)] in [capstr_all(%1,_)].  You both gain %q6 XP.  Please remember to only use this command when it makes sense ICly.)[pemit(%q0,ansi(hg,%N trains you in [capstr_all(%1,_)].  You gain %q6 XP.))][set(#XPDATA,log_train:[xget(#XPDATA,log_train)]|%N trained %0 on %1 for %q6 XP.)][set(%#,has_trained:1)][set(%q0,has_been_trained:1)][u(fun_add_xp,%#,trim(%1),%q6)][u(fun_add_xp,%q0,trim(%1),%q6)])
@@ -383,7 +387,7 @@ back
 @lock/Basic Chargen=ISOK/1
 &CHARGEN_OPEN Chargen=1
 @FAILURE Chargen=switch(v(chargen_open),0,Chargen isn't open yet.,Only new players may enter chargen.)
-&ISOK Chargen=or(isstaff(%#),and(orflags(%#,?),not(haspower(%N,guest)),v(chargen_open)))
+&ISOK Chargen=or(isstaff(%#),and(orflags(%#,?),not(haspower(%#,guest)),v(chargen_open)))
 
 chargen
 next
@@ -505,6 +509,7 @@ think setup_attr(h,xpspent,)
 @wait 5=@fo me=+copyhelp [num(Skill Functions)]
 @wait 5=@fo me=+copyhelp [num(XP System)]
 @wait 5=@tr Chargen Info Functions/startup
+@wait 5=@tr FUDGE Skill Functions/startup
 
 @wait 7=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
 

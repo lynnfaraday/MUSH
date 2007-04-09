@@ -16,7 +16,7 @@
 @set MOTD System = !NO_COMMAND
 @ACONNECT MOTD System=@fo %#=+motd
 
-&CMD-+MOTD MOTD System=$+motd:@pemit %#=[line()][switch(hasattr(#MOTDDB,motd),1,[center(ansi(xget(#MOTDDB,color),Important Message!),78)]%r[center(u(#MOTDDB/motd),78)]%r)]%R[center(ansi(xget(#MOTDDB,color),Tip of the Day),78)]%R[center(u(fun_get_tip),78)]%R%r[center(ansi(xget(#MOTDDB,color),Global BBS System - Unread Messages \(+bbread\)),78)][u(fun_get_bbs,%#)]%R[center(ansi(xget(#MOTDDB,color),Upcoming Events \(+events\)),78)][event_reminders()]%R%r[center(ansi(xget(#MOTDDB,color),Mail Report \(@mail\)),78)]%r[u(fun_get_mail,%#)]%R[line()]
+&CMD-+MOTD MOTD System=$+motd:@pemit %#=[line()][switch(hasattr(#MOTDDB,motd),1,%R[center(ansi(xget(#MOTDDB,color),Important Message!),78)]%r[center(u(#MOTDDB/motd),78)]%r)]%R[center(ansi(xget(#MOTDDB,color),Tip of the Day),78)]%R[center(u(fun_get_tip),78)]%R%r[center(ansi(xget(#MOTDDB,color),Global BBS System - Unread Messages \(+bbread\)),78)][u(fun_get_bbs,%#)]%R[center(ansi(xget(#MOTDDB,color),Upcoming Events \(+events\)),78)][event_reminders()]%R%r[center(ansi(xget(#MOTDDB,color),Mail Report \(@mail\)),78)]%r[u(fun_get_mail,%#)]%R[line()]
 &CMD-+MOTD-CATCHUP MOTD System=$+motd/catchup:@tr me/TR_CATCHUP=%#
 &CMD-+MOTD-CLEAR MOTD System=$+motd/clear:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),ansi(hg,You clear the message of the day.)[wipe(#MOTDDB/motd)])
 &CMD-+MOTD-CLEARTIP MOTD System=$+motd/cleartip *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),hasattr(#MOTDDB,TIP_[squish(%0)]),ansi(hr,There is no such tip.),ansi(hg,You erase tip %0.)[wipe(#MOTDDB/tip_[squish(%0)])])
@@ -50,14 +50,12 @@
 &MOTD MOTD Database=[center(This is an important notice for today!,78)]%R[center(NOTE: There may not always be an important message.,78)]
 &BBPOCKET MOTD Database=#0
 
-&TIP_AFK MOTD Database=The +afk command will take you to a lounge where you can idle.
-&TIP_AFK2 MOTD Database=Please don't idle on the IC grid. Use the +afk command to go to the idle lounge.
 &TIP_ALTS MOTD Database=Remember to register your alternate characters using the +alts command.
 &TIP_CENSUS MOTD Database=You can use the +census command to see what other characters are out there.
 &TIP_CENSUS2 MOTD Database=The +census command can show you a breakdown of characters by various fields.
 &TIP_CENSUS3 MOTD Database=Looking for a detective?  Doctor?  Lawyer?  Do a +census/search to find other characters' concepts.
 &TIP_DESC MOTD Database=The MUSH has a multi-descer (+desc) that lets you store multiple descriptions.
-&TIP_DESC2 MOTD Database=The MUSH multi-descer (+desc) contains pre-made descriptions for various uniforms.
+&TIP_DESC2 MOTD Database=The MUSH multi-descer (+desc) contains pre-made descriptions.
 &TIP_DETAIL MOTD Database=You can add details to your character using the +detail command.
 &TIP_DETAIL2 MOTD Database=A "+detail" after the room contents indicates that there are +detail views available in the room.
 &TIP_DETAIL3 MOTD Database=You can add detailed descriptions - like jewelry or special quirks about your character - using the +detail command.
@@ -65,14 +63,13 @@
 &TIP_EVENTS2 MOTD Database=You can use the +events system to schedule upcoming events.
 &TIP_EVENTS3 MOTD Database=Got a plot event coming up? Use +events to schedule it!
 &TIP_FINGER MOTD Database=There are a variety of +finger fields you can set.
-&TIP_FINGER2 MOTD Database=Going on vacation?  Set your Unavailable field in +finger so other players will know where you've gone and how to RP around you while you're away.
-&TIP_FINGER3 MOTD Database=Want a random message in your notes?%rStore a number of messages on you as finger_msg_0 through finger_msg_5 (you can use more than 5 - it's just an example)%r&notes me=\[xget(me\,finger_msg_\[rand(6)\])\]
+&TIP_FINGER2 MOTD Database=Going on vacation?  Set your Vacation field in +finger so other players will know where you've gone and how to RP around you while you're away.
 &TIP_FRIENDS MOTD Database=The +friends command lets you keep track of your friends.
 &TIP_FRIENDS2 MOTD Database=The +friends command lets you know when your friends log in and out.
 &TIP_GLANCE MOTD Database=The +glance command will show you a summary of other nearby players.
-&TIP_GUESTBOOT MOTD Database=Having trouble with an abusive Guest?  +guestboot them!  Just be sure you have a good reason or your might find your guest booting priveledges revoked.
 &TIP_HELP MOTD Database=Did you know that you can search +help? Use +help/search.
 &TIP_IDLE MOTD Database=Please do not idle on the IC grid.  The +idle command will take you to the Idle Lounge.
+&TIP_KNOCK MOTD Database=You can use the +knock command to knock on doors.
 &TIP_LIST MOTD Database=You can use +list to see all available mailing lists- and the people on each list.
 &TIP_LIST2 MOTD Database=You can create your own personal mailing lists using the +list command.
 &TIP_LIST3 MOTD Database=You can send mail to any mailing list  - global or personal -  using +mail.

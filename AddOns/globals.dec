@@ -15,7 +15,7 @@
 @set Misc Globals = WIZARD
 @set Misc Globals = !NO_COMMAND
 @aconnect Misc Globals=think [switch(gt(words(mwho()),xget(#MISCFUN,who_record)),1,[set(#MISCFUN,who_record:[words(mwho())])][pemit(lwho(),[ansi(h[rand_color()],New Online Record - [words(mwho())] players!)])])]
-&CMD-+DETAIL Misc Globals=$+detail*:think switch(%0,,pemit(%#,[line()]%r[ansi(hy,Detail Views Available:)][iter(%l [lcon(%l)],u(#MISCFUN/fun_detail,##))]%r%rType +detail <name>/<view> to look at a detail view.%r[ansi(y,line())]),pemit(%#,[ansi(y,line())]%r[ansi(hy,Detail View for [ucstr(trim(before(%0,/)))]/[ucstr(after(%0,/))]:)]%r[setq(0,matchcon(switch(trim(before(%0,/)),here,[name(%l)],trim(before(%0,/))),%l))][setq(1,detail_[trim(after(%0,/))])][u(%q0/%q1)]%r[line()]))
+&CMD-+DETAIL Misc Globals=$+detail*:think switch(%0,,pemit(%#,[line()]%r[ansi(hy,Detail Views Available:)]%R%R[ansi(hg,NAME)][space(18)][ansi(hg,AVAILABLE VIEWS)][iter(%l [lcon(%l)],u(#MISCFUN/fun_detail,##))]%r%rType +detail <name>/<view> to look at a detail view.%r[ansi(y,line())]),pemit(%#,[ansi(y,line())]%r[ansi(hy,Detail View for [ucstr(trim(before(%0,/)))]/[ucstr(after(%0,/))]:)]%r[setq(0,matchcon(switch(trim(before(%0,/)),here,[name(%l)],trim(before(%0,/))),%l))][setq(1,detail_[trim(after(%0,/))])][u(%q0/%q1)]%r[line()]))
 &CMD-+GUESTBOOT Misc Globals=$+guestboot *=*:@switch/first [setq(0,pmatch(%0))]0=t(%q0),@pemit %#=That is not a valid player!,not(hasflag(%#,unreg)),@pemit %#=Only approved characters may use this command.,match(name(%q0),guest-*),@pemit %#=This command may only be used to boot guests!,{think [create_job(MISC,Guest Booted!,%N booted a Guest from IP Address: [xget(%q0,lastip)] for the following reason:%R%R%1,%#)];@pemit %#=You have booted %0.;@pemit %q0=[line()]%R[ansi(h,A player has booted you from the game for the following reason: "%1".  If you feel that you have been unjustly booted, please send the staff a message (+mail staff=Subject/Message) explaining what happened so we can deal with it.)]%R[line()];@boot %q0;@fo %q0=home}
 &CMD-+LAST Misc Globals=$+last *:think pemit(%#,switch(0,t(pmatch(%0)),ansi(hr,That is not a valid player.),match(mwho(),pmatch(%0)),ansi(hy,[capstr(trim(%0))] was last online [xget(pmatch(%0),last)].),ansi(hg,[capstr(trim(%0))] is currently CONNECTED.)))
 &CMD-+SHOUT Misc Globals=$+shout *:think switch(1,t(match(xget(%l,area),OOC)),pemit(%#,Sorry, that command doesn't work in the OOC Nexus. :\)),[iter(lexits(%l),remit(room(##),From [ansi(r,trim(before(name(%l),--)))] you hear shouting: %0))][remit(%l,You hear shouting: %0)])
@@ -74,7 +74,7 @@
 &MUSH_NAME Misc Functions and Data=[ansi(h,MY MUSH)]
 &WHO_RECORD Misc Functions and Data=1
 &WHO_COLOR Misc Functions and Data=rand_color()
-&FUN_DETAIL Misc Functions and Data=[switch(words(lattr(%0/detail_*)),>0,%r[padstr([switch(hastype(%0,room),1,Here,name(%0))]:,20)]%b%b[iter(lattr(%0/detail_*),after(##,_))])]
+&FUN_DETAIL Misc Functions and Data=[switch(words(lattr(%0/detail_*)),>0,%r[padstr([switch(hastype(%0,room),1,Here,name(%0))],20)]%b%b[iter(lattr(%0/detail_*),after(##,_))])]
 
 
 @pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
