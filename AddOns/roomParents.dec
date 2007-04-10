@@ -17,7 +17,7 @@
 @STARTUP Exit Parent=@set me=!NO_COMMAND
 @DESCRIBE Exit Parent=An exit leading towards the [name(loc(me))].
 @ODROP Exit Parent=arrives from the [name(home(me))].
-@OSUCCESS Exit Parent=leaves, heading towards the [name(loc(me))] <[name(me)]>.
+@OSUCCESS Exit Parent=leaves, heading towards the [name(loc(me))] \[[name(me)]\].
 @SUCCESS Exit Parent=You head towards [ansi(hc,[name([loc(me)])])]
 &CREDITS Exit Parent=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 &VERSION Exit Parent=3.0
@@ -81,7 +81,7 @@
 &CMD-+LHELP Room Parent=$+lhelp*:think switch(words([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)]),0,pemit(%#,ansi(c,There are no local help files here.)),switch(%0,,pemit(%#,[line()]%rLocal Help Topics::%r%r[setq(0,iter([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)],after(##,_)))][table([sort(%q0)],15,78,,)]%r%rType [ansi(hb,+lhelp <topic>)] for more information about a given topic.%r[line()]),pemit(%#,[line()]%rLocal Help Topic : [ansi(hr,[ucstr(%0)])]%r%r[u(help_[trim(%0)])]%r[line()])))
 @CONFORMAT Room Parent=[switch(u(me/whichplace,me,%#),>0,%R%R[u(getinfo,me,[u(me/whichplace,me,%#)],name)]:%B[u(getinfo,me,[u(me/whichplace,me,%#)],desc)]%R)][ansi(c,repeat(-,78))]%R[ansi(c,Contents:)][space(5)][wrap(iter(revwords(sort(u(visible_contents),a,|),|),[switch(mod(#@,2),1,[ansi(h,##)]%B,##%B)],|),61,61,%R[space(14)])]%R
 @DESCRIBE Room Parent=This is a temporary description.
-@EXITFORMAT Room Parent=[ansi(c,Exits:)][iter(sortby(sort_regular_exits,setdiff(lexits(me),trim([u(find_dark_exits,num(me))]%B[u(find_rooms,num(me))]))),[switch(#@,1,[space(8)],switch(mod(#@,2),1,%R[space(14)]))][ljust(<[ansi(h,name(##))]>,4)]%B[padstr( [switch(loc(##),#-1,Nowhere,[name(loc(##))])],27)])][switch(words(u(find_rooms,num(me))),>0,%R%R[ansi(c,Rooms:)][space(8)][wrap(iter(u(find_rooms,num(me) ),<[ansi(h,name(##))]>),61,61,%R[space(14)])])][u(format_special)]%R[ansi(c,line_no_color())]
+@EXITFORMAT Room Parent=[ansi(c,Exits:)][iter(sortby(sort_regular_exits,setdiff(lexits(me),trim([u(find_dark_exits,num(me))]%B[u(find_rooms,num(me))]))),[switch(#@,1,[space(8)],switch(mod(#@,2),1,%R[space(14)]))][ljust(\[[ansi(h,name(##))]\],4)]%B[padstr( [switch(loc(##),#-1,Nowhere,[name(loc(##))])],27)])][switch(words(u(find_rooms,num(me))),>0,%R%R[ansi(c,Rooms:)][space(8)][wrap(iter(u(find_rooms,num(me) ),\[[ansi(h,name(##))]\]),61,61,%R[space(14)])])][u(format_special)]%R[ansi(c,line_no_color())]
 &FIND_DARK_EXITS Room Parent=iter(lexits(%0),switch(hasflag(##,dark),1,##,))
 &FIND_ROOMS Room Parent=switch(xget(%0,show_rooms),0,,iter(lattr(%0/room*),extract(xget(%0,##),3,1,|)))
 &FORMAT_SPECIAL Room Parent=[iter(squish([switch(words([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)]),>0,LHELP)]%B[switch(gt(words(lattr(me/msg_*)),0),1,MSG)]%B[switch(hasattr(%l,combat),1,COMBAT)]%B[switch(words(lattr(%l/detail_*)),>0,DETAIL)]%B[switch(xget(%l,PLACESMAX),>0,PLACES)]),[switch(#@,1,%R%R[ansi(c,Special:)][space(6)][switch(##,LHELP,[ansi(h,+lhelp)] - Local Help Available,MSG,[ansi(h,+com/msg)] - Answering Machine Blinking,COMBAT,[ansi(h,+combat)] - Combat In Progress please join in!,DETAIL,[ansi(h,+detail)] - Details available,PLACES,[ansi(h,places)] - Special Places Available)],%R[space(14)][switch(##,LHELP,[ansi(h,+lhelp)] - Local Help Available,MSG,[ansi(h,+com/msg)] - Answering Machine Blinking,COMBAT,[ansi(h,+combat)] - Combat In Progress please join in,DETAIL,[ansi(h,+detail)] - Details available,PLACES,[ansi(h,places)] - Special Places Available)])])]
