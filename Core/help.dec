@@ -28,7 +28,7 @@
 &CMD-+COPYHELP +help Commands=$+copyhelp *:think [setq(0,[lattr(%0/HELP_*)]%B[lattr(%0/MORE_HELP_*)]%B[lattr(%0/SHELP_*)]%B[lattr(%0/MORE_SHELP_*)])];@switch 0=isstaff(%#),@pemit %#=ansi(hr,This command is only for staff.),words(%q0),@pemit %#=ansi(hr,No help files found on object %0 \([name(%0)]\).),{@dolist %q0=@cpattr %0/##=#HELPDB;@pemit %#=ansi(hg,Copied help files: %q0.)}
 @DESCRIBE +help Commands=Softcoded help system for player and staff help.%R[u(credits)]
 &CREDITS +help Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&version +help Commands=4.0
+&version +help Commands=4.xx
 &FUN_FIND_HELPFILE +help Commands=localize([setq(9,graball([lattr(#HELPDB/%0_*)]%B[lattr(#HELPDB/more_%0_*)],*[edit(%1,+,)]*))][switch(1,hasattr(#HELPDB,%0_%1),[center(ansi(h,%0 [trim(ucstr(%1))]),78)]%R[u(#HELPDB/%0_%1)],hasattr(#HELPDB,more_%0_%1),u(#HELPDB/more_%0_%1),t(words(%q9)),[center(ansi(h,%0 [u(FUN_RAW_HELPFILE_NAME,[first(%q9)])]),78)]%R[u(#HELPDB/[first(%q9)])][switch(gt(words(%q9),1),1,%R%R[ansi(h,Other possible matches:)] [iter(rest(%q9),u(FUN_RAW_HELPFILE_NAME,##))])],[center(ansi(h,%0 [trim(ucstr(%1))]),78)]%RNo match found.)])
 &FUN_RAW_HELPFILE_NAME +help Commands=edit(%0,MORE_SHELP_,,SHELP_,,MORE_HELP_,,HELP_,)
 
