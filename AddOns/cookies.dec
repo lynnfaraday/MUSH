@@ -17,6 +17,11 @@
 @set Cookie System = SAFE
 @set Cookie System = !NO_COMMAND
 
+@DESCRIBE Cookie System=Cookie system for player rewards.%R[u(credits)]
+@set Cookie System/DESCRIBE=no_command visual prefixmatch public nearby
+&CREDITS Cookie System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&VERSION Cookie System=4.xx
+
 &CMD-+COOKIE Cookie System=$+cookie *:think switch(words(%0),1,[setq(0,pmatch(%0))][pemit(%#,switch(0,t(%q0),ansi(hr,That is not a valid player.),not(match(%#,%q0)),ansi(hr,You can't give yourself a cookie!),not(match(xget(%#,cookies_given),[name(%q0)])),ansi(hr,You have already given %0 a cookie this week.),not(match(xget(%#,alts),%q0)),ansi(hr,You can't give your alt a cookie!),ansi(hg,You give [name(%q0)] a cookie.)[set(%#,cookies_given:[xget(%#,cookies_given)][name(%q0)]%B)][set(%q0,cookies_received:[xget(%q0,cookies_received)]%N%B)]))])
 &CMD-+COOKIE-HERE Cookie System=$+cookie/here:@dolist remove(lcon(%l),%#)=@switch [conn(##)]=>0,@fo %#=+cookie [name(##)]
 &CMD-+COOKIE-LEVELS Cookie System=$+cookie/levels:think pemit(%#,[line()]%R[ansi(h,Cookie award levels)][iter(sort(lattr(#COOKIEDB/COOKIE_LEVEL_*)),%R[ljust(u(fun_format_cookie_level_name,#@),20)][ansi(h,[u(fun_cookie_level_cookies,#@)] cookies)])]%R%RYou have a total of [xget(%#,cookies)] cookies[switch(cookie_award(%#),,.,\,%Bwhich gives you the [cookie_award(%#)] cookie award.)]%R[line()])
@@ -35,8 +40,6 @@
 &CRON_JOB_COOKIEREMIND Cookie System=@tr #COOKIESYS/tr-cookie-reminder
 &CRON_TIME_COOKIEAWARD Cookie System=||Sun|23|59|
 &CRON_TIME_COOKIEREMIND Cookie System=|||01 03 05 07 09 11 13 15 17 19 21 23|00|
-@DESCRIBE Cookie System=Cookie system for player rewards.%R[u(credits)]
-@set Cookie System/DESCRIBE=no_command visual prefixmatch public nearby
 &FUN_COOKIE_AWARD Cookie System=u(fun_format_cookie_level_name,u(fun_cookie_level,%0))
 &FUN_COOKIE_LEVEL Cookie System=localize([setq(9,0)][iter(sort(lattr(#COOKIEDB/COOKIE_LEVEL_*)),switch(gte(xget(%0,cookies),u(fun_cookie_level_cookies,#@)),1,setq(9,#@)),,)]%q9)
 &FUN_COOKIE_LEVEL_COLOR Cookie System=extract(xget(#COOKIEDB,COOKIE_LEVEL_[rjust(%0,2,0)]),3,1,|)
