@@ -35,6 +35,11 @@
 &CMD-+SUMMON Staff Commands=$+summon *:@switch [setq(0,pmatch(%0))][t(%q0)]=0,{@pemit %#=ansi(hr,There is no such player.)},{@remit [loc(%q0)]=[ansi(h,<OOC> [name(%q0)] is being summoned away.)];@pemit %#=[ansi(h,You summon %0)];@switch [xget(%q0,status)]=IC,&ICLOC %q0=[loc(%q0)];&STATUS %q0=OOC}
 &SHELP_SUMMON Staff Commands=The +summon command will teleport a player to your location.  It will set them OOC so that they can return to where they were by going IC.%R%R+summon <playername> - Summons a player.
 
+
+&cmd-+send Staff Commands=$+send *=*:think [setq(0,lsearch(all,type,room))][setq(1,0)][squish(iter(%q0,switch(and(strmatch(name(##),*%1*),not(%q1)),1,[setq(1,##)])))][switch(%q1,0,pemit(%#,ansi(hr,That is not a valid location.)),iter(%0,[setq(2,pmatch(##))][pemit(%#,[switch(0,t(%q2),ansi(hr,That is not a valid player.),match(xget(%q2,STATUS),IC),ansi(hr,## is not IC.),[ansi(hg,You send [name(%q2)] to [name(%q1)].)][remit(loc(%q2),[ansi(hy,<OOC> %N whisks [name(%q2)] away.)])][tel(%q2,%q1)])]))]
+&SHELP_+SEND Staff Commands=The +send command is a people-mover for teleporting a bunch of folks to a specific room.  Like +hop, it will attempt to find the first matching room name for what you give it.  If your MUSH has too many rooms, you may need to increase your function invocation limit to make the command work.%R%R+send <list of players>=<room name>
+
+
 @DESCRIBE Staff Commands=Miscellaneous staff commands.%R%R[u(credits)]
 &VERSION Staff Commands=3.0
 &CREDITS Staff Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
