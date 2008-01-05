@@ -12,6 +12,8 @@ Weather - Added a simple weather system (still not quite finished)
 
 Globals - Changed +idle to +afk and RP_OK to IC.  Added +fullname.  Added support for showing IC in magenta if someone's in a TP Room.
 
+Functions - Fixed typos in help for line_no_color function.
+
 Version 3.0 (4/9/07)~~~~~~~~~~~~~~~~~~~~~~~~~~~~Although some of the systems are very similar to Version 1.0, this was effectively a ground-up redo of everything. The systems integrate together now, and there are a lot more systems available.Tested On: PennMUSH 1.8.2.p3Version 2.0 (n/a)~~~~~~~~~~~~~~~~~~~~~~~~~~~~I skipped version 2.0 because some of the individual systems were labeled with versions ranging from 1.0 to 2.0.
 
 
