@@ -10,7 +10,7 @@ Cookies - Fixed bug with cookie posting.
 
 Weather - Added a simple weather system (still not quite finished)
 
-Globals - Changed +idle to +afk and RP_OK to IC.  Added +fullname.  Added support for showing IC in magenta if someone's in a TP Room.
+Globals - Changed +idle to +afk and RP_OK to IC.  Added +fullname.  Added support for showing IC in magenta if someone's in a TP Room.  Split +RP into +IC and +OOC.  Created a separate data object for the data.
 
 Functions - Fixed typos in help for line_no_color function.
 
