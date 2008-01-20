@@ -18,11 +18,11 @@
 @set +help Commands = WIZARD
 @set +help Commands = SAFE
 
-&CMD-+HELP +help Commands=$+help:think pemit(%#,[line()]%R[center(ansi(h,+help Topics),78)]%R[iter(lattr(#HELPDB/help_*),[switch(mod(#@,3),1,%R)][ljust(after(##,_),25)])]%R%RSee [ansi(h,+help <topic>)] for more information about a topic.%R[line()]
+&CMD-+HELP +help Commands=$+help:think pemit(%#,[line()]%R[center(ansi(h,+help Topics),78)]%R[iter(lattr(#HELPDB/help_*),[switch(mod(#@,3),1,%R)][ljust(after(##,_),25)])]%R%RSee [ansi(h,+help <topic>)] for more information about a topic.%R[line()])
 &CMD-+HELP-SEARCH +help Commands=$+help/search *:think pemit(%#,[line()]%R[center(ansi(h,+help files containing %0),78)]%R[iter([grepi(#HELPDB,help_*,%0)]%B[grepi(#HELPDB,more_help_*,%0)],[switch(mod(#@,3),1,%R)][ljust(last(##,_),25)])]%R[line()])
 &CMD-+HELP-TOPIC +help Commands=$+help *:think pemit(%#,[line()]%R[u(FUN_FIND_HELPFILE,HELP,trim(%0))]%R[line()])
-&CMD-+FUNHELP +help Commands=$+funhelp *:think pemit(%#,[line()]%R[function_help(%0)]%R[line()]
-&CMD-+SHELP +help Commands=$+shelp:think switch(isstaff(%#),0,pemit(%#,ansi(hr,This command is for staff only.)),pemit(%#,[line()]%R[center(ansi(h,+shelp Topics),78)]%R[iter(lattr(#HELPDB/SHELP_*),[switch(mod(#@,3),1,%R)][ljust(after(##,_),25)])]%R%RSee [ansi(h,+shelp <topic>)] for more information about a topic.%R[line()])
+&CMD-+FUNHELP +help Commands=$+funhelp *:think pemit(%#,[line()]%R[function_help(%0)]%R[line()])
+&CMD-+SHELP +help Commands=$+shelp:think switch(isstaff(%#),0,pemit(%#,ansi(hr,This command is for staff only.)),pemit(%#,[line()]%R[center(ansi(h,+shelp Topics),78)]%R[iter(lattr(#HELPDB/SHELP_*),[switch(mod(#@,3),1,%R)][ljust(after(##,_),25)])]%R%RSee [ansi(h,+shelp <topic>)] for more information about a topic.%R[line()]))
 &CMD-+SHELP-SEARCH +help Commands=$+shelp/search *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),[line()]%R[center(ansi(h,+shelp files containing %0),78)]%R[iter([grepi(#HELPDB,SHELP_*,%0)]%B[grepi(#HELPDB,more_SHELP_*,%0)],[switch(mod(#@,3),1,%R)][ljust(last(##,_),25)])]%R[line()]))
 &CMD-+SHELP-TOPIC +help Commands=$+shelp *:think pemit(%#,switch(1,not(isstaff(%#)),ansi(hr,This command is for staff only.),[line()]%R[u(FUN_FIND_HELPFILE,SHELP,trim(%0))]%R[line()]))
 &CMD-+COPYHELP +help Commands=$+copyhelp *:think [setq(0,[lattr(%0/HELP_*)]%B[lattr(%0/MORE_HELP_*)]%B[lattr(%0/SHELP_*)]%B[lattr(%0/MORE_SHELP_*)])];@switch 0=isstaff(%#),@pemit %#=ansi(hr,This command is only for staff.),words(%q0),@pemit %#=ansi(hr,No help files found on object %0 \([name(%0)]\).),{@dolist %q0=@cpattr %0/##=#HELPDB;@pemit %#=ansi(hg,Copied help files: %q0.)}
@@ -30,7 +30,7 @@
 &CREDITS +help Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 &version +help Commands=4.xx
 &FUN_FIND_HELPFILE +help Commands=localize([setq(9,graball([lattr(#HELPDB/%0_*)]%B[lattr(#HELPDB/more_%0_*)],*[edit(%1,+,)]*))][switch(1,hasattr(#HELPDB,%0_%1),[center(ansi(h,%0 [trim(ucstr(%1))]),78)]%R[u(#HELPDB/%0_%1)],hasattr(#HELPDB,more_%0_%1),u(#HELPDB/more_%0_%1),t(words(%q9)),[center(ansi(h,%0 [u(FUN_RAW_HELPFILE_NAME,[first(%q9)])]),78)]%R[u(#HELPDB/[first(%q9)])][switch(gt(words(%q9),1),1,%R%R[ansi(h,Other possible matches:)] [iter(rest(%q9),u(FUN_RAW_HELPFILE_NAME,##))])],[center(ansi(h,%0 [trim(ucstr(%1))]),78)]%RNo match found.)])
-&FUN_RAW_HELPFILE_NAME +help Commands=edit(%0,MORE_SHELP_,,SHELP_,,MORE_HELP_,,HELP_,)
+&FUN_RAW_HELPFILE_NAME +help Commands=edit(edit(edit(edit(%0,MORE_SHELP_,),SHELP_,),MORE_HELP_,),HELP_,)
 
 
 @STARTUP +help Commands=@set me=!no_command
