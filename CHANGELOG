@@ -1,6 +1,7 @@
 Version 4.0 (In Development - Not Yet Released)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +help - Now supports partial matches (so +help census or +help cen will find the help file for "+census").
+Fixed MUX compatibility bugs.  Should now work on TinyMUX.
 
 FUDGE - Fixed bug in opposed +roll.
 
