@@ -20,7 +20,7 @@
 @OSUCCESS Exit Parent=leaves, heading towards the [name(loc(me))] \[[name(me)]\].
 @SUCCESS Exit Parent=You head towards [ansi(hc,[name([loc(me)])])]
 &CREDITS Exit Parent=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Exit Parent=3.0
+&VERSION Exit Parent=4.x
 
 @create Max's Table Code Parent
 @set Max's Table Code Parent = SAFE
@@ -100,6 +100,7 @@
 @create TP Room Parent
 @set TP Room Parent = SAFE
 @set TP Room Parent = !NO_COMMAND
+@set TP Room Parent = VISUAL
 &CMD-DESC-CREATE TP Room Parent=$desc/create *=*:think switch(1,hasattr(me,tpdesc_[edit(%0,%b,-)]),pemit(%#,ansi(hr,There is already a desc with that name.)),t(match(%1,*\[*)),pemit(%#,ansi(hr,Sorry - your request could not be completed.  Do not use MUSH function calls in your descriptions.  Contact staff to request a special exception.)),pemit(%#,ansi(hc,You create a desc entited "[edit(%0,%b,-)]".))[set(#TPROOM,tpdesc_[edit(%0,%b,-)]:%1)])
 &CMD-DESC-DELETE TP Room Parent=$desc/delete *:think switch(hasattr(#TPROOM,tpdesc_[trim(%0)]),0,pemit(%#,ansi(hr,There is no desc by that name.)),pemit(%#,ansi(hg,You delete desc [trim(%0)].))[set(#TPROOM,old_[trim(%0)]:[xget(#TPROOM,tpdesc_[trim(%0)])])][wipe(#TPROOM/tpdesc_[trim(%0)])])
 &CMD-DESC-LIST TP Room Parent=$desc/list:think pemit(%#,[line()]%R[ansi(h,Available TP Room Descriptions)]%R[iter(lattr(#TPROOM/tpdesc_*),%R[capstr(lcstr(after(##,_)))])]%R[line()])
