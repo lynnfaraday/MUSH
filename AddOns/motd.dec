@@ -89,8 +89,8 @@
 &TIP_ROLL MOTD Database=You can use the +roll commands to simulate NPC skill rolls.
 &TIP_ROLL2 MOTD Database=The +roll command can roll attributes, skills, or any trait level.
 &TIP_ROLL3 MOTD Database=The +roll command can do opposed or unopposed skill rolls.
-&TIP_RP MOTD Database=Use the +rp command to travel to and from the IC and OOC areas.
-&TIP_RP2 MOTD Database=Use the +rp command to travel to and from the IC and OOC areas.
+&TIP_RP MOTD Database=Use the +ic and +ooc commands to travel to and from the IC and OOC areas.
+&TIP_RP2 MOTD Database=Use the +ic and +ooc commands to travel to and from the IC and OOC areas.
 &TIP_RPSEARCH MOTD Database=Looking for RP?  Check out the +rpsearch command!
 &TIP_RPSEARCH2 MOTD Database=Looking for RP?  Check out the +rpsearch command!
 &TIP_RPSEARCH3 MOTD Database=Looking for RP?  Use +rpsearch to find others who are too.
