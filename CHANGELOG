@@ -3,9 +3,11 @@ Version 4.0 (In Development - Not Yet Released)
 +help - Now supports partial matches (so +help census or +help cen will find the help file for "+census").
 Fixed MUX compatibility bugs.  Should now work on TinyMUX.
 
+Jobs - Priority, status and title commands were not updating activity.  Now they do.
+
 FUDGE - Fixed bug in opposed +roll.
 
-Staff - Added +send command.
+Staff - Added +send command.  
 
 Cookies - Fixed bug with cookie posting.
 
@@ -19,6 +21,16 @@ Player Setup - Fixed two bugs in the setup_attr function.  If you had an attribu
 
 Room Parents - Made the TP Room parent visual so the lhelp would show up.
 Fixed the places help so it will get copied over to the +help system.
+
+Actors - Added an actor registration system.
+
+Meetme - Added a meetme system.
+
+Autospace - Added pose autospacer.
+
+News - Added a +news system.
+
+MOTD - Fixed tip for +RP command that no longer exists.
 
 Version 3.0 (4/9/07)~~~~~~~~~~~~~~~~~~~~~~~~~~~~Although some of the systems are very similar to Version 1.0, this was effectively a ground-up redo of everything. The systems integrate together now, and there are a lot more systems available.Tested On: PennMUSH 1.8.2.p3Version 2.0 (n/a)~~~~~~~~~~~~~~~~~~~~~~~~~~~~I skipped version 2.0 because some of the individual systems were labeled with versions ranging from 1.0 to 2.0.
 
