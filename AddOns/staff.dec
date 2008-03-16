@@ -32,7 +32,7 @@
 &CMD-+JOIN Staff Commands=$+join *:@remit loc(pmatch(%0))=[ansi(h,<OOC> %N is about to join your location.)];@wait 5={@fo %#=@tel loc(pmatch(%0));@remit loc(pmatch(%0))=[ansi(h,<OOC> %N hops into the room.)]}
 &SHELP_+JOIN Staff Commands=The +join command will @tel you to a player's location.  There is an OOC warning to the room you're jumping to and a 5 second delay.%R%R+join <playername> - Joins a player
 
-&CMD-+SUMMON Staff Commands=$+summon *:@switch [setq(0,pmatch(%0))][t(%q0)]=0,{@pemit %#=ansi(hr,There is no such player.)},{@remit [loc(%q0)]=[ansi(h,<OOC> [name(%q0)] is being summoned away.)];@pemit %#=[ansi(h,You summon %0)];@switch [xget(%q0,status)]=IC,&ICLOC %q0=[loc(%q0)];&STATUS %q0=OOC}
+&CMD-+SUMMON Staff Commands=$+summon *:@switch [setq(0,pmatch(%0))][t(%q0)]=0,{@pemit %#=ansi(hr,There is no such player.)},{@remit [loc(%q0)]=[ansi(h,<OOC> [name(%q0)] is being summoned away.)];@pemit %#=[ansi(h,You summon %0)];@switch [xget(%q0,status)]=IC,{&ICLOC %q0=[loc(%q0)];&STATUS %q0=OOC;@tel %q0=%l},{@tel %q0=%l}
 &SHELP_SUMMON Staff Commands=The +summon command will teleport a player to your location.  It will set them OOC so that they can return to where they were by going IC.%R%R+summon <playername> - Summons a player.
 
 
