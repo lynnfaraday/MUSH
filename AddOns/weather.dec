@@ -11,59 +11,69 @@
 
 @pemit/silent %#=[ansi(hr,Creating Objects...)]%R
 
+@create Spring
+&TYPE-CLEAR Spring=clear clear clear fair fair fair drizzling drizzling overcast raining
+&TYPE-drizzling Spring=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
+&TYPE-FAIR Spring=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
+&TYPE-OVERCAST Spring=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
+&TYPE-raining Spring=raining raining raining overcast overcast overcast stormy stormy fair fair
+&TYPE-STORMY Spring=stormy stormy stormy raining raining raining clear overcast drizzling fair
+&temp Spring=cool cool cool cool cool warm warm warm warm warm
+
+@create Summer
+&TYPE-CLEAR Summer=clear clear clear fair fair fair drizzling drizzling overcast raining
+&TYPE-drizzling Summer=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
+&TYPE-FAIR Summer=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
+&TYPE-OVERCAST Summer=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
+&TYPE-raining Summer=raining raining raining overcast overcast overcast stormy stormy fair fair
+&TYPE-STORMY Summer=stormy stormy stormy raining raining raining clear overcast drizzling fair
+&temp Summer=hot hot hot hot hot warm warm warm warm cool cool
+
+@create Fall
+&TYPE-CLEAR Fall=clear clear clear fair fair fair drizzling drizzling overcast raining
+&TYPE-drizzling Fall=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
+&TYPE-FAIR Fall=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
+&TYPE-OVERCAST Fall=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
+&TYPE-raining Fall=raining raining raining overcast overcast overcast stormy stormy fair fair
+&TYPE-STORMY Fall=stormy stormy stormy raining raining raining clear overcast drizzling fair
+&TEMP Fall=cool cool cool cool cool cool cool freezing warm warm
+
+@create Winter
+&TYPE-CLEAR Winter=clear clear clear fair fair fair flurrying flurrying overcast snowing
+&TYPE-flurrying Winter=flurrying flurrying flurrying fair fair fair overcast overcast clear stormy
+&TYPE-FAIR Winter=fair fair fair flurrying flurrying flurrying clear clear overcast overcast snowing
+&TYPE-OVERCAST Winter=overcast overcast overcast flurrying flurrying flurrying fair fair clear clear snowing
+&TYPE-snowing Winter=snowing snowing snowing overcast overcast overcast stormy stormy fair fair
+&TYPE-STORMY Winter=stormy stormy stormy snowing snowing snowing clear overcast flurrying fair
+&TEMP Winter=cold cold cold cold cold cold cold cool cool freezing freezing
 
 @create Weather Generator
 @set Weather Generator = VISUAL
 @set Weather Generator = SAFE
 @set Weather Generator = !NO_COMMAND
-&DAWN Weather Generator=It is morning.
-&DAWNCLEAR Weather Generator=The sky starts to lighten and the stars fade out. The sky is clear and there's a light breeze from the west.
-&DAWNDRIZZLE Weather Generator=A soft drizzle is falling as the sky lightens to overcast grey. A warm breeze blows from the southeast.
-&DAWNFAIR Weather Generator=The sky turns a lighter blue and the stars fade out. It's clear and there's a soft breeze from the west.
-&DAWNOVERCAST Weather Generator=The sky pales in the east, turning overcast grey. There's little wind, and it's warm and humid.
-&DAWNRAIN Weather Generator=A solid rain is falling as the sky lightens to overcast grey. A warm breeze blows from the southeast.
-&DAWNSTORMY Weather Generator=Heavy rain pours from clouds slowly lightening from black to grey, and the crackle of thunder fills the air.
-&DAY Weather Generator=It is daytime.
-&DAYCLEAR Weather Generator=The sky is clear brilliant blue and there's a light breeze from the west. It's hot and humid.
-&DAYDRIZZLE Weather Generator=A light drizzle falls from a blue sky dotted with clouds. It's warm and there's a slight wind from the southeast.
-&DAYFAIR Weather Generator=Fluffy white clouds drift slowly through the blue sky. It's hazy and hot.
-&DAYOVERCAST Weather Generator=The sky is grey and cloudy, and nothing casts a shadow. It's hot, humid, and still.
-&DAYRAIN Weather Generator=A solid rain falls from a sky dotted with grey clouds.  The rain does little to ease the humidity, though there is a gentle breeze from the southeast.
-&DAYSTORMY Weather Generator=Heavy rain pours from dark grey clouds, and the crackle of thunder fills the air.
+
 &CREDITS Weather Generator=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 &VERSION Weather Generator=4.x
-@DESCRIBE Weather Generator=This is a simple weather object.  It has one main function:  FUN_WEATHER.  This will give you a descriptive string based on the time of day and current weather.  You can put this in a +weather command (not included) or a room desc or whatever.%R%RTR-CHANGEWEATHER is @triggered automatically at startup and then every UPDATE_WEATHER_SECS after that (default every half hour).  This updates the weather and time of day.  This sends out a global @emit to all connected players telling them the new weather emit.%R%RFUN_COMPUTE_TIME tells you the time of day (night, dusk, etc.) based on the ICTIME function.  If you want the time of day to be determined by another function (such as TIME), go ahead and change that function.%R%RThe types of weather are clear, drizzle, fair, overcast, rain, stormy.   The times of day are night, dawn, day, dusk.    The weather descriptions themselves are in attributes like DAWNRAIN or DUSKSTORMY.%R%RAttributes named TYPE-CLEAR, TYPE-DRIZZLE, etc. store the list of potential "next weather" types based on the current weather.  It's random, so the more often a weather type appears in the list, the more likely you are to transition to that weather type.  If you don't want the weather to change very often, make the current weather type appear more often.%R%R%TFor example:  If TYPE-RAIN said - "rain rain rain rain rain overcast overcast stormy fair fair", when it was raining, there'd be a 50\% chance it would stay raining, a 20\% chance it would go to overcast or fair, and a 10\% chance it would start storming.%R%RTo create a new weather type (like hurricane), you'd need to:%R%T1. Create a TYPE-HURRICANE attribute that says what the next weather might be once a hurricane has started.%R%T2. Add DAWNHURRICANE, DUSKHURRICANE, etc. weather descs for all times of day.%R%T3. Add hurricane to at least one of the existig TYPE-xxx lists so a hurricane can begin.%R%RThere is no support for "seasons" as of yet.   For now, my recommendation would be to store all your seasonal weather descs on a separate object in attributes like WINTER_DAWNRAIN and SUMMER_DAWNRAIN and copy over the ones appropriate to the current season whenever it changes.%R%RThere is also no support for local weather yet. It assumes that the entire game shares the same weather.%R%R[u(credits)]
+@DESCRIBE Weather Generator=This is a simple weather object.  It has one main function:  FUN_WEATHER.  This will give you a descriptive string based on the time of day and current weather.  You can put this in a +weather command (not included) or a room desc or whatever.%R%RTR-CHANGEWEATHER is @triggered automatically at startup and then every UPDATE_WEATHER_SECS after that (default every half hour).  This updates the weather and time of day.  This sends out a global @emit to all connected players telling them the new weather emit.%R%RFUN_COMPUTE_TIME tells you the time of day (night, evening, etc.) based on the ICTIME function.  If you want the time of day to be determined by another function (such as TIME), go ahead and change that function.%R%RThe types of weather are clear, drizzling, fair, overcast, raining, stormy.   The times of day are night, morning, day, evening.    The weather descriptions themselves are in attributes like morningraining or eveningSTORMY.%R%RAttributes named TYPE-CLEAR, TYPE-drizzling, etc. store the list of potential "next weather" types based on the current weather.  It's random, so the more often a weather type appears in the list, the more likely you are to transition to that weather type.  If you don't want the weather to change very often, make the current weather type appear more often.%R%R%TFor example:  If TYPE-raining said - "raining raining raining raining raining overcast overcast stormy fair fair", when it was raining, there'd be a 50\% chance it would stay raining, a 20\% chance it would go to overcast or fair, and a 10\% chance it would start storming.%R%RTo create a new weather type (like hurricane), you'd need to:%R%T1. Create a TYPE-HURRICANE attribute that says what the next weather might be once a hurricane has started.%R%T2. Add morningHURRICANE, eveningHURRICANE, etc. weather descs for all times of day.%R%T3. Add hurricane to at least one of the existig TYPE-xxx lists so a hurricane can begin.%R%RThere is no support for "seasons" as of yet.   For now, my recommendation would be to store all your seasonal weather descs on a separate object in attributes like WINTER_morningraining and SUMMER_morningraining and copy over the ones appropriate to the current season whenever it changes.%R%RThere is also no support for local weather yet. It assumes that the entire game shares the same weather.%R%R[u(credits)]
 @set Weather Generator/DESCRIBE=no_command visual prefixmatch public nearby
-&DUSK Weather Generator=It is evening.
-&DUSKCLEAR Weather Generator=The sun sets and the evening stars begin to appear in a blue and cloudless sky. There's a light breeze from the west.
-&DUSKDRIZZLE Weather Generator=A light drizzle falls as the grey clouds darkens in the twilight. It's warm and there's a gentle wind from the southeast.
-&DUSKFAIR Weather Generator=The sun sets, the clouds turning purple, red, and gold. It's hazy and warm.
-&DUSKOVERCAST Weather Generator=The grey of the clouds begins to darken, and the temperature drops slightly. It's warm and still.
-&DUSKRAIN Weather Generator=A solid rain falls as the grey clouds darken in the twilight. It's still hot and humid, though there's a gentle wind from the southeast.
-&DUSKSTORMY Weather Generator=Driving rain pours from clouds darkening from grey to black as daylight fades, and the crackle of thunder fills the air.
-&FUN_COMPUTE_TIME Weather Generator=switch(first(extract(ictime(),4,1),:),<5,night,5,dawn,6,dawn,21,dusk,22,dusk,>22,night,day)
-&FUN_WEATHER Weather Generator=[u(v(time))] [u([v(time)][v(weather)])]
-&NIGHT Weather Generator=It is nighttime.
-&NIGHTCLEAR Weather Generator=The deep blue night sky is clear and cloudless, and the stars glitter. A light breeze blows from the west.
-&NIGHTDRIZZLE Weather Generator=A soft drizzle falls from a mostly clear, starlit sky. A warm gentle wind blows from the southeast.
-&NIGHTFAIR Weather Generator=The night is warm and sultry, and dark clouds hide the stars in patches. Elsewhere they shine brightly.
-&NIGHTOVERCAST Weather Generator=The sky is grey-black, moonless and starless. It's hard for human eyes to see anything in the deep shadows round about, without a light. It's warm, still, and humid.
-&NIGHTRAIN Weather Generator=A solid rain falls from a grey-black sky, the stars completely hidden.  It's still hot and humid, though there's a gentle wind from the southeast.
-&NIGHTSTORMY Weather Generator=Heavy rain drenches you in the dark as it falls from grey-black clouds, and the crackle of thunder fills the air.
+
+&FUN_COMPUTE_TIME Weather Generator=switch(first(extract(ictime(),4,1),:),<5,night,5,morning,6,morning,21,evening,22,evening,>22,night,day)
+&FUN_WEATHER Weather Generator=It is a [v(season)] [v(time)].  The weather is [v(temp)] and [v(type)].
 @STARTUP Weather Generator=@set me=!no_command;@tr me/tr-changeweather
-@set Weather Generator/STARTUP=no_command prefixmatch
-&STARTWEATHERTIME Weather Generator=1174003200
-&SUMMDERDAWNPRECIP Weather Generator=Soft rain is falling as the sky lightens to cloudy grey. A warm breeze blows from the southeast.
+&FUN_DETERMINE_SEASON Weather Generator=num(switch(extract(time(),2,1),Jan,Winter,Feb,Winter,Mar,Spring,Apr,Spring,May,Spring,Jun,Summer,Jul,Summer,Aug,Summer,Sep,Fall,Oct,Fall,Nov,Fall,Dec,Winter))
+
 &TIME Weather Generator=day
-&TR-CHANGEWEATHER Weather Generator=think [set(me,time:[u(fun_compute_time)])][set(me,weather:[first(shuffle(v(type-[v(weather)])))])][iter(lwho(),pemit(##,[ansi(hb,<WEATHER>)] [u(FUN_WEATHER)]))];@wait v(UPDATE_WEATHER_SECS)=@tr me/tr-changeweather
-&TYPE-CLEAR Weather Generator=clear clear clear fair fair fair drizzle drizzle overcast rain
-&TYPE-DRIZZLE Weather Generator=drizzle drizzle drizzle fair fair fair overcast overcast clear stormy
-&TYPE-FAIR Weather Generator=fair fair fair drizzle drizzle drizzle clear clear overcast overcast rain
-&TYPE-OVERCAST Weather Generator=overcast overcast overcast drizzle drizzle drizzle fair fair clear clear rain
-&TYPE-RAIN Weather Generator=rain rain rain overcast overcast overcast stormy stormy fair fair
-&TYPE-STORMY Weather Generator=stormy stormy stormy rain rain rain clear overcast drizzle fair
+&TYPE Weather Generator=snowing
+&TEMP Weather Generator=cold
+&SEASON Weather Generator=winter
+
+&TR-CHANGEWEATHER Weather Generator=think [set(me,season:[u(fun_determine_season)])][set(me,time:[u(fun_compute_time)])][set(me,type:[first(shuffle(xget(v(season),type-[v(type)])))])][set(me,temp:[first(shuffle(xget(v(season),temp))])][iter(lwho(),switch(xget(%l,show_weather),1,pemit(##,[ansi(hb,<WEATHER>)] [u(FUN_WEATHER)])))];@wait v(UPDATE_WEATHER_SECS)=@tr me/tr-changeweather
 &UPDATE_WEATHER_SECS Weather Generator=1800
-&WEATHER Weather Generator=rain
+
+@wait 3=@tel Spring=Weather Generator
+@wait 3=@tel Summer=Weather Generator
+@wait 3=@tel Fall=Weather Generator
+@wait 3=@tel Winter=Weather Generator
 
 @wait 4=@tr Weather Generator/startup
 
