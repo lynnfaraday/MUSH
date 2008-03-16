@@ -1,0 +1,70 @@
+@@ Faraday's Actor System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning Actors Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
+@create Actor Commands
+@set Actor Commands = WIZARD
+@set Actor Commands = SAFE
+@set Actor Commands = !NO_COMMAND
+&CMD-+ACTOR Actor Commands=$+actor *:think pemit(%#,switch(t(u(#ACTORFUN/fun_find_actors,%0)),1,ansi(hr,That actor is already taken.),ansi(hg,You set your actor to %0.)[u(#ACTORFUN/fun_set_actor,%N,%0)])))
+&CMD-+ACTORS Actor Commands=$+actors*:think switch(%0,/*,,%B*,,pemit(%#,[setq(1,switch(%0,,1,%0))][setq(2,[add(div(words(lattr(#ACTORDB/actor_*)),25),1)])][line()]%R[ansi(h,Characters with Actors Set \(Page %q1 of %q2\))]%R[iter(extract(sort_oldest(lattr(#ACTORDB/ACTOR_*)),add(1,mul(sub(%q1,1),25)),25),%R[setq(0,before(xget(#ACTORDB,##),|))][padstr([switch(t(pmatch(%q0)),1,%q0,ansi(hx,%q0))],20)][padstr(after(xget(#ACTORDB,##),|),20)])][switch(lt(%q1,%q2),1,%R%RSee [ansi(h,+actors[inc(%q1)])] for more pages.)]%R[line()]))
+&CMD-+ACTOR-NPC Actor Commands=$+actor/npc *=*:think pemit(%#,switch(1,t(u(#ACTORFUN/fun_find_actors,%0)),ansi(hr,That actor is already taken.),pmatch(%0),ansi(hr,%0 is a player.  Use the +actor command instead.),ansi(hg,You set %0's actor to %1.)[u(#ACTORFUN/fun_set_actor,trim(capstr(%0)),%1)])))
+&CMD-+ACTORS-SEARCH Actor Commands=$+actors *:think pemit(%#,[line()]%R[ansi(h,Characters with Actors Matching "[capstr(%0)]")]%R[iter(u(#ACTORFUN/fun_find_actors,%0),%R[ljust(before(xget(#ACTORDB,##),|),20)][after(xget(#ACTORDB,##),|)])]%R[line()])
+@STARTUP Actor Commands=@set me=!no_command
+@set Actor Commands/STARTUP=no_command
+
+@DESCRIBE Actor Commands=Keeps a database of which actors folks have chosen for their characters.%R[u(credits)]
+&CREDITS Actor Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&VERSION Actor Commands=4.xx
+
+@create Actor Functions
+@set Actor Functions=WIZARD
+@set Actor Functions=SAFE
+@describe Actor Functions=Actor Functions
+&FUN_FIND_ACTORS Actor Functions=squish(iter(lattr(#ACTORDB/actor_*),switch(strmatch(after(xget(#ACTORDB,##),|),*%0*),1,##)))
+&FUN_FIND_PLAYERS Actor Functions=squish(iter(lattr(#ACTORDB/actor_*),switch(and(strmatch(before(xget(#ACTORDB,##),|),*%0*),strmatch(after(xget(#ACTORDB,##),|),xget(pmatch(%0),actor))),1,##)))
+&FUN_SET_ACTOR Actor Functions=localize([setq(0,u(#ACTORFUN/fun_find_players,%0))][switch(1,eq(words(%q0),1),[set(#ACTORDB,%q0:%0|%1)][set(pmatch(%0),actor:%1)],[set(pmatch(%0),actor:%1)][set(#ACTORDB,actor_[xget(#ACTORDB,next_actor)]:%0|%1)][set(#ACTORDB,next_actor:[inc(xget(#ACTORDB,next_actor))])])
+&HELP_+ACTOR Actor Functions=This command lets you see which actors/actresses people have selected to represent their characters, or to see if a particular actor is "taken".%R%R[ansi(h,+actors)] - Lists all actors%R[ansi(h,+actors <search>)] - Search for all or part of an actor's name.%R%R[ansi(h,+actor <name>)] - Sets your character's actor.%R[ansi(h,+actor/npc <character name>=<actor name>)] - Adds a NPC actor.
+
+@create Actor DB
+@set Actor DB=SAFE
+@DESCRIBE Actor DB=Actor Database
+&NEXT_ACTOR Actor DB=1
+@STARTUP Actor DB=@set me=!no_command
+
+
+
+
+@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
+
+@wait 4=@fo me=@edit Actor Commands/*=#ACTORDB,[num(Actor DB)]
+@wait 4=@fo me=@edit Actor Functions/*=#ACTORDB,[num(Actor DB)]
+@wait 4=@fo me=@edit Actor DB/*=#ACTORDB,[num(Actor DB)]
+
+@wait 4=@fo me=@edit Actor Commands/*=#ACTORFUN,[num(Actor Functions)]
+@wait 4=@fo me=@edit Actor Functions/*=#ACTORFUN,[num(Actor Functions)]
+@wait 4=@fo me=@edit Actor DB/*=#ACTORFUN,[num(Actor Functions)]
+
+
+@wait 5=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
+@wait 5=@fo me=+copyhelp [num(Actor Functions)]
+
+@wait 7=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 7=@tel Actor Functions=Actor Commands
+@wait 7=@tel Actor DB=Actor Commands
+@wait 7=@tel Actor Commands=#2
+
+@wait 8=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
+
+@wait 8=@set me=!quiet
+
