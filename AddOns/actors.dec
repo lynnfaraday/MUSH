@@ -16,9 +16,9 @@
 @set Actor Commands = SAFE
 @set Actor Commands = !NO_COMMAND
 &CMD-+ACTOR Actor Commands=$+actor *:think pemit(%#,switch(t(u(#ACTORFUN/fun_find_actors,%0)),1,ansi(hr,That actor is already taken.),ansi(hg,You set your actor to %0.)[u(#ACTORFUN/fun_set_actor,%N,%0)])))
-&CMD-+ACTORS Actor Commands=$+actors*:think switch(%0,/*,,%B*,,pemit(%#,[setq(1,switch(%0,,1,%0))][setq(2,[add(div(words(lattr(#ACTORDB/actor_*)),25),1)])][line()]%R[ansi(h,Characters with Actors Set \(Page %q1 of %q2\))]%R[iter(extract(sort_oldest(lattr(#ACTORDB/ACTOR_*)),add(1,mul(sub(%q1,1),25)),25),%R[setq(0,before(xget(#ACTORDB,##),|))][padstr([switch(t(pmatch(%q0)),1,%q0,ansi(hx,%q0))],20)][padstr(after(xget(#ACTORDB,##),|),20)])][switch(lt(%q1,%q2),1,%R%RSee [ansi(h,+actors[inc(%q1)])] for more pages.)]%R[line()]))
-&CMD-+ACTOR-NPC Actor Commands=$+actor/npc *=*:think pemit(%#,switch(1,t(u(#ACTORFUN/fun_find_actors,%0)),ansi(hr,That actor is already taken.),pmatch(%0),ansi(hr,%0 is a player.  Use the +actor command instead.),ansi(hg,You set %0's actor to %1.)[u(#ACTORFUN/fun_set_actor,trim(capstr(%0)),%1)])))
-&CMD-+ACTORS-SEARCH Actor Commands=$+actors *:think pemit(%#,[line()]%R[ansi(h,Characters with Actors Matching "[capstr(%0)]")]%R[iter(u(#ACTORFUN/fun_find_actors,%0),%R[ljust(before(xget(#ACTORDB,##),|),20)][after(xget(#ACTORDB,##),|)])]%R[line()])
+&CMD-+ACTORS Actor Commands=$+actors*:think switch(%0,/*,,%B*,,pemit(%#,[setq(1,switch(%0,,1,%0))][setq(2,[add(div(words(lattr(#ACTORDB/actor_*)),25),1)])][line()]%R[ansi(h,Characters with Actors Set \(Page %q1 of %q2\))]%R[iter(extract(sortby(#ACTORFUN/fun_sort_actors,lattr(#ACTORDB/ACTOR_*)),add(1,mul(sub(%q1,1),25)),25),%R[setq(0,before(xget(#ACTORDB,##),|))][padstr([switch(t(pmatch(%q0)),1,%q0,ansi(hx,%q0))],30)][padstr(after(xget(#ACTORDB,##),|),30)])][switch(lt(%q1,%q2),1,%R%RSee [ansi(h,+actors[inc(%q1)])] for more pages.)]%R[line()]))
+&CMD-+ACTOR-NPC Actor Commands=$+actor/npc *=*:think pemit(%#,switch(1,t(u(#ACTORFUN/fun_find_actors,%1)),ansi(hr,That actor is already taken.),pmatch(%0),ansi(hr,%0 is a player.  Use the +actor command instead.),ansi(hg,You set %0's actor to %1.)[u(#ACTORFUN/fun_set_actor,trim(capstr(%0)),%1)])))
+&CMD-+ACTORS-SEARCH Actor Commands=$+actors *:think pemit(%#,[line()]%R[ansi(h,Characters with Actors Matching "[capstr(%0)]")]%R[iter(sortby(#ACTORFUN/fun_sort_actors,u(#ACTORFUN/fun_find_actors,%0)),%R[ljust(before(xget(#ACTORDB,##),|),30)][after(xget(#ACTORDB,##),|)])]%R[line()])
 @STARTUP Actor Commands=@set me=!no_command
 @set Actor Commands/STARTUP=no_command
 
@@ -30,6 +30,7 @@
 @set Actor Functions=WIZARD
 @set Actor Functions=SAFE
 @describe Actor Functions=Actor Functions
+&FUN_SORT_ACTORS Actor Functions=comp(before(xget(#ACTORDB,%0),|),before(xget(#ACTORDB,%1),|))
 &FUN_FIND_ACTORS Actor Functions=squish(iter(lattr(#ACTORDB/actor_*),switch(strmatch(after(xget(#ACTORDB,##),|),*%0*),1,##)))
 &FUN_FIND_PLAYERS Actor Functions=squish(iter(lattr(#ACTORDB/actor_*),switch(and(strmatch(before(xget(#ACTORDB,##),|),*%0*),strmatch(after(xget(#ACTORDB,##),|),xget(pmatch(%0),actor))),1,##)))
 &FUN_SET_ACTOR Actor Functions=localize([setq(0,u(#ACTORFUN/fun_find_players,%0))][switch(1,eq(words(%q0),1),[set(#ACTORDB,%q0:%0|%1)][set(pmatch(%0),actor:%1)],[set(pmatch(%0),actor:%1)][set(#ACTORDB,actor_[xget(#ACTORDB,next_actor)]:%0|%1)][set(#ACTORDB,next_actor:[inc(xget(#ACTORDB,next_actor))])])
