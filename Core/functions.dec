@@ -48,6 +48,10 @@
 &FUN_SORT_NAMES Global Utility Functions=sortby(sortby_names,%0)
 &SORTBY_NAMES Global Utility Functions=comp(name(%0),name(%1))
 &FUN_WEB_EDIT Global Utility Functions=[setq(9,%0)][setq(9,edit(%q9,<,\[))][setq(9,edit(%q9,>,\]))][setq(9,edit(%q9,\\\%r\\\%r,%R<p>))][setq(9,edit(%q9,\\\%R\\\%R,%R<p>))][setq(9,edit(%q9,\\\%r,%R<BR>))][setq(9,edit(%q9,\\\%R,%R<BR>))]%q9
+&FUN_APPEND Global Utility Functions=localize([setq(0,xget(%0,%1))][set(%0,%1:%q0[switch(words(%q0),>0,switch(%3,,%B,%3))]%2)])
+&FUNHELP_APPEND Global Utility Functions=Appends text to an attribute.  Separator is optional and defaults to a blank space.%R%RUsage: append(db#,attribute,text to append,separator)
+&FUNHELP_WIKIFI Global Utility Functions=This function will take a MUSH string and perform basic formatting to turn it into a Mediawiki-friendly version.%R%RUsage: wikifi(<string>)
+&FUN_WIKIFI Global Utility Functions=edit(regeditalli(%0,\\\[ansi\\\(\[^\,\]+\,\(\[^\\\)\]+\)\\\)\\\],'''$1'''),\%R,%R%R,\%r,%R%R,\%b,%b,\%B,%b,\%t,,\%T,)
 &FUNHELP_CAPSTR_ALL Global Utility Functions=This function will capitalize each word of a multi-word string. It defaults to a space-delimited string but you can pass a delimiter if you want.%R%RUsage: capstr_all(<string>,\[delimiter\])
 &FUNHELP_CENTER_STR Global Utility Functions=This function centers a string, just like the center() function, but it also chops the string if it's too long to fit.  It returns the formatted string.%R%RUsage: center_str(<string>, <length>)
 &FUNHELP_ESCAPE_CR Global Utility Functions=When storing user input on an attribute, the MUSH will put in hard line breaks for any carriage return(\%R).  This function escapes them out so you can later @decompile the attribute easily.  It returns the string with all carriage returns escaped out.  You use it in conjunction with the 'set' function.  For example:%Rset(#123,foo:\[escape_cr(\%0)\])%R%RIts partner is replace_cr, which will un-escape the linebreaks so you can display them.
