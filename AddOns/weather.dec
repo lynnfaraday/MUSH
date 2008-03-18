@@ -11,64 +11,79 @@
 
 @pemit/silent %#=[ansi(hr,Creating Objects...)]%R
 
-@create Spring
-&TYPE-CLEAR Spring=clear clear clear fair fair fair drizzling drizzling overcast raining
-&TYPE-drizzling Spring=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
-&TYPE-FAIR Spring=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
-&TYPE-OVERCAST Spring=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
-&TYPE-raining Spring=raining raining raining overcast overcast overcast stormy stormy fair fair
-&TYPE-STORMY Spring=stormy stormy stormy raining raining raining clear overcast drizzling fair
-&temp Spring=cool cool cool cool cool warm warm warm warm warm
 
-@create Summer
-&TYPE-CLEAR Summer=clear clear clear fair fair fair drizzling drizzling overcast raining
-&TYPE-drizzling Summer=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
-&TYPE-FAIR Summer=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
-&TYPE-OVERCAST Summer=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
-&TYPE-raining Summer=raining raining raining overcast overcast overcast stormy stormy fair fair
-&TYPE-STORMY Summer=stormy stormy stormy raining raining raining clear overcast drizzling fair
-&temp Summer=hot hot hot hot hot warm warm warm warm cool cool
-
-@create Fall
-&TYPE-CLEAR Fall=clear clear clear fair fair fair drizzling drizzling overcast raining
-&TYPE-drizzling Fall=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
-&TYPE-FAIR Fall=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
-&TYPE-OVERCAST Fall=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
-&TYPE-raining Fall=raining raining raining overcast overcast overcast stormy stormy fair fair
-&TYPE-STORMY Fall=stormy stormy stormy raining raining raining clear overcast drizzling fair
-&TEMP Fall=cool cool cool cool cool cool cool freezing warm warm
 
 @create Winter
-&TYPE-CLEAR Winter=clear clear clear fair fair fair flurrying flurrying overcast snowing
-&TYPE-flurrying Winter=flurrying flurrying flurrying fair fair fair overcast overcast clear stormy
-&TYPE-FAIR Winter=fair fair fair flurrying flurrying flurrying clear clear overcast overcast snowing
-&TYPE-OVERCAST Winter=overcast overcast overcast flurrying flurrying flurrying fair fair clear clear snowing
-&TYPE-snowing Winter=snowing snowing snowing overcast overcast overcast stormy stormy fair fair
-&TYPE-STORMY Winter=stormy stormy stormy snowing snowing snowing clear overcast flurrying fair
+@set Winter = NO_COMMAND
+@DESCRIBE Winter=Weather Descs
 &TEMP Winter=cold cold cold cold cold cold cold cool cool freezing freezing
+&TYPE-CLEAR Winter=clear clear clear fair fair fair flurrying flurrying overcast snowing
+&TYPE-FAIR Winter=fair fair fair flurrying flurrying flurrying clear clear overcast overcast snowing
+&TYPE-FLURRYING Winter=flurrying flurrying flurrying fair fair fair overcast clear snowing snowing
+&TYPE-OVERCAST Winter=overcast overcast overcast flurrying flurrying flurrying fair fair clear clear snowing
+&TYPE-SNOWING Winter=snowing snowing snowing overcast overcast fair fair flurrying flurrying flurrying
+
+@create Fall
+@set Fall = NO_COMMAND
+@DESCRIBE Fall=Weather Descs
+&TEMP Fall=cool cool cool cool cool cool cool freezing warm warm
+&TYPE-CLEAR Fall=clear clear clear fair fair fair drizzling drizzling overcast raining
+&TYPE-DRIZZLING Fall=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
+&TYPE-FAIR Fall=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
+&TYPE-OVERCAST Fall=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
+&TYPE-RAINING Fall=raining raining raining overcast overcast overcast stormy stormy fair fair
+&TYPE-STORMY Fall=stormy stormy stormy raining raining raining clear overcast drizzling fair
+
+@create Summer
+@set Summer = NO_COMMAND
+@DESCRIBE Summer=Weather Descs
+&TEMP Summer=hot hot hot hot hot warm warm warm warm cool cool
+&TYPE-CLEAR Summer=clear clear clear fair fair fair drizzling drizzling overcast raining
+&TYPE-DRIZZLING Summer=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
+&TYPE-FAIR Summer=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
+&TYPE-OVERCAST Summer=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
+&TYPE-RAINING Summer=raining raining raining overcast overcast overcast stormy stormy fair fair
+&TYPE-STORMY Summer=stormy stormy stormy raining raining raining clear overcast drizzling fair
+
+@create Spring
+@set Spring = NO_COMMAND
+@DESCRIBE Spring=Weather Descs
+&TEMP Spring=cool cool cool cool cool warm warm warm warm warm
+&TYPE-CLEAR Spring=clear clear clear fair fair fair drizzling drizzling overcast raining
+&TYPE-DRIZZLING Spring=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
+&TYPE-FAIR Spring=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
+&TYPE-OVERCAST Spring=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
+&TYPE-RAINING Spring=raining raining raining overcast overcast overcast stormy stormy fair fair
+&TYPE-STORMY Spring=stormy stormy stormy raining raining raining clear overcast drizzling fair
 
 @create Weather Generator
 @set Weather Generator = VISUAL
 @set Weather Generator = SAFE
 @set Weather Generator = !NO_COMMAND
 
-&CREDITS Weather Generator=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Weather Generator=4.x
-@DESCRIBE Weather Generator=This is a simple weather object.  It has one main function:  FUN_WEATHER.  This will give you a descriptive string based on the time of day and current weather.  You can put this in a +weather command (not included) or a room desc or whatever.%R%RTR-CHANGEWEATHER is @triggered automatically at startup and then every UPDATE_WEATHER_SECS after that (default every half hour).  This updates the weather and time of day.  This sends out a global @emit to all connected players telling them the new weather emit.%R%RFUN_COMPUTE_TIME tells you the time of day (night, evening, etc.) based on the ICTIME function.  If you want the time of day to be determined by another function (such as TIME), go ahead and change that function.%R%RThe types of weather are clear, drizzling, fair, overcast, raining, stormy.   The times of day are night, morning, day, evening.    The weather descriptions themselves are in attributes like morningraining or eveningSTORMY.%R%RAttributes named TYPE-CLEAR, TYPE-drizzling, etc. store the list of potential "next weather" types based on the current weather.  It's random, so the more often a weather type appears in the list, the more likely you are to transition to that weather type.  If you don't want the weather to change very often, make the current weather type appear more often.%R%R%TFor example:  If TYPE-raining said - "raining raining raining raining raining overcast overcast stormy fair fair", when it was raining, there'd be a 50\% chance it would stay raining, a 20\% chance it would go to overcast or fair, and a 10\% chance it would start storming.%R%RTo create a new weather type (like hurricane), you'd need to:%R%T1. Create a TYPE-HURRICANE attribute that says what the next weather might be once a hurricane has started.%R%T2. Add morningHURRICANE, eveningHURRICANE, etc. weather descs for all times of day.%R%T3. Add hurricane to at least one of the existig TYPE-xxx lists so a hurricane can begin.%R%RThere is no support for "seasons" as of yet.   For now, my recommendation would be to store all your seasonal weather descs on a separate object in attributes like WINTER_morningraining and SUMMER_morningraining and copy over the ones appropriate to the current season whenever it changes.%R%RThere is also no support for local weather yet. It assumes that the entire game shares the same weather.%R%R[u(credits)]
-@set Weather Generator/DESCRIBE=no_command visual prefixmatch public nearby
-
-&FUN_COMPUTE_TIME Weather Generator=switch(first(extract(ictime(),4,1),:),<5,night,5,morning,6,morning,21,evening,22,evening,>22,night,day)
+&CMD-+WEATHER Weather Generator=$+weather:think pemit(%#,u(fun_weather))
+&CMD-+WEATHER-CLEAR Weather Generator=$+weather/clear:think [pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),ansi(hg,You clear the weather override.)[set(me,override:0)][set(me,type:[u(fun_random_type)])][set(me,temp:[u(fun_random_temp)])]))]
+&CMD-+WEATHER-OVERRIDE Weather Generator=$+weather/override *=*:think
+&CMD-+WEATHER-SET Weather Generator=$+weather/set * and *:think [pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),ansi(hg,You set the weather to %0 and %1.)[set(me,override:1)][set(me,type:[lcstr(trim(%1))])][set(me,temp:[lcstr(trim(%0))])]))]
+&FUN_COMPUTE_TIME Weather Generator=switch(first(extract(ictime(),4,1),:),<5,night,<11,morning,<18,day,<21,evening,night)
+&FUN_DETERMINE_SEASON Weather Generator=switch(extract(time(),2,1),Jan,winter,Feb,winter,Mar,switch(extract(time(),3,1),>20,spring,winter),Apr,spring,May,spring,Jun,switch(extract(time(),3,1),>20,summer,spring),Jul,summer,Aug,summer,Sep,switch(extract(time(),3,1),>20,fall,summer),Oct,fall,Nov,fall,Dec,switch(extract(time(),3,1),>20,winter,fall))
+&FUN_RANDOM_TEMP Weather Generator=[lcstr(first(shuffle(xget(v(season),temp))))]
+&FUN_RANDOM_TYPE Weather Generator=[lcstr(after(first(shuffle(lattr([v(season)]/type*))),-))]
 &FUN_WEATHER Weather Generator=It is a [v(season)] [v(time)].  The weather is [v(temp)] and [v(type)].
-@STARTUP Weather Generator=@set me=!no_command;@tr me/tr-changeweather
-&FUN_DETERMINE_SEASON Weather Generator=num(switch(extract(time(),2,1),Jan,Winter,Feb,Winter,Mar,Spring,Apr,Spring,May,Spring,Jun,Summer,Jul,Summer,Aug,Summer,Sep,Fall,Oct,Fall,Nov,Fall,Dec,Winter))
-
-&TIME Weather Generator=day
-&TYPE Weather Generator=snowing
-&TEMP Weather Generator=cold
+&OVERRIDE Weather Generator=1
 &SEASON Weather Generator=winter
-
-&TR-CHANGEWEATHER Weather Generator=think [set(me,season:[u(fun_determine_season)])][set(me,time:[u(fun_compute_time)])][set(me,type:[first(shuffle(xget(v(season),type-[v(type)])))])][set(me,temp:[first(shuffle(xget(v(season),temp))])][iter(lwho(),switch(xget(%l,show_weather),1,pemit(##,[ansi(hb,<WEATHER>)] [u(FUN_WEATHER)])))];@wait v(UPDATE_WEATHER_SECS)=@tr me/tr-changeweather
+&SHELP_WEATHER Weather Generator=Weather is automatically displayed in room descriptions and updated every half hour.  You can temporarily override the weather if you need to for a special plot or something.  The weather will stay at what you set until you clear the override.%R%R[ansi(h,+weather/set <temperature> and <weather>)] - Overrides the weather.%R%TExample: +weather/set cold and raining%R%R[ansi(h,+weather/clear)] - Clears the weather override.
+@STARTUP Weather Generator=@set me=!no_command;@tr me/tr-changeweather
+@set Weather Generator/STARTUP=no_command prefixmatch
+&TEMP Weather Generator=cold
+&TIME Weather Generator=evening
+&TR-CHANGEWEATHER Weather Generator=think [set(me,season:[u(fun_determine_season)])][set(me,time:[u(fun_compute_time)])][switch(v(override),0,[set(me,type:[u(fun_random_type)])][set(me,temp:[u(fun_random_temp)])])][iter(lwho(),switch(xget(%l,show_weather),1,pemit(##,[ansi(hb,<WEATHER>)] [u(FUN_WEATHER)])))];@wait v(UPDATE_WEATHER_SECS)=@tr me/tr-changeweather
+&TYPE Weather Generator=flurrying
 &UPDATE_WEATHER_SECS Weather Generator=1800
+
+&CREDITS Weather Generator=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&VERSION Weather Generator=4.0
+@DESCRIBE Weather Generator=This is a simple weather object.%R%R[u(credits)]
 
 @wait 3=@tel Spring=Weather Generator
 @wait 3=@tel Summer=Weather Generator
@@ -77,7 +92,7 @@
 
 @wait 4=@tr Weather Generator/startup
 
-@wait 4=@pemit/silent %#=[ansi(hr,Put the weather object someplace safe.  It does not need to be in the master room.)]%R
+@wait 5=@tel Weather Generator=#2
 
 @wait 6=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
