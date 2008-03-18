@@ -38,7 +38,7 @@
 &SHELP_+MOTD MOTD System=Staff members can change the message of the day, and also add and edit tips that show up randomly on the "tip of the day" section.%R%R[ansi(h,+motd/set <message>)] - Set the important message of the day.%R[ansi(h,+motd/clear)] - Clears the important message.%R%R[ansi(h,+motd/tip <title>=<tip text>)] - Adds a tip.%R[ansi(h,+motd/showtips)] - Shows a list of all tip titles.%R[ansi(h,+motd/viewtip <title>)] - Views a tip.%R[ansi(h,+motd/cleartip <title>)] - Erases a tip%R[ansi(h,+motd/edittip <title>=<find>/<replace>)] - Edits a tip.%R%RIf you want integration with Myrddin's BBS to show unread BBS postings, you need to configure the BBPOCKET attribute on #MOTDDB to be the DB# of the BBS "bbpocket" object.
 @DESCRIBE MOTD System=Stores the message of the day commands.%R[u(credits)]
 &CREDITS MOTD System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION MOTD System=3.0
+&VERSION MOTD System=4.0
 
 
 

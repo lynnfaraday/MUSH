@@ -24,7 +24,7 @@
 
 @DESCRIBE Actor Commands=Keeps a database of which actors folks have chosen for their characters.%R[u(credits)]
 &CREDITS Actor Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Actor Commands=4.xx
+&VERSION Actor Commands=4.0
 
 @create Actor Functions
 @set Actor Functions=WIZARD

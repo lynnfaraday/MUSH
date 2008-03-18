@@ -20,7 +20,7 @@
 @DESCRIBE Cookie System=Cookie system for player rewards.%R[u(credits)]
 @set Cookie System/DESCRIBE=no_command visual prefixmatch public nearby
 &CREDITS Cookie System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Cookie System=4.xx
+&VERSION Cookie System=4.0
 
 &CMD-+COOKIE Cookie System=$+cookie *:think switch(words(%0),1,[setq(0,pmatch(%0))][pemit(%#,switch(0,t(%q0),ansi(hr,That is not a valid player.),not(match(%#,%q0)),ansi(hr,You can't give yourself a cookie!),not(match(xget(%#,cookies_given),[name(%q0)])),ansi(hr,You have already given %0 a cookie this week.),not(match(xget(%#,alts),%q0)),ansi(hr,You can't give your alt a cookie!),ansi(hg,You give [name(%q0)] a cookie.)[set(%#,cookies_given:[xget(%#,cookies_given)][name(%q0)]%B)][set(%q0,cookies_received:[xget(%q0,cookies_received)]%N%B)]))])
 &CMD-+COOKIE-HERE Cookie System=$+cookie/here:@dolist remove(lcon(%l),%#)=@switch [conn(##)]=>0,@fo %#=+cookie [name(##)]

@@ -24,7 +24,7 @@
 
 @DESCRIBE Pose Autospacer=Automatically puts spaces between poses.%R[u(credits)]
 &CREDITS Pose Autospacer=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Pose Autospacer=4.xx
+&VERSION Pose Autospacer=4.0
 
 @wait 4=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
 @wait 4=@fo %#=+copyhelp [num(Pose Autospacer)]

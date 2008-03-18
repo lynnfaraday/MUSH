@@ -34,7 +34,7 @@
 &SHELP_+DESC Multi-Descer=You can set up global pre-made descriptions just by adding attributes to the Multi-Descer object.  Then players can use it as if it were their own desc.%R%R%T&DESC_<TITLE> #DESCDB=<DESC>
 &BOTTOM_LINE Multi-Descer=ansi(h,[repeat(=,78)])
 &TOP_LINE Multi-Descer=ansi(h,[repeat(=,29)] Multi-Desc System [repeat(=,30)])
-&VERSION Multi-Descer=3.0
+&VERSION Multi-Descer=4.0
 @Desc Multi-Descer=Lets characters store multiple descriptions and switch between them easily.%RSee [ansi(hr,+desc/help)] for instrictions.%R%R[u(credits)]
 &CREDITS Multi-Descer=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 

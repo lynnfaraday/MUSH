@@ -22,7 +22,7 @@
 &CMD-+NEWS-TOPIC +news Commands=$+news *:think [setq(0,#-1)][pemit(%#,[switch(1,hasattr(#NEWSDB,news_[trim(%0)]),setq(0,[trim(ucstr(%0))]),hasattr(#NEWSDB,alias_[trim(%0)]),setq(0,[xget(#NEWSDB,alias_[trim(%0)])]))][switch(%q0,#-1,ansi(hr,There is no such news entry.),[set(%#,last_news:[trim(%0)])][line()]%R[center(ansi(h,+news %q0),78)]%R[u(fun_format_for_mush,u(#NEWSDB/news_[trim(%q0)]))]%R[line()])])]
 @DESCRIBE +news Commands=Softcoded news system.%R[u(credits)]
 &CREDITS +news Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION +news Commands=4.x
+&VERSION +news Commands=4.0
 &FUN_FORMAT_FOR_HTML +news Commands=localize([setq(9,%0)][setq(9,regeditalli(%q9,\%B,&nbsp\;))][setq(9,regeditalli(%q9,\%T,repeat(&nbsp\;,5)))][setq(9,regeditalli(%q9,<c>(\[^<\]+)</c>,[setq(8,$1)]<a href="#[ucstr(%q8)]">%q8</a>))][setq(9,regeditalli(%q9,<a>(\[^<\]+)</a>,[setq(8,$1)]<a href="%q8">%q8</a>))]%q9)
 &FUN_FORMAT_FOR_MUSH +news Commands=[localize([setq(9,%0[u(#NEWSDB/bottom_text)])][setq(9,regeditalli(%q9,<b>(\[^<\]+)</b>,[setq(8,$1)][ansi(h,%q8)]))][setq(9,regeditalli(%q9,<u>(\[^<\]+)</u>,[setq(8,$1)][ansi(u,%q8)]))][setq(9,regeditalli(%q9,<h1>(\[^<\]+)</h1>,[setq(8,$1)][ansi(hB,%q8)]))][setq(9,regeditalli(%q9,<a>(\[^<\]+)</a>,[setq(8,$1)][ansi(hg,%q8)]))][setq(9,regeditalli(%q9,<c>(\[^<\]+)</c>,[setq(8,$1)][ansi(hr,+news %q8)]))][setq(9,edit(%q9,<BR>,%R))][setq(9,edit(%q9,<br>,%R))][setq(9,edit(%q9,<P>,%R%R))][setq(9,edit(%q9,<p>,%R%R))]%q9)]
 @set +news Commands/FUN_FORMAT_FOR_MUSH=regexp

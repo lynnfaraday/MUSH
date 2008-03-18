@@ -86,7 +86,7 @@
 &NON_PLAYERS Global Utility Functions=#1
 @STARTUP Global Utility Functions=@dolist lattr(me/fun_*)={@function after(##,_)=num(me),##}
 &CREDITS Global Utility Functions=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Global Utility Functions=3.0
+&VERSION Global Utility Functions=4.0
 
 @wait 6=@pemit/silent %#=%R%R[ansi(hr,Activating Functions...)]%R
 @wait 6=@trigger Global Utility Functions/startup

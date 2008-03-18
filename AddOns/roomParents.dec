@@ -20,7 +20,7 @@
 @OSUCCESS Exit Parent=leaves, heading towards the [name(loc(me))] \[[name(me)]\].
 @SUCCESS Exit Parent=You head towards [ansi(hc,[name([loc(me)])])]
 &CREDITS Exit Parent=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Exit Parent=4.x
+&VERSION Exit Parent=4.0
 
 @create Max's Table Code Parent
 @set Max's Table Code Parent = SAFE
@@ -118,6 +118,7 @@
 &TPDESC_DEFAULT TP Room Parent=The walls of the room shimmer.  They are shapeless, malleable, almost waiting to be given form.  With a little imagination, the room can become anything, from an abandoned mining tunnel to an ornate ballroom.%R%RThis is a [ansi(hg,TinyPlot Room)] which you can use to simulate any room not actually coded on the MUSH.  The room's commands allow you to change the description to suit your needs, even storing multiple descs if you so desire.  You can also lock the room for privacy, and request that it be linked to the IC world for special TPs.
 &cmd-+lhelp TP Room Parent=$+lhelp*:think switch(words([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)]),0,pemit(%#,ansi(c,There are no local help files here.)),switch(%0,,pemit(%#,[line()]%rLocal Help Topics::%r%r[setq(0,iter([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)],after(##,_)))][table([sort(%q0)],15,78,,)]%r%rType [ansi(hb,+lhelp <topic>)] for more information about a given topic.%r[line()]),pemit(%#,[line()]%rLocal Help Topic : [ansi(hr,[ucstr(%0)])]%r%r[u(help_[trim(%0)])]%r[line()])))
 &CREDITS TP Room Parent=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&VERSION TP Room Parent=4.0
 
 @create Room Parent Holder
 
