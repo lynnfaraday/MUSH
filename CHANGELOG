@@ -1,38 +1,86 @@
-Version 4.0 (In Development - Not Yet Released)
+Version 4.0 (03/17/08)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+help - Now supports partial matches (so +help census or +help cen will find the help file for "+census").
+
+**** NEW SYSTEMS ****
+
+Actors 
+------
+Track character actor choices.
+
+Meetme
+-------
+Meet other players for RP.
+
+Autospace
+---------
+Automatically insert blank lines between poses/says/emits.
+
++News
+-----
+Softcoded +news system.
+
+
+Weather
+-------
+Simple weather generator.
+
+**** IMPORTANT BUGFIXES ****
+
+
+FUDGE
+-----
+Fixed bug in opposed +roll.  It was using the attackers skill level for both the attacker AND defender.  Ooops.
+
+Staff
+-----
+Added +send command to send players around.
+Fixed +summon so it would actually summon people.
+
+Cookies
+-------
+Fixed bug with cookie bbpost.  It would often have a phantom person listed as #1.
+
+Player Setup
+------------
+Fixed two bugs in the setup_attr function.  If you had an attribute that was an evaluation, it wasn't properly evaluating it when it initialized on existing players.  Also, if you had a visible attribute, it wasn't initializing on existing players at all.
+
+**** OTHER CHANGES ***
+
++help
+-----
+Now supports partial matches (so +help census or +help cen will find the help file for "+census").
 Fixed MUX compatibility bugs.  Should now work on TinyMUX.
 
-Alts - Made the job notice optional.
+Alts
+----
+Made the job notice optional.
 
-Jobs - Priority, status and title commands were not updating activity.  Now they do.
+Jobs
+----
+Priority, status and title commands were not updating activity.  Now they do.
 
-FUDGE - Fixed bug in opposed +roll.
+Globals
+-------
+Changed +idle to +afk and RP_OK to IC.  
+Added +fullname.  
+Added support for showing IC in magenta if someone's in a TP Room.  
+Split +RP into +IC and +OOC.  
+Created a separate data object for the data.
 
-Staff - Added +send command.  
+Functions
+---------
+Fixed typos in help for line_no_color function.  
+Added append() and wikifi() functions.
 
-Cookies - Fixed bug with cookie posting.
-
-Weather - Added a simple weather system (still not quite finished)
-
-Globals - Changed +idle to +afk and RP_OK to IC.  Added +fullname.  Added support for showing IC in magenta if someone's in a TP Room.  Split +RP into +IC and +OOC.  Created a separate data object for the data.
-
-Functions - Fixed typos in help for line_no_color function.  Added append() and wikifi() functions.
-
-Player Setup - Fixed two bugs in the setup_attr function.  If you had an attribute that was an evaluation, it wasn't properly evaluating it when it initialized on existing players.  Also, if you had a visible attribute, it wasn't initializing on existing players at all.
-
-Room Parents - Made the TP Room parent visual so the lhelp would show up.
+Room Parents
+------------
+Made the TP Room parent visual so the lhelp would show up.
 Fixed the places help so it will get copied over to the +help system.
 
-Actors - Added an actor registration system.
+MOTD and +desc
+---------------
+Really minor helpfile changes.
 
-Meetme - Added a meetme system.
-
-Autospace - Added pose autospacer.
-
-News - Added a +news system.
-
-MOTD - Fixed tip for +RP command that no longer exists.
 
 Version 3.0 (4/9/07)~~~~~~~~~~~~~~~~~~~~~~~~~~~~Although some of the systems are very similar to Version 1.0, this was effectively a ground-up redo of everything. The systems integrate together now, and there are a lot more systems available.Tested On: PennMUSH 1.8.2.p3Version 2.0 (n/a)~~~~~~~~~~~~~~~~~~~~~~~~~~~~I skipped version 2.0 because some of the individual systems were labeled with versions ranging from 1.0 to 2.0.
 
