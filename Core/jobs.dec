@@ -52,12 +52,13 @@
 @DESCRIBE Jobs System=Staff Jobs System.%R%R[u(credits)]
 &ISSTAFF Jobs System=isstaff(%#)
 @STARTUP Jobs System=@set me=!no_command;@function create_job=#JOBFUN/fun_create_job;@function find_job=#JOBFUN/fun_find_job
-&VERSION Jobs System=4.0
+&VERSION Jobs System=4.1
 &CREDITS Jobs System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 
 @create Jobs Functions
 @set Jobs Functions = NO_COMMAND
-@DESCRIBE Jobs Functions=Functinos for staff jobs system.
+@set Jobs Functions = WIZARD
+@DESCRIBE Jobs Functions=Functions for staff jobs system.
 &FUN_CREATE_JOB Jobs Functions=[setq(j,xget(#JOBDB,next_job))][set([xget(#JOBDB,cat_[trim(%0)])],job_%qj:%1|[secs()]|[name(%3)]||[add(secs(),xget(#JOBDB,DUEDATE_SECS))]|NEW|M|[escape_cr(%2)]||[secs()]||)][set(#JOBDB,next_job:[inc(%qj)])][iter(lwho(),switch(isstaff(##),1,pemit(##,ansi(hg,New Job Submitted \(#%qj\): %1))))]
 &FUN_DISPLAY_HEADER Jobs Functions=[ansi(hu,[ljust(#,6)][ljust(Cat,6)][ljust(Title,21)][ljust(Submitter,14)][ljust(Handler,14)][ljust(Due,11)]Status)]
 &FUN_DISPLAY_JOB Jobs Functions=[setq(7,before(%0,:))][setq(8,after(%0,:))][setq(9,xget(%q7,%q8))][ljust([after(%q8,_)][switch(u(#JOBFUN/fun_has_new_activity,%q9,%#),1,[ansi(B,*)])],5)]%B[ljust(ansi(switch(u(#JOBFUN/fun_extract_data,%q9,priority),H,hr,M,h,L,hg),name(%q7)),5)]%B[padstr(u(#JOBFUN/fun_extract_data,%q9,title),20)]%B[padstr(u(#JOBFUN/fun_extract_data,%q9,submitter),13)]%B[padstr(switch(u(#JOBFUN/fun_extract_data,%q9,handler),,-----------,u(#JOBFUN/fun_extract_data,%q9,handler)),13)]%B[padstr(u(#JOBFUN/fun_format_duedate,u(#JOBFUN/fun_extract_data,%q9,duedate),u(#JOBFUN/fun_extract_data,%q9,status)),10)]%B[u(#JOBFUN/fun_extract_data,%q9,status)]

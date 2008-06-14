@@ -1,3 +1,15 @@
+Version 4.1 (6/13/08)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Jobs
+~~~~~~~~~~~
+Fixed installer, which was not setting the wiz flag on the function object.
+
+Room Parent
+~~~~~~~~~~~
+Fixed reference to level - should have been AREA.  
+Fixed exit format to space correctly for 4-letter exit names.
+
+
 Version 4.0 (03/17/08)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
