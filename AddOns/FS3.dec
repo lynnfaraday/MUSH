@@ -1,88 +1,96 @@
 @create FS3 Skill System
 @set FS3 Skill System = WIZARD
 @set FS3 Skill System = SAFE
-
 &CMD-+ABILITIES FS3 Skill System=$+abilities:think pemit(%#,[line()]%R[ansi(hg,Attributes)][iter(lattr(#FS3DB/attribute*),%R[ljust(capstr(lcstr(after(##,_))),20)][u(#FS3DB/##)])]%R%R[ansi(hr,Action Skills)][iter(lattr(#FS3DB/actionskill*),%R[ljust(capstr(lcstr(after(##,_))),20)][u(#FS3DB/##)])]%R%R[ansi(hy,Background Skills)]%RYou can make up any background skill you like.  The following are just some examples.%R[table(xget(#FS3DB,background_skills),18,78)]%R[line()]
 &CMD-+ATTRIBUTES FS3 Skill System=$+attributes:@fo %#=+abilities
-&CMD-+ROLL FS3 Skill System=$+roll *:think switch(%0,* vs *,,[setq(0,u(#FS3FUN/fun_parse_roll_params,%0))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),gt(%q1,12)),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q1),lt(%q1,1)),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(t(%q2),not(hasattr(#FS3DB,attribute_%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3FUN/fun_notify_roll_results,%l,[ansi(hy,<Trait Roll>)] %N rolls [capstr_all(%0)] and [u(#FS3FUN/fun_pretty_success_level,%q4)].))])
-&CMD-+ROLL-OPPOSED FS3 Skill System=$+roll *=* vs *=*:think [setq(0,u(#FS3FUN/fun_parse_roll_params,%1))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(pmatch(%0),%q1,%q3,%q2))][setq(5,u(#FS3FUN/fun_parse_roll_params,%3))][setq(6,extract(%q5,1,1,|))][setq(7,extract(%q5,2,1,|))][setq(8,extract(%q5,3,1,|))][setq(9,roll_ability(pmatch(%2),%q6,%q8,%q7))][setq(a,sub(last(%q9),last(%q4)))][switch(1,and(isnum(%q1),gt(%q1,12)),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q1),lt(%q1,1)),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q6),gt(%q6,12)),pemit(%#,ansi(hr,%q6 is not a valid ability rating number.)),and(isnum(%q6),lt(%q6,1)),pemit(%#,ansi(hr,%q6 is not a valid ability rating number.)),and(t(%q2),not(hasattr(#FS3DB,attribute_%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),and(t(%q7),not(hasattr(#FS3DB,attribute_%q7))),pemit(%#,ansi(hr,%q7 is not an attribute.)),and(t(%q8),not(isnum(%q8))),pemit(%#,ansi(hr,%q8 is not a valid modifier.)),u(#FS3FUN/fun_notify_roll_results,%l,[ansi(hy,<Trait Roll>)] %0 %1 vs %2 %3%R%T[switch(%qa,0,DRAW,<0,[ansi(hg,%0)] wins by [abs(%qa)],[ansi(hm,%2)] wins by [abs(%qa)])].)
+&REM-+ROLL FS3 Skill System= %q0 = parsed roll params  %R %q1=ability %R %q2=ruling attr or blank %R  %q3=modifier or 0 %r %q4=roll result
+&CMD-+ROLL FS3 Skill System=$+roll *:think switch(%0,* vs *,,[setq(0,u(#FS3FUN/fun_parse_roll_params,%0))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,not(u(#FS3FUN/FUN_IS_VALID_RATING,%q1)),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(%0)]: [u(#FS3FUN/fun_pretty_success_level,%q4)].))])
+&CMD-+ROLL-CASUAL FS3 Skill System=$+roll/casual *:think [setq(0,u(#FS3FUN/fun_parse_roll_params,%0))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))[setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,add(%q3,20),%q2))][switch(1,not(u(#FS3FUN/FUN_IS_VALID_RATING,%q1)),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(%0)] [ansi(hy,*CASUAL*)]: [u(#FS3FUN/fun_pretty_success_level,%q4)].))])
+&REM_+ROLL_OPPOSED FS3 Skill System=%q0 = parsed roll params A  %R%T %q1 = A ability %R%T  %q2 = A ruling attr or blank   %R%T   %q3 = A modifier  %R%T   %q4 = A result  %R%R   %q5 = B parsed params %R%T %q6 = B ability %R%T  %q7 = B ruling attr or blank   %R%T   %q8 = B modifier  %R%T   %q9 = B result  %R%R   %qa = Opposed result text
+&CMD-+ROLL-OPPOSED FS3 Skill System=$+roll *=* vs *=*:think [setq(0,u(#FS3FUN/fun_parse_roll_params,%1))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(pmatch(%0),%q1,%q3,%q2))][setq(5,u(#FS3FUN/fun_parse_roll_params,%3))][setq(6,extract(%q5,1,1,|))][setq(7,extract(%q5,2,1,|))][setq(8,extract(%q5,3,1,|))][setq(9,roll_ability(pmatch(%2),%q6,%q8,%q7))][setq(a,u(#FS3FUN/FUN_GET_OPPOSED_RESULT,%0,%q4,%2,%q9))][switch(1,not(u(#FS3FUN/FUN_IS_VALID_RATING,%q1)),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),not(u(#FS3FUN/FUN_IS_VALID_RATING,%q6)),pemit(%#,ansi(hr,%q6 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),and(t(%q7),not(u(#FS3FUN/FUN_IS_VALID_ATTRIBUTE,%q7))),pemit(%#,ansi(hr,%q7 is not an attribute.)),and(t(%q8),not(isnum(%q8))),pemit(%#,ansi(hr,%q8 is not a valid modifier.)),u(#FS3FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] [capstr(%0)] [prettify(%1)] vs [capstr(%2)] [prettify(%3)]%R<%T[capstr(%0)]: [u(#FS3FUN/FUN_PRETTY_SUCCESS_LEVEL,%q4)][space(10)][capstr(%2)]: [u(#FS3FUN/FUN_PRETTY_SUCCESS_LEVEL,%q9)]%R<%T%T%qa)]
 &CMD-+SHEET FS3 Skill System=$+sheet:think pemit(%#,u(#FS3FUN/fun_display_sheet,%#))
 &CMD-+SHEET-OTHER FS3 Skill System=$+sheet *:think pemit(%#,switch(0,or(isstaff(%#),xget(#FS3DB,PLAYER_VISIBLE_SHEETS)),ansi(hr,That command is restricted to staff.),t(pmatch(%0)),ansi(hr,That is not a valid player.),u(#FS3FUN/fun_display_sheet,pmatch(%0))))
 &CMD-+SKILLS FS3 Skill System=$+skills:@fo %#=+abilities
-&CMD-+SKILLCENSUS FS3 Skill System=$+skillcensus *=*:think pemit(%#,switch(0,or(isstaff(%#),xget(#FS3DB,PLAYER_VISIBLE_SHEETS)),ansi(hr,That command is restricted to staff.),u(#106/fun_is_valid_skill,%0),ansi(hr,That's not a valid skill.),u(#106/fun_is_valid_level_name,%1),ansi(hr,That's not a valid level.),[line()]%RCharacters with %0 at %1 or higher%R[iter(u(#106/fun_skill_census,%0,%1),%R[padstr(name(after(##,:)),15)][u(#106/fun_level_name,before(##,:))])]%R[line()]))
-&CMD-+SKILLCENSUS-GENERAL FS3 Skill System=$+skillcensus *:think switch(%0,*=*,,pemit(%#,switch(0,or(isstaff(%#),xget(#120,PLAYER_VISIBLE_SHEETS)),ansi(hr,That command is restricted to staff.),u(#106/fun_is_valid_skill,%0),ansi(hr,That is not a valid skill.),not(match(%0,*=*)),,[line()]%RCharacters with [capstr(%0)]%R[iter(u(#106/fun_skill_census,%0,Poor),%R[padstr(name(after(##,:)),15)][u(#106/fun_level_name,before(##,:))])]%R[line()])))
-
-&CREDITS FS3 Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%RBased on FUDGE rules by Steffan O'Sullivan.  See +help FUDGE.
-@DESCRIBE FS3 Skill System=These are the commands for the FUDGE skills system.%R%R[u(Credits)]
-@set FS3 Skill System/DESCRIBE=no_command visual prefixmatch public nearby
-&FUN_DISPLAY_SHEET FS3 Skill System=[line()]%R[center([xget(%0,fullname)] \([name(%0)]\),78)]%R%R[ansi(hr,Physical Profile)]%R[line2()]%R[padstr([ansi(h,Height:%B%B%B%B)] [xget(%0,height)],38)][ansi(h,Weight:)] %B%B%B%B[xget(%0,weight)]%R[padstr([ansi(h,Hair Color:)] [xget(%0,hair)],38)][ansi(h,Eye Color:)] %B[xget(%0,eyes)]%R[padstr([ansi(h,Skin Color:)] [xget(%0,skin)],38)][ansi(h,Handedness:)] [xget(%0,hand)]%R%R[ansi(hb,Demographics)]%R[line2()]%R[padstr([ansi(h,Faction:)][space(4)][xget(%0,faction)],38)][switch(words(xget(%0,rank)),>0,[ansi(h,Rank:)][space(7)][xget(%0,rank)])]%R[padstr([ansi(h,Ship:)][space(7)][xget(%0,ship)],38)][ansi(h,Position:)]%B%B%B[xget(%0,position)]%R[padstr([ansi(h,Colony:)][space(5)][xget(%0,colony)],38)][ansi(h,Age:)][space(8)][u(#50/fun_get_age,%0)] \([u(#50/fun_display_birthdate,%0)]\)%R[padstr([switch(xget(%0,faction),military,[ansi(h,Department:)]%B[xget(%0,department)])],38)][switch(1,hasattr(%0,callsign),[ansi(h,Callsign:)][space(3)][xget(%0,callsign)])]%R%R[ansi(hg,Attributes)]%R[line2()]%R[table(iter(sort(xget(%0,attributes)),[padstr(ansi(h,[before(##,:)]:),15)]%B[u(#106/fun_print_name_and_num,after(##,:))],,|),37,78,|)]%R%R[ansi(hm,Skills)]%R[line2()]%R[table(iter(sort(xget(%0,skills)),[padstr(ansi(h,[before(##,:)]:),15)]%B[u(#106/fun_print_name_and_num,after(##,:))],,|),37,78,|)]%R%R[ljust([ansi(hc,Experience Points:)] [xget(%0,XP)],38)][ansi(hc,Luck Points:)] [xget(%0,LUCK_POINTS)]%R[line()]
-&REM_OPPOSED_REGISTERS FS3 Skill System=[pemit(#33,Attack Skill + Mod: %q0 %RAttack Skill: %q1%RAttack Mod: %q2%RDefend Skill + Mod: %q3%RDefend Skill: %q4%RDefend Mod: %q5 %RAttack Roll (%q1 %q2 %qa): %q6%RAttack Crit: %q7%RDefend Roll (%q4 %q5 %qb): %q8%RDefend Crit: %q9)]
+&CREDITS FS3 Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda O'Meara (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
+@DESCRIBE FS3 Skill System=These are the commands for the FS3 skills system.%R%R[u(Credits)]
 @STARTUP FS3 Skill System=@function ability_level=#FS3FUN,fun_ability_level;@function roll_ability=#FS3FUN,fun_roll_ability
 @set FS3 Skill System/STARTUP=no_command prefixmatch
-&VERSION FS3 Skill System=1.0
+&VERSION FS3 Skill System=2.0
+
+
 @create FS3 Skill Data
-@link FS3 Skill Data = #754
+@describe FS3 Skill Data=Stores FS3 skill data.
 @set FS3 Skill Data = NO_COMMAND
+&ACTIONSKILL_ALERTNESS FS3 Skill Data=Noticing things and being aware of your surroundings.
+&ACTIONSKILL_DEMOLITIONS FS3 Skill Data=Blowing crap up.
+&ACTIONSKILL_DRIVE FS3 Skill Data=Driving ground vehicles.
+&ACTIONSKILL_ECM FS3 Skill Data=Operating electronic countermeasure systems.
 &ACTIONSKILL_FIREARMS FS3 Skill Data=Shooting pistols, rifles and personal guns.
 &ACTIONSKILL_FIRSTAID FS3 Skill Data=Basic first aid and paramedic medicine. Doesn't cover advanced medicine.
 &ACTIONSKILL_GUNNERY FS3 Skill Data=Shooting big vehicle and ship weapons.
+&ACTIONSKILL_MEDICINE FS3 Skill Data=Doctor skills.  Use FirstAid for first aid.
 &ACTIONSKILL_MELEE FS3 Skill Data=Fighting with fists, knives, and hand to hand weapons.
-&ACTIONSKILL_PILOTING FS3 Skill Data=Flying and driving.
+&ACTIONSKILL_PILOTING FS3 Skill Data=Flying planes and other airborne vehicles.
 &ACTIONSKILL_REPAIR FS3 Skill Data=Fixing things using mechanics or electronics.
-&ATTRIBUTE_CHARISMA FS3 Skill Data=Ability to influence others.
-&ATTRIBUTE_COORDINATION FS3 Skill Data=Reflexes, speed and coordination.
-&ATTRIBUTE_INTELLIGENCE FS3 Skill Data=IQ and memory.
-&ATTRIBUTE_PERCEPTION FS3 Skill Data=Noticing things.
-&ATTRIBUTE_STRENGTH FS3 Skill Data=Raw physical strength.
-&ATTRIBUTE_TOUGHNESS FS3 Skill Data=Ability to withstand physical punishment.
-&ATTRIBUTE_WILLPOWER FS3 Skill Data=Determination and mental toughness.
-&ATTRIBUTE_WITS FS3 Skill Data=Creativity and thinking on your feet.
-&BACKGROUND_SKILLS FS3 Skill Data=Acting Astronomy Chess Cooking Dancing Finance Gardening Gymnastics History Hunting Juggling Mathematics Needlepoint Novels Painting Philosophy Photography Physics Poetry Pyramid Roleplaying Sailing Sculpture Singing SleightOfHand Swimming Triad Trumpet Writing
-&MAX_HIGH_ABILITIES FS3 Skill Data=4
-&MAX_POINTS_ACTION FS3 Skill Data=14
-&MAX_POINTS_ATTRIBUTES FS3 Skill Data=40
-&RULING_ATTR FS3 Skill Data=Firearms:Coordination+Perception Melee:Coordination+Strength Piloting:Coordination+Wits Gunnery:Wits+Perception FirstAid:Wits+Intelligence Repair:Wits+Coordination Profession:Intelligence+Charisma Background:Intelligence+Wits
-&STARTING_POINTS FS3 Skill Data=75
+&ACTIONSKILL_STEALTH FS3 Skill Data=Being sneaky.
 
+&ATTRIBUTE_ACADEMIC FS3 Skill Data=Book learning and scientific pursuits.
+&ATTRIBUTE_CREATIVE FS3 Skill Data=Artistic and creative endeavors.
+&ATTRIBUTE_TECHNICAL FS3 Skill Data=Working with gizmos.
+&ATTRIBUTE_ATHLETIC FS3 Skill Data=Running, jumping, and the like.
+&ATTRIBUTE_REACTIVE FS3 Skill Data=Things involving good reaction and hand/eye coordination, like driving, piloting, shooting, etc.
+&ATTRIBUTE_SOCIAL FS3 Skill Data=Dealing with people. 
+
+&BACKGROUND_SKILLS FS3 Skill Data=Acting Astronomy Chess Cooking Dancing Finance Gardening Gymnastics History Hunting Juggling Mathematics Needlepoint Novels Painting Philosophy Photography Physics Poetry Pyramid Roleplaying Sailing Sculpture Singing SleightOfHand Swimming Triad Trumpet Writing
+&PLAYER_VISIBLE_SHEETS FS3 Skill Data=1
+&RULING_ATTR FS3 Skill Data=Alertness:Reactive Demolitions:Technical Drive:Reactive ECM:Technical Firearms:Reactive FirstAid:Technical Gunnery:Technical Medicine:Academic Melee:Athletic Piloting:Reactive Repair:Technical Stealth:Athletic
+
+&TOP_SHEET FS3 Skill Data=[name(%0)]
+&BOTTOM_SHEET FS3 Skill Data=[ljust([ansi(hc,Experience Points:)] [xget(%0,XP)],38)][ansi(hc,Luck Points:)] [xget(%0,LUCK_POINTS)]
 
 @create FS3 Skill Functions
-@link FS3 Skill Functions = #754
+@describe FS3 Skill Functions=Stores FS3 skill functions.
 @set FS3 Skill Functions = WIZARD
-@DESCRIBE FS3 Skill Functions=This object stores the skills and attributes lists.  Important attrs:%RATTR_DESC_<name> and SKILL_DESC_<name>: Skill/attribute descriptions%RSKILL_CAT_<category>: Used for +skills to list skills by category.%RSKILL_POINTS and ATTR_POINTS: Starting chargen skill and attribute point numbers.%RMAX_<skills or attributes>_above_<level>: Configures how many different skills or attributes they can have above Fair, Good or Great.
-@set FS3 Skill Functions/DESCRIBE=no_command visual prefixmatch public nearby
-&FUN_ABILITY_LEVEL FS3 Skill Functions=localize([switch(isnum(%1),1,%1,[setq(0,0)][iter(attributes actionskills profskills bgskills,switch(t(grab(xget(%0,##),%1:*)),1,setq(0,after(grab(xget(%0,##),%1:*),:))),,)]%q0)])
-&FUN_ABILITY_TYPE FS3 Skill Functions=switch(1,hasattr(#FS3DB,attribute_%1),attribute,hasattr(#FS3DB,actionskill_%1),action,t(grab(xget(%0,profskills),%1:*)),profession,background)
-&FUN_CALC_SUCCESS FS3 Skill Functions=max(1,min(5,ceil(fdiv(abs(%0),10))))
-&FUN_DISPLAY_SHEET FS3 Skill Functions=[line()]%R[center([xget(%0,fullname)] \([name(%0)]\),78)]%R%R[ansi(hr,Physical Profile)]%R[line2()]%R[padstr([ansi(h,Height:%B%B%B%B)] [xget(%0,height)],38)][ansi(h,Weight:)] %B%B%B%B[xget(%0,weight)]%R[padstr([ansi(h,Hair Color:)] [xget(%0,hair)],38)][ansi(h,Eye Color:)] %B[xget(%0,eyes)]%R[padstr([ansi(h,Skin Color:)] [xget(%0,skin)],38)][ansi(h,Handedness:)] [xget(%0,hand)]%R%R[ansi(hb,Demographics)]%R[line2()]%R[padstr([ansi(h,Faction:)][space(4)][xget(%0,faction)],38)][switch(1,hasattr(%0,callsign),[ansi(h,Callsign:)][space(3)][xget(%0,callsign)])]%R[padstr([ansi(h,Position:)][space(3)][xget(%0,position)],38)][switch(words(xget(%0,rank)),>0,[ansi(h,Rank:)][space(7)][xget(%0,rank)])]%R[padstr([ansi(h,Colony:)][space(5)][xget(%0,colony)],38)][ansi(h,Age:)][space(8)][age(%0)] \([xget(%0,birthdate)]\)%R[ansi(h,Education:)] %B[switch(xget(%0,education),,---,[before(xget(%0,education),|)] years \([after(xget(%0,education),|)]\))]%R%R[ansi(hg,Attributes)]%R[line2()]%R[table(iter(Strength Intelligence Coordination Wits Toughness Willpower Perception Charisma,[padstr(ansi(h,##:),15)]%B[u(#FS3FUN/fun_print_level,ability_level(%0,##),attribute)],,|),37,78,|)]%R%R[ansi(hr,Action Skills)]%R[line2()]%R[table(iter(sort(xget(%0,actionskills)),[padstr(ansi(h,[before(##,:)]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]%R%R[ansi(hb,Profession Skills)]%R[line2()]%R[table(iter(sort(xget(%0,profskills)),[padstr(ansi(h,[before(##,:)]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]%R%R[ansi(hy,Background Skills)]%R[line2()]%R[table(iter(sort(xget(%0,bgskills)),[padstr(ansi(h,[before(##,:)]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]%R%R[ljust([ansi(hc,Experience Points:)] [xget(%0,XP)],38)][ansi(hc,Luck Points:)] [xget(%0,LUCK_POINTS)]%R[line()]
+
+&REM_ABILITY_LEVEL FS3 Skill Functions=%0 = player, %1=ability.  returns level, default 5
+&FUN_ABILITY_LEVEL FS3 Skill Functions=localize([switch(1,isnum(%1),%1,not(pmatch(%0)),5,[setq(0,0)][iter(attributes actionskills bgskills,switch(t(grab(xget(%0,##),%1:*)),1,setq(0,after(grab(xget(%0,##),%1:*),:))),,)]%q0)])
+
+&FUN_ABILITY_TYPE FS3 Skill Functions=switch(1,hasattr(#FS3DB,attribute_%1),attribute,hasattr(#FS3DB,actionskill_%1),action,background)
+&FUN_ATTRIBUTES FS3 Skill Functions=iter(lattr(#FS3DB/ATTRIBUTE_*),after(##,_))
+&FUN_DISPLAY_SHEET FS3 Skill Functions=[line()]%R[u(#FS3DB/TOP_SHEET,%0)]%R[ansi(hg,Attributes)]%R[line2()]%R[table(iter(u(FUN_ATTRIBUTES),[padstr(ansi(h,[prettify(##)]:),15)]%B[u(#FS3FUN/fun_print_level,ability_level(%0,##),attribute)],,|),37,78,|)]%R%R[ansi(hr,Action Skills)]%R[line2()]%R[table(iter(sort(xget(%0,actionskills)),[padstr(ansi(h,[prettify(before(##,:))]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]%R%R[ansi(hy,Background Skills)]%R[line2()]%R[table(iter(sort(xget(%0,bgskills)),[padstr(ansi(h,[before(##,:)]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]%R%R[u(#FS3DB/BOTTOM_SHEET)]%R[line()]
 &FUN_IS_VALID_ACTION FS3 Skill Functions=hasattr(#FS3DB,actionskill_%0)
 &FUN_IS_VALID_ATTRIBUTE FS3 Skill Functions=hasattr(#FS3DB,attribute_%0)
 &FUN_IS_VALID_BACKGROUND FS3 Skill Functions=1
-&FUN_IS_VALID_PROFESSION FS3 Skill Functions=1
-&FUN_LEVEL_BRACKET FS3 Skill Functions=switch(%1,attribute,switch(%0,>9,Exceptional,>6,Good,>3,Average,Poor),switch(%0,>9,Expert,>6,Veteran,>3,Professional,Amateur))
-&FUN_NOTIFY_ROLL_RESULTS FS3 Skill Functions=[remit(%0,%B%B%B%1)][cemit(SkillRolls,[ansi(hc,<SkillRolls>)] %1
-&FUN_PARSE_ROLL_PARAMS FS3 Skill Functions=localize([switch(%0,*/*+*,[setq(0,[before(%0,/)])][setq(1,[before(after(%0,/),+)])][setq(2,[after(%0,+)])],*/*-*,[setq(0,[before(%0,/)])][setq(1,[before(after(%0,/),-)])][setq(2,sub(0,[after(%0,-)]))],*+*,[setq(0,[before(%0,+)])][setq(1,)][setq(2,[after(%0,+)])],*-*,[setq(0,[before(%0,-)])][setq(1,)][setq(2,sub(0,[after(%0,-)]))],*/*,[setq(0,[before(%0,/)])][setq(1,[after(%0,/)])][setq(2,0)],[setq(0,%0)][setq(1,)][setq(2,0)])]%q0|%q1|%q2)
-&FUN_PRETTY_SUCCESS_LEVEL FS3 Skill Functions=[switch(last(%0),<0,[ansi(hr,FAILS)] by [abs(last(%0))],[ansi(hg,SUCCEEDS)] by [last(%0)])]
-&FUN_PRETTY_SUCCESS_LEVEL2 FS3 Skill Functions=[switch(last(%0),<0,[ansi(hr,Level [abs(first(%0))] Failure)],[ansi(hg,Level [first(%0)] Success)])] \([last(%0)]\)
+&FUN_IS_VALID_RATING FS3 Skill Functions=and(isnum(%0),lte(%0,12),gte(%0,1))
+&FUN_LEVEL_BRACKET FS3 Skill Functions=switch(%1,attribute,switch(%0,>9,Exceptional,>6,Good,>3,Average,Poor),switch(%0,>9,Expert,>6,Veteran,>3,Professional,Rookie))
+&FUN_NOTIFY_ROLL_RESULTS FS3 Skill Functions=[remit(%0,%1)][cemit(FS3,[ansi(hc,<FS3>)] %1
+&FUN_PRETTY_SUCCESS_LEVEL FS3 Skill Functions=localize([setq(0,switch(%0,-2,hR|Miserable Failure,-1,hr|Bad Failure,0,r|Failure,1,g|Success,2,hg|Good Success,3,hG|Amazing Success))][ansi(before(%q0,|),after(%q0,|))])
 &FUN_PRINT_LEVEL FS3 Skill Functions=[ljust(%0,2)] \([u(fun_level_bracket,%0,%1)]\)
-&FUN_ROLL_ABILITY FS3 Skill Functions=u(fun_success_level,u(fun_target_number,ability_level(%0,%1),%2,u(fun_ruling_attr_level,%0,%1,%3)),u(fun_roll_dice))
-&FUN_ROLL_DICE FS3 Skill Functions=localize([setq(0,extract(sort([rand(1,50)] [rand(1,50)] [rand(1,50)]),1,2))][add(first(%q0),last(%q0))])
-&FUN_RULING_ATTR_LEVEL FS3 Skill Functions=localize([setq(0,u(fun_ability_type,%0,%1))][setq(1,after(grab(xget(#FS3DB,ruling_attr),switch(%q0,action,%1:*,profession,Profession:*,background,Background:*)),:))][switch(1,match(%q0,attribute),0,t(%2),ability_level(%0,%2),round(mean(ability_level(%0,before(%q1,+)),ability_level(%0,after(%q1,+))),0))])
-&FUN_SKILLS_ABOVE_LVL FS3 Skill Functions=localize([setq(0,0)][iter(xget(%0,skills),switch(gt(after(##,:),%1),1,setq(0,inc(%q0))),,)]%q0)
-&FUN_SKILL_CENSUS FS3 Skill Functions=localize([iter(lsearch(all,type,player),[setq(0,[u(#106/fun_get_trait_lvl_num,##,%0,skills)])][switch(gte(%q0,u(#106/fun_level_num,%1)),1,setq(1,%q1 %q0:##))])][sort(%q1,n)])
-&FUN_SUCCESS_LEVEL FS3 Skill Functions=localize([setq(0,sub(%0,%1))][u(fun_calc_success,%q0)] %q0)
-&FUN_TARGET_NUMBER FS3 Skill Functions=max(min(add(25,mul(add(%0,div(switch(t(%2),1,%2,0),4)),3),switch(t(%1),1,round(mul(%1,1.5),0),0)),95),5)
-&PLAYER_VISIBLE_SHEETS FS3 Skill Functions=1
-@set FS3 Skill Functions/PLAYER_VISIBLE_SHEETS=visual
-&REM_PARSE_ROLL_PARAMS FS3 Skill Functions=returns ability|attr|modifier
-&REM_ROLL_ABILITY FS3 Skill Functions=%0 = player DB, %1 = ability, %2 = modifier, %3 = attribute.  Returns X Y (x = success level, y = raw success)
-&REM_ROLL_DICE FS3 Skill Functions=Returns sum of dice roll.
-&REM_RULING_ATTR_LEVEL FS3 Skill Functions=%0 = player DB, %1 = ability, %2 = attr override (opt)
-&REM_SUCCESS_LEVEL FS3 Skill Functions=%0 = target, %1 = roll, Returns X Y (x = success level, y = raw success)
-&REM_TARGET_NUMBER FS3 Skill Functions=%0 = ability level, %1 = modifier (opt), %2 = ruling attr level (opt)
+
+&REM_PARSE_ROLL_PARAMS FS3 Skill Functions=ability|ruling attr or empty|modifier or 0
+&FUN_PARSE_ROLL_PARAMS FS3 Skill Functions=localize([switch(%0,*/*+*,[setq(0,[before(%0,/)])][setq(1,[before(after(%0,/),+)])][setq(2,[after(%0,+)])],*/*-*,[setq(0,[before(%0,/)])][setq(1,[before(after(%0,/),-)])][setq(2,sub(0,[after(%0,-)]))],*+*,[setq(0,[before(%0,+)])][setq(1,)][setq(2,[after(%0,+)])],*-*,[setq(0,[before(%0,-)])][setq(1,)][setq(2,sub(0,[after(%0,-)]))],*/*,[setq(0,[before(%0,/)])][setq(1,[after(%0,/)])][setq(2,0)],[setq(0,%0)][setq(1,)][setq(2,0)])]%q0|%q1|%q2)
+
+&REM_ROLL_ABILITY FS3 Skill Functions=%0 = player DB, %1 = ability, %2 = modifier, %3 = attribute.  Returns Succ Level %R%R  %q0 = ruling attr mod   %q1 = total mod
+&FUN_ROLL_ABILITY FS3 Skill Functions=localize([setq(0,u(fun_ruling_attr_mod,%0,%1,%3))][setq(1,add(%2,%q0))][extract(v(ROLLRESULTS_[ability_level(%0,%1)]),u(FUN_ROLL_DICE,%q1),1,1)])
+
+&REM_RULING_ATTR_MOD FS3 Skill Functions=%0 = player DB, %1 = ability, %2 = attr override (opt)
+&FUN_RULING_ATTR_MOD FS3 Skill Functions=localize([setq(0,switch(u(fun_ability_type,%0,%1),attribute,0,action,after(grab(xget(#FS3DB,ruling_attr),%1:*,:),default(%0/ruling_attr,Academic)))][switch(0,%q0,0,t(pmatch(%0)),0,mul(sub(5,ability_level(%0,switch(t(%q2),1,%q2,%q0))),2))])
+
+&REM_ROLL_DICE FS3 Skill Functions=%0 = modifier
+&FUN_ROLL_DICE FS3 Skill Functions=localize([setq(0,rand(1,100))][setq(1,switch(%q0,1,1,add(%q0,%0)))][min(max(%q1,100),1)])
+
 @STARTUP FS3 Skill Functions=
 @set FS3 Skill Functions/STARTUP=no_command prefixmatch
 
 
+
+
+
+
+&MAX_HIGH_ABILITIES FS3 Skill Data=4
+&MAX_POINTS_ACTION FS3 Skill Data=28
+&MAX_POINTS_ATTRIBUTES FS3 Skill Data=40
+&STARTING_POINTS FS3 Skill Data=75
 
 
 @create Ability Chargen Commands
@@ -90,12 +98,12 @@
 @set Ability Chargen Commands = DARK
 @set Ability Chargen Commands = WIZARD
 @set Ability Chargen Commands = SAFE
-&CMD-+ABILITY Ability Chargen Commands=$+ability */*=*:think pemit(%#,switch(isnum(%2),0,ansi(hr,That is not a valid rating.),u(fun_set,[trim(%0)],[capstr_all(edit(%1,%B,_))],sub(%2,ability_level(%#,%1))))
+&CMD-+ABILITY Ability Chargen Commands=$+ability */*=*:think pemit(%#,switch(isnum(%2),0,ansi(hr,That is not a valid rating.),u(fun_set,[trim(%0)],[prettify(edit(%1,%B,_))],sub(%2,ability_level(%#,%1))))
 &CMD-+LIMITS Ability Chargen Commands=$+limits:think pemit(%#,[line()]%R[ansi(h,Ability Limits in Chargen)]%R%RYou can't spend more than [xget(#FS3DB,max_points_attributes)] points on attributes%RYou can't spend more than [xget(#FS3DB,max_points_action)] points on action skills.%RYou can't have more than [xget(#FS3DB,max_high_abilities)] abilities \(including attributes\) above level 6.%R[line()])
-&CMD-+LOWER Ability Chargen Commands=$+lower */*:think pemit(%#,u(fun_set,[trim(%0)],[capstr_all(edit(%1,%B,_))],-1))
+&CMD-+LOWER Ability Chargen Commands=$+lower */*:think pemit(%#,u(fun_set,[trim(%0)],[prettify(edit(%1,%B,_))],-1))
 &CMD-+LOWER-ERROR Ability Chargen Commands=$+lower *:think switch(%0,*/*,,pemit(%#,ansi(hr,Remember to specify a type\, such as +lower attribute/strength.)))
 &CMD-+POINTS Ability Chargen Commands=$+points:think pemit(%#,u(#1572/fun_display_points,%#))
-&CMD-+RAISE Ability Chargen Commands=$+raise */*:think pemit(%#,u(fun_set,[trim(%0)],[capstr_all(edit(%1,%B,_))],1))
+&CMD-+RAISE Ability Chargen Commands=$+raise */*:think pemit(%#,u(fun_set,[trim(%0)],[prettify(edit(%1,%B,_))],1))
 &CMD-+RAISE-ERROR Ability Chargen Commands=$+raise *:think switch(%0,*/*,,pemit(%#,ansi(hr,Remember to specify a type\, such as +raise attribute/strength.)))
 &CMD-+RESET Ability Chargen Commands=$+reset:think pemit(%#,ansi(hg,You reset your skills and attributes.))[set(%#,attributes:[iter(lattr(#FS3DB/attribute_*),[capstr(lcstr(after(##,_)))]:4)])][iter(profskills bgskills actionskills,set(%#,##:))]
 &FUN_RAISE_ATTRIBUTE Ability Chargen Commands=[ability_level(%#,%0)]
