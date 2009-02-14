@@ -1,6 +1,7 @@
 @create FS3 Skill System
 @set FS3 Skill System = WIZARD
 @set FS3 Skill System = SAFE
+
 &CMD-+ABILITIES FS3 Skill System=$+abilities:think pemit(%#,[line()]%R[ansi(hg,Attributes)][iter(lattr(#FS3DB/attribute*),%R[ljust(capstr(lcstr(after(##,_))),20)][u(#FS3DB/##)])]%R%R[ansi(hr,Action Skills)][iter(lattr(#FS3DB/actionskill*),%R[ljust(capstr(lcstr(after(##,_))),20)][u(#FS3DB/##)])]%R%R[ansi(hy,Background Skills)]%RYou can make up any background skill you like.  The following are just some examples.%R[table(xget(#FS3DB,background_skills),18,78)]%R[line()]
 &CMD-+ATTRIBUTES FS3 Skill System=$+attributes:@fo %#=+abilities
 &CMD-+ROLL FS3 Skill System=$+roll *:think switch(%0,* vs *,,[setq(0,u(#FS3FUN/fun_parse_roll_params,%0))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),gt(%q1,12)),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q1),lt(%q1,1)),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(t(%q2),not(hasattr(#FS3DB,attribute_%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3FUN/fun_notify_roll_results,%l,[ansi(hy,<Trait Roll>)] %N rolls [capstr_all(%0)] and [u(#FS3FUN/fun_pretty_success_level,%q4)].))])
