@@ -70,11 +70,11 @@
 &FUN_DISPLAY_SHEET_PAGE0 FS3 Skill Data=[line()]%R[center([name(%0)]'s Sheet,78)]%R%R[u(#FS3FUN/FUN_DISPLAY_ATTRS,%0)]%R%R[u(#FS3FUN/FUN_DISPLAY_ACTSKILLS,%0)]%R%R[u(#FS3FUN/FUN_DISPLAY_BGSKILLS,%0)]%R%R[u(#FS3FUN/FUN_DISPLAY_LANGSKILLS,%0)]%R%R[u(#FS3FUN/FUN_DISPLAY_QUIRKS,%0)]%R%R[ljust([ansi(hc,Experience Points:)] [xget(%0,XP)],38)][ansi(hc,Luck Points:)] [xget(%0,LUCK_POINTS)]%R[line()]
 
 &MAX_HIGH_ABILITIES FS3 Skill Data=4
-&MAX_POINTS_ACTION FS3 Skill Data=28
-&MAX_POINTS_ATTRIBUTES FS3 Skill Data=40
+&MAX_POINTS_ACTION FS3 Skill Data=32
+&MAX_POINTS_ATTRIBUTES FS3 Skill Data=32
 &STARTING_POINTS FS3 Skill Data=75
 &HIGH_ABILITY_LEVEL FS3 Skill Data=7
-&MAX_QUIRKS FS3 Skill Data=3
+&MAX_QUIRKS FS3 Skill Data=4
 &MIN_QUIRKS FS3 Skill Data=1
 &MIN_BGSKILLS FS3 Skill Data=2
 
@@ -90,11 +90,11 @@
 &FUN_ATTRIBUTES FS3 Skill Functions=iter(lattr(#FS3DB/ATTRIBUTE_*),after(##,_))
 
 &FUN_DISPLAY_SHEET FS3 Skill Functions=localize([setq(0,switch(%1,,0,%1))]switch(hasattr(#FS3DB,FUN_DISPLAY_SHEET_PAGE%q0),0,ansi(hr,That is not a valid character sheet page.),u(#FS3DB/FUN_DISPLAY_SHEET_PAGE%q0,%0)))
-&FUN_DISPLAY_ATTRS FS3 Skill Functions=[ansi(hg,Attributes)]%R[line2()]%R[table(iter(u(FUN_ATTRIBUTES),[padstr(ansi(h,[prettify(lcstr(##))]:),15)]%B[u(#FS3FUN/fun_print_level,ability_level(%0,##),attribute)],,|),37,78,|)]
-&FUN_DISPLAY_ACTSKILLS FS3 Skill Functions=[ansi(hr,Action Skills)]%R[line2()]%R[table(iter(sort(xget(%0,actionskills)),[padstr(ansi(h,[prettify(before(##,:))]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]
-&FUN_DISPLAY_BGSKILLS FS3 Skill Functions=[ansi(hy,Background Skills)]%R[line2()]%R[table(iter(sort(xget(%0,bgskills)),[padstr(ansi(h,[prettify(before(##,:))]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]
-&FUN_DISPLAY_LANGSKILLS FS3 Skill Functions=[ansi(hb,Language Skills)]%R[line2()]%R[table(iter(sort(xget(%0,langskills)),[padstr(ansi(h,[prettify(before(##,:))]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]
-&FUN_DISPLAY_QUIRKS FS3 Skill Functions=[ansi(hm,Quirks)]%R[line2()]%R[table(sort(xget(%0,quirks),a,|),37,78,|)]
+&FUN_DISPLAY_ATTRS FS3 Skill Functions=[line_with_text(ansi(hw,Attributes))]%R[table(iter(u(FUN_ATTRIBUTES),[padstr(ansi(h,[prettify(lcstr(##))]:),15)]%B[u(#FS3FUN/fun_print_level,ability_level(%0,##),attribute)],,|),37,78,|)]
+&FUN_DISPLAY_ACTSKILLS FS3 Skill Functions=[line_with_text(ansi(hw,Action Skills))]%R[table(iter(sort(xget(%0,actionskills)),[padstr(ansi(h,[prettify(before(##,:))]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]
+&FUN_DISPLAY_BGSKILLS FS3 Skill Functions=[line_with_text(ansi(hw,Background Skills))]%R[table(iter(sort(xget(%0,bgskills)),[padstr(ansi(h,[prettify(before(##,:))]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]
+&FUN_DISPLAY_LANGSKILLS FS3 Skill Functions=[line_with_text(ansi(hw,Language Skills))]%R[table(iter(sort(xget(%0,langskills)),[padstr(ansi(h,[prettify(before(##,:))]:),15)]%B[u(#FS3FUN/fun_print_level,after(##,:),skill)],,|),37,78,|)]
+&FUN_DISPLAY_QUIRKS FS3 Skill Functions=[line_with_text(ansi(hw,Quirks))]%R[table(sort(xget(%0,quirks),a,|),37,78,|)]
 
 &FUN_IS_VALID_ACTION FS3 Skill Functions=hasattr(#FS3DB,actionskill_[unprettify(%0)])
 &FUN_IS_VALID_ATTRIBUTE FS3 Skill Functions=hasattr(#FS3DB,attribute_[unprettify(%0)])
@@ -202,8 +202,8 @@
 &CHECK_8 FS3 Chargen Commands=not(match(iter(lattr(#FS3DB/attribute_*),gt(ability_level(%0,after(##,_)),0),,),*0*))
 &ERROR_8 FS3 Chargen Commands=You can't have attributes at 0.
 
-&CHECK_9 FS3 Chargen Commands=gte(words(xget(%#,langskills)),1)
-&ERROR_9 FS3 Chargen Commands=You must speak at least 1 language.
+&CHECK_9 FS3 Chargen Commands=localize([setq(0,0)][iter(xget(%0,langskills),switch(after(##,:),>6,setq(0,1)),,)]%q0)
+&ERROR_9 FS3 Chargen Commands=You must speak at least 1 language competently (rating 7).
 
 &FUN_CHECK_ERRORS FS3 Chargen Commands=localize([setq(0,1)][setq(1,)][iter(lattr(me/check_*),switch(u(check_#@,%0),0,[setq(0,0)][setq(1,%q1%R[u(error_#@)])]),,)][squish(%q0|%q1)])
 
