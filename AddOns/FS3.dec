@@ -15,18 +15,20 @@
 @set FS3 Skill System = WIZARD
 @set FS3 Skill System = SAFE
 
-&CMD-+LIMITS FS3 Skill System=$+limits:think pemit(%#,[line()]%R[ansi(h,Ability Limits in Chargen)]%R%RYou can't spend more than [xget(#FS3DB,max_points_attributes)] points on attributes%RYou can't spend more than [xget(#FS3DB,max_points_action)] points on action skills.%R%R[ansi(h,Ability Limits For Chargen and XP)]%R%RYou can't have more than [xget(#FS3DB,max_high_abilities)] abilities \(including attributes\) above level [xget(#FS3DB,high_ability_level)].%R[line()])
+&CMD-+LIMITS FS3 Skill System=$+limits:think pemit(%#,[line()]%R[ansi(h,Ability Limits in Chargen)]%R%RYou can't spend more than [xget(#FS3DB,max_points_attributes)] points on attributes%RAll attributes must be at least level 1.%RYou can't spend more than [xget(#FS3DB,max_points_action)] points on action skills.%RYou must have [xget(#FS3DB,min_quirks)]-[xget(#FS3DB,max_quirks)] Quirks.%RYou must have at least [xget(#FS3DB,min_bgskills)] different background skills.%RYou must be a native speaker in at least one language.%R%R[ansi(h,Ability Limits For Chargen and XP)]%R%RYou can't have more than [xget(#FS3DB,max_high_abilities)] abilities \(including attributes\) above level [xget(#FS3DB,high_ability_level)].%R[line()])
 &CMD-+QUIRKS FS3 Skill System=$+quirks:@fo %#=+abilities2
 &CMD-+LANGUAGES FS3 Skill System=$+languages:@fo %#=+abilities2
-&CMD-+ABILITIES FS3 Skill System=$+abilities:think pemit(%#,[line()]%R[ansi(hg,Attributes)][iter(lattr(#FS3DB/attribute*),%R[ljust(capstr(lcstr(after(##,_))),20)][u(#FS3DB/##)])]%R%R[ansi(hr,Action Skills)][iter(lattr(#FS3DB/actionskill*),%R[ljust(capstr(lcstr(after(##,_))),20)][u(#FS3DB/##)])]%R%R[ansi(h,Continued in +abilities2)]%R[line()]
-&CMD-+ABILITIES2 FS3 Skill System=$+abilities2:think pemit(%#,[line()]%RBackground Skills, Language Skills and Quirks are all freeform, meaning you can make up anything you want.  The lists below are just some ideas.%R%R[ansi(hy,Sample Background Skills)]%R[table(iter(xget(#FS3DB,background_skills),[prettify(##)],,|),18,78,|,)]%R%R[ansi(hb,Sample Language Skills)]%R[table(iter(xget(#FS3DB,language_skills),[prettify(##)],,|),18,78,|,)]%R%R[ansi(hm,Sample Quirks)]%R[table(xget(#FS3DB,quirks),39,78,|,)]%R[line()]
+&CMD-+ABILITIES FS3 Skill System=$+abilities:think pemit(%#,[line()]%R[ansi(hg,Attributes)][iter(lattr(#FS3DB/attribute*),%R[ljust(prettify(lcstr(after(##,_))),20)][u(#FS3DB/##)])]%R%R[ansi(hr,Action Skills)][iter(lattr(#FS3DB/actionskill*),%R[ljust(prettify(lcstr(after(##,_))),20)][u(#FS3DB/##)])]%R%R[ansi(h,Continued in +abilities2)]%R[line()]
+&CMD-+ABILITIES2 FS3 Skill System=$+abilities2:think pemit(%#,[line()]%RBackground Skills, Language Skills and Quirks are all freeform, meaning you can make up anything you want.  The lists below are just some ideas.%R%R[ansi(hy,Sample Background Skills)]%R[iter(xget(#FS3DB,background_skills),##,|,%R)]%R%R[ansi(hb,Sample Language Skills)]%R[table(iter(xget(#FS3DB,language_skills),[prettify(##)],,|),18,78,|,)]%R%R[ansi(hm,Sample Quirks)]%R[table(xget(#FS3DB,quirks),39,78,|,)]%R[line()]
 &CMD-+ATTRIBUTES FS3 Skill System=$+attributes:@fo %#=+abilities
 &REM-+ROLL FS3 Skill System= %q0 = parsed roll params  %R %q1=ability %R %q2=ruling attr or blank %R  %q3=modifier or 0 %r %q4=roll result
 &CMD-+ROLL FS3 Skill System=$+roll *:think switch(%0,* vs *,,[setq(0,u(#FS3FUN/fun_parse_roll_params,%0))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),not(u(#FS3FUN/FUN_IS_VALID_RATING,%q1))),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(%0)]: [u(#FS3FUN/fun_pretty_success_level,%q4)].))])
 &CMD-+ROLL-CASUAL FS3 Skill System=$+roll/casual *:think [setq(0,u(#FS3FUN/fun_parse_roll_params,%0))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))[setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,add(%q3,20),%q2))][switch(1,and(isnum(%q1),not(u(#FS3FUN/FUN_IS_VALID_RATING,%q1))),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(%0)] [ansi(hy,*CASUAL*)]: [u(#FS3FUN/fun_pretty_success_level,%q4)].))])
 &REM_+ROLL_OPPOSED FS3 Skill System=%q0 = parsed roll params A  %R%T %q1 = A ability %R%T  %q2 = A ruling attr or blank   %R%T   %q3 = A modifier  %R%T   %q4 = A result  %R%R   %q5 = B parsed params %R%T %q6 = B ability %R%T  %q7 = B ruling attr or blank   %R%T   %q8 = B modifier  %R%T   %q9 = B result  %R%R   %qa = Opposed result text
 &CMD-+ROLL-OPPOSED FS3 Skill System=$+roll *=* vs *=*:think [setq(0,u(#FS3FUN/fun_parse_roll_params,%1))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(pmatch(%0),%q1,%q3,%q2))][setq(5,u(#FS3FUN/fun_parse_roll_params,%3))][setq(6,extract(%q5,1,1,|))][setq(7,extract(%q5,2,1,|))][setq(8,extract(%q5,3,1,|))][setq(9,roll_ability(pmatch(%2),%q6,%q8,%q7))][setq(a,u(#FS3FUN/FUN_GET_OPPOSED_RESULT,%0,%q4,%2,%q9))][switch(1,and(isnum(%q1),not(u(#FS3FUN/FUN_IS_VALID_RATING,%q1))),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q6),not(u(#FS3FUN/FUN_IS_VALID_RATING,%q6))),pemit(%#,ansi(hr,%q6 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),and(t(%q7),not(u(#FS3FUN/FUN_IS_VALID_ATTRIBUTE,%q7))),pemit(%#,ansi(hr,%q7 is not an attribute.)),and(t(%q8),not(isnum(%q8))),pemit(%#,ansi(hr,%q8 is not a valid modifier.)),u(#FS3FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] Opposed Roll -- [capstr(%0)]:[prettify(%1)] vs [capstr(%2)]:[prettify(%3)]%R<%T[capstr(%0)]: [u(#FS3FUN/FUN_PRETTY_SUCCESS_LEVEL,%q4)][space(10)][capstr(%2)]: [u(#FS3FUN/FUN_PRETTY_SUCCESS_LEVEL,%q9)]%R<%T%TNet Result: [u(#FS3FUN/FUN_PRETTY_OPPOSED_RESULT,[capstr(%0)],[capstr(%2)],%qa)])]
-&CMD-+SHEET FS3 Skill System=$+sheet*:think pemit(%#,u(#FS3FUN/fun_display_sheet,%#,%0))
+&CMD-+RULINGATTR FS3 Skill System=$+rulingattr:think pemit(%#,[line()]%R[ansi(h,Ruling Attributes)]%R%R[ansi(h,Action Skills)]%R[table(iter(lattr(#FS3DB/actionskill_*),[prettify(lcstr(after(##,_)))]:[prettify(u(#FS3FUN/fun_ruling_attr,%#,[after(##,_)]))],,|),25,78,|)]%R%R[ansi(h,Background Skills)] (May be customized using the +rulingattr command.)%R[table(iter(xget(%#,bgskills),[prettify(before(##,:))]:[prettify(u(#FS3FUN/fun_ruling_attr,%#,before(##,:)))],,|),25,78,|)]%R%R[ansi(h,Language Skills)]%RAll use Academic%R[line()]
+&CMD-+RULINGATTR-SET FS3 Skill System=$+rulingattr *=*:think pemit(%#,switch(0,match(u(#FS3FUN/fun_ability_type,%#,%0),background),ansi(hr,You may only set ruling attributes for background skills.),ability_level(%#,%0),ansi(hr,You don't have that skill.),u(#FS3FUN/fun_is_valid_attribute,%1),ansi(hr,That is not a valid attribute.),ansi(hg,You set the ruling attribute for [prettify(%0)] to [prettify(%1)].)[setq(0,[unprettify(%0)]:[unprettify(%1)])][switch(match(xget(%#,ruling_attr),[unprettify(%0)]:*),0,append(%#,ruling_attr,%q0),set(%#,ruling_attr:[find_and_replace(xget(%#,ruling_attr),[unprettify(%0)]:*,%q0)]))]))
+&CMD-+SHEET FS3 Skill System=$+sheet*:think pemit(%#,switch(%0,* *,,u(#FS3FUN/fun_display_sheet,%#,%0)))
 &CMD-+SHEET-OTHER FS3 Skill System=$+sheet* *:think pemit(%#,switch(0,or(isstaff(%#),xget(#FS3DB,PLAYER_VISIBLE_SHEETS)),ansi(hr,That command is restricted to staff.),t(pmatch(%1)),ansi(hr,That is not a valid player.),u(#FS3FUN/fun_display_sheet,pmatch(%1),%0)))
 &CMD-+SKILLS FS3 Skill System=$+skills:@fo %#=+abilities
 &CMD-+SKILLMOD FS3 Skill System=$+skillmod *=*/*/*:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),[setq(0,u(#FS3FUN/FUN_SET_ABILITY,pmatch(%0),%1,%2,%3))]switch(%q0,0*,ansi(hr,after(%q0,|)),ansi(hg,You modify %0's %2 %1 ability by %3.  It is now a [ability_level(%0,%2)].))
@@ -48,7 +50,7 @@
 &ACTIONSKILL_FIREARMS FS3 Skill Data=Shooting pistols, rifles and personal guns.
 &ACTIONSKILL_FIRSTAID FS3 Skill Data=Basic first aid/paramedic medicine.  Use Medicine for docs.
 &ACTIONSKILL_GUNNERY FS3 Skill Data=Shooting big vehicle and ship weapons.
-&ACTIONSKILL_MEDICINE FS3 Skill Data=Doctor skills.  Use FirstAid for first aid.
+&ACTIONSKILL_MEDICINE FS3 Skill Data=Doctor skills.  Use First Aid for first aid.
 &ACTIONSKILL_MELEE FS3 Skill Data=Fighting with fists, knives, and hand to hand weapons.
 &ACTIONSKILL_PILOTING FS3 Skill Data=Flying planes and other airborne vehicles.
 &ACTIONSKILL_REPAIR FS3 Skill Data=Fixing things using mechanics or electronics.
@@ -63,16 +65,16 @@
 
 &DEFAULT_LANG FS3 Skill Data=English
 &LANGUAGE_SKILLS FS3 Skill Data=English
-&BACKGROUND_SKILLS FS3 Skill Data=Acting Astronomy Chess Cooking Dancing Finance Gardening Gymnastics History Hunting Juggling Mathematics Needlepoint Novels Painting Philosophy Photography Physics Poetry Pyramid Roleplaying Sailing Sculpture Singing Sleight_Of_Hand Swimming Triad Trumpet Writing
+&BACKGROUND_SKILLS FS3 Skill Data=A science - astronomy, biology, chemistry, geology, mathematics, physics, etc.|A humanity - history, literature, psychology, philosophy, poetry, etc.|A profession or trade - cook, waitress, bartender, accountant, programmer, carpenter, brewer, blacksmith, etc.|A game - chess, roleplaying, poker, etc.|An art - sculpting, painting, sketching, photography, etc.|A form of expression - acting, singing, dancing, playing an instrument, writing|A sport - baseball, football, gymnastics, etc.|A craft or hobby - gardening, basketweaving, knitting, etc.|An unusual interest - detective novels, game show hosts, etc. |
 &PLAYER_VISIBLE_SHEETS FS3 Skill Data=1
-&RULING_ATTR FS3 Skill Data=Alertness:Reactive Demolitions:Technical Drive:Reactive ECM:Technical Firearms:Reactive FirstAid:Technical Gunnery:Technical Medicine:Academic Melee:Athletic Piloting:Reactive Repair:Technical Stealth:Athletic
+&RULING_ATTR FS3 Skill Data=Alertness:Reactive Demolitions:Technical Drive:Reactive ECM:Technical Firearms:Reactive First_Aid:Technical Gunnery:Technical Medicine:Academic Melee:Athletic Piloting:Reactive Repair:Technical Stealth:Athletic
 
 &FUN_DISPLAY_SHEET_PAGE0 FS3 Skill Data=[line()]%R[center([name(%0)]'s Sheet,78)]%R%R[u(#FS3FUN/FUN_DISPLAY_ATTRS,%0)]%R%R[u(#FS3FUN/FUN_DISPLAY_ACTSKILLS,%0)]%R%R[u(#FS3FUN/FUN_DISPLAY_BGSKILLS,%0)]%R%R[u(#FS3FUN/FUN_DISPLAY_LANGSKILLS,%0)]%R%R[u(#FS3FUN/FUN_DISPLAY_QUIRKS,%0)]%R%R[ljust([ansi(hc,Experience Points:)] [xget(%0,XP)],38)][ansi(hc,Luck Points:)] [xget(%0,LUCK_POINTS)]%R[line()]
 
 &MAX_HIGH_ABILITIES FS3 Skill Data=4
 &MAX_POINTS_ACTION FS3 Skill Data=32
 &MAX_POINTS_ATTRIBUTES FS3 Skill Data=32
-&STARTING_POINTS FS3 Skill Data=75
+&STARTING_POINTS FS3 Skill Data=80
 &HIGH_ABILITY_LEVEL FS3 Skill Data=7
 &MAX_QUIRKS FS3 Skill Data=4
 &MIN_QUIRKS FS3 Skill Data=1
@@ -103,8 +105,10 @@
 &FUN_IS_VALID_RATING FS3 Skill Functions=and(isnum(%0),lte(%0,12),gte(%0,1))
 
 &FUN_LEVEL_BRACKET FS3 Skill Functions=switch(%1,attribute,switch(%0,>9,Exceptional,>6,Good,>3,Average,Poor),switch(%0,>9,Expert,>6,Veteran,>3,Professional,Rookie))
+&FUN_LEVEL_BRACKET_ABBREV FS3 Skill Functions=switch(%1,attribute,switch(%0,>9,Exc,>6,Good,>3,Avg,Poor),switch(%0,>9,Exp,>6,Vet,>3,Prof,Rook))
 &FUN_PRETTY_SUCCESS_LEVEL FS3 Skill Functions=localize([setq(0,switch(%0,-2,hR|Terrible Failure,-1,hr|Bad Failure,0,r|Failure,1,g|Success,2,hg|Good Success,3,hG|Great Success))][ansi(before(%q0,|),after(%q0,|))])
-&FUN_PRINT_LEVEL FS3 Skill Functions=[ljust(%0,2)] \([u(fun_level_bracket,%0,%1)]\)
+&FUN_PRINT_LEVEL FS3 Skill Functions=[ljust([u(fun_level_bracket_abbrev,%0,%1)],4)] [iter(lnum(1,%0),[ansi(switch(#@,<4,g,<7,y,<10,r,b),@)],,)]
+&FUN_PRINT_LEVEL_ALT FS3 Skill Functions=[ljust(%0,2)] \([u(fun_level_bracket,%0,%1)]\)
 &FUN_NOTIFY_ROLL_RESULTS FS3 Skill Functions=[remit(%0,%1)][cemit(FS3,[ansi(hc,<FS3>)] %1
 
 &REM_PARSE_ROLL_PARAMS FS3 Skill Functions=ability|ruling attr or empty|modifier or 0
@@ -150,7 +154,9 @@
 
 @create FS3 Skill Help
 @describe FS3 Skill Help=FS3 Help Files
-&MORE_HELP_FS3 FS3 Skill Help=TBD more coming soon%R+roll <ability[/rulingAttr][+modifier]>%R+roll/casual <ability[/rulingAttr][+modifier]>%R+roll <characterA>/<ability[/rulingAttr][+modifier]> vs <characterB>/<ability[/rulingAttr][+modifier]>%R
+
+&HELP_SKILLS FS3 Skill Help=This game uses the [ansi(hg,FS3 Skills System)] by Faraday.%R%R[ansi(h,+roll <ability[/rulingAttr][+modifier]>)]%R%TMake a simple ability roll.%R[ansi(h,+roll/casual <ability[/rulingAttr][+modifier]>)]%R%TMake a casual roll, for UN-stressful situations.%R[ansi(h,+roll <characterA>/<ability[/rulingAttr][+mod]> vs <characterB>/<ability[/rulingAttr][+mod]>)]%R%TMakes an opposed roll.
+&MORE_HELP_FS3 FS3 Skill Help=TBD more coming soon%R%R%R%R
 &SHELP_SKILLS FS3 Skill Help=+sheet <player>%R+skillmod <player>=<abilityType>/<ability>/<modifier> - modify's an ability rating%R%TabilityType must be one of action, background or language
 
 
@@ -202,10 +208,10 @@
 &CHECK_8 FS3 Chargen Commands=not(match(iter(lattr(#FS3DB/attribute_*),gt(ability_level(%0,after(##,_)),0),,),*0*))
 &ERROR_8 FS3 Chargen Commands=You can't have attributes at 0.
 
-&CHECK_9 FS3 Chargen Commands=localize([setq(0,0)][iter(xget(%0,langskills),switch(after(##,:),>6,setq(0,1)),,)]%q0)
-&ERROR_9 FS3 Chargen Commands=You must speak at least 1 language competently (rating 7).
+&CHECK_9 FS3 Chargen Commands=localize([setq(0,0)][iter(xget(%0,langskills),switch(after(##,:),>9,setq(0,1)),,)]%q0)
+&ERROR_9 FS3 Chargen Commands=You must speak at least 1 language fluently (rating 10).
 
-&FUN_CHECK_ERRORS FS3 Chargen Commands=localize([setq(0,1)][setq(1,)][iter(lattr(me/check_*),switch(u(check_#@,%0),0,[setq(0,0)][setq(1,%q1%R[u(error_#@)])]),,)][squish(%q0|%q1)])
+&FUN_CHECK_ERRORS FS3 Chargen Commands=localize([setq(0,1)][setq(1,)][iter(lattr(me/check_*),switch(u(check_#@,%0),0,[setq(0,0)][setq(1,%q1%R[u(error_#@)])]),,)][set(%0,cg_errors:[squish(%q0|%q1)])][squish(%q0|%q1)])
 
 &FUN_DISPLAY_POINTS FS3 Chargen Commands=localize([setq(0,u(fun_points_left,%0))][setq(1,u(FUN_CHECK_ERRORS,%0))][line()]%RYou have spent [ansi(h,u(fun_spent_points,%0))] of your [ansi(h,u(fun_available_points,%0))] available points.%R[switch(%q0,<0,ansi(hr,[abs(%q0)] points overspent.),ansi(hg,%q0 points remaining.))][switch(%q1,0*,%R%R[ansi(hr,ERRORS:%R)][after(%q1,|)])]%R[line()])
 
@@ -215,6 +221,158 @@
 @startup FS3 Chargen Commands=@set me=!NO_COMMAND
 
 
+@create Chargen Exit Parent
+@set Chargen Exit Parent = NO_COMMAND
+@power Chargen Exit Parent = See_All
+@DESCRIBE Chargen Exit Parent=Stores some functions common to chargen exits.  It will require that they have set something in every attribute listed in REQUIRED_ATTRS on the child exit.  It will also call a function OTHER_CHECKS, which should return 0 or 1 depending on whether there's anything else wrong.  If OTHER_CHECKS returns 0, the exit parent will call OTHER_ERRORS to tell the user what the problem is.
+@FAILURE Chargen Exit Parent=ansi(hr,You have not set everything yet.[squish(iter(v(required_attrs),switch(strlen(xget(%#,##)),0,%R- Missing ##)))]%R[u(other_errors,%#)])
+&ISDONE Chargen Exit Parent=[and(not(t(edit(iter(v(required_attrs),eq(strlen(xget(%#,##)),0)),%B,))),u(other_checks,%#))]
+
+
+@create Chargen Info Functions
+@set Chargen Info Functions = WIZARD
+@DESCRIBE Chargen Info Functions=Functions related to chargen but also useful outside of it.
+@set Chargen Info Functions/DESCRIBE=no_command visual prefixmatch public nearby
+&FUN_DISPLAY_BIRTHDATE Chargen Info Functions=[switch(xget(%0,birthdate),,-,[extract(v(months),before(xget(%0,birthdate),/),1)] [extract(xget(%0,birthdate),2,1,/)])
+&FUN_GET_AGE Chargen Info Functions=switch(xget(%0,birthdate),,0,add(sub(last(time()),add(after(after(xget(%0,birthdate),/),/),1)),switch(match(v(months),extract(time(),2,1)),<[before(xget(%0,birthdate),/)],0,[before(xget(%0,birthdate),/)],switch(gte(extract(time(),3,1),before(after(xget(%0,birthdate),/),/)),1,1,0),1))
+&FUN_IS_VALID_FACTION Chargen Info Functions=t(match(factions(),%0))
+&FUN_IS_VALID_ORG Chargen Info Functions=t(match(orgs(),%0))
+&FUN_IS_VALID_POSITION Chargen Info Functions=t(match(positions(),%0))
+&FUN_IS_VALID_RANK Chargen Info Functions=t(match(u(fun_ranks),%0))
+&FUN_ENLISTED_RANKS Chargen Info Functions=Private|Private First Class|Lance Corporal|Corporal|Sergeant|Staff Sergeant|Gunnery Sergeant|Master Sergeant|Sergeant Major
+&FUN_OFFICER_RANKS Chargen Info Functions=2nd Lieutenant|1st Lieutenant|Captain|Major|Lt. Colonel|Colonel|Brigadier General|Major General|Lieutenant General|General
+&FUN_RANK Chargen Info Functions=xget(%0,rank)
+&FUN_RANKS Chargen Info Functions=[u(FUN_ENLISTED_RANKS)]|[u(FUN_OFFICER_RANKS)]
+&MONTHS Chargen Info Functions=Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+@STARTUP Chargen Info Functions=@set me=!no_command;@fun AGE=[num(me)]/FUN_GET_AGE;@fun RANK=[num(me)]/FUN_RANK;@fun BIRTHDATE=[num(me)]/fun_display_birthdate
+@set Chargen Info Functions/STARTUP=no_command prefixmatch
+
+
+@create Demographic Commands
+@lock/user:Basic Demographic Commands=me
+@set Demographic Commands = DARK
+@set Demographic Commands = WIZARD
+&CMD-+RANKS Demographic Commands=$+ranks:think pemit(%#,[line()]%R[table(%B%B%BOfficer|Enlisted|[iter(lnum(1,10),[ljust(#@,2)] [extract(u(#CGINFO/fun_officer_ranks),#@,1,|)]|[extract(u(#CGINFO/fun_enlisted_ranks),#@,1,|)]|,,)],39,78,|)]%R[line()])
+&CMD-+AGE Demographic Commands=$+age *:think pemit(%#,switch(0,isnum(%0),ansi(hr,Your name must be a number.),lte(%0,75),ansi(hr,You cannot be that old without special staff permission. Contact a member of staff.),gte(%0,11),ansi(hr,You cannot be that young without special staff permission.  Contact a member of staff.),[set(%#,birthdate:[rand(1,12)]/[rand(1,28)]/[sub(last(time()),%0)])][ansi(hg,You set your age to %0.%R%RYour birthdate has been randomly set to: [birthdate(%#)].  If you would like a different random birthday you can use the command again.  If you would like a specific birthday, contact a staff member.)]))
+&CMD-+FACTION Demographic Commands=$+faction *:think pemit(%#,switch(0,t(match(factions(),%0)),ansi(hr,That is not a valid faction.  Use one of: [factions()].),ansi(hg,You set your faction to %0.)[set(%#,rank:)][set(%#,faction:[trim(capstr(%0))])]))
+&CMD-+FULLNAME Demographic Commands=$+fullname *:think pemit(%#,ansi(hg,You set your full name to %0.))[set(%#,fullname:%0)]
+&CMD-+ORG Demographic Commands=$+org *:think pemit(%#,switch(0,u(#CGINFO/fun_is_valid_org,%0),ansi(hr,That is not a valid org. Use one of: [orgs()].),ansi(hg,You set your organization to %0.)[set(%#,org:[trim(capstr(%0))])]))
+&CMD-+POSITION Demographic Commands=$+position *:think pemit(%#,switch(0,u(#CGINFO/fun_is_valid_position,%0),ansi(hr,That is not a valid position.  See +positions.),ansi(hg,You set your position to %0.)[set(%#,position:[trim(capstr(%0))])])))
+&CMD-+RANK Demographic Commands=$+rank *:think pemit(%#,switch(0,match(u(#CGINFO/fun_ranks),%0,|),ansi(hr,That is not a valid rank.),not(match(xget(%#,faction),Civilian)),ansi(hr,Ranks are not for civilians.),ansi(hg,You set your rank to [prettify(%0)].)[set(%#,rank:[prettify(%0)])]))
+@DESCRIBE Demographic Commands=Chargen commands for setting demographic information.
+@STARTUP Demographic Commands=@set me=!no_command
+
+@wait 1=@fo me=@edit Demographic Commands/*=#CGINFO,[num(Chargen Info Functions)]
+
+
+@@========================
+@@ BEGIN OUTSIDE CG ROOM
+@@========================
+
+@dig Chargen=CG;chargen
+
+@lock/user:Basic Chargen=ISOK/1
+@power Chargen = See_All
+&CHARGEN_OPEN Chargen=1
+@FAILURE Chargen=switch(v(chargen_open),0,Chargen isn't open yet.,Only new players may enter chargen.)
+@set Chargen/FAILURE=no_command prefixmatch
+&ISOK Chargen=or(isstaff(%#),and(orflags(%#,?),not(haspower(%#,guest)),v(chargen_open)))
+Only new players may enter chargen.
+
+CG
+
+@@========================
+@@ IN CHARGEN ROOM
+@@========================
+
+@set here = NO_COMMAND
+&CG here=1
+@DESCRIBE here=The next few rooms will guide you through the process of creating your character.  Each room will give you instructions about what to set.  Before starting, you should have a good idea of the character you wish to create.  You can always go back to a previous room if you need to change something (without losing your other stats).  If you have any questions, ask on the Newbie channel by typing [ansi(hg,+n <message>)].
+
+@dig Demographics=N;next,B;back
+
+N
+
+@@========================
+@@ IN DEMOGRAPHICS ROOM
+@@========================
+
+&CG here=1
+@DESCRIBE here=In this room, you will set up some basic info about your character's background - how old he is, his job, etc.  This is all subject to approval - you can make yourself an Admiral in chargen, but you won't be approved!%R%R%T[ansi(h,+fullname <full name>)]%R%T[ansi(h,+age <age>)]%r%t[ansi(hw,+skin <complexion>)]%r%t[ansi(hw,+height <height>)]%r%t[ansi(hw,+weight <weight>)]%r%t[ansi(hw,+eyes <eye color>)]%r%t[ansi(hw,+hair <hair color>)]%R%R%T[ansi(h,+faction <faction>)] (See +factions) %R%T[ansi(h,+position <position>)] (See +positions)%R%T[ansi(h,+org <organization>)] (see +orgs)%R%R%T[ansi(h,+rank <rank>)] (see +ranks - military chars only)
+@set here/DESCRIBE=no_command visual prefixmatch public nearby
+
+@dig Abilities=N;next,B;back
+
+@parent Next=Chargen Exit Parent
+@power Next = See_All
+&OTHER_CHECKS Next=switch(match(xget(%#,faction),Military),1,t(words(rank(%#))),1)
+&OTHER_ERRORS Next=Military characters must have a rank.
+&REQUIRED_ATTRS Next=faction org position birthdate fullname hair skin eyes weight height
+
+drop Demographics Commands
+
+
+@@========================
+@@ In ABILITIES ROOM
+@@========================
+
+N
+
+&CG here=1
+@DESCRIBE here=Here you will set up your character's Abilities, including Attributes, Action Skills, Background Skills, Language Skills and Quirks.   See [ansi(hg,+help FS3_Chargen)] for help with Chargen.%R%R%T[ansi(h,+reset)] - Deletes all abilities%R%T[ansi(h,+sheet)] - Views your character sheet%R%T[ansi(h,+points)] - Views your points remaining%R%T[ansi(h,+limits)] - Views limits on what you can spend.%R%R%T[ansi(h,+abilities)] - Views all abilities%R%T[ansi(h,+raise <type>/<ability>)] and [ansi(h,+lower <type>/<ability>)]%R%T[ansi(h,+ability <type>/<ability>=<level>)]%R%T- type must be one of attr, action, bg, lang%R%T- type may be omitted for action skills and attributes%R%R%T[ansi(h,+quirk/add <quirk>)] and [ansi(h,+quirk/delete <quirk>)]%R%R%TYou may also want to configure ruling attributes for your%R%Tbackground skills.  See +help +rulingattr
+
+@dig Background=N;next,B;back
+
+@parent Next=Chargen Exit Parent
+@power Next=see_all
+&OTHER_CHECKS Next=strmatch(xget(%0,cg_errors),1*)
+&OTHER_ERRORS Next=after(xget(%0,cg_errors),|)
+
+drop FS3 Chargen Commands
+
+N
+
+@@========================
+@@ In BACKGROUND ROOM
+@@========================
+
+&CG here=1
+@DESCRIBE here=This is the room where you set up your character's backstory, or background.  Make sure that your background matches your character's skills and other information.%R%RYour background is just another MUSH attribute on yourself, like your description. You can set it by typing [ansi(hg,&bg me=<your background text>)]. You can use the built-in MUSH editing commands (@edit, @dec, etc.) to edit it.%R%RIf your background is particularly long, you can split it into multiple attributes, like:%R%T[ansi(h,&BG1 me=This is the first part of my bg.)]%R%T[ansi(h,&BG2 me=This is the second part of my bg.)]%R%Tetc.%R%RThe [ansi(hg,+bg)] command will let you view your background.
+
+@dig Approval=N;next,B;back
+
+@parent Next=Chargen Exit Parent
+@power Next = See_All
+&OTHER_CHECKS Next=or(hasattr(%0,bg),hasattr(%0,bg1))
+&OTHER_ERRORS Next=- You must set your background to proceed.
+
+N
+
+@@========================
+@@ In APPROVAL ROOM
+@@========================
+
+@DESCRIBE here=If you're finished with everything, type [ansi(hg,+bg/submit)] to submit your character for approval.  While you're waiting to be approved, you can hang out in the OOC Center.  Just go through the OOC exit.  If there are any problems with your character, you will be able to re-enter chargen later to fix them.%R%RIf you realize you forgot something, you can use [ansi(h,+bg/unsubmit)] to withdraw your application and go back to make changes.
+
+@open Done;D;N;next
+@parent Done=Chargen Exit Parent
+@power Done = See_All
+&OTHER_CHECKS Done=or(t(xget(%0,approval_job)),not(hasflag(%0,unregistered)))
+&OTHER_ERRORS Done=- You must submit your character for approval first.
+
+@lock/user:Basic Back=ISSUBMITTED/0
+@power Back = See_All
+@FAILURE Back=You must unsubmit your background first.
+&ISSUBMITTED Back=t(xget(%#,approval_job))
+
+
+
+
+@@ This has to be done last because otherwise all the previous exits would be locked!
+@lock/Basic Chargen Exit Parent=ISDONE/1
+@lset Chargen Exit Parent/Basic=!no_inherit
+
+
 think setup_attr(h,xp,0)
 think setup_attr(h,actionskills,)
 think setup_attr(h,bgskills,)
@@ -222,6 +380,7 @@ think setup_attr(h,langskills,)
 think setup_attr(h,attributes,)
 think setup_attr(h,quirks,)
 think setup_attr(h,ruling_attr,)
+think setup_attr(h,cg_errors,)
 
 
 @pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
