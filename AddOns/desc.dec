@@ -54,6 +54,7 @@
 @wait 5=@tel Pre-Made Descs=Multi-Descer
 @wait 5=@tel Multi-Descer=#2
 
+@wait 5=+jobs/create CODE=Descs/Set up pre-made descs if desired.  See +shelp +desc.  At minimum, remove the example desc. 
 
 @wait 6=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
 @wait 6=@pemit/silent %#=%R%T[ansi(hg,- You probably want to remove the DESC_EXAMPLE attribute.%R%T%B%BIt's just an example.)]

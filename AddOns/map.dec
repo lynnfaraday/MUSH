@@ -43,6 +43,8 @@
 @wait 5=@tel Map DB=Map Commands
 @wait 6=@tel Map Commands=#2
 
+@wait 7=+jobs/create CODE/Maps=Create maps for +map.  See +shelp +map
+
 @wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
 @wait 10=@set me=!quiet

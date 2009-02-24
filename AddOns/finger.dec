@@ -119,8 +119,10 @@
 @wait 7=@tel +finger Database=+finger Commands
 @wait 7=@tel +finger Commands=#2
 
+@wait 7=+jobs/create CODE=+finger/Set up +finger fields.  See +shelp +finger_config
+
 @wait 8=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
-@wait 8=@pemit/silent %#=%R%T[ansi(hg,- See +finger/config for configuration info.)]%R
+@wait 8=@pemit/silent %#=%R%T[ansi(hg,- See +shelp +finger_config for configuration info.)]%R
 
 @wait 8=@set me=!quiet
 

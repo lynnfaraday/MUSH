@@ -118,6 +118,8 @@
 @wait 4=@tel MOTD Database=MOTD System
 @wait 5=@tel MOTD System=#2
 
+@wait 5=+jobs/create CODE=MOTD BBS/Set BBPOCKET attribute for the MOTD object.  See +shelp +motd.
+@wait 5=+jobs/create CODE=Tips/Review the tips on the MOTD object and add/delete ones as needed.  See +shelp +motd.
 @wait 5=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
 
 @wait 5=@set me=!quiet

@@ -104,6 +104,8 @@
 @wait 5=@tel Misc Data=Misc Globals
 @wait 6=@tel Misc Globals=#2
 
+@wait 6=+jobs/create CODE=Globals/Set up the room DB#'s and other info for the globals.  See +shelp globals
+
 @wait 7=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
 @wait 7=@set me=!quiet
