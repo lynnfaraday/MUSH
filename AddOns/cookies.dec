@@ -26,13 +26,12 @@
 &CMD-+COOKIE-HERE Cookie System=$+cookie/here:@dolist remove(lcon(%l),%#)=@switch [conn(##)]=>0,@fo %#=+cookie [name(##)]
 &CMD-+COOKIE-LEVELS Cookie System=$+cookie/levels:think pemit(%#,[line()]%R[ansi(h,Cookie award levels)][iter(sort(lattr(#COOKIEDB/COOKIE_LEVEL_*)),%R[ljust(u(fun_format_cookie_level_name,#@),20)][ansi(h,[u(fun_cookie_level_cookies,#@)] cookies)])]%R%RYou have a total of [xget(%#,cookies)] cookies[switch(cookie_award(%#),,.,\,%Bwhich gives you the [cookie_award(%#)] cookie award.)]%R[line()])
 &CMD-+COOKIE-LIST Cookie System=$+cookie *:@switch words(%0)=>1,@dolist %0=@fo %#=+cookie ##
-&CMD-+COOKIE-MAIL Cookie System=$+cookie/mail *:think pemit(%#,switch(0,match(on off,%0),ansi(hr,You must specify ON or OFF.),switch(%0,on,ansi(hg,You turn on the cookie mail.)[set(%#,cookie_mail:1)],off,[set(%#,cookie_mail:0)]ansi(hg,You turn off the cookie mail.))
 &CMD-+COOKIE-REMIND Cookie System=$+cookie/remind *:think pemit(%#,switch(0,match(on off,%0),ansi(hr,You must specify ON or OFF.),switch(%0,on,ansi(hg,You turn on the cookie reminder.)[set(%#,cookie_remind:1)],off,[set(%#,cookie_remind:0)]ansi(hg,You turn off the cookie reminder.))
 &CMD-+COOKIES Cookie System=$+cookies:think pemit(%#,[line()]%R[ansi(h,You have given out the following cookies this week:)]%R%R[switch(xget(%#,cookies_given),,[ansi(hr,No Cookies Given)],iter(sort(setdiff(xget(%#,cookies_given),)),%R[ljust(##:,15)][words(graball(xget(%#,cookies_given),##))]))]%R[line()])
 &CMD-+COOKIE-TOP Cookie System=$+cookie/top:think pemit(%#,[setq(0,iter(real_players(),[rjust(xget(##,cookies),4,0)]:##))][line()]%R[ansi(h,Top Cookie Earners \(total cookies\))]%R[iter(extract(revwords(sort(%q0)),1,20),%R[ljust(#@.,4)][padstr(name(after(##,:)),15)]  [ljust(u(#COOKIESYS/fun_format_cookie_Level_name,u(#COOKIESYS/fun_Cookie_level,after(##,:))),10)] \([trimpenn(before(##,:),0,l)] cookies\))]%R%RSee also [ansi(h,+cookie/top2)]%R[line()])
 &CMD-+COOKIE-TOP2 Cookie System=$+cookie/top2:think pemit(%#,[setq(0,iter(real_players(),[switch(xget(##,cookies),0,,[round(fdiv(xget(##,cookies),fdiv(sub(secs(),convtime(ctime(##))),86400)),2)]:##)]))][line()]%R[ansi(h,Top Cookie Earners \(cookies per day\))]%R[iter(extract(revwords(sort(%q0)),1,20),%R[ljust(#@.,4)][padstr(name(after(##,:)),15)]  [ljust(u(#COOKIESYS/fun_format_cookie_Level_name,u(#COOKIESYS/fun_Cookie_level,after(##,:))),10)] \([trimpenn(before(##,:),0,l)] cookies/day\))]%R[line()])
 &CMD-+LUCK Cookie System=$+luck:think pemit(%#,ansi(hg,[line()]%RYou have [xget(%#,luck_points)] luck [switch(xget(%#,luck_points),1,point,points)].%R%RYou can save up a maximum of [xget(#COOKIEDB,max_lp)] luck points.%R[line()]))
-&CMD-+LUCK-AWARD Cookie System=$+luck/award *=*/*:@switch [setq(0,pmatch(%0))]0=isstaff(%#),@pemit %#=ansi(hr,Restricted to staff.),t(%q0),@pemit %#=ansi(hr,There is no such player.),isnum(%1),@pemit %#=ansi(hr,That is not a number.),{@pemit %#=ansi(hg,You award %0 %1 luck points for %2.);+bbpost 4/Luck Award - [name(%q0)]=%N awarded [name(%q0)] with %1 Luck Points for %2.;@fo %#=+mail [name(%q0)]=XP Award/Congratulations!  You have received %1 Luck Points for %2.;think set(%q0,luck_points:[add(xget(%q0,luck_points),%1)])
+&CMD-+LUCK-AWARD Cookie System=$+luck/award *=*/*:@switch [setq(0,pmatch(%0))]0=isstaff(%#),@pemit %#=ansi(hr,Restricted to staff.),t(%q0),@pemit %#=ansi(hr,There is no such player.),isnum(%1),@pemit %#=ansi(hr,That is not a number.),{@pemit %#=ansi(hg,You award %0 %1 luck points for %2.);+bbpost Staff Job Notices/Luck Award - [name(%q0)]=%N awarded [name(%q0)] with %1 Luck Points for %2.;@fo %#=+mail [name(%q0)]=Luck Award/Congratulations!  You have received %1 Luck Points for %2.;think set(%q0,luck_points:[add(xget(%q0,luck_points),%1)])
 &CMD-+LUCK-INFO Cookie System=$+luck/info:think pemit(%#,[line()]%R[ansi(h,+luck Uses)]%R%R[u(#COOKIEDB/LUCK_INFO)]%R[line()])
 &CMD-+LUCK-SPEND Cookie System=$+luck/spend *=*:think switch(0,gte(xget(%#,luck_points),%0),pemit(%#,ansi(hr,You don't have that many luck points)),isnum(%0),pemit(%#,ansi(hr,That is not a number.)),[remit(%l,ansi(h,%N spends %0 luck points on %1.))][create_job(REQ,Luck - %N,%N has spent %0 luck points on %1,%#)][set(%#,luck_points:[sub(xget(%#,luck_points),%0)])])
 &CMD-+LUCK-SPEND2 Cookie System=$+luck/spend *:think pemit(%#,switch(%0,*=*,,ansi(hr,You forgot the reason.)))
@@ -92,6 +91,10 @@
 
 @wait 7=@tel Cookie DB=Cookie System
 @wait 7=@tel Cookie System=#2
+
+@wait 7=+job/create CODE=Cookie Cron/Copy the +cookie CRON job over to the MUSHCron system, or otherwise configure it to run weekly.
+@wait 7=+job/create CODE=Cookie Levels/Customize the cookie levels if desired.  See +shelp +cookie.
+@wait 7=+job/create CODE=Set up info on what luck points can be used on.  See +shelp +cookie.
 
 @wait 8=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
 @wait 8=@pemit/silent %#=%R%R[ansi(hr,Be sure to copy the CRON job attributes to the MUSHCron system.)]
