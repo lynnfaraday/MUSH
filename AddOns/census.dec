@@ -24,7 +24,7 @@
 &CMD-+CENSUS-SEX Census Commands=$+census/sex:think pemit(%#,[line()]%R[ansi(hb,Census Breakdown By Sex)][setq(0,iter(real_players(),xget(##,sex)))][iter(Male Female,%R[ljust(##,15)] [words(graball(%q0,##))])]%R%RSee [ansi(h,+help +census)] for other census commands.%R[line()])
 @DESCRIBE Census Commands=Breakdown of characters by various areas.[u(credits)]
 @STARTUP Census Commands=@set me=!no_command
-&HELP_GROUPS Census Commands=There are various commands surrounding character organization, factions and positions:%R%R[ansi(h,+positions)] - Shows all positions.%R[ansi(h,+position <name>)] - Views info about a position.%R%R[ansi(h,+factions)] - Views all factions.%R[ansi(h,+faction <name>)] - Shows info about a faction.%R%R[ansi(h,+orgs)] - Views all organizations.%R[ansi(h,+org <name>)] - Views info about an organization.
+&HELP_GROUPS Census Commands=There are various commands surrounding character organization, factions and positions:%R%R[ansi(h,+positions)] - Shows all positions.%R[ansi(h,+positions <name>)] - Views info about a position.%R%R[ansi(h,+factions)] - Views all factions.%R[ansi(h,+factions <name>)] - Shows info about a faction.%R%R[ansi(h,+orgs)] - Views all organizations.%R[ansi(h,+orgs <name>)] - Views info about an organization.
 &CREDITS Census Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 &VERSION Census Commands=3.0
 &HELP_+CENSUS Census Commands=The census command lets you see what other characters are out there.  It can give you the number of players in a particular job (position), faction or sex.%R%R[ansi(h,+census)] - Shows you everyone and their basic info.%R[ansi(h,+census/position)] - Breakdown by position.%R[ansi(h,+census/faction)] - Breakdown by faction.%R[ansi(h,+census/org)] - Breakdown by organization.%R[ansi(h,+census/sex)] - Breakdown by sex.%R%R[ansi(h,+census/search <search>)] - Searches the census.  You can search by most of the fields that are listed.  It must be an exact match, though.  
@@ -35,14 +35,14 @@
 &FUN_FACTIONS Census Commands=iter(lattr(#CENSUSDB/FACTION_*),capstr(lcstr(after(##,_))))
 &FUN_ORGS Census Commands=iter(lattr(#CENSUSDB/ORG_*),capstr(lcstr(after(##,_))))
 
-&CMD-+factions Census Commands=$+factions:think pemit(%#,[line()]%R[ansi(h,Factions)]%R[iter(u(fun_factions),%R##)]%R%RSee [ansi(h,+faction <name>)] for more info on a faction.%R[line()])
-&CMD-+faction-info Census Commands=$+faction *:think pemit(%#,switch(0,hasattr(#CENSUSDB,FACTION_%0),ansi(hr,No such faction.),[line()]%R[ansi(h,Faction info for %0)]%R%R[u(#CENSUSDB/FACTION_%0)]%R[line()]))
+&CMD-+factions Census Commands=$+factions:think pemit(%#,[line()]%R[ansi(h,Factions)]%R[iter(u(fun_factions),%R##)]%R%RSee [ansi(h,+factions <name>)] for more info on a faction.%R[line()])
+&CMD-+faction-info Census Commands=$+factions *:think pemit(%#,switch(0,hasattr(#CENSUSDB,FACTION_%0),ansi(hr,No such faction.),[line()]%R[ansi(h,Faction info for %0)]%R%R[u(#CENSUSDB/FACTION_%0)]%R[line()]))
 
-&CMD-+orgs Census Commands=$+orgs:think pemit(%#,[line()]%R[ansi(h,Organizations)]%R[iter(u(fun_orgs),%R##)]%R%RSee [ansi(h,+org <name>)] for more info on an organization.%R[line()])
-&CMD-+org-info Census Commands=$+org *:think pemit(%#,switch(0,hasattr(#CENSUSDB,ORG_%0),ansi(hr,No such org.),[line()]%R[ansi(h,Organization info for %0)]%R%R[u(#CENSUSDB/ORG_%0)]%R[line()]))
+&CMD-+orgs Census Commands=$+orgs:think pemit(%#,[line()]%R[ansi(h,Organizations)]%R[iter(u(fun_orgs),%R##)]%R%RSee [ansi(h,+orgs <name>)] for more info on an organization.%R[line()])
+&CMD-+org-info Census Commands=$+orgs *:think pemit(%#,switch(0,hasattr(#CENSUSDB,ORG_%0),ansi(hr,No such org.),[line()]%R[ansi(h,Organization info for %0)]%R%R[u(#CENSUSDB/ORG_%0)]%R[line()]))
 
-&CMD-+positions Census Commands=$+positions:think pemit(%#,[line()]%R[ansi(h,Positions)]%R[iter(u(fun_positions),%R##)]%R%RSee [ansi(h,+position <name>)] for more info on a position.%R[line()])
-&CMD-+position-info Census Commands=$+position *:think pemit(%#,switch(0,hasattr(#CENSUSDB,POSITION_%0),ansi(hr,No such position.),[line()]%R[ansi(h,Position info for %0)]%R%R[u(#CENSUSDB/POSITION_%0)]%R[line()]))
+&CMD-+positions Census Commands=$+positions:think pemit(%#,[line()]%R[ansi(h,Positions)]%R[iter(u(fun_positions),%R##)]%R%RSee [ansi(h,+positions <name>)] for more info on a position.%R[line()])
+&CMD-+position-info Census Commands=$+positions *:think pemit(%#,switch(0,hasattr(#CENSUSDB,POSITION_%0),ansi(hr,No such position.),[line()]%R[ansi(h,Position info for %0)]%R%R[u(#CENSUSDB/POSITION_%0)]%R[line()]))
 
 @create Census DB
 @set Census DB=Wizard
@@ -90,6 +90,10 @@ think setup_attr(h,org,)
 
 @wait 4=@tel Census DB=Census Commands
 @wait 5=@tel Census Commands=#2
+
+@wait 5=+jobs/create CODE=Factions/Create factions info.  See +shelp +census.
+@wait 5=+jobs/create CODE=Orgs/Create orgs info.  See +shelp +census.
+@wait 5=+jobs/create CODE=Positions/Create positions info.  See +shelp +census.
 
 @wait 6=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
