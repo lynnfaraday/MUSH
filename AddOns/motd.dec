@@ -28,14 +28,16 @@
 &CMD-+MOTD-TIP MOTD System=$+motd/tip *=*:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),ansi(hg,You add a tip with the subject %0 and text %1)[set(#MOTDDB,tip_[edit(squish(%0),%B,_)]:%1)])
 &CMD-+MOTD-VIEWTIP MOTD System=$+motd/viewtip *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),hasattr(#MOTDDB,TIP_[squish(%0)]),ansi(hr,There is no such tip.),[line()]%R[ansi(hg,Tip: %0)]%R[u(#MOTDDB/TIP_[squish(%0)])]%R[line()])
 &FUN_GET_BBS MOTD System=[switch(hasattr(xget(#MOTDDB,BBPOCKET),BB_POST_HDR_%#),1,%R[center(** BB Warning: You are in the middle of writing a bbpost. **,78)])][switch(setdiff(iter(setr(0,u([xget(#MOTDDB,BBPOCKET)]/VALID_GROUPS,%#,read)),get(##/MESS_LST)),setr(1,get(%#/BB_READ))),,%r[center(None.,78)]%r,[setq(9,get([xget(#MOTDDB,BBPOCKET)]/GROUPS))][trim(iter(%q0,switch(setr(2,setdiff(setr(3,get(##/MESS_LST)),%q1)),,,%R[center([ansi(h,[name(##)] \(#[member(%q9,##)]\):%b)][words(%q2)] unread \([u([xget(#MOTDDB,BBPOCKET)]/FN_UNREAD_LIST,%q2,%q3)]\),78)]),,),b)]%R)]
-&FUN_GET_MAIL MOTD System=[center([ansi(h,[extract(mail(%#),2,1)] Unread)] -- [add(extract(mail(%#),1,1),extract(mail(%#),2,1))] Total,78)][switch([extract(mail(%#),1,1)],>25,ansi(r,%r[center(You have more than 25 mail messages.,78)]%r[center(Please archive and erase ones that you do not need!,78)]))]
+&FUN_GET_MAIL MOTD System=[center([ansi(h,[u(fun_unread_mail,%0)] Unread)] -- [u(fun_total_mail,%0)] Total,78)][switch([extract(mail(%#),1,1)],>25,ansi(r,%r[center(You have more than 25 mail messages.,78)]%r[center(Please archive and erase ones that you do not need!,78)]))]
 &FUN_GET_TIP MOTD System=u(#MOTDDB/[extract(lattr(#MOTDDB/tip_*),add(1,rand(words(lattr(#MOTDDB/tip_*)))),1)])
 
+&FUN_UNREAD_MAIL MOTD System=switch(xget(#MOTDDB,MAILSYS),builtin,extract(mail(%0),2,1),faramail,unread_mail(%0),ERROR)
+&FUN_TOTAL_MAIL MOTD System=switch(xget(#MOTDDB,MAILSYS),builtin,[add(extract(mail(%0),1,1),extract(mail(%0),2,1))],faramail,total_mail(%0),ERROR)
 
 @STARTUP MOTD System=@set me=!no_COMMAND
 &TR_CATCHUP MOTD System=@fo %0=+bbcatchup all
 &HELP_+MOTD MOTD System=Whenever you login, the Message Of The Day screen will be presented to you automatically. It shows any important news for the day, as well as a summary of unread items (mail, bulletin boards, events, etc.). %r%rThere is a "catchup" command for the MOTD. This will catch up on all unread items at once (except mail).%r%r[ansi(h,+motd)] - Views the welcome screen. %R[ansi(h,+motd/<on or off>)]- Sets whether to show the screen when you connect. %r[ansi(h,+motd/catchup)] - Catches up on posts.
-&SHELP_+MOTD MOTD System=Staff members can change the message of the day, and also add and edit tips that show up randomly on the "tip of the day" section.%R%R[ansi(h,+motd/set <message>)] - Set the important message of the day.%R[ansi(h,+motd/clear)] - Clears the important message.%R%R[ansi(h,+motd/tip <title>=<tip text>)] - Adds a tip.%R[ansi(h,+motd/showtips)] - Shows a list of all tip titles.%R[ansi(h,+motd/viewtip <title>)] - Views a tip.%R[ansi(h,+motd/cleartip <title>)] - Erases a tip%R[ansi(h,+motd/edittip <title>=<find>/<replace>)] - Edits a tip.%R%RIf you want integration with Myrddin's BBS to show unread BBS postings, you need to configure the BBPOCKET attribute on #MOTDDB to be the DB# of the BBS "bbpocket" object.
+&SHELP_+MOTD MOTD System=Staff members can change the message of the day, and also add and edit tips that show up randomly on the "tip of the day" section.%R%R[ansi(h,+motd/set <message>)] - Set the important message of the day.%R[ansi(h,+motd/clear)] - Clears the important message.%R%R[ansi(h,+motd/tip <title>=<tip text>)] - Adds a tip.%R[ansi(h,+motd/showtips)] - Shows a list of all tip titles.%R[ansi(h,+motd/viewtip <title>)] - Views a tip.%R[ansi(h,+motd/cleartip <title>)] - Erases a tip%R[ansi(h,+motd/edittip <title>=<find>/<replace>)] - Edits a tip.%R%RIf you want integration with Myrddin's BBS to show unread BBS postings, you need to configure the BBPOCKET attribute on #MOTDDB to be the DB# of the BBS "bbpocket" object.%R%RIf using FaraMail, set the MAILSYS attribute on #MOTD to faramail (the default is builtin for @mail)
 @DESCRIBE MOTD System=Stores the message of the day commands.%R[u(credits)]
 &CREDITS MOTD System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 &VERSION MOTD System=4.0
@@ -49,6 +51,7 @@
 
 &MOTD MOTD Database=[center(This is an important notice for today!,78)]%R[center(NOTE: There may not always be an important message.,78)]
 &BBPOCKET MOTD Database=#0
+&MAILSYS MOTD Database=builtin
 
 &TIP_ALTS MOTD Database=Remember to register your alternate characters using the +alts command.
 &TIP_CENSUS MOTD Database=You can use the +census command to see what other characters are out there.
@@ -119,7 +122,9 @@
 @wait 5=@tel MOTD System=#2
 
 @wait 5=+jobs/create CODE=MOTD BBS/Set BBPOCKET attribute for the MOTD object.  See +shelp +motd.
-@wait 5=+jobs/create CODE=Tips/Review the tips on the MOTD object and add/delete ones as needed.  See +shelp +motd.
+@wait 5=+jobs/create CODE=Tips/Review the tips on the MOTD object and add/delete ones as needed.  See +shelp +motd. 
+@wait 5=+jobs/create CODE=MOTD/Set the important message (if there is one).  See +shelp +motd.
+
 @wait 5=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
 
 @wait 5=@set me=!quiet
