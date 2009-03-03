@@ -131,5 +131,8 @@
 
 @wait 14=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!  Create a Staff Job Notices bbs if you don't have one already.)]%R
 
+@wait 14=+jobs/create CODE=ICTIME/Set up the ICTIME function.
+@wait 14=+jobs/create CODE=Non-Players/Once all non-players (guests, wizzes, etc.) are created, update the NON_PLAYERS attr on the global functions object with a space-separated list of their DB#s.
+
 @wait 15=@set me=!quiet
 
