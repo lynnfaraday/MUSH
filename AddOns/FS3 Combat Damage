@@ -1,0 +1,208 @@
+@create FS3Combat Damage Commands
+@set FS3Combat Damage Commands = WIZARD
+@set FS3Combat Damage Commands = SAFE
+
+@@@@@@@@@@@@@@@@@@@@@@@@
+@@@ DAMAGE VIEW COMMANDS
+@@@@@@@@@@@@@@@@@@@@@@@@
+
+&CMD-+DAMAGE FS3Combat Damage Commands=$+damage:@pemit %#=[line()]%R[ansi(hr,Damage Report for %N)]%R[u(fun_dmglist,%N)]%R%RSee [ansi(h,+damage <#>)] for details on a given wound.%R[line()]
+
+&CMD-+DAMAGE-DETAIL FS3Combat Damage Commands=$+damage *:@pemit %#=switch(0,isnum(%0),,gt(%0,0),ansi(hr,That is not a valid wound number.),lte(%0,words(u(FUN_ALL_DMG,%N))),ansi(hr,You don't have that many wounds.),[line()]%R[ansi(hr,Damage Report for %N wound %0)]%R[u(fun_dmg_detail,u(fun_get_dmgnum,%N,%0))]%R[line()]
+
+&CMD-+DAMAGE-PERSON FS3Combat Damage Commands=$+damage *:@pemit %#=switch(1,isnum(%0),,strmatch(%0,*/*),,eq(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),[line()]%R[ansi(hr,Damage Report for [prettify(%0)])]%R[u(fun_dmglist,%0)]%R%RSee [ansi(h,+damage <name>/<#>)] for details on a given wound.%R[line()]
+
+&CMD-+DAMAGE-PERSON-DETAIL FS3Combat Damage Commands=$+damage */*:@pemit %#=switch(0,isnum(%1),ansi(hr,That is not a valid wound number.),gt(%1,0),ansi(hr,That is not a valid wound number.),lte(%1,words(u(FUN_ALL_DMG,%N))),ansi(hr,%0 doesn't have that many wounds.),[line()]%R[ansi(hr,Damage Report for [prettify(%0)] wound %1)]%R[u(fun_dmg_detail,u(fun_get_dmgnum,%0,%1))]%R[line()]
+
+@@@@@@@@@@@@@@@@@@@@@@@@
+@@ DAMAGE MOD COMMANDS
+@@@@@@@@@@@@@@@@@@@@@@@@
+
+&CMD-+DAMAGE-MODLIST FS3Combat Damage Commands=$+damage/mod:@pemit %#=[line()]%R[ansi(h,Damage values that can be modified:)]%R[ljust(real,12)] 1 for real, 0 for mock%R[ljust(hitloc,12)] Hit location%R[ljust(weapon,12)] Weapon used%R[ljust(type,12)] Physical or stun%R[ljust(initsev,12)] Initial severity (D/S/M/L/H)%R[ljust(currsev,12)] Current severity (D/S/M/L/H)%R[ljust(healing,12)] Healing points%R[ljust(lasttreat,12)] Last treated (secs)%R[ljust(lastheal,12)] Last healed (secs)%R[ljust(notes,12)] Wound notes%R%RD=Deadly, S=Serious, M=Moderate, L=Light, H=Healed%RUse [ansi(h,+damage/mod <name>/<#>=<stat, from list above>/<newvalue>)]%R[line()]
+&CMD-+DAMAGE-MOD FS3Combat Damage Commands=$+damage/mod */*=*/*:@pemit %#=[setq(0,u(fun_get_dmgnum,%0,%1))]switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(%q0),ansi(hr,%0/%1 is not a valid damage value.),match(v(dmgstats),trim(%2)),ansi(hr,%2 is not a valid damage stat to modify.),u(fun_valid_dmgstat_[trim(%2)],%3),ansi(hr,%3 is not a valid value for the %2 statistic.),ansi(hg,You modify [prettify(%0)]'s damage.)[u(fun_mod_dmgstat,%q0,trim(%2),prettify(%3))])
+&CMD-+DAMAGE-MOVE FS3Combat Damage Commands=$+damage/move *=*:@pemit %#=[setq(0,u(fun_get_dmgnum,%N,%0))][switch(0,t(%q0),ansi(hr,That is not a valid damage number.),gt(xget(%#,luck_points),0),ansi(hr,You do not have any luck points.  Contact staff.),lte(u(fun_minutes_since_injury,%q0),10),ansi(hr,You only have 10 minutes to move a wound using this command.  Contact staff.),ansi(hg,You spend a luck point to move wound %0 to hit location %1.)[set(%#,luck_points:[sub(xget(%#,luck_points),1)])][u(fun_mod_dmgstat,%q0,hitloc,prettify(%1))])]
+
+@@@@@@@@@@@@@@@@@@@@@@@@
+@@ HEALING COMMANDS
+@@@@@@@@@@@@@@@@@@@@@@@@
+
+@@@ TODO: Limit to people only
+&CMD-+TREAT FS3Combat Damage Commands=$+treat */*:@pemit %#=[setq(0,u(fun_get_dmgnum,%0,%1))][setq(1,xget(#731,treat_skill))][setq(2,roll_ability(%#,%q1))][setq(3,u(fun_dmgstat,%q0,healing))][switch(0,t(%q0),ansi(hr,%0/%1 is not a valid damage combination.),u(fun_can_be_treated,%q0),ansi(hr,That wound cannot be treated.),ability_level(%#,%q1),ansi(hr,You don't have the %q1 skill.),ansi(hg,You treat [prettify(%0)].)[remit(%l,ansi(hg,%N treats [prettify(%0)] [switch(%q2,>0,successfully,unsuccessfully)].))][u(fun_mod_dmgstat,%q0,lasttreat,secs())][u(fun_mod_dmgstat,%q0,healing,add(%q3,switch(%q2,-2,-0.5,-1,-0.25,0,0,1,.5,2,1,3,1.5,0)))])]
+
+&CMD-+HEAL FS3Combat Damage Commands=$+heal */*:@pemit %#=[setq(0,u(fun_get_dmgnum,%0,%1))][setq(1,xget(#731,heal_skill))][setq(2,roll_ability(%#,%q1))][setq(3,u(fun_dmgstat,%q0,healing))][switch(0,t(%q0),ansi(hr,%0/%1 is not a valid damage combination.),not(u(FUN_HEALED_TODAY,%q0)),ansi(hr,That wound has already been healed today.),ability_level(%#,%q1),ansi(hr,You don't have the %q1 skill.),ansi(hg,You heal [prettify(%0)].)[remit(%l,ansi(hg,%N heals [prettify(%0)] [switch(%q2,>0,successfully,unsuccessfully)].))][u(fun_mod_dmgstat,%q0,lastheal,secs())][u(fun_mod_dmgstat,%q0,healing,add(%q3,switch(%q2,-2,-1,-1,-0.5,0,0,1,.75,2,1.25,3,1.75,0)))])]
+
+@@@ TODO: Limit to vehicles only
+&CMD-+REPAIR FS3Combat Damage Commands=$+repair */*:@pemit %#=[setq(0,u(fun_get_dmgnum,%0,%1))][setq(1,xget(#731,repair_skill))][setq(2,roll_ability(%#,%q1))][setq(3,u(fun_dmgstat,%q0,healing))][switch(0,t(%q0),ansi(hr,%0/%1 is not a valid damage combination.),not(u(FUN_HEALED_TODAY,%q0)),ansi(hr,That damage has already been repaired today.),ability_level(%#,%q1),ansi(hr,You don't have the %q1 skill.),ansi(hg,You repair [prettify(%0)].)[remit(%l,ansi(hg,%N repairs [prettify(%0)] [switch(%q2,>0,successfully,unsuccessfully)].))][u(fun_mod_dmgstat,%q0,lastheal,secs())][u(fun_mod_dmgstat,%q0,healing,add(%q3,switch(%q2,-2,-1,-1,-0.5,0,0,1,.75,2,1.25,3,1.75,0)))])]
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ TR_DAILY_HEALING
+@@ Goes through every unhealed wound in the database and applies daily healing points.
+@@ This is based on a 'toughness' skill roll, with a bonus if you're in a designated
+@@ hospital.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+&TR_DAILY_HEALING FS3Combat Damage Commands=iter(lattr(#731/DMG_*),[setq(0,before(after(##,_),_))][setq(1,switch(1,isplayer(%q0),ability_level(pmatch(%q0),xget(#731,toughness_skill)),npc_rating(%q0)))][setq(2,u(fun_dmgstat,##,healing))][switch(u(fun_dmgstat,##,currsev),H,,u(fun_mod_dmgstat,##,healing,add(%q2,switch(%q2,-2,0.75,-1,1,0,1,1,1,2,1.25,3,1.5,1),switch(0,match(xget(#731,hospitals),loc(pmatch(%q0))),0,0.5)))])
+@@ TODO: Check for wound severity healing.  Reduce severity and send mail.
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@  NOTE: Most +damage functions expect to be passed in the damage attribute name  @@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_ALL_DMG
+@@ Gets a list of attr names for all the damage suffered by a char/vehicle.
+@@ Damage is sorted by date/time, oldest first.
+@@ %0 = Name, may be PC, NPC or Vehicle
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_ALL_DMG FS3Combat Damage Commands=sortkey(KEY_SORT_DMG,lattr(#731/DMG_[trim(edit(%0,_,.,%B,.))]_*))
+&KEY_SORT_DMG FS3Combat Damage Commands=after(after(%0,_),_)
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_GET_DMGNUM
+@@ Gets a specific damage attr name from the 'all damage' list for a char/vehicle.
+@@ %0 = Name
+@@ %1 = Index, 1-based
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_GET_DMGNUM FS3Combat Damage Commands=extract(u(FUN_ALL_DMG,%0),%1,1)
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_DMGSTAT
+@@ Gets a piece of damage info from a given damage attribute.
+@@ %0 = Damage attr name 
+@@ %1 = The stat to get, from DMGSTATS.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&DMGSTATS FS3Combat Damage Commands=real hitloc weapon type initsev currsev healing lasttreat lastheal notes
+&FUN_DMGSTAT FS3Combat Damage Commands=extract(xget(#731,%0),match(v(DMGstats),%1),1,|)
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_VALID_DMGSTAT_xxx
+@@ Tells whether a value is valid for the xxx damage statistic.
+@@ %0 = The value
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_VALID_DMGSTAT_REAL FS3Combat Damage Commands=match(0 1,%0)
+&FUN_VALID_DMGSTAT_HITLOC FS3Combat Damage Commands=1
+&FUN_VALID_DMGSTAT_WEAPON FS3Combat Damage Commands=1
+&FUN_VALID_DMGSTAT_TYPE FS3Combat Damage Commands=match(physical stun,%0)
+&FUN_VALID_DMGSTAT_INITSEV FS3Combat Damage Commands=match(D S M L H,%0)
+&FUN_VALID_DMGSTAT_CURRSEV FS3Combat Damage Commands=match(D S M L H,%0)
+&FUN_VALID_DMGSTAT_HEALING FS3Combat Damage Commands=isnum(%0)
+&FUN_VALID_DMGSTAT_LASTTREAT FS3Combat Damage Commands=isnum(%0)
+&FUN_VALID_DMGSTAT_LASTHEAL FS3Combat Damage Commands=isnum(%0)
+&FUN_VALID_DMGSTAT_NOTES FS3Combat Damage Commands=1
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_MOD_DMGSTAT
+@@ Modifies a piece of damage info from a given damage attribute.  This is stored back 
+@@ on the damage database.
+@@ %0 = Damage attr name 
+@@ %1 = The stat to set, from DMGSTATS.
+@@ %2 = The new value.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_MOD_DMGSTAT FS3Combat Damage Commands=set(#731,%0:[replace(xget(#731,%0),match(v(DMGstats),%1),%2,|)])
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_MINUTES_SINCE_INJURY
+@@ How long it's been since the injury occurred.
+@@ %0 = Damage attr name
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_MINUTES_SINCE_INJURY FS3Combat Damage Commands=div(sub(secs(),last(%0,_)),60)
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_CAN_BE_TREATED
+@@ Whether the char/vehicle can be treated right now.  True if they haven't already been treated,
+@@ and the damage is not more than an hour old.
+@@ %0 = Damage attr name
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_CAN_BE_TREATED FS3Combat Damage Commands=not(or(u(FUN_DMGSTAT,%0,lasttreat),gt(u(FUN_MINUTES_SINCE_INJURY,%0),60)))
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_DISPLAY_TIME
+@@ Shows a damage time, -- if not set.
+@@ %0 = Seconds
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_DISPLAY_TIME FS3Combat Damage Commands=switch(%0,,--,convsecs(%0))
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_HEALED_TODAY
+@@ Whether the char/vehicle was already healed today.
+@@ %0 = Name
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_HEALED_TODAY FS3Combat Damage Commands=switch(sub(secs(),u(FUN_DMGSTAT,%0,lastheal)),>86400,0,1)
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_DMG_DETAIL
+@@ Shows detail for a given damage element.
+@@ %0 = Damage attr name.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_DMG_DETAIL FS3Combat Damage Commands=%R[ansi(h,Wound)]: [u(fun_dmgstat,%0,weapon)] to [u(fun_dmgstat,%0,hitloc)] [switch(u(fun_dmgstat,%0,real),0,%R[ansi(hg,*** MOCK DAMAGE ***)] %R\(will be removed when combat ends\)%R)]  %R[ansi(h,Time of Injury)]: [convsecs(after(after(%0,_),_))]%R[ansi(h,Type)]: [u(fun_dmgstat,%0,type)] %R[ansi(h,Initial Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,initsev))] %R[ansi(h,Current Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,currsev))] %R[ansi(h,Healing Points)]: [u(fun_dmgstat,%0,healing)] %R[ansi(h,Last Treated)]: [u(fun_display_time,u(fun_dmgstat,%0,lasttreat))] %R[ansi(h,Last Healed)]: [u(fun_display_time,u(fun_dmgstat,%0,lastheal))] %R[ansi(h,Notes)]: [u(fun_dmgstat,%0,notes)]
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_DMGLIST
+@@ Lists damage summary for a char/vehicle.
+@@ %0 = Name
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_DMGLIST FS3Combat Damage Commands=[ansi(h,%b%b%b%b%bSeverity[space(41)]Can%b%bCan)]%r[ansi(h,[space(5)]\(Current\)[space(6)]Type[space(6)]Wound[space(18)]Treat Heal)][iter(u(FUN_ALL_DMG,%0),[setq(0,u(FUN_DMGSTAT,##,currsev))]%R[ljust(#@.,4)] [ljust(ansi(u(fun_wound_color,%q0),[u(fun_wound_name,%q0)]),14)] [ljust(u(FUN_DMGSTAT,##,type),10)][padstr([u(FUN_DMGSTAT,##,weapon)] to [u(FUN_DMGSTAT,##,hitloc)],25)][switch(u(FUN_CAN_BE_TREATED,##),1,+,-)]%B%B%B%B[switch(u(FUN_HEALED_TODAY,##),1,-,+)])]
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_DMGMOD_TOTAL
+@@ Total damage modifier for a char/vehicle, counting all wounds.
+@@ %0 = Name
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_DMGMOD_TOTAL FS3Combat Damage Commands=localize([setq(0,0)][iter(u(FUN_ALL_DMG,%0),setq(0,add(%q0,u(FUN_DMGMOD_WOUND,##))),,)][min(%q0,95)])
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_DMGMOD_WOUND
+@@ Damage modifier for an individual wound.
+@@ Modifier is 1/2 for stun damage, and also 1/2 for wounds that have been treated/healed.  
+@@ This is cumulative.  It is also modified by the 'hero factor'.
+@@ %0 = Damage attr
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&WOUND_DMGMOD FS3Combat Damage Commands=L:5 M:15 S:50 D:85
+&FUN_DMGMOD_WOUND FS3Combat Damage Commands=localize([setq(0,after(grab(v(WOUND_DMGMOD),[u(FUN_DMGSTAT,%0,currsev)]:*),:))][switch(u(FUN_DMGSTAT,%0,type),Stun,setq(0,div(%q0,2)))][switch(or(u(FUN_DMGSTAT,%0,lasttreat),u(FUN_DMGSTAT,%0,lastheal)),1,setq(0,div(%q0,2)))][max(sub(%q0,xget(#731,HERO_FACTOR)),0)])
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_PRINT_WOUND
+@@ FUN_WOUND_COLOR
+@@ FUN_WOUND_NAME
+@@ These functions are used to show a pretty printed version of a wound.
+@@ %0 = Wound level (D/S/M/L)
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_PRINT_WOUND FS3Combat Damage Commands=ansi(u(FUN_WOUND_COLOR,%0),u(FUN_WOUND_NAME,%0))
+&FUN_WOUND_COLOR FS3Combat Damage Commands=switch(%0,D,hR,S,hr,M,hy,L,hg,hx)
+&FUN_WOUND_NAME FS3Combat Damage Commands=switch(%0,D,Deadly,S,Serious,M,Moderate,L,Light,Healed)
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_DO_DMG
+@@ Inflicts damage upon a char/vehicle.
+@@ %0 = Name 
+@@ %1 = Real (1) or Mock (0) Damage
+@@ %2 = Hit location
+@@ %3 = Weapon
+@@ %4 = Physical or Stun damage
+@@ %5 = Severity (D/S/M/L), applied to both initial and current severity
+@@ Healing points defaulted to 0, notes to empty, and last treated/healed to empty
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_DO_DMG FS3Combat Damage Commands=set(#731,DMG_[edit(%0,_,.,%B,.)]_[secs()]:%1|%2|%3|%4|%5|%5|0|||)
+
+@STARTUP FS3Combat Damage Commands=@set me=!no_command;@fun damagemod=me,fun_dmgmod_total;@fun do_damage=me,fun_dodmg 
+
+
+
+@create FS3Combat Damage Database
+@set FS3Combat Damage Database = NO_COMMAND
+&DMG_BOB.SMITH_1240109974 FS3Combat Damage Database=0|Chest|Unarmed|Stun|L|L||1240109974||
+&DMG_FARADAY_1110006999 FS3Combat Damage Database=1|Chest|Unarmed|Stun|L|L||||
+&DMG_FARADAY_1240096971 FS3Combat Damage Database=1|Head|Rifle|Physical|D|D|9|1239933097|1239933097|Notes
+&DMG_FARADAY_1240096972 FS3Combat Damage Database=1|Head|Rifle|Physical|M|L|10||1240105931|Notes
+&DMG_FARADAY_1240096973 FS3Combat Damage Database=1|Head|Rifle|Physical|L|L|9|||Notes
+&DMG_FARADAY_1240109974 FS3Combat Damage Database=1|Chest|Unarmed|Stun|L|L||1240109974||
+&HERO_FACTOR FS3Combat Damage Database=0
+&TREAT_SKILL FS3Combat Damage Database=First_Aid
+&HEAL_SKILL FS3Combat Damage Database=Medicine
+&REPAIR_SKILL FS3Combat Damage Database=Repair
+&TOUGHNESS_SKILL FS3Combat Damage Database=Athletics
+&HOSPITALS FS3Combat Damage Database=#-1
