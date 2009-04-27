@@ -16,6 +16,7 @@
 @create Meetme System
 @set Meetme System = WIZARD
 @set Meetme System = SAFE
+@set Meetme System = !NO_COMMAND
 &CMD-+MDECLINE Meetme System=$+mdecline:@switch [setq(0,xget(%#,meetme))][t(%q0)]=0,@pemit %#=ansi(hr,No one has invited you to meet them.),{@pemit %q0=ansi(hy,%N has declined your invitation.);@pemit %#=ansi(hy,You decline [name(%q0)]'s invitation.);think set(%#,meetme:)}
 &CMD-+MEETME Meetme System=$+meetme *:think [setq(0,pmatch(%0))]pemit(%#,switch(0,t(%q0),ansi(hr,That is not a valid player.),u(fun_both_ic,%q0,%#),ansi(hr,You cannot invite someone unless you both are IC.),u(FUN_IS_IN_OBJECT,%q0),ansi(hr,You can't invite someone who is inside another object.),ansi(hg,You invite [name(%q0)] to meet you for RP.)[set(%q0,meetme:%#)][pemit(%q0,ansi(hg,<OOC> %N has invited you to meet them for RP at [xget(%l,area)] - [name(%l)].  You can +mjoin to join them, +msummon to bring them to you, or +mdecline to decline the invitation.))]))
 &CMD-+MJOIN Meetme System=$+mjoin:@switch/first [setq(0,xget(%#,meetme))]0=[t(%q0)],@pemit %#=ansi(hr,No one has invited you to meet them.),u(fun_both_ic,%#,%q0),@pemit %#=ansi(hr,You cannot meet someone unless you are both IC.),u(FUN_IS_IN_OBJECT,%#),@pemit %#=ansi(hr,You cannot join someone while inside another object.),{@remit loc(%q0)=ansi(hy,<OOC> %N is about to join your location.);@remit %l=ansi(hy,<OOC> %N is being summoned away.);think set(%#,meetme:);@wait 5=@tel %#=loc(%q0)}
@@ -29,6 +30,7 @@
 &VERSION Meetme System=4.0
 
 @STARTUP Meetme System=@set me=!no_command
+
 
 @wait 4=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
 @wait 4=@fo %#=+copyhelp [num(Meetme System)]
