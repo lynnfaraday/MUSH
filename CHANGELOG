@@ -1,3 +1,15 @@
+In Development
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Functions: Added prettify and unprettify
+Systems now create +jobs for to-do items when installed
++census:  +faction/+org/+position command details now work properly when in chargen
++cookie: Removed mention of mail command.
++jobs:  +jobs/new, +jobs/catchup
+FS3!
+FARAMAIL!
+
+
+
 Version 4.1 (6/13/08)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Jobs
