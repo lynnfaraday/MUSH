@@ -75,13 +75,13 @@
 &FUN_WEAPONSTAT FS3Combat Equipment Commands=extract(xget(#724,weapon_[trim(%0)]),match(v(weaponstats),%1),1,|)
 &FUN_FILTER_WPN_CLASS FS3Combat Equipment Commands=squish(iter(weapons(),switch(strmatch(weaponstat(##,class),%0),1,##)))
 
-&CMD-+GEAR-VEHICLE-DETAIL FS3Combat Equipment Commands=$+gear/vehicle *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(vehicletypes(),%q0),ansi(hr,That is not a valid vehicle type.),[line()]%R[ansi(h,[prettify(%0)] Vehicle Data)]%R%R[ansi(h,Piloting Skill:)] [vehiclestat(%q0,pilotskill)]%R[ansi(h,Toughness:)] [vehiclestat(%q0,toughness)] %R[ansi(h,Armor Type:)] [vehiclestat(%q0,armor)]%R[ansi(h,Possible Armarment:)] [vehiclestat(%q0,weapons)]%R[ansi(h,Hit Location Chart:)] [vehiclestat(%q0,hitloc)]%R%R[ansi(h,Description:)]%R[vehiclestat(%q0,desc)]%R[line()])
-&CMD-+GEAR-VEHICLE FS3Combat Equipment Commands=$+gear/vehicles:@pemit %#=[line()]%R[ansi(h,Vehicle[space(13)]Piloting[space(10)]Weapons)][iter(vehicletypes(),%R[padstr(prettify(lcstr(##)),20)][ljust(vehiclestat(##,pilotskill),18)][vehiclestat(##,weapons)])]%R%RSee [ansi(h,+gear/vehicle <type>)] for details.%R[line()]
+&CMD-+GEAR-VEHICLE-DETAIL FS3Combat Equipment Commands=$+gear/vehicle *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(vehicletypes(),%q0),ansi(hr,That is not a valid vehicle type.),[line()]%R[ansi(h,[prettify(%0)] Vehicle Data)]%R%R[ansi(h,Piloting Skill:)] [vehtypestat(%q0,pilotskill)]%R[ansi(h,Toughness:)] [vehtypestat(%q0,toughness)] %R[ansi(h,Armor Type:)] [vehtypestat(%q0,armor)]%R[ansi(h,Possible Armarment:)] [vehtypestat(%q0,weapons)]%R[ansi(h,Hit Location Chart:)] [vehtypestat(%q0,hitloc)]%R%R[ansi(h,Description:)]%R[vehtypestat(%q0,desc)]%R[line()])
+&CMD-+GEAR-VEHICLE FS3Combat Equipment Commands=$+gear/vehicles:@pemit %#=[line()]%R[ansi(h,Vehicle[space(13)]Piloting[space(10)]Weapons)][iter(vehicletypes(),%R[padstr(prettify(lcstr(##)),20)][ljust(vehtypestat(##,pilotskill),18)][vehtypestat(##,weapons)])]%R%RSee [ansi(h,+gear/vehicle <type>)] for details.%R[line()]
 &FUN_VEHICLETYPES FS3Combat Equipment Commands=edit(lattr(#724/vehicle_*),VEHICLE_,)
-&FUN_VEHICLESTAT FS3Combat Equipment Commands=extract(xget(#724,vehicle_[trim(%0)]),match(v(vehiclestats),%1),1,|)
+&FUN_VEHTYPESTAT FS3Combat Equipment Commands=extract(xget(#724,vehicle_[trim(%0)]),match(v(vehiclestats),%1),1,|)
 
 &CMD-+GEAR-COVER FS3Combat Equipment Commands=$+gear/cover:@pemit %#=[line()]%R[ansi(h,Cover[space(15)]Protection)][iter(sortkey(key_cover_sort,lattr(#724/cover_*)),%R[padstr(prettify(after(lcstr(##),_)),23)][xget(#724,##)])]%R%R[ansi(hg,Note:)] These are just sample numbers and are not meant to be all-inclusive.%R[line()]
 &KEY_COVER_SORT FS3Combat Equipment Commands=xget(#724,%0)
 
 
-@STARTUP FS3Combat Equipment Commands=@set me=!no_command;@fun weaponstat=me,fun_weaponstat;@fun weapons=me,fun_weapons;@fun armor=me,fun_armor;@fun armorstat=me,fun_armorstat;@fun vehicletypes=me,fun_vehicletypes;@fun vehiclestat=me,fun_vehiclestat
+@STARTUP FS3Combat Equipment Commands=@set me=!no_command;@fun weaponstat=me,fun_weaponstat;@fun weapons=me,fun_weapons;@fun armor=me,fun_armor;@fun armorstat=me,fun_armorstat;@fun vehicletypes=me,fun_vehicletypes;@fun vehtypestat=me,fun_vehtypestat
