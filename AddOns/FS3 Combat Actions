@@ -1,0 +1,26 @@
+@create FS3Combat Instance Parent
+@set FS3Combat Instance Parent = WIZARD
+@set FS3Combat Instance Parent = SAFE
+@set FS3Combat Instance Parent = !NO_COMMAND
+&ORGANIZER FS3Combat Instance Parent=
+
+&COMBATSTATS FS3Combat Instance Parent=type vehicle coverperc coverdur weapon stance armor mods luck lastaim suppress action acttarget actoptions
+&FUN_COMBATSTAT FS3Combat Instance Parent=extract(v(stat_[trim(unprettify(%0))]),match(v(combatstats),%1),1,|)
+
+@@ GENERAL NOTE:
+@@ 'participant' refers to everyone who's joined the combat 
+@@ 'combatant' refers to everyone EXCEPT observers and passengers
+
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_COMBATANTS
+@@ Gets a pretty list of the combatants.
+@@ @@@@@@@@@@@@@@@@@@@@@
+
+&FUN_COMBATANTS FS3Combat Instance Parent=iter(lattr(me/stat_*),prettify(after(##,_)))
+
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_IS_COMBATANT
+@@ Given a name, returns whether they're a combatant.
+@@ @@@@@@@@@@@@@@@@@@@@@
+
+&FUN_IS_COMBATANT FS3Combat Instance Parent=hasattr(me,stat_unprettify(%0))
