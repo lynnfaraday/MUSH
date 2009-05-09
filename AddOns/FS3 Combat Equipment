@@ -2,8 +2,8 @@
 @set FS3Combat Equipment Stats = SAFE
 
 
-&WEAPON_FRAG_GRENADE FS3Combat Equipment Stats=Fragmentation Grenade|Reactive|Reactive|-5|1|Explosive|Personal|0|0|0|10|5|Physical
-&WEAPON_FLASHBANG FS3Combat Equipment Stats=Flashbang Grenade which also blinds/deafens targets for 5 secs|Reactive|Reactive|-75|1|Explosive|Personal|0|0|0|10|5|Stun
+&WEAPON_FRAG_GRENADE FS3Combat Equipment Stats=Fragmentation Grenade|Athletic|Reactive|-5|1|Explosive|Personal|0|0|0|10|5|Physical
+&WEAPON_FLASHBANG FS3Combat Equipment Stats=Flashbang Grenade which also blinds/deafens targets for 5 secs|Athletic|Reactive|-75|1|Explosive|Personal|0|0|0|10|5|Stun
 &WEAPON_MISSILE_HE  FS3Combat Equipment Stats=High Explosive Anti-Personnel Missile|Gunnery|Reactive|20|10|Explosive|Personal|0|0|0|5000|10|Physical
 
 &WEAPON_PISTOL FS3Combat Equipment Stats=Pistol|Firearms|5|0|3|Ranged|Personal|0|10|0|50|0|Physical
