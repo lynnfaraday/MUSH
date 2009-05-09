@@ -13,7 +13,7 @@
 
 &CMD-+VEHICLE FS3Combat vehicle Commands=$+vehicle *:@pemit %#=switch(0,isvehicle(%0),ansi(hr,There is no vehicle by that name.),[setq(0,unprettify(%0))][setq(1,damagemod(%0))][line()]%R[ansi(h,Name:)] [prettify(%0)]%R[ansi(h,Type:)] [vehiclestat(%q0,type)]%R[ansi(h,Damage Modifier:)] %q1 [switch(%q1,>0,ansi(hr,<DAMAGED>))]%R[ansi(h,Notes:)]%R[replace_cr(vehiclestat(%q0,notes))]%R[line()]
 
-&CMD-+VEHICLE-CREATE FS3Combat vehicle Commands=$+vehicle/create *=*:@pemit %#=[setq(1,unprettify(%1))]switch(1,isvehicle(%0),ansi(hr,There is already a vehicle by that name.),isplayer(%0),ansi(hr,There is already a player by that name.),isnpc(%0),ansi(hr,There is already a NPC by that name.),strmatch(%0,*|*),ansi(hr,Vehicle names may not contain the '|' character.),not(match(vehicletypes(),%q1)),ansi(hr,%1 is not a valid vehicle type.),ansi(hg,You create vehicle %0.)[set(#818,vehicle_[unprettify(%0)]:%q1|%N|)])
+&CMD-+VEHICLE-CREATE FS3Combat vehicle Commands=$+vehicle/create *=*:@pemit %#=[setq(1,unprettify(%1))]switch(1,isvehicle(%0),ansi(hr,There is already a vehicle by that name.),isplayer(%0),ansi(hr,There is already a player by that name.),isnpc(%0),ansi(hr,There is already a NPC by that name.),gt(words(%0),1),ansi(hr,Vehicle names may only be 1 word.),strmatch(%0,*|*),ansi(hr,Vehicle names may not contain the '|' character.),not(match(vehicletypes(),%q1)),ansi(hr,%1 is not a valid vehicle type.),ansi(hg,You create vehicle %0.)[set(#818,vehicle_[unprettify(%0)]:%q1|%N|)])
 
 &CMD-+VEHICLE-DELETE FS3Combat vehicle Commands=$+vehicle/delete *:@pemit %#=switch(0,isvehicle(%0),ansi(hr,There is no vehicle by that name.),isstaff(%#),ansi(hr,Only staff can delete a vehicle.),ansi(hg,You delete vehicle %0)[wipe(#818/vehicle_[unprettify(%0)])])
 
@@ -34,4 +34,13 @@
 &FUN_VEHICLESTAT FS3Combat vehicle Commands=extract(xget(#818,vehicle_[unprettify(%0)]),match(v(vehiclestats),%1),1,|)
 &FUN_ISVEHICLE FS3Combat vehicle Commands=hasattr(#818,vehicle_[unprettify(%0)])
 
-@STARTUP FS3Combat vehicle Commands=@set me=!no_command;@fun vehiclestat=me,FUN_VEHICLESTAT;@fun isvehicle=me,fun_isvehicle
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_RANDOM_VEHICLE
+@@ Makes up a random vehicle of the specified type.  Theoretically if the vehicle already exists
+@@ this will overwrite it, but a) that shouldn't happen often, and b) even if it did, it would
+@@ just end up inheriting the existing vehicle's damage.
+@@ %0 = Type
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_RANDOM_VEHICLE FS3Combat Vehicle Commands=switch(0,isstaff(%#),ansi(hr,You aren't allowed to do that.),localize([setq(0,[unprettify(%0)])][setq(1,[rjust(rand(99),2,0)][ljust(mod(secs(),99),2,0)][extract(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,mod(secs(),26),1)])][set(#818,vehicle_%q0-%q1:%q0|)]%q0-%q1))
+
+@STARTUP FS3Combat vehicle Commands=@set me=!no_command;@fun vehiclestat=me,FUN_VEHICLESTAT;@fun isvehicle=me,fun_isvehicle;@fun randvehicle=me,fun_random_vehicle
