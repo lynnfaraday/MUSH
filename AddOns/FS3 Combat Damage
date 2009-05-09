@@ -79,7 +79,7 @@
 @@  Because it's global, must check for wiz to prevent unauth access.
 @@  %0 = Name
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_CLEAR_MOCK FS3Combat Damage Commands=switch(0,isstaff(%#),ansi(hr,You are not allowed to do that.),iter(u(fun_all_dmg,%0),switch(u(fun_dmgstat,##,real),0,wipe(#731/##))))
+&FUN_CLEAR_MOCK FS3Combat Damage Commands=switch(0,isstaff(%#),ansi(hr,You are not allowed to do that.),iter(u(fun_all_dmg,%0),switch(u(fun_dmgstat,##,real),0,wipe(#731/##)),,))
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGSTAT
@@ -184,7 +184,7 @@
 @@  %0 = Damage attr
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &WOUND_DMGMOD FS3Combat Damage Commands=L:5 M:15 S:50 D:85
-&FUN_DMGMOD_WOUND FS3Combat Damage Commands=localize([setq(0,after(grab(v(WOUND_DMGMOD),[u(FUN_DMGSTAT,%0,currsev)]:*),:))][switch(u(FUN_DMGSTAT,%0,type),Stun,setq(0,div(%q0,2)))][switch(or(u(FUN_DMGSTAT,%0,lasttreat),u(FUN_DMGSTAT,%0,lastheal)),1,setq(0,div(%q0,2)))][max(sub(%q0,xget(#731,HERO_FACTOR)),0)])
+&FUN_DMGMOD_WOUND FS3Combat Damage Commands=localize([setq(0,after(grab(v(WOUND_DMGMOD),[u(FUN_DMGSTAT,%0,currsev)]:*),:))][switch(u(FUN_DMGSTAT,%0,type),Stun,setq(0,div(%q0,2)))][switch(or(u(FUN_DMGSTAT,%0,lasttreat),u(FUN_DMGSTAT,%0,lastheal)),1,setq(0,div(%q0,2)))][max(sub(%q0,herofactor()),0)])
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_PRINT_WOUND
@@ -233,7 +233,7 @@
 &DMG_FARADAY_1240096972 FS3Combat Damage Database=1|Head|Rifle|Physical|M|L|10||1240105931|Notes
 &DMG_FARADAY_1240096973 FS3Combat Damage Database=1|Head|Rifle|Physical|L|L|9|||Notes
 &DMG_FARADAY_1240109974 FS3Combat Damage Database=1|Chest|Unarmed|Stun|L|L||1240109974||
-&HERO_FACTOR FS3Combat Damage Database=0
+
 &TREAT_SKILL FS3Combat Damage Database=First_Aid
 &HEAL_SKILL FS3Combat Damage Database=Medicine
 &REPAIR_SKILL FS3Combat Damage Database=Repair
