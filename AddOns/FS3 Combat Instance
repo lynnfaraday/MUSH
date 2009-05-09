@@ -1,0 +1,80 @@
+
+@create FS3Combat Instance Parent
+@set FS3Combat Instance Parent = WIZARD
+@set FS3Combat Instance Parent = SAFE
+@set FS3Combat Instance Parent = !NO_COMMAND
+
+&ORGANIZER FS3Combat Instance Parent=
+
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_COMBATSTAT
+@@ Gets a combat stat.  Blank if not in combat.
+@@ %0 = name
+@@ %1 = stat
+@@ @@@@@@@@@@@@@@@@@@@@@
+
+&COMBATSTATS FS3Combat Instance Parent=type team vehicle weapon stance armor mods luck lastaim suppress action acttarget actoptions
+&FUN_COMBATSTAT FS3Combat Instance Parent=extract(u(fun_combat_attr,%0),match(v(combatstats),%1),1,|)
+
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_INIT_COMBATSTAT
+@@ %0 = name
+@@ %1 = type
+@@ %2 = vehicle
+@@ %3 = weapon
+@@ Note: 
+@@ - PCs automatically put on team 1, and NPCs on team 2.
+@@ - Weapon set to default rifle for soldiers or primary vehicle weapon for pilots
+@@ - Armor set to blank 
+@@ @@@@@@@@@@@@@@@@@@@@@
+&FUN_INIT_COMBATSTAT  FS3Combat Instance Parent=set(me,stat_[unprettify(%0)]:[lcstr(trim(%1))]|[switch(isplayer(%0),1,1,2)]|[prettify(%2)]|%3|normal||0|||0|pass||
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_DAMAGEMOD
+@@ Gets the damage modifier, which is for the person (if a soldier) or them + their vehicle (for pilot/passenger)
+@@ %0 = name
+@@ @@@@@@@@@@@@@@@@@@@@@
+&FUN_DAMAGEMOD FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),soldier,damagemod(%0),observer,0,add(damagemod(%0),damagemod(u(fun_combatstat,%0,vehicle))))
+
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_COMBAT_ATTR
+@@ Gets the combat stat attribute for a name.  Blank if not in combat.
+@@ %0 = name
+@@ @@@@@@@@@@@@@@@@@@@@@
+&FUN_COMBAT_ATTR FS3Combat Instance Parent=v(stat_[unprettify(%0)])
+
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_IS_PARTICIPANT
+@@ FUN_IS_COMBATANT
+@@ FUN_IS_TARGETABLE
+@@ Given a name, returns whether they're a combatant, participant or targetable.
+@@ 'participant' refers to everyone who's joined the combat 
+@@ 'combatant' refers to everyone EXCEPT observers 
+@@ 'targetable' refers to everyone EXCEPT observers and passengers
+@@ @@@@@@@@@@@@@@@@@@@@@
+
+&FUN_IS_PARTICIPANT FS3Combat Instance Parent=t(u(fun_combat_attr,%0))
+&FUN_IS_COMBATANT FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,1)
+&FUN_IS_TARGETABLE FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,passenger,0,1)
+
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_PARTICIPANTS
+@@ FUN_COMBATANTS
+@@ FUN_TARGETABLE
+@@ Gets an (unpretty) list of the participants, combantants or targetable folks
+@@ @@@@@@@@@@@@@@@@@@@@@
+
+&FUN_PARTICIPANTS FS3Combat Instance Parent=iter(lattr(me/stat_*),after(##,_))
+&FUN_COMBATANTS FS3Combat Instance Parent=iter(lattr(me/stat_*),switch(u(fun_is_combatant,after(##,_)),1,after(##,_)))
+&FUN_TARGETABLE FS3Combat Instance Parent=iter(lattr(me/stat_*),switch(u(fun_is_targetaable,after(##,_)),1,after(##,_)))
+
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_COMBAT_MSG
+@@ Sends a message to all participants.
+@@ %0 = message
+@@ @@@@@@@@@@@@@@@@@@@@@
+
+&FUN_COMBAT_MSG FS3Combat Instance Parent=iter(u(fun_participants),switch(isplayer(##),1,pemit(pmatch(##),[ansi(hb,<COMBAT>)] %0)),,)
+
+@startup FS3Combat Instance Parent=@set me=!no_command
