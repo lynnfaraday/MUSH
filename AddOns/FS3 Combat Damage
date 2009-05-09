@@ -73,6 +73,13 @@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_GET_DMGNUM FS3Combat Damage Commands=extract(u(FUN_ALL_DMG,%0),%1,1)
 
+@@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@   FUN_CLEAR_MOCK
+@@  Clears out any mock damage suffered by someone.  Should be done after a combat. 
+@@  Because it's global, must check for wiz to prevent unauth access.
+@@  %0 = Name
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_CLEAR_MOCK FS3Combat Damage Commands=switch(0,isstaff(%#),ansi(hr,You are not allowed to do that.),iter(u(fun_all_dmg,%0),switch(u(fun_dmgstat,##,real),0,wipe(#731/##))))
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGSTAT
@@ -200,8 +207,9 @@
 @@  %4 = Physical or Stun damage
 @@  %5 = Severity (D/S/M/L), applied to both initial and current severity
 @@  Healing points defaulted to 0, notes to empty, and last treated/healed to empty
+@@ Because this is global, must check for staff.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_DO_DMG FS3Combat Damage Commands=set(#731,DMG_[edit(%0,_,.,%B,.)]_[secs()]:%1|%2|%3|%4|%5|%5|0|||)
+&FUN_DO_DMG FS3Combat Damage Commands=switch(0,isstaff(%#),ansi(hr,You aren't allowed to do that.),set(#731,DMG_[edit(%0,_,.,%B,.)]_[secs()]:%1|%2|%3|%4|%5|%5|0|||))
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_HEALING_POINTS_REQD
@@ -213,7 +221,7 @@
 &HEALING_POINTS FS3Combat Damage Commands=D:15 S:10 M:10 L:5 H:0
 &FUN_HEALING_POINTS_REQD FS3Combat Damage Commands=div(grab(v(healing_points),after([u(fun_dmgstat,%0,currsev)]:*,:)),switch(u(fun_dmgstat,%0,type),Stun,5,1))
 
-@STARTUP FS3Combat Damage Commands=@set me=!no_command;@fun damagemod=me,fun_dmgmod_total;@fun do_damage=me,fun_dodmg 
+@STARTUP FS3Combat Damage Commands=@set me=!no_command;@fun damagemod=me,fun_dmgmod_total;@fun do_damage=me,fun_dodmg;@fun clearmockdmg=me,fun_clear_mock
 
 
 
