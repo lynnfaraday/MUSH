@@ -13,6 +13,7 @@
 &WEAPON_SHOTGUN FS3Combat Equipment Stats=Shotgun|Firearms|5|10|3|Ranged|Personal|0|8|0|100|0|Physical
 
 &WEAPON_UNARMED FS3Combat Equipment Stats=Unarmed|Melee|Melee|0|0|Melee|Personal|0|0|0|0|0|Stun
+&WEAPON_SPARRING FS3Combat Equipment Stats=Unarmed|Melee|Melee|-30|0|Melee|Personal|0|0|0|0|0|Stun
 &WEAPON_CLUB FS3Combat Equipment Stats=Mace/club/baton|Melee|Melee|-10|0|Melee|Personal|0|0|0|0|0|Physical
 &WEAPON_KNIFE FS3Combat Equipment Stats=Knife|Melee|Melee|-5|0|Melee|Personal|0|0|0|0|0|Physical
 &WEAPON_TAZER FS3Combat Equipment Stats=Stun gun|Firearms|Melee|70|0|Ranged|Personal|0|5|0|5|0|Stun
