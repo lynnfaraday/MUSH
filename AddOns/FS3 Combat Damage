@@ -9,11 +9,11 @@
 @@  @ DAMAGE VIEW COMMANDS
 @@  @@@@@@@@@@@@@@@@@@@@@@
 
-&CMD-+DAMAGE FS3Combat Damage Commands=$+damage:@pemit %#=[line()]%R[ansi(hr,Damage Report for %N)]%R[u(fun_dmglist,%N)]%R%RSee [ansi(h,+damage <#>)] for details on a given wound.%R[line()]
+&CMD-+DAMAGE FS3Combat Damage Commands=$+damage:@pemit %#=[line()]%R[ansi(hr,Damage Report for %N)]%R[u(fun_dmglist,%N)]%R%R[ansi(h,Total Wound Modifier:)] -[damagemod(%N)]%RSee [ansi(h,+damage <#>)] for details on a given wound.%R[line()]
 
 &CMD-+DAMAGE-DETAIL FS3Combat Damage Commands=$+damage *:@pemit %#=switch(0,isnum(%0),,gt(%0,0),ansi(hr,That is not a valid wound number.),lte(%0,words(u(FUN_ALL_DMG,%N))),ansi(hr,You don't have that many wounds.),[line()]%R[ansi(hr,Damage Report for %N wound %0)]%R[u(fun_dmg_detail,u(fun_get_dmgnum,%N,%0))]%R[line()]
 
-&CMD-+DAMAGE-PERSON FS3Combat Damage Commands=$+damage *:@pemit %#=switch(1,isnum(%0),,strmatch(%0,*/*),,eq(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),[line()]%R[ansi(hr,Damage Report for [prettify(%0)])]%R[u(fun_dmglist,%0)]%R%RSee [ansi(h,+damage <name>/<#>)] for details on a given wound.%R[line()]
+&CMD-+DAMAGE-PERSON FS3Combat Damage Commands=$+damage *:@pemit %#=switch(1,isnum(%0),,strmatch(%0,*/*),,eq(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),[line()]%R[ansi(hr,Damage Report for [prettify(%0)])]%R[u(fun_dmglist,%0)]%R%R[ansi(h,Total Wound Modifier:)] -[damagemod(%0)]See [ansi(h,+damage <name>/<#>)] for details on a given wound.%R[line()]
 
 &CMD-+DAMAGE-PERSON-DETAIL FS3Combat Damage Commands=$+damage */*:@pemit %#=switch(0,isnum(%1),ansi(hr,That is not a valid wound number.),gt(%1,0),ansi(hr,That is not a valid wound number.),lte(%1,words(u(FUN_ALL_DMG,%N))),ansi(hr,%0 doesn't have that many wounds.),[line()]%R[ansi(hr,Damage Report for [prettify(%0)] wound %1)]%R[u(fun_dmg_detail,u(fun_get_dmgnum,%0,%1))]%R[line()]
 
@@ -179,12 +179,12 @@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGMOD_WOUND
 @@  Damage modifier for an individual wound.
-@@  Modifier is 1/2 for stun damage, and also 1/2 for wounds that have been treated/healed.  
+@@  Modifier is 1/2 for wounds that have been treated/healed.  
 @@  This is cumulative.  It is also modified by the 'hero factor'.
 @@  %0 = Damage attr
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &WOUND_DMGMOD FS3Combat Damage Commands=L:5 M:15 S:50 D:85
-&FUN_DMGMOD_WOUND FS3Combat Damage Commands=localize([setq(0,after(grab(v(WOUND_DMGMOD),[u(FUN_DMGSTAT,%0,currsev)]:*),:))][switch(u(FUN_DMGSTAT,%0,type),Stun,setq(0,div(%q0,2)))][switch(or(u(FUN_DMGSTAT,%0,lasttreat),u(FUN_DMGSTAT,%0,lastheal)),1,setq(0,div(%q0,2)))][max(sub(%q0,herofactor()),0)])
+&FUN_DMGMOD_WOUND FS3Combat Damage Commands=localize([setq(0,after(grab(v(WOUND_DMGMOD),[u(FUN_DMGSTAT,%0,currsev)]:*),:))][switch(u(FUN_DMGSTAT,%0,healing),>0,setq(0,div(%q0,2)))][max(sub(%q0,herofactor()),0)])
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_PRINT_WOUND
@@ -221,7 +221,16 @@
 &HEALING_POINTS FS3Combat Damage Commands=D:15 S:10 M:10 L:5 H:0
 &FUN_HEALING_POINTS_REQD FS3Combat Damage Commands=div(grab(v(healing_points),after([u(fun_dmgstat,%0,currsev)]:*,:)),switch(u(fun_dmgstat,%0,type),Stun,5,1))
 
-@STARTUP FS3Combat Damage Commands=@set me=!no_command;@fun damagemod=me,fun_dmgmod_total;@fun do_damage=me,fun_dodmg;@fun clearmockdmg=me,fun_clear_mock
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@  FUN_CHECK_KO
+@@  Determines if someone should be ko'd.  Makes a toughness check, using either the person
+@@  or vehicle's toughness.
+@@  Returns 1 if they fail their KO check.
+@@  %0 = name
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_CHECK_KO FS3Combat Damage Commands=lte(roll_ability(%0,switch(isvehicle(%0),1,vehtypestat(vehiclestat(%0,type),toughness),xget(#731,toughness_skill)),-[damagemod(%0)]),0)
+
+@STARTUP FS3Combat Damage Commands=@set me=!no_command;@fun damagemod=me,fun_dmgmod_total;@fun dodamage=me,fun_do_dmg;@fun clearmockdmg=me,fun_clear_mock;@fun checkko=me,fun_check_ko
 
 
 
