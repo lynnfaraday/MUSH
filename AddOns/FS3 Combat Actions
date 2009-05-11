@@ -1,5 +1,4 @@
 @@ TODO: Join must restrict so you can't join as pilot if the ship already has a pilot.
-@@ TODO: Clear out the 'dead' during newround.
 
 @create FS3Combat Action Commands
 @set FS3Combat Action Commands = WIZARD
@@ -52,7 +51,7 @@
 @@ Returns the combat # of the person, if they're in combat.  Otherwise blank.
 @@ %0 = name
 @@ @@@@@@@@@@@@@@@@@@
-&FUN_COMBAT_NUM  FS3Combat Action Commands=switch(t(pmatch(%0)),1,xget(pmatch(%0),combat),squish(iter(children(#806),switch(words(lattr(##/stat_[unprettify(%0)])),>0,##))))
+&FUN_COMBAT_NUM  FS3Combat Action Commands=switch(t(pmatch(%0)),1,xget(pmatch(%0),combat),squish(iter(children(#806),switch(u(##/fun_is_participant,%0),1,##))))
 
 
 @@ ================================================================================================================
@@ -60,7 +59,7 @@
 @@ ================================================================================================================
 
 
-&CMD-+COMBAT-START FS3Combat Action Commands=$+combat/start *:@pemit %#=[ansi(h,<COMBAT>)] [switch(0,not(u(FUN_IS_IN_COMBAT,%#)),ansi(hr,You are already in combat.),match(mock real,%0),ansi(hr,Combat type must be mock or real.),You start a combat.  Your combat number is [setq(0,create(Combat Instance))]%q0.[setq(1,parent(%q0,#806))][set(%q0,organizer:%#)][set(%q0,mock:[switch(%0,mock,1,0)])])]
+&CMD-+COMBAT-START FS3Combat Action Commands=$+combat/start *:@pemit %#=[ansi(h,<COMBAT>)] [switch(0,not(u(FUN_IS_IN_COMBAT,%#)),ansi(hr,You are already in combat.),match(mock real,%0),ansi(hr,Combat type must be mock or real.),You start a combat.  Your combat number is [setq(0,create(Combat Instance))]%q0.[setq(1,parent(%q0,#806))][set(%q0,organizer:%#)][set(%q0,mock:[switch(%0,mock,1,0)])])];@switch t(%q0)=1,@fo %#=+combat/join %q0/observer
 
 &CMD-+COMBAT-STOP FS3Combat Action Commands=$+combat/stop *:@pemit %#=[ansi(h,<COMBAT>)] [switch(0,u(FUN_IS_VALID_COMBAT,%0),ansi(hr,That is not a valid combat number.),or(isstaff(%#),strmatch(xget(%0,organizer),%N)),ansi(hr,Only staff or the organizer can stop a combat.),You stop combat %0.[u(%0/fun_combat_msg,%N has stopped the combat.)][iter(u(%0/fun_participants),u(FUN_DO_LEAVE,##,%0))][setq(0,1)])];@switch %q0=1,{@nuke %0;@nuke %0}
 
@@ -90,7 +89,7 @@
 @@ Returns message to display to enactor.
 @@ @@@@@@@@@@@@@@@@@@
 
-&FUN_DO_JOIN FS3Combat Action Commands=localize([setq(0,extract(%1,2,1,/))][setq(1,extract(%1,3,1,/))][setq(2,extract(%1,1,1,/))][switch(0,u(FUN_IS_VALID_COMBAT,%q2),ansi(hr,That is not a valid combat number.),not(u(FUN_IS_IN_COMBAT,%0)),ansi(hr,%0 is already in combat.),match(v(types),%q0),ansi(hr,That is not a valid type.  Pick one of: [v(types)].),[setq(v,u(fun_join_vehicle_stuff,%q0,%q1))][eq(%qv,1)],ansi(hr,after(%qv,|)),[setq(n,u(fun_join_npc_stuff,%0))][eq(%qn,1)],ansi(hr,after(%qn,|)),[switch(%N,%0,You join combat %q2.,You make %0 join combat %q2.)]%R< Weapon set to: [u(fun_default_weapon,%q0,%q1)][u(%q2/fun_init_combatstat,%0,%q0,%q1,[u(fun_default_weapon,%q0,%q1)])][set(pmatch(%0),combat:%q2)][u(%q2/fun_combat_msg,[prettify(%0)] has joined the combat as a %q0[switch(t(%q1),1,%Bin [prettify(%q1)])] on team [u(%q2/fun_combatstat,%0,team)].[u(fun_add_id,%0)])])
+&FUN_DO_JOIN FS3Combat Action Commands=localize([setq(0,extract(%1,2,1,/))][setq(1,extract(%1,3,1,/))][setq(2,extract(%1,1,1,/))][switch(0,u(FUN_IS_VALID_COMBAT,%q2),ansi(hr,That is not a valid combat number.),not(u(FUN_IS_IN_COMBAT,%0)),ansi(hr,%0 is already in combat.),match(v(types),%q0),ansi(hr,That is not a valid type.  Pick one of: [v(types)].),[setq(v,u(fun_join_vehicle_stuff,%q0,%q1))][eq(%qv,1)],ansi(hr,after(%qv,|)),[setq(n,u(fun_join_npc_stuff,%0))][eq(%qn,1)],ansi(hr,after(%qn,|)),[switch(%N,%0,You join combat %q2.,You make %0 join combat %q2.)]%R< Weapon set to: [u(fun_default_weapon,%q0,%q1)][u(%q2/fun_init_combatstat,%0,%q0,%q1,[u(fun_default_weapon,%q0,%q1)])][set(pmatch(%0),combat:%q2)][u(%q2/fun_combat_msg,[prettify(%0)] has joined the combat as a %q0[switch(t(%q1),1,%Bin [prettify(%q1)])][switch(%q0,observer,,%Bon team [u(%q2/fun_combatstat,%0,team)])].[u(fun_add_id,%0)])])
 
 
 @@ @@@@@@@@@@@@@@@@@@
@@ -131,7 +130,7 @@
 @@ %0 = name
 @@ %1 = combat #
 @@ @@@@@@@@@@@@@@@@@@
-&FUN_DO_LEAVE FS3Combat Action Commands=[switch(isplayer(%0),1,wipe([pmatch(%0)]/combat))][clearmockdmg(%0)][wipe(%1/stat_[unprettify(%0)])][switch(%0,%N,You leave the combat.,You make %0 leave the combat.)]
+&FUN_DO_LEAVE FS3Combat Action Commands=[switch(isplayer(%0),1,wipe([pmatch(%0)]/combat))][clearmockdmg(%0)][u(%1/fun_remove,%0)][switch(%0,%N,You leave the combat.,You make %0 leave the combat.)]
 
 
 @@ ================================================================================================================
