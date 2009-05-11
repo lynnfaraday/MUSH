@@ -25,21 +25,14 @@
 @@ ================================================================================================================
 
 @@ @@@@@@@@@@@@@@@@@@@@@
-@@ FUN_COMBAT_ATTR
-@@ Gets the combat stat attribute for a name.  Blank if not in combat.
-@@ %0 = name
-@@ @@@@@@@@@@@@@@@@@@@@@
-&FUN_COMBAT_ATTR FS3Combat Instance Parent=v(stat_[unprettify(%0)])
-
-@@ @@@@@@@@@@@@@@@@@@@@@
 @@ FUN_COMBATSTAT
 @@ Gets a combat stat.  Blank if not in combat.
 @@ %0 = name
 @@ %1 = stat
 @@ @@@@@@@@@@@@@@@@@@@@@
 
-&COMBATSTATS FS3Combat Instance Parent=type team vehicle weapon stance armor mods luck lastaim suppress action target actoptions hitthisturn ko
-&FUN_COMBATSTAT FS3Combat Instance Parent=extract(u(fun_combat_attr,%0),match(v(combatstats),%1),1,|)
+&COMBATSTATS FS3Combat Instance Parent=type team vehicle weapon stance armor mods luck lastaim suppress action target actoptions hitthisturn ko subduedby ammo 
+&FUN_COMBATSTAT FS3Combat Instance Parent=[v(stat_[unprettify(%0)]`[unprettify(%1)]
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_MOD_COMBATSTAT
@@ -48,7 +41,7 @@
 @@  %1 = The stat to set, from COMBATSTATS.
 @@  %2 = The new value.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_MOD_COMBATSTAT FS3Combat Instance Parent=localize([set(me,stat_[unprettify(%0)]:[replace(u(FUN_COMBAT_ATTR,%0),match(v(combatstats),%1),%2,|)])
+&FUN_MOD_COMBATSTAT FS3Combat Instance Parent=set(me,stat_[unprettify(%0)]`[unprettify(%1)]:%2)
 
 @@ @@@@@@@@@@@@@@@@@@@@@
 @@ FUN_INIT_COMBATSTAT
@@ -58,10 +51,33 @@
 @@ %3 = weapon
 @@ Note: 
 @@ - PCs automatically put on team 1, and NPCs on team 2.
-@@ - Weapon set to default rifle for soldiers or primary vehicle weapon for pilots
-@@ - Armor set to blank 
 @@ @@@@@@@@@@@@@@@@@@@@@
-&FUN_INIT_COMBATSTAT  FS3Combat Instance Parent=set(me,stat_[unprettify(%0)]:[lcstr(trim(%1))]|[switch(%1,observer,,switch(isplayer(%0),1,1,2))]|[prettify(%2)]|%3|normal||0|||0|pass|||0|0
+&FUN_INIT_COMBATSTAT  FS3Combat Instance Parent=iter(v(combatstats),u(fun_mod_combatstat,%0,##,[u(init_##,%0,%1,%2,%3)]))
+
+&INIT_TYPE FS3Combat Instance Parent=[lcstr(trim(%1))]
+&INIT_TEAM FS3Combat Instance Parent=[switch(%1,observer,,switch(isplayer(%0),1,1,2))]
+&INIT_VEHICLE FS3Combat Instance Parent=[prettify(%2)]
+&INIT_WEAPON FS3Combat Instance Parent=%3
+&INIT_STANCE FS3Combat Instance Parent=normal
+&INIT_ARMOR FS3Combat Instance Parent=
+&INIT_MODS FS3Combat Instance Parent=0
+&INIT_LUCK FS3Combat Instance Parent=
+&INIT_LASTAIM FS3Combat Instance Parent=
+&INIT_SUPPRESS FS3Combat Instance Parent=0
+&INIT_ACTION FS3Combat Instance Parent=pass
+&INIT_TARGET FS3Combat Instance Parent=
+&INIT_ACTOPTIONS FS3Combat Instance Parent=
+&INIT_HITTHISTURN FS3Combat Instance Parent=0
+&INIT_KO FS3Combat Instance Parent=0
+&INIT_SUBDUEDBY FS3Combat Instance Parent=
+&INIT_AMMO FS3Combat Instance Parent=[weaponstat(%3,ammo)]
+
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_REMOVE
+@@ Removes someone from combat by erasing all their combat attributes.
+@@ %0 = name
+@@ @@@@@@@@@@@@@@@@@@@@@
+&FUN_REMOVE FS3Combat Instance Parent=wipe(me/stat_[unprettify(%0)]**)
 
 @@ @@@@@@@@@@@@@@@@@@@@@
 @@ FUN_DAMAGEMOD
@@ -69,6 +85,7 @@
 @@ %0 = name
 @@ @@@@@@@@@@@@@@@@@@@@@
 &FUN_DAMAGEMOD FS3Combat Instance Parent=switch(u(fun_is_in_vehicle,%0),1,add(damagemod(%0),damagemod(u(fun_combatstat,%0,vehicle))),damagemod(%0))
+
 
 @@ ================================================================================================================
 @@ ---------------   Participants and Messages -----------------
@@ -83,7 +100,7 @@
 @@ 'combatant' refers to everyone EXCEPT observers 
 @@ 'targetable' refers to everyone EXCEPT observers and passengers
 @@ @@@@@@@@@@@@@@@@@@@@@
-&FUN_IS_PARTICIPANT FS3Combat Instance Parent=t(u(fun_combat_attr,%0))
+&FUN_IS_PARTICIPANT FS3Combat Instance Parent=t(u(fun_combatstat,%0,type))
 &FUN_IS_COMBATANT FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,1)
 &FUN_IS_TARGETABLE FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,passenger,0,1)
 
@@ -149,12 +166,21 @@
 @@ @@@@@@@@@@@@@@@@@@@@@
 &FUN_NEW_ROUND FS3Combat Instance Parent=[u(fun_combat_msg,%N has started a new round.  Choose your actions.)][set(me,round:[inc(v(round))])][set(me,acted:)][iter(u(fun_combatants),[u(fun_check_for_ko,##)][u(fun_reduce_suppress,##)][u(fun_reset_aim,##)][u(fun_reset_luck,##)])]
 
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ These are helper functions for FUN_NEW_ROUND just to keep things less messy.  
+@@ %0 = name
+@@ @@@@@@@@@@@@@@@@@@@@@
 &FUN_CHECK_FOR_KO FS3Combat Instance Parent=localize(switch(u(fun_combatstat,%0,hitthisturn),1,switch(checkko(%0),1,[u(fun_ko,%0)][setq(0,u(fun_combatstat,%0,vehicle))][switch(t(%q0),1,iter(remove(u(fun_combatants),%0),switch(u(fun_combatstat,##,vehicle),%q0,u(fun_ko,##))))])))
 &FUN_REDUCE_SUPPRESS FS3Combat Instance Parent=u(fun_mod_combatstat,%0,suppress,max(sub(u(fun_combatstat,%0,suppress),1),0)
 &FUN_RESET_LUCK FS3Combat Instance Parent=u(fun_mod_combatstat,%0,luck,)
 &FUN_RESET_AIM FS3Combat Instance Parent=u(fun_mod_combatstat,%0,lastaim,switch(u(fun_combatstat,%0,action),aim,u(fun_combatstat,%0,target),))
 
-&FUN_KO FS3Combat Instance Parent=u(fun_combat_msg,[prettify(lcstr(%0))] has been [ansi(hr,**KO'd**)]!)[u(fun_mod_combatstat,%0,ko,1)]
+@@ @@@@@@@@@@@@@@@@@@@@@
+@@ FUN_KO
+@@ Handles knocking someone out.  Players are set 'ko' but NPCs are removed from combat.
+@@ %0 = name
+@@ @@@@@@@@@@@@@@@@@@@@@
+&FUN_KO FS3Combat Instance Parent=u(fun_combat_msg,[prettify(lcstr(%0))] has been [ansi(hr,**KO'd**)]!)[switch(isplayer(%0),1,u(fun_mod_combatstat,%0,ko,1),u(fun_remove,%0))]
 
 @@ ================================================================================================================
 @@ ---------------  Teams -----------------
