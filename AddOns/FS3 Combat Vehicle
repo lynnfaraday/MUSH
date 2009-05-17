@@ -41,6 +41,6 @@
 @@ just end up inheriting the existing vehicle's damage.
 @@ %0 = Type
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_RANDOM_VEHICLE FS3Combat Vehicle Commands=switch(0,isstaff(%#),ansi(hr,You aren't allowed to do that.),localize([setq(0,[unprettify(%0)])][setq(1,[rjust(rand(99),2,0)][ljust(mod(secs(),99),2,0)][extract(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,mod(secs(),26),1)])][set(#818,vehicle_%q0-%q1:%q0|)]%q0-%q1))
+&FUN_RANDOM_VEHICLE FS3Combat Vehicle Commands=switch(0,isstaff(%!),ansi(hr,You aren't allowed to do that.),localize([setq(0,[unprettify(%0)])][setq(1,[rjust(rand(99),2,0)][ljust(mod(secs(),99),2,0)][extract(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,mod(secs(),26),1)])][set(#818,vehicle_%q0-%q1:%q0|)]%q0-%q1))
 
 @STARTUP FS3Combat vehicle Commands=@set me=!no_command;@fun vehiclestat=me,FUN_VEHICLESTAT;@fun isvehicle=me,fun_isvehicle;@fun randvehicle=me,fun_random_vehicle
