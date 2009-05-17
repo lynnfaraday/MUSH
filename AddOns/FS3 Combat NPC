@@ -44,9 +44,9 @@
 
 &FUN_IS_VALID_SKILL FS3Combat NPC Commands=and(isnum(%0),lte(%0,12),gte(%0,1))
 
-&FUN_NPCSTAT FS3Combat NPC Commands=switch(0,isstaff(%#),ansi(hr,You are not allowed to do that.),extract(xget(#816,npc_[unprettify(%0)]),match(v(npcstats),%1),1,|))
+&FUN_NPCSTAT FS3Combat NPC Commands=switch(0,isstaff(%!),ansi(hr,You are not allowed to do that.),extract(xget(#816,npc_[unprettify(%0)]),match(v(npcstats),%1),1,|))
 &FUN_ISNPC FS3Combat NPC Commands=hasattr(#816,npc_[unprettify(%0)])
 
-&FUN_CREATE_NPC FS3Combat NPC Commands=switch(1,not(isstaff(%#)),0|You are not allowed to do that.,isnpc(%0),0|There is already a NPC by that name.,isplayer(%0),0|There is already a player by that name.,isvehicle(%0),0|There is already a vehicle by that name.,strmatch(%0,*|*),0|NPC names may not contain the '|' character.,not(u(fun_is_valid_skill,%1)),0|%1 is not a valid skill level.,1[set(#816,npc_[unprettify(%0)]:[trim(%1)]|%N|)])
+&FUN_CREATE_NPC FS3Combat NPC Commands=switch(1,not(isstaff(%!)),0|You are not allowed to do that.,isnpc(%0),0|There is already a NPC by that name.,isplayer(%0),0|There is already a player by that name.,isvehicle(%0),0|There is already a vehicle by that name.,strmatch(%0,*|*),0|NPC names may not contain the '|' character.,not(u(fun_is_valid_skill,%1)),0|%1 is not a valid skill level.,1[set(#816,npc_[unprettify(%0)]:[trim(%1)]|%N|)])
 
 @STARTUP FS3Combat NPC Commands=@set me=!no_command;@fun npcstat=me,fun_npcstat;@fun isnpc=me,fun_isnpc;@fun createnpc=me,fun_create_npc
