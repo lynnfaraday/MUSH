@@ -9,8 +9,7 @@
 
 &CMD-+COMBAT-ALL FS3Combat Action Commands=$+combat/all:@pemit %#=[line()]%R[ansi(h,Combat #%B%BOrganizer%B%B%B%BParticipants)][iter(children(#806),%R[ljust(##,9)] [padstr(name(xget(##,organizer)),12)] [iter(u(##/fun_participants),prettify(lcstr(itext(0))))])]%R[line()]
 
-&CMD-+COMBAT-STATUS FS3Combat Action Commands=$+combat:@pemit %#=[setq(0,u(fun_combat_num,%N))]switch(0,t(%q0),ansi(hr,You are not in combat.),[line()]%R[ansi(hx,<)] [ansi(h,Name[space(11)]Weapon/Vehicle[space(6)]Damage[space(2)]Action[space(5)]Target)][iter(u(%q0/fun_active_teams),%R[ansi(hx,<)] %R[ansi(hx,<)] [ansi(hg,Team ##)][iter(sort(u(%q0/fun_team_members,##)),u(fun_display_status,itext(0),%q0))])]%R[ansi(hx,<)]%R[ansi(hx,<)] [ansi(h,Observers/NPCMasters:)] %R[ansi(hx,<)] [iter(setdiff(u(%q0/fun_participants),u(%q0/fun_combatants)),prettify(lcstr(##)))]%R[line()])
-
+&CMD-+COMBAT-STATUS FS3Combat Action Commands=$+combat:@pemit %#=[setq(0,u(fun_combat_num,%N))]switch(0,t(%q0),ansi(hr,You are not in combat.),[line()]%R[ansi(hx,<)] [ansi(h,Name[space(11)]Weapon/Vehicle[space(6)]Damage[space(2)]Stance/Action[space(2)]Target)][iter(u(%q0/fun_active_teams),%R[ansi(hx,<)] %R[ansi(hx,<)] [ansi(hg,Team ##)][iter(sort(u(%q0/fun_team_members,##)),u(fun_display_status,itext(0),%q0))])]%R[ansi(hx,<)]%R[ansi(hx,<)] [ansi(h,Observers/NPCMasters:)] %R[ansi(hx,<)] [iter(setdiff(u(%q0/fun_participants),u(%q0/fun_combatants)),prettify(lcstr(##)))]%R[line()])
 
 &CMD-+COMBAT-HERO FS3Combat Action Commands=$+combat/hero:@pemit %#=[setq(0,u(fun_combat_num,%N))][ansi(h,<COMBAT>)] [switch(0,t(%q0),ansi(hr,You are not in combat.),gt(xget(%#,luck_points),0),ansi(hr,You do not have any luck points..),u(%q0/fun_combatstat,%N,ko),ansi(hr,You aren't KO'd yet.  Save your points.),You spend a luck point to soldier on.[set(%#,luck_points:[sub(xget(%#,luck_points),1)])][u(%q0/fun_mod_combatstat,%N,ko,0)][u(%q0/fun_combat_msg,%N spends a luck point to keep fighting!)])]
 
@@ -22,7 +21,7 @@
 @@ %0 = name
 @@ %1 = combat #
 @@ --------------------------
-&FUN_DISPLAY_STATUS FS3Combat Action Commands=localize(%R[ansi(hx,<)] [padstr(prettify(lcstr(%0)),15)][setq(1,u(%1/fun_combatstat,%0,type))][padstr([switch(%q1,soldier,u(%1/fun_combatstat,%0,weapon),[u(%1/fun_combatstat,%0,vehicle)]%B\([switch(%q1,pilot,plt,pas)]\))],20)][switch(u(%1/fun_combatstat,%0,ko),1,[ansi(h,*KO*%B)],u(fun_dmg_meter,u(%1/fun_damagemod,%0)))]%B%B%B[padstr(u(%1/fun_combatstat,%0,action),10)] [padstr(prettify(lcstr(u(%1/fun_combatstat,%0,target))),20)])
+&FUN_DISPLAY_STATUS FS3Combat Action Commands=localize(%R[ansi(hx,<)] [padstr(prettify(lcstr(%0)),15)][setq(1,u(%1/fun_combatstat,%0,type))][padstr([switch(%q1,soldier,u(%1/fun_combatstat,%0,weapon),[u(%1/fun_combatstat,%0,vehicle)]%B\([switch(%q1,pilot,plt,pas)]\))],20)][switch(u(%1/fun_combatstat,%0,ko),1,[ansi(h,*KO*%B)],u(fun_dmg_meter,u(%1/fun_damagemod,%0)))]%B%B%B[ucstr(mid(u(%1/fun_combatstat,%0,stance),0,3))]/[padstr(u(%1/fun_combatstat,%0,action),10)] [padstr(prettify(lcstr(u(%1/fun_combatstat,%0,target))),20)])
 
 @@ --------------------------
 @@ FUN_DMG_METER
@@ -287,7 +286,61 @@
 &FUN_ACTION_ATTACK FS3Combat Action Commands=switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),u(%q0/fun_is_targetable,%1),ansi(hr,%1 is not a valid target.),u(%q0/FUN_CAN_ATTACK,%0),ansi(hr,That weapon cannot attack.),eq(words(%2,1)),ansi(hr,Attack options are not yet supported.  Sorry.),words(u(%q0/fun_combatstat,%0,weapon)),ansi(hr,You don't have a weapon!),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,attack,%1,%2)])
 
 
+
+
+@@ ================================================================================================================
+@@ ---------------   Prep -----------------
+@@ ================================================================================================================
+
+
+@@ ---------------   Type -----------------
+@@ Changing types has to reinitialize their combat stats.
+
+&CMD-+COMBAT-TYPE FS3Combat Action Commands=$+combat/type *:@pemit %#=[ansi(h,<COMBAT>)] [switch(%0,*=*,u(FUN_PREP_TYPE,before(%0,=),before(after(%0,=),/),after(after(%0,=),/)),u(FUN_PREP_TYPE,%N,before(%0,/),after(%0,/)))]
+
+@@ --------------------------
+@@ FUN_PREP_TYPE
+@@ Changes type.
+@@ %0 = name
+@@ %1 = type
+@@ %2 = vehicle
+@@ Uses %qv for temp vehicle stuff
+@@ --------------------------
+
+&FUN_PREP_TYPE FS3Combat Action Commands=[switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.  If you are an observer you must leave the combat and rejoin.),match(v(types),%1),ansi(hr,That is not a valid type.),[setq(v,u(FUN_JOIN_VEHICLE_STUFF,%1,%2))][eq(%qv,1)],after(%qv,|),[switch(%N,%0,You change your type.,You change %0's type.)]%R< Weapon set to: [u(fun_default_weapon,%1,%2)][u(%q0/fun_init_combatstat,%0,%1,%2,u(fun_default_weapon,%1,%2))][u(%q0/fun_combat_msg,[prettify(%0)] has changed type to %1[switch(t(%2),1,%Bin [prettify(%2)])].[u(fun_add_id,%0)])])]
+
+@@ ---------------   Weapon -----------------
+@@ Warn them if they pick an invalid vehicle weapon but don't restrict it.  This allows for special cases like a rifleman poking his
+@@ gun out the side of an APC or a plane outfitted with unusual armament.
+
+&CMD-+COMBAT-WEAPON FS3Combat Action Commands=$+combat/weapon *:@pemit %#=[ansi(h,<COMBAT>)] [switch(%0,*=*,u(FUN_PREP_WEAPON,before(%0,=),after(%0,=)),u(FUN_PREP_WEAPON,%N,%0))]
+
+@@ --------------------------
+@@ FUN_PREP_WEAPON
+@@ %0 = name
+@@ %1 = weapon
+@@ --------------------------
+
+&FUN_PREP_WEAPON FS3Combat Action Commands=[switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),match(weapons(),%1),ansi(hr,That is not a valid weapon.),[switch(%N,%0,You change your weapon.,You change %0's weapon.)][switch(1,and(u(%q0/FUN_IS_IN_VEHICLE,%0),not(match(u(%q0/fun_vehiclestat,%0,weapons),%1))),ansi(hm,%R< %1 is not a normal weapon for %0's vehicle.  Please make sure it makes sense ICly.))][u(%q0/fun_mod_combatstat,%0,weapon,%1)][u(%q0/fun_combat_msg,[prettify(%0)] has changed weapons to %1.[u(fun_add_id,%0)])])]
+
+@@ ---------------   Stance -----------------
+
+&CMD-+COMBAT-STANCE FS3Combat Action Commands=$+combat/stance *:@pemit %#=[ansi(h,<COMBAT>)] [switch(%0,*=*,u(FUN_PREP_STANCE,before(%0,=),after(%0,=)),u(FUN_PREP_STANCE,%N,%0))]
+
+@@ --------------------------
+@@ FUN_PREP_STANCE
+@@ %0 = name
+@@ %1 = stance
+@@ --------------------------
+
+&FUN_PREP_STANCE FS3Combat Action Commands=[switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),match(v(stances),%1),ansi(hr,That is not a valid stance.),match(soldier pilot,u(%q0/fun_combatstat,%0,type)),ansi(hr,Only soldiers and pilots may change stances.),[switch(%N,%0,You change your stance.,You change %0's stance.)][u(%q0/fun_mod_combatstat,%0,stance,lcstr(%1))][u(%q0/fun_combat_msg,[prettify(%0)] has changed stance to %1.[u(fun_add_id,%0)])])]
+
+
+
 &TYPES FS3Combat Action Commands=soldier pilot passenger observer npcmaster
+&STANCES FS3Combat Action Commands=normal banzai evade cautious cover outofsight
+
+
 
 @STARTUP FS3Combat Action Commands=@set me=!no_command
 
