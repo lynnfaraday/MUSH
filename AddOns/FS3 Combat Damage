@@ -288,7 +288,7 @@
 @@ %0 = name
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&FUN_DISPLAY_RESTRICTED FS3Combat Damage Commands=switch(u(FUN_IS_RESTRICTED,%0),1,[ansi(hm,switch(isvehicle(%0),0,<RESTRICTED DUTY>,<DOWN FOR REPAIRS>))],2,[ansi(hr,switch(isvehicle(%0),0,<HOSPITALIZED>,<DOWN FOR REPAIRS>))])
+&FUN_DISPLAY_RESTRICTED FS3Combat Damage Commands=switch(u(FUN_IS_RESTRICTED,%0),0,[ansi(hg,<FIT FOR DUTY>)],1,[ansi(hm,switch(isvehicle(%0),0,<LIGHT DUTY>,<DOWN FOR REPAIRS>))],2,[ansi(hr,switch(isvehicle(%0),0,<HOSPITALIZED>,<DOWN FOR REPAIRS>))])
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
