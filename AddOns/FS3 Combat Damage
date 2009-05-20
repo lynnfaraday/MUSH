@@ -315,12 +315,6 @@
 
 @create FS3Combat Damage Database
 @set FS3Combat Damage Database = NO_COMMAND
-&DMG_BOB.SMITH_1240109974 FS3Combat Damage Database=0|Chest|Unarmed|Stun|L|L||1240109974||
-&DMG_FARADAY_1110006999 FS3Combat Damage Database=1|Chest|Unarmed|Stun|L|L||||
-&DMG_FARADAY_1240096971 FS3Combat Damage Database=1|Head|Rifle|Physical|D|D|9|1239933097|1239933097|Notes
-&DMG_FARADAY_1240096972 FS3Combat Damage Database=1|Head|Rifle|Physical|M|L|10||1240105931|Notes
-&DMG_FARADAY_1240096973 FS3Combat Damage Database=1|Head|Rifle|Physical|L|L|9|||Notes
-&DMG_FARADAY_1240109974 FS3Combat Damage Database=1|Chest|Unarmed|Stun|L|L||1240109974||
 
 &TREAT_SKILL FS3Combat Damage Database=First_Aid
 &HEAL_SKILL FS3Combat Damage Database=Medicine
