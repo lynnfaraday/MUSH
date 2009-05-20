@@ -103,6 +103,15 @@
 @@ --------------------------
 &FUN_WEAPONSTAT FS3Combat Instance Parent=weaponstat(u(fun_combatstat,%0,weapon),%1)
 
+@@ --------------------------
+@@ FUN_VEHICLESTAT
+@@ Shortcut to get a particular vehicle stat for someone's vehicle.
+@@ %0 = name
+@@ %1 = vehicle stat
+@@ --------------------------
+&FUN_VEHICLESTAT FS3Combat Instance Parent=vehtypestat(vehiclestat(u(fun_combatstat,%0,vehicle),type),%1)
+
+
 
 @@ ================================================================================================================
 @@ ---------------   Participants and Messages -----------------
@@ -115,12 +124,12 @@
 @@ Given a name, returns whether they're a combatant, participant or targetable.
 @@ 'participant' refers to everyone who's joined the combat 
 @@ 'combatant' refers to everyone EXCEPT observers and npcmasters 
-@@ 'targetable' refers to everyone EXCEPT observers npcmasters and passengers
+@@ 'targetable' refers to everyone EXCEPT observers npcmasters and passengers and folks in the 'outofsight' stance.
 @@ 'actors' refers to everyone EXCEPT observers
 @@ --------------------------
 &FUN_IS_PARTICIPANT FS3Combat Instance Parent=t(u(fun_combatstat,%0,type))
 &FUN_IS_COMBATANT FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,npcmaster,0,1)
-&FUN_IS_TARGETABLE FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,passenger,0,npcmaster,0,1)
+&FUN_IS_TARGETABLE FS3Combat Instance Parent=and(switch(u(fun_combatstat,%0,type),,0,observer,0,passenger,0,npcmaster,0,1),not(strmatch(u(fun_combatstat,%0,stance),outofsight)))
 &FUN_IS_ACTOR FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,1)
 
 @@ --------------------------
@@ -211,6 +220,8 @@
 @@ %1 = defender
 &FUN_ROLL_ATTACK FS3Combat Instance Parent=[setq(9,u(fun_weaponstat,%0,atkskill))][setq(8,u(fun_attack_mods,%0,%1))][roll_ability(pmatch(%0),%q9,%q8)][pemit(*Faraday,%q9 %q8)]
 
+@@ --------------------------
+@@ FUN_DEFENSE_MODS
 @@ %0 = attacker
 @@ %1 = defender
 @@ Attack mods include:
@@ -219,22 +230,38 @@
 @@ - Weapon accuracy
 @@ - Special modifiers
 @@ - Aim modifier x 15
-@@ TODO: Add stance mods
-&FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),10)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mods),switch(u(fun_combatstat,%0,lastaim),%1,15,0))
+@@ - Stance modifier
+@@ --------------------------
+&FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),10)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mods),switch(u(fun_combatstat,%0,lastaim),%1,15,0),u(fun_stance_mod,%0,attacker))
 
 @@ %0 = attacker
 @@ %1 = defender
 &FUN_ROLL_DEFENSE FS3Combat Instance Parent=roll_ability(pmatch(%1),u(fun_weaponstat,%0,defskill),[u(fun_defense_mods,%0)])
 
+@@ --------------------------
+@@ FUN_DEFENSE_MODS
 @@ %0 = attacker
 @@ %1 = defender
 @@ Defense mods include:
 @@ - Damage modifier
 @@ - Suppression value x 10
 @@ - Special modifiers
-@@ TODO: Add stance mods
-&FUN_DEFENSE_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),10)],u(fun_combatstat,%0,mods))
+@@ - Stance mods
+@@ --------------------------
+&FUN_DEFENSE_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%1)],-[mul(u(fun_combatstat,%0,suppress),10)],u(fun_combatstat,%0,mods),u(fun_stance_mod,%1,defender))
 
+
+@@ --------------------------
+@@ FUN_STANCE_MOD
+@@ Gets someone's stance modifier.
+@@ %0 = name
+@@ %1 = attacker or defender
+@@ --------------------------
+&FUN_STANCE_MOD FS3Combat Instance Parent=after(grab(v(stancemod_%1),[u(fun_combatstat,%0,stance)]:*),:)
+
+@@ Note: Cover and out of sight are handled specially so they don't have direct modifiers
+&STANCEMOD_ATTACKER FS3Combat Instance Parent=normal:0 banzai:+30 evade:-50 cautious:-15 cover:0 outofsight:0
+&STANCEMOD_DEFENDER FS3Combat Instance Parent=normal:0 banzai:-50 evade:+30 cautious:+15 cover:0 outofsight:0
 
 @@ ================================================================================================================
 @@ ---------------  Turns -----------------
