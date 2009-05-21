@@ -29,7 +29,7 @@
 
 &CMD-+DAMAGE-DELETE FS3Combat Damage Commands=$+damage/delete */*:@pemit %#=[setq(0,u(fun_get_dmgnum,%0,%1))]switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(%q0),ansi(hr,%0/%1 is not a valid damage value.),ansi(hg,You delete [prettify(%0)]'s damage.)[wipe(#731/%q0)])
 
-&CMD-+DAMAGE-CLEAR FS3Combat Damage Commands=$+damage/clear *:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is for staff only.),eq(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),ansi(hg,You clear all of [prettify(%0)]'s damage.)[wipe(#731/dmg_[unprettify(%0)]_*)])
+&CMD-+DAMAGE-CLEAR FS3Combat Damage Commands=$+damage/clear *:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is for staff only.),gt(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),ansi(hg,You clear all of [prettify(%0)]'s damage.)[wipe(#731/dmg_[unprettify(%0)]_*)])
 
 
 @@  %0 = Name 
@@ -298,7 +298,7 @@
 @@  Returns 1 if they fail their KO check.
 @@  %0 = name
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_CHECK_KO FS3Combat Damage Commands=switch(damagemod(%0),0,0,lte(roll_ability(pmatch(%0),switch(isvehicle(%0),1,vehtypestat(vehiclestat(%0,type),toughness),xget(#731,toughness_skill)),-[damagemod(%0)]),0))
+&FUN_CHECK_KO FS3Combat Damage Commands=localize([setq(0,damagemod(%0))][setq(1,roll_ability(pmatch(%0),switch(isvehicle(%0),1,vehtypestat(vehiclestat(%0,type),toughness),xget(#731,toughness_skill)))][setq(2,rand(100))][switch(1,eq(%q0,0),0,lte(%q2,sub(%q0,mul(%q1,5)),1,0)
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_TIME_TO_HEAL
@@ -319,5 +319,5 @@
 &TREAT_SKILL FS3Combat Damage Database=First_Aid
 &HEAL_SKILL FS3Combat Damage Database=Medicine
 &REPAIR_SKILL FS3Combat Damage Database=Repair
-&TOUGHNESS_SKILL FS3Combat Damage Database=Athletics
+&TOUGHNESS_SKILL FS3Combat Damage Database=Athletic
 &HOSPITALS FS3Combat Damage Database=#-1
