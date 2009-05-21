@@ -214,11 +214,11 @@
 @@ %0 = attack - def roll
 @@ %1 = hit loc
 @@ %2 = weapon lethal
-&random_damage FS3Combat Instance Parent=extract(L L L L L L L L L L L L L L L L L L L L M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M S S S S C,min(add(rand(1,50),max(%0,2),switch(%1,head,2,chest,1,abdomen,1,0),div(%2,10)),50)
+&random_damage FS3Combat Instance Parent=extract(L L L L L L L L L L L L L L L L L L L L M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M S S S S C,min(add(rand(1,50),max(%0,2),switch(%1,head,2,chest,1,abdomen,1,0),div(%2,2)),50)
 
 @@ %0 = attacker
 @@ %1 = defender
-&FUN_ROLL_ATTACK FS3Combat Instance Parent=[setq(9,u(fun_weaponstat,%0,atkskill))][setq(8,u(fun_attack_mods,%0,%1))][roll_ability(pmatch(%0),%q9,%q8)][pemit(*Faraday,%q9 %q8)]
+&FUN_ROLL_ATTACK FS3Combat Instance Parent=[setq(9,u(fun_weaponstat,%0,atkskill))][setq(8,u(fun_attack_mods,%0,%1))][roll_ability(pmatch(%0),%q9,%q8)]
 
 @@ --------------------------
 @@ FUN_DEFENSE_MODS
@@ -272,7 +272,7 @@
 @@ This can be installed as an @hook after pose/say/semipose/emit to trigger combat notification when all actors have posed.
 @@ --------------------------
 &POSE_HOOK FS3Combat Instance Parent=[setq(c,xget(%#,combat))][switch(t(%qc),1,[set(%qc,posed:[setdiff([xget(%qc,posed)] %N,)])][u(%qc/fun_pose_trigger)])]
-&FUN_POSE_TRIgGER FS3Combat Instance Parent=switch(u(FUN_EVERYONE_POSED),1,u(fun_org_msg,ansi(hc,Everyone has posed.)))
+&FUN_POSE_TRIgGER FS3Combat Instance Parent=switch(1,v(allposed),,u(FUN_EVERYONE_POSED),u(fun_org_msg,ansi(hc,Everyone has posed.))[set(me,allposed:1)])
 
 @@ --------------------------
 @@ FUN_EVERYONE_ACTED
@@ -287,6 +287,7 @@
 @@ --------------------------
 &FUN_EVERYONE_POSED FS3Combat Instance Parent=not(strmatch(iter(u(fun_actors),switch(isplayer(##),1,t(match(v(posed),##)),1),,),*0*))
 
+@@ TODO: What is this???
 [switch(t(%qc),1,[set(%qc,posed:[setdiff([xget(%qc,posed)] %N,)])][u(%qc/fun_pose_trigger)])]
 
 @@ --------------------------
@@ -307,7 +308,7 @@
 @@   - Set lastaim (to target if aiming, to blank if not)
 @@   - reset 'hit this turn'
 @@ --------------------------
-&FUN_NEW_TURN FS3Combat Instance Parent=[u(fun_combat_msg,[ansi(hc,%N has started a new turn.  Pose and choose your action.)])][set(me,turn:[inc(v(turn))])][set(me,acted:)][set(me,posed:)][iter(u(fun_combatants),[u(fun_check_for_ko,##)][u(fun_reduce_suppress,##)][u(fun_reset_aim,##)][u(fun_reset_luck,##)][u(fun_reset_hit,##)])]
+&FUN_NEW_TURN FS3Combat Instance Parent=[u(fun_combat_msg,[ansi(hc,%N has started a new turn.  Pose and choose your action.)])][set(me,turn:[inc(v(turn))])][set(me,acted:)][set(me,posed:)][set(me,allposed:0)][iter(u(fun_combatants),[u(fun_check_for_ko,##)][u(fun_reduce_suppress,##)][u(fun_reset_aim,##)][u(fun_reset_luck,##)][u(fun_reset_hit,##)])]
 
 @@ --------------------------
 @@ These are helper functions for FUN_NEW_TURN just to keep things less messy.  
