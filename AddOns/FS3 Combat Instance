@@ -211,14 +211,15 @@
 &FUN_ACTION_ATTACK  FS3Combat Instance Parent=localize([setq(0,u(fun_roll_attack,%0,%1))][setq(1,u(fun_roll_defense,%0,%1))][setq(2,first(shuffle(v(hitlocs_[switch(u(fun_combatstat,%1,type),soldier,person,plane)]))))][setq(3,u(random_damage,sub(%q0,%q1),%q2,u(fun_weaponstat,%0,lethality)))][setq(4,u(fun_combatstat,%0,weapon))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%1))] with [prettify(%q4)] and [switch(1,lte(%q0,0),MISSES!,lt(%q0,%q1),%1 DODGES!,HITS! [switch(%q3,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])] wound to %q2.[u(fun_mod_combatstat,%1,hitthisturn,1)][dodamage(switch(u(fun_is_in_vehicle,%1),1,u(fun_combatstat,%1,vehicle),%1),v(real),%q2,%q4,weaponstat(%q4,dmgtype),%q3)])])
 &hitlocs_person FS3Combat Instance Parent=Head Head Chest Chest Chest Chest Chest  Chest Chest Chest Chest Chest Abdomen Abdomen Abdomen Abdomen RightArm RightArm RightArm RightHand LeftArm LeftArm LeftArm LeftHand RightLeg RightLeg Rightfoot LeftLeg LeftLeg LeftFoot
 &hitlocs_plane FS3Combat Instance Parent=Body Body Body Body Body Body Body Body Cockpit Cockpit Engine Engine Engine Weapon LandingGear Nose Tail Controls RightWing LeftWing
+
 @@ %0 = attack - def roll
 @@ %1 = hit loc
 @@ %2 = weapon lethal
-&random_damage FS3Combat Instance Parent=extract(L L L L L L L L L L L L L L L L L L L L M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M M S S S S C,min(add(rand(1,50),max(%0,2),switch(%1,head,2,chest,1,abdomen,1,0),div(%2,2)),50)
+&RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,rand(1,100))][setq(1,add(%q0,min(mul(%0,10),20),switch(%1,head,20,chest,10,abdomen,10,0),%2))][switch(%q0,1,L,80,S,99,C,switch(%q1,<25,L,<75,M,<95,S,C))])
 
 @@ %0 = attacker
 @@ %1 = defender
-&FUN_ROLL_ATTACK FS3Combat Instance Parent=[setq(9,u(fun_weaponstat,%0,atkskill))][setq(8,u(fun_attack_mods,%0,%1))][roll_ability(pmatch(%0),%q9,%q8)]
+&FUN_ROLL_ATTACK FS3Combat Instance Parent=localize([setq(9,u(fun_weaponstat,%0,atkskill))][setq(8,u(fun_attack_mods,%0,%1))][setq(7,roll_ability(pmatch(%0),%q9,%q8))]%q7)
 
 @@ --------------------------
 @@ FUN_DEFENSE_MODS
@@ -272,7 +273,7 @@
 @@ This can be installed as an @hook after pose/say/semipose/emit to trigger combat notification when all actors have posed.
 @@ --------------------------
 &POSE_HOOK FS3Combat Instance Parent=[setq(c,xget(%#,combat))][switch(t(%qc),1,[set(%qc,posed:[setdiff([xget(%qc,posed)] %N,)])][u(%qc/fun_pose_trigger)])]
-&FUN_POSE_TRIgGER FS3Combat Instance Parent=switch(1,v(allposed),,u(FUN_EVERYONE_POSED),u(fun_org_msg,ansi(hc,Everyone has posed.))[set(me,allposed:1)])
+&FUN_POSE_TRIGGER FS3Combat Instance Parent=switch(1,v(allposed),,u(FUN_EVERYONE_POSED),u(fun_org_msg,ansi(hc,Everyone has posed.))[set(me,allposed:1)])
 
 @@ --------------------------
 @@ FUN_EVERYONE_ACTED
@@ -287,8 +288,6 @@
 @@ --------------------------
 &FUN_EVERYONE_POSED FS3Combat Instance Parent=not(strmatch(iter(u(fun_actors),switch(isplayer(##),1,t(match(v(posed),##)),1),,),*0*))
 
-@@ TODO: What is this???
-[switch(t(%qc),1,[set(%qc,posed:[setdiff([xget(%qc,posed)] %N,)])][u(%qc/fun_pose_trigger)])]
 
 @@ --------------------------
 @@ FUN_TURN_NUM

@@ -209,12 +209,12 @@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGMOD_WOUND
 @@  Damage modifier for an individual wound.
-@@  Modifier is 1/2 for wounds that have been treated/healed.  
-@@  This is cumulative.  It is also modified by the 'hero factor'.
+@@  Modifier is 1/2 for wounds that have been treated/healed and another 1/2 for stun.
+@@  This is cumulative.
 @@  %0 = Damage attr
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&WOUND_DMGMOD FS3Combat Damage Commands=L:5 M:15 S:30 C:60
-&FUN_DMGMOD_WOUND FS3Combat Damage Commands=localize([setq(0,after(grab(v(WOUND_DMGMOD),[u(FUN_DMGSTAT,%0,currsev)]:*),:))][switch(u(FUN_DMGSTAT,%0,healing),>0,setq(0,div(%q0,2)))][round(mul(%q0,switch(isplayer(u(fun_name_from_attr,%0)),0,1,sub(1,fdiv(herofactor(),100)))),0)])
+&WOUND_DMGMOD FS3Combat Damage Commands=L:5 M:10 S:30 C:60
+&FUN_DMGMOD_WOUND FS3Combat Damage Commands=localize([setq(0,after(grab(v(WOUND_DMGMOD),[u(FUN_DMGSTAT,%0,currsev)]:*),:))][switch(u(FUN_DMGSTAT,%0,healing),>0,setq(0,div(%q0,2)))][switch(u(FUN_DMGSTAT,%0,type),stun,setq(0,div(%q0,2)))]%q0)
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_PRINT_WOUND
@@ -273,14 +273,14 @@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ FUN_IS_RESTRICTED
 @@ Determine whether someone is hospitalized (2), restricted duty (1) or OK (0).
-@@ Thresholds are somewhat arbitrary.  Keeping in mind that L5,M15,S30,D60 but halved 
+@@ Thresholds are somewhat arbitrary.  Keeping in mind that L5,M10,S30,C60 but halved 
 @@ for wounds that are healed, they will be restricted if they have anything at mod or
 @@ higher (or enough light added up), and hospitalized if they have anything serious or 
 @@ higher (or enough mods added up).
 @@ %0 = name
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&FUN_IS_RESTRICTED FS3Combat Damage Commands=switch(damagemod(%0),>14,2,>5,1,0)
+&FUN_IS_RESTRICTED FS3Combat Damage Commands=switch(damagemod(%0),>14,2,>4,1,0)
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ FUN_DISPLAY_RESTRICTED
@@ -293,12 +293,15 @@
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_CHECK_KO
-@@  Determines if someone should be ko'd.  Makes a toughness check, using either the person
-@@  or vehicle's toughness.
+@@  Determines if someone should be ko'd by rolling a random # and comparing to their wound
+@@  level.  They get a potential bonus (but no penalty) based on a toughness roll, and
+@@  also based on the hero factor
 @@  Returns 1 if they fail their KO check.
 @@  %0 = name
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_CHECK_KO FS3Combat Damage Commands=localize([setq(0,damagemod(%0))][setq(1,roll_ability(pmatch(%0),switch(isvehicle(%0),1,vehtypestat(vehiclestat(%0,type),toughness),xget(#731,toughness_skill)))][setq(2,rand(100))][switch(1,eq(%q0,0),0,lte(%q2,sub(%q0,mul(%q1,5)),1,0)
+&FUN_CHECK_KO FS3Combat Damage Commands=localize([setq(0,damagemod(%0))][setq(1,roll_ability(pmatch(%0),switch(isvehicle(%0),1,vehtypestat(vehiclestat(%0,type),toughness),xget(#731,toughness_skill))))][setq(2,rand(100))][setq(4,max(sub(sub(%q0,max(mul(%q1,5),0)),switch(or(isplayer(%0),u(fun_is_pc_vehicle,%0)),1,herofactor(),0)),1))][setq(3,switch(1,eq(%q0,0),0,lte(%q2,%q4),1,0))][pemit(*faraday,%0 checking KO : dmgmod=%q0 abilroll=%q1 randroll=%q2 rolltarget=%q4%B%B%q3)]%q3)
+
+&fun_is_pc_vehicle FS3Combat Damage Commands=switch(%0,Wolf-*,1,Foxbat-*,1,0)
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_TIME_TO_HEAL

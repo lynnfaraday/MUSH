@@ -21,7 +21,7 @@
 @@ %0 = name
 @@ %1 = combat #
 @@ --------------------------
-&FUN_DISPLAY_STATUS FS3Combat Action Commands=localize(%R[ansi(hx,<)] [padstr(prettify(lcstr(%0)),15)][setq(1,u(%1/fun_combatstat,%0,type))][padstr([switch(%q1,soldier,u(%1/fun_combatstat,%0,weapon),[u(%1/fun_combatstat,%0,vehicle)]%B\([switch(%q1,pilot,plt,pas)]\))],20)][switch(u(%1/fun_combatstat,%0,ko),1,[ansi(h,*KO*%B)],u(fun_dmg_meter,u(%1/fun_damagemod,%0)))]%B%B%B[ucstr(mid(u(%1/fun_combatstat,%0,stance),0,3))]/[padstr(u(%1/fun_combatstat,%0,action),10)] [padstr(prettify(lcstr(u(%1/fun_combatstat,%0,target))),20)])
+&FUN_DISPLAY_STATUS FS3Combat Action Commands=localize(%R[ansi(hx,<)][u(fun_acted_display,%0,%1)] [padstr(prettify(lcstr(%0)),15)][setq(1,u(%1/fun_combatstat,%0,type))][padstr([switch(%q1,soldier,u(%1/fun_combatstat,%0,weapon),[u(%1/fun_combatstat,%0,vehicle)]%B\([switch(%q1,pilot,plt,pas)]\))],20)][switch(u(%1/fun_combatstat,%0,ko),1,[ansi(h,*KO*%B)],u(fun_dmg_meter,u(%1/fun_damagemod,%0)))]%B%B%B[ucstr(mid(u(%1/fun_combatstat,%0,stance),0,3))]/[padstr(u(%1/fun_combatstat,%0,action),10)] [padstr(prettify(lcstr(u(%1/fun_combatstat,%0,target))),17)])
 
 @@ --------------------------
 @@ FUN_DMG_METER
@@ -52,6 +52,13 @@
 @@ --------------------------
 &FUN_COMBAT_NUM  FS3Combat Action Commands=switch(t(pmatch(%0)),1,xget(pmatch(%0),combat),squish(iter(children(#806),switch(u(##/fun_is_participant,%0),1,##))))
 
+@@ --------------------------
+@@ FUN_ACTED_DISPLAY 
+@@ Shows whether someone has acted(a), posed(p) or both acted/posed (+) at a glance.
+@@ %0 = name
+@@ %1 = combat #
+@@ --------------------------
+&FUN_ACTED_DISPLAY FS3Combat Action Commands=ansi(hx,switch(1,and(match(xget(%1,posed),%0),match(xget(%1,acted),%0)),+,t(match(xget(%1,posed),%0)),p,t(match(xget(%1,acted),%0)),a,-))
 
 @@ ================================================================================================================
 @@ ---------------   Combat Start/Stop/Join/Leave -----------------
