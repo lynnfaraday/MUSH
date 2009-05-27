@@ -9,11 +9,16 @@
 
 &CMD-+COMBAT-ALL FS3Combat Action Commands=$+combat/all:@pemit %#=[line()]%R[ansi(h,Combat #%B%BOrganizer%B%B%B%BParticipants)][iter(children(#806),%R[ljust(##,9)] [padstr(name(xget(##,organizer)),12)] [iter(u(##/fun_participants),prettify(lcstr(itext(0))))])]%R[line()]
 
-&CMD-+COMBAT-STATUS FS3Combat Action Commands=$+combat:@pemit %#=[setq(0,u(fun_combat_num,%N))]switch(0,t(%q0),ansi(hr,You are not in combat.),[line()]%R[ansi(hx,<)] [ansi(h,Name[space(11)]Weapon/Vehicle[space(6)]Damage[space(2)]Stance/Action[space(2)]Target)][iter(u(%q0/fun_active_teams),%R[ansi(hx,<)] %R[ansi(hx,<)] [ansi(hg,Team ##)][iter(sort(u(%q0/fun_team_members,##)),u(fun_display_status,itext(0),%q0))])]%R[ansi(hx,<)]%R[ansi(hx,<)] [ansi(h,Observers/NPCMasters:)] %R[ansi(hx,<)] [iter(setdiff(u(%q0/fun_participants),u(%q0/fun_combatants)),prettify(lcstr(##)))]%R[line()])
+&CMD-+COMBAT-STATUS FS3Combat Action Commands=$+combat:@pemit %#=[setq(0,u(fun_combat_num,%N))]switch(0,t(%q0),ansi(hr,You are not in combat.),[ansi(hx,<)][line()]%R[ansi(hx,<)] [ansi(h,Name[space(11)]Weapon/Vehicle[space(6)]Damage[space(2)]Stance/Action[space(2)]Target)][iter(u(%q0/fun_active_teams),%R[ansi(hx,<)] %R[ansi(hx,<)] [ansi(hg,Team ##)][iter(sort(u(%q0/fun_team_members,##)),u(fun_display_status,itext(0),%q0))])]%R[ansi(hx,<)]%R[ansi(hx,<)] [ansi(h,Observers/NPCMasters:)] %R[ansi(hx,<)] [iter(setdiff(u(%q0/fun_participants),u(%q0/fun_combatants)),prettify(lcstr(##)))]%R[ansi(hx,<)][line()])
 
 &CMD-+COMBAT-HERO FS3Combat Action Commands=$+combat/hero:@pemit %#=[setq(0,u(fun_combat_num,%N))][ansi(h,<COMBAT>)] [switch(0,t(%q0),ansi(hr,You are not in combat.),gt(xget(%#,luck_points),0),ansi(hr,You do not have any luck points..),u(%q0/fun_combatstat,%N,ko),ansi(hr,You aren't KO'd yet.  Save your points.),You spend a luck point to soldier on.[set(%#,luck_points:[sub(xget(%#,luck_points),1)])][u(%q0/fun_mod_combatstat,%N,ko,0)][u(%q0/fun_combat_msg,%N spends a luck point to keep fighting!)])]
 
-&CMD-+COMBAT-MSG FS3Combat Action Commands=$+combat/msg *:@switch [setq(0,u(fun_combat_num,%N))]0=t(%q0),[ansi(h,<COMBAT>)] You are not in combat.,think u(%q0/fun_combat_msg,[ansi(hc,Message from %N:)] %0)
+&CMD-+COMBAT-UNKO FS3Combat Action Commands=$+combat/unko *:@pemit %#=[setq(0,u(fun_combat_num,%0))][ansi(h,<COMBAT>)] [switch(0,or(strmatch(xget(%q0,organizer),%#),isstaff(%#)),ansi(hr,This command is only for the organizer or staff.),t(%q0),ansi(hr,%0 is not in combat.),u(%q0/fun_combatstat,%0,ko),ansi(hr,%0 is not KO'd.),[u(%q0/fun_combat_msg,[prettify(%0)] is not out of the fight yet! \(%N\))][u(%q0/fun_mod_combatstat,%0,ko,0)]You un-KO %0.)]
+
+&CMD-+COMBAT-MSG FS3Combat Action Commands=$+combat/msg *:@switch [setq(0,u(fun_combat_num,%N))]0=t(%q0),@pemit %#=[ansi(h,<COMBAT>)] You are not in combat.),think u(%q0/fun_combat_msg,[ansi(hc,Message from %N:)] %0)
+
+&CMD-+COMBAT-SKILLS FS3Combat Action Commands=$+combat/skills:@pemit %#=[setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),[ansi(h,<COMBAT>)] You are not in combat.,or(strmatch(xget(%q0,organizer),%#),isstaff(%#)),[ansi(h,<COMBAT>)] [ansi(hr,This command is only for the organizer or staff.)],[ansi(hx,<)][line()]%R[ansi(hx,<)] [ansi(h,Name[space(20)]Skill)][iter(u(%q0/fun_combatants),%R[ansi(hx,<)] [ljust(prettify(lcstr(##)),25)] [u(%q0/fun_get_skill,##,u(%q0/fun_weaponstat,##,atkskill))])]%R[ansi(hx,<)][line()])]
+
 
 @@ --------------------------
 @@ FUN_DISPLAY_STATUS
@@ -28,7 +33,7 @@
 @@ %0 = damage modifier
 @@ Displays a damage meter that fills up as you become more hurt.
 @@ --------------------------
-&FUN_DMG_METER FS3Combat Action Commands=switch(%0,>80,ansi(hR,XXXXX),>60,ansi(hr,XXXX.),>40,ansi(hy,XXX..),>20,ansi(hb,XX...),>0,ansi(hg,X....),.....)
+&FUN_DMG_METER FS3Combat Action Commands=switch(%0,>80,ansi(hR,XXXXX),>60,ansi(hr,XXXX.),>40,ansi(hr,XXX..),>20,ansi(hy,XX...),>0,ansi(hg,X....),.....)
 
 
 @@ --------------------------
@@ -121,7 +126,7 @@
 @@ --------------------------
 
 &FUN_JOIN_NPC_STUFF FS3Combat Action Commands=switch(1,isplayer(%0),1,isnpc(%0),1,createnpc(%0,u(fun_rand_npc_skill)))
-&FUN_RAND_NPC_SKILL FS3Combat Action Commands=first(shuffle(1 2 2 3 3 3 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 7 7 8 8 9 10 11 12))
+&FUN_RAND_NPC_SKILL FS3Combat Action Commands=first(shuffle(3 3 3 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 7 7 8 8))
 
 @@ --------------------------
 @@ FUN_DEFAULT_WEAPON
