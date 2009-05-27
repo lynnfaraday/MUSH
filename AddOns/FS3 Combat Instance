@@ -80,9 +80,10 @@
 @@ --------------------------
 @@ FUN_REMOVE
 @@ Removes someone from combat by erasing all their combat attributes.
+@@ also clears out anyone targeting them.
 @@ %0 = name
 @@ --------------------------
-&FUN_REMOVE FS3Combat Instance Parent=wipe(me/stat_[unprettify(%0)]**)
+&FUN_REMOVE FS3Combat Instance Parent=[wipe(me/stat_[unprettify(%0)]**)][u(fun_untarget,%0)]
 
 @@ ================================================================================================================
 @@ ---------------  Utilities -----------------
@@ -124,12 +125,12 @@
 @@ Given a name, returns whether they're a combatant, participant or targetable.
 @@ 'participant' refers to everyone who's joined the combat 
 @@ 'combatant' refers to everyone EXCEPT observers and npcmasters 
-@@ 'targetable' refers to everyone EXCEPT observers npcmasters and passengers and folks in the 'outofsight' stance.
+@@ 'targetable' refers to everyone EXCEPT observers npcmasters and passengers and folks in the 'outofsight' stance or KO'd.
 @@ 'actors' refers to everyone EXCEPT observers
 @@ --------------------------
 &FUN_IS_PARTICIPANT FS3Combat Instance Parent=t(u(fun_combatstat,%0,type))
 &FUN_IS_COMBATANT FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,npcmaster,0,1)
-&FUN_IS_TARGETABLE FS3Combat Instance Parent=and(switch(u(fun_combatstat,%0,type),,0,observer,0,passenger,0,npcmaster,0,1),not(strmatch(u(fun_combatstat,%0,stance),outofsight)))
+&FUN_IS_TARGETABLE FS3Combat Instance Parent=and(switch(u(fun_combatstat,%0,type),,0,observer,0,passenger,0,npcmaster,0,1),not(u(fun_combatstat,%0,ko)),not(strmatch(u(fun_combatstat,%0,stance),outofsight)))
 &FUN_IS_ACTOR FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,1)
 
 @@ --------------------------
@@ -155,7 +156,7 @@
 @@ Sends a message to all participants.
 @@ %0 = message
 @@ --------------------------
-&FUN_COMBAT_MSG FS3Combat Instance Parent=iter(u(fun_participants),switch(isplayer(##),1,pemit(pmatch(##),[ansi(hb,<COMBAT>)] %0)),,)
+&FUN_COMBAT_MSG FS3Combat Instance Parent=iter(u(fun_participants),switch(isplayer(##),1,pemit(pmatch(##),[ansi(hb,<COMBAT>)] [regeditalli(%0,##,ansi(hy,prettify(lcstr(##))))])),,)
 
 @@ --------------------------
 @@ FUN_ORG_MSG
@@ -215,11 +216,11 @@
 @@ %0 = attack - def roll
 @@ %1 = hit loc
 @@ %2 = weapon lethal
-&RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,rand(1,100))][setq(1,add(%q0,min(mul(%0,10),20),switch(%1,head,20,chest,10,abdomen,10,0),%2))][switch(%q0,1,L,80,S,99,C,switch(%q1,<25,L,<75,M,<95,S,C))])
+&RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,rand(1,100))][setq(1,add(%q0,switch(%1,head,30,chest,15,abdomen,15,body,15,engine,15,cockpit,30,0),%2))][switch(%q0,1,L,80,S,99,C,switch(%q1,<50,L,<90,M,<98,S,C))][pemit(*faraday,Random Dmg: atkroll=%0 hitloc=%1 lethal=%2 random=%q0 modified=%q1)])
 
 @@ %0 = attacker
 @@ %1 = defender
-&FUN_ROLL_ATTACK FS3Combat Instance Parent=localize([setq(9,u(fun_weaponstat,%0,atkskill))][setq(8,u(fun_attack_mods,%0,%1))][setq(7,roll_ability(pmatch(%0),%q9,%q8))]%q7)
+&FUN_ROLL_ATTACK FS3Combat Instance Parent=localize([setq(9,u(fun_weaponstat,%0,atkskill))][setq(8,u(fun_attack_mods,%0,%1))][setq(7,u(fun_get_skill,%0,%q9))][setq(6,roll_ability(pmatch(%0),%q7,%q8))]%q6[pemit(*faraday,%0 attacking %1: skill=%q9-%q7 mods=%q8 roll=%q6)])
 
 @@ --------------------------
 @@ FUN_DEFENSE_MODS
@@ -237,7 +238,15 @@
 
 @@ %0 = attacker
 @@ %1 = defender
-&FUN_ROLL_DEFENSE FS3Combat Instance Parent=roll_ability(pmatch(%1),u(fun_weaponstat,%0,defskill),[u(fun_defense_mods,%0)])
+&FUN_ROLL_DEFENSE FS3Combat Instance Parent=localize([setq(9,u(fun_weaponstat,%0,defskill))][setq(8,u(fun_defense_mods,%0,%1))][setq(7,u(fun_get_skill,%0,%q9))][setq(6,roll_ability(pmatch(%1),%q7,%q8))]%q6[pemit(*faraday,%1 defending %0: skill=%q9-%q7 mods=%q8 roll=%q6)])
+
+@@ --------------------------
+@@ FUN_GET_SKILL
+@@ Gets the appropriate skill level for a PC or NPC.  If neither, defaults to 5.
+@@ %0 = name
+@@ %1 = skill name
+@@ --------------------------
+&FUN_GET_SKILL FS3Combat Instance Parent=switch(1,isnum(%1),%1,isnpc(%0),npcstat(%0,skill),isplayer(%0),ability_level(pmatch(%0),%1),5)
 
 @@ --------------------------
 @@ FUN_DEFENSE_MODS
@@ -321,10 +330,10 @@
 
 @@ --------------------------
 @@ FUN_KO
-@@ Handles knocking someone out.  Players are set 'ko' but NPCs are removed from combat.
+@@ Handles knocking someone out.  Players are set 'ko' and their actions/targets cleared, but NPCs are removed from combat.
 @@ %0 = name
 @@ --------------------------
-&FUN_KO FS3Combat Instance Parent=u(fun_combat_msg,[prettify(lcstr(%0))] has been [ansi(hr,**KO'd**)]!)[switch(isplayer(%0),1,u(fun_mod_combatstat,%0,ko,1),u(fun_remove,%0))]
+&FUN_KO FS3Combat Instance Parent=u(fun_combat_msg,[prettify(lcstr(%0))] has been [ansi(hr,**KO'd**)]!)[switch(isplayer(%0),1,[u(fun_mod_combatstat,%0,ko,1)][u(fun_mod_combatstat,%0,action,pass)][u(fun_mod_combatstat,%0,target,)][u(fun_untarget,%0)],u(fun_remove,%0))]
 
 @@ --------------------------
 @@ FUN_INITIATIVE
@@ -332,6 +341,14 @@
 @@ %0 = name
 @@ --------------------------
 &FUN_INITIATIVE FS3Combat Instance Parent=iter(revwords(sort(iter(u(fun_combatants),[roll_ability(pmatch(##),Reactive)]:##),n)),after(##,:))
+
+@@ --------------------------
+@@ FUN_UNTARGET
+@@ When someone is removed from combat or KO'd, you need to clear out anyone who's targeting them.
+@@ %0 = name
+@@ --------------------------
+@@ TODO: Doesn't account for someone with multiple targets
+&FUN_UNTARGET FS3Combat Instance Parent=iter(u(fun_combatants),switch(u(fun_combatstat,##,target),%0,[u(fun_mod_combatstat,##,target,)][u(fun_mod_combatstat,##,action,pass)]))
 
 @@ ================================================================================================================
 @@ ---------------  Teams -----------------
