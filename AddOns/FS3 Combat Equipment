@@ -18,7 +18,7 @@
 &WEAPON_KNIFE FS3Combat Equipment Stats=Knife|Melee|Melee|-5|0|Melee|Personal|0|0|0|0|0|Physical|0
 &WEAPON_TAZER FS3Combat Equipment Stats=Stun gun|Firearms|Melee|70|0|Ranged|Personal|0|5|0|5|0|Stun|0
 
-&WEAPON_KEW FS3Combat Equipment Stats=KEW Assault Cannon|Gunnery|Piloting|0|20|Ranged|Vehicle|0|0|0|500|0|Physical|0
+&WEAPON_KEW FS3Combat Equipment Stats=KEW Assault Cannon|Gunnery|Piloting|0|15|Ranged|Vehicle|0|0|0|500|0|Physical|0
 &WEAPON_MISSILE_AA  FS3Combat Equipment Stats=Anti-Aircraft Missile|Gunnery|ECM|75|20|Ranged|Vehicle|0|0|0|10000|0|Physical|0
 &WEAPON_MISSILE_HEAT FS3Combat Equipment Stats=High Explosive Anti-Tank Missile|Gunnery|Piloting|75|70|Ranged|Vehicle|0|0|0|5000|0|Physical|0
 &WEAPON_HMG FS3Combat Equipment Stats=Heavy machinegun.  Assumes tripod.|Firearms|Piloting|-10|8|Ranged|Vehicle|1|100|10|2000|0|Physical|0
@@ -37,7 +37,7 @@
 &ARMOR_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider Vehicle Armor|Body Cockpit Engine Nose Tail Controls RightWing LeftWing|15|Vehicle
 
 &VEHICLE_VIPER FS3Combat Equipment Stats=Viper space fighter|Piloting|4|Viper|Viper|KEW
-&VEHICLE_RAIDER FS3Combat Equipment Stats=Cylon Raider space fighter|Piloting|2|Raider|Raider|KEW MISSILE_AA NUKE
+&VEHICLE_RAIDER FS3Combat Equipment Stats=Cylon Raider space fighter|Piloting|1|Raider|Raider|KEW MISSILE_AA NUKE
 &VEHICLE_RAPTOR FS3Combat Equipment Stats=Raptor space command and control|Piloting|6|Raptor|Raptor|ECM MISSILE_HEAT MISSILE_HE NUKE
 &VEHICLE_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider space transport/bomber|Piloting|6|Heavy_Raider|Heavy_Raider|KEW MISSILE_AA NUKE
 
