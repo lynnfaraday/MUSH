@@ -9,9 +9,9 @@
 
 
 &VEHICLESTATS FS3Combat vehicle Commands=type notes
-&CMD-+VEHICLES FS3Combat vehicle Commands=$+vehicles:@pemit %#=[line()]%R[ansi(h,Name)][space(16)][ansi(h,Type)][space(16)]Damaged?[iter(sort(lattr(#818/vehicle_*)),[setq(0,after(##,_))]%R[padstr(prettify(lcstr(%q0)),20)][padstr(vehiclestat(%q0,type),20)][switch(damagemod(%q0),0,--,[ansi(hr,YES)])])]%R%RUse [ansi(h,+vehicle <name>)] to view details.%R[line()]
+&CMD-+VEHICLES FS3Combat vehicle Commands=$+vehicles:@pemit %#=[line()]%R[ansi(h,Name)][space(16)][ansi(h,Type)][space(16)]Damage Status[iter(sort(lattr(#818/vehicle_*)),[setq(0,after(##,_))]%R[padstr(prettify(lcstr(%q0)),20)][padstr(vehiclestat(%q0,type),20)][dmgrestricted(%q0)])]%R%RUse [ansi(h,+vehicle <name>)] to view details.%R[line()]
 
-&CMD-+VEHICLE FS3Combat vehicle Commands=$+vehicle *:@pemit %#=switch(0,isvehicle(%0),ansi(hr,There is no vehicle by that name.),[setq(0,unprettify(%0))][setq(1,damagemod(%0))][line()]%R[ansi(h,Name:)] [prettify(%0)]%R[ansi(h,Type:)] [vehiclestat(%q0,type)]%R[ansi(h,Damage Modifier:)] %q1 [switch(%q1,>0,ansi(hr,<DAMAGED>))]%R[ansi(h,Notes:)]%R[replace_cr(vehiclestat(%q0,notes))]%R[line()]
+&CMD-+VEHICLE FS3Combat vehicle Commands=$+vehicle *:@pemit %#=switch(0,isvehicle(%0),ansi(hr,There is no vehicle by that name.),[setq(0,unprettify(%0))][setq(1,damagemod(%0))][line()]%R[ansi(h,Name:)] [prettify(%0)]%R[ansi(h,Type:)] [vehiclestat(%q0,type)]%R[ansi(h,Damage Modifier:)] %q1 [dmgrestricted(%q0)]%R[ansi(h,Notes:)]%R[replace_cr(vehiclestat(%q0,notes))]%R[line()]
 
 &CMD-+VEHICLE-CREATE FS3Combat vehicle Commands=$+vehicle/create *=*:@pemit %#=[setq(1,unprettify(%1))]switch(1,isvehicle(%0),ansi(hr,There is already a vehicle by that name.),isplayer(%0),ansi(hr,There is already a player by that name.),isnpc(%0),ansi(hr,There is already a NPC by that name.),gt(words(%0),1),ansi(hr,Vehicle names may only be 1 word.),strmatch(%0,*|*),ansi(hr,Vehicle names may not contain the '|' character.),not(match(vehicletypes(),%q1)),ansi(hr,%1 is not a valid vehicle type.),ansi(hg,You create vehicle %0.)[set(#818,vehicle_[unprettify(%0)]:%q1|%N|)])
 
