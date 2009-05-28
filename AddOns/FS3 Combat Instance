@@ -203,27 +203,56 @@
 
 &FUN_ACTION_AIM FS3Combat Instance Parent=[u(fun_combat_msg,[prettify(lcstr(%0))] takes careful aim at [prettify(lcstr(%1))].)]
 
-@@ %q0 = attack roll result
-@@ %q1 = defense roll result
-@@ %q2 = random hit location
-@@ %q3 = random damage
-@@ %q4 = weapon
-@@ TODO: Fix all this
-&FUN_ACTION_ATTACK  FS3Combat Instance Parent=localize([setq(0,u(fun_roll_attack,%0,%1))][setq(1,u(fun_roll_defense,%0,%1))][setq(2,first(shuffle(v(hitlocs_[switch(u(fun_combatstat,%1,type),soldier,person,plane)]))))][setq(3,u(random_damage,sub(%q0,%q1),%q2,u(fun_weaponstat,%0,lethality)))][setq(4,u(fun_combatstat,%0,weapon))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%1))] with [prettify(%q4)] and [switch(1,lte(%q0,0),MISSES!,lt(%q0,%q1),%1 DODGES!,HITS! [switch(%q3,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])] wound to %q2.[u(fun_mod_combatstat,%1,hitthisturn,1)][dodamage(switch(u(fun_is_in_vehicle,%1),1,u(fun_combatstat,%1,vehicle),%1),v(real),%q2,%q4,weaponstat(%q4,dmgtype),%q3)])])
-&hitlocs_person FS3Combat Instance Parent=Head Head Chest Chest Chest Chest Chest  Chest Chest Chest Chest Chest Abdomen Abdomen Abdomen Abdomen RightArm RightArm RightArm RightHand LeftArm LeftArm LeftArm LeftHand RightLeg RightLeg Rightfoot LeftLeg LeftLeg LeftFoot
-&hitlocs_plane FS3Combat Instance Parent=Body Body Body Body Body Body Body Body Cockpit Cockpit Engine Engine Engine Weapon LandingGear Nose Tail Controls RightWing LeftWing
-
-@@ %0 = attack - def roll
-@@ %1 = hit loc
-@@ %2 = weapon lethal
-&RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,rand(1,100))][setq(1,add(%q0,switch(%1,head,30,chest,15,abdomen,15,body,15,engine,15,cockpit,30,0),%2))][switch(%q0,1,L,80,S,99,C,switch(%q1,<50,L,<90,M,<98,S,C))][pemit(*faraday,Random Dmg: atkroll=%0 hitloc=%1 lethal=%2 random=%q0 modified=%q1)])
-
+@@ %qa = attack roll result
+@@ %qd = defense roll result
+@@ %qh = random hit location, in the form location:criticality
+@@ %qz = random damage
+@@ %qw = weapon
+@@ %qv = vehicle
+@@ %ql = weapon lethality
+@@ %qc = cover lethality modifier (0 if no cover)
+@@ %qr = armor lethality modifier (0 if no armor)
+@@
 @@ %0 = attacker
 @@ %1 = defender
+@@ %2 = action options
+@@ TODO: Fix all this
+&FUN_ACTION_ATTACK  FS3Combat Instance Parent=localize([setq(a,u(fun_roll_attack,%0,%1))][setq(d,u(fun_roll_defense,%0,%1))][setq(h,u(FUN_RANDOM_HITLOC,%1,%qv,sub(%qa,%qd)))][setq(w,u(fun_combatstat,%0,weapon))][setq(l,weaponstat(%qw,lethality))][setq(v,switch(u(fun_is_in_vehicle,%1),1,u(fun_combatstat,%1,vehicle)))][setq(c,u(FUN_COVER_MOD,%1,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%1))] with [prettify(%qw)] and [switch(1,lte(%qa,0),MISSES!,lt(%qa,%qd),%1 DODGES!,and(lt(%qc,v(total_protect)),gt(%qc,0)),hits COVER.,and(lt(%qr,v(total_protect)),gt(%qr,0)),hits [before(%qh,:)] but ARMOR stops the attack!,HITS! [switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])] wound to [before(%qh,:)][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[u(fun_mod_combatstat,%1,hitthisturn,1)][dodamage(switch(t(%qv),1,%qv,%1),v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz)])])
+
+
+@@ --------------------------
+@@ FUN_RANDOM_HITLOC
+@@ Determines hit location based on attack roll and target type.
+@@ %0 = target name
+@@ %1 = delta between attack and defense roll
+@@ TODO: This needs to be finished.
+@@ --------------------------
+&FUN_RANDOM_HITLOC FS3Combat Instance Parent=first(shuffle(v(hitlocs_[switch(u(fun_combatstat,%0,type),soldier,person,plane)])))
+
+&hitlocs_person FS3Combat Instance Parent=Head:Critical Head:Critical Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Abdomen:Vital Abdomen:Vital Abdomen:Vital Abdomen:Vital RightArm:Normal RightArm:Normal RightArm:Normal RightHand:Normal LeftArm:Normal LeftArm:Normal LeftArm:Normal LeftHand:Normal RightLeg:Normal RightLeg:Normal Rightfoot:Normal LeftLeg:Normal LeftLeg:Normal LeftFoot:Normal
+&hitlocs_plane FS3Combat Instance Parent=Body:Vital Body:Vital Body:Vital Body:Vital Body:Vital Body:Vital Body:Vital Body:Vital Cockpit:Critical Engine:Vital Engine:Vital Engine:Vital Weapon:Normal LandingGear:Normal Nose:Normal Tail:Normal Controls:Vital RightWing:Normal LeftWing:Normal
+
+@@ --------------------------
+@@ FUN_RANDOM_DAMAGE
+@@ Determines damage based on lethality and hit location.
+@@ There's logic so no matter what the modifiers are there's always a chance (albeit small) to get a L, M, S or C wound.
+@@ %0 = hit loc type (critical, vital, normal)
+@@ %1 = weapon lethality
+@@ %2 = cover lethal. mod
+@@ %3 = armor lethal. mod
+@@ --------------------------
+&FUN_RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,rand(1,100))][setq(1,add(%q0,switch(%0,critical,30,vital,15,normal,0),%1,-%2,-%3))][switch(%q0,1,L,50,M,90,S,99,C,switch(%q1,<50,L,<90,M,<98,S,C))][pemit(*faraday,Random Dmg: hitloc=%0 wpn=%1 cov=%2 arm=%3 random=%q0 modified=%q1)])
+
+@@ --------------------------
+@@ FUN_ROLL_ATTACK
+@@ Makes the attack roll, factoring in appropriate modifiers.
+@@ %0 = attacker
+@@ %1 = defender
+@@ --------------------------
 &FUN_ROLL_ATTACK FS3Combat Instance Parent=localize([setq(9,u(fun_weaponstat,%0,atkskill))][setq(8,u(fun_attack_mods,%0,%1))][setq(7,u(fun_get_skill,%0,%q9))][setq(6,roll_ability(pmatch(%0),%q7,%q8))]%q6[pemit(*faraday,%0 attacking %1: skill=%q9-%q7 mods=%q8 roll=%q6)])
 
 @@ --------------------------
-@@ FUN_DEFENSE_MODS
+@@ FUN_ATTACK_MODS
 @@ %0 = attacker
 @@ %1 = defender
 @@ Attack mods include:
@@ -236,8 +265,12 @@
 @@ --------------------------
 &FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),10)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mods),switch(u(fun_combatstat,%0,lastaim),%1,15,0),u(fun_stance_mod,%0,attacker))
 
+@@ --------------------------
+@@ FUN_ROLL_DEFENSE
+@@ Makes the defense roll, factoring in appropriate modifiers.
 @@ %0 = attacker
 @@ %1 = defender
+@@ --------------------------
 &FUN_ROLL_DEFENSE FS3Combat Instance Parent=localize([setq(9,u(fun_weaponstat,%0,defskill))][setq(8,u(fun_defense_mods,%0,%1))][setq(7,u(fun_get_skill,%0,%q9))][setq(6,roll_ability(pmatch(%1),%q7,%q8))]%q6[pemit(*faraday,%1 defending %0: skill=%q9-%q7 mods=%q8 roll=%q6)])
 
 @@ --------------------------
@@ -272,6 +305,43 @@
 @@ Note: Cover and out of sight are handled specially so they don't have direct modifiers
 &STANCEMOD_ATTACKER FS3Combat Instance Parent=normal:0 banzai:+30 evade:-50 cautious:-15 cover:0 outofsight:0
 &STANCEMOD_DEFENDER FS3Combat Instance Parent=normal:0 banzai:-50 evade:+30 cautious:+15 cover:0 outofsight:0
+
+
+@@ --------------------------
+@@ FUN_ARMOR_MOD
+@@ Determines the lethality modifier based on armor.
+@@ - If not wearing armor, mod is 0
+@@ - If armor doesn't apply to the given hit location, mod is 0
+@@ - Compare weapon pen to armor value and reduce lethality accordingly
+@@ %0 = target name
+@@ %1 = hit location
+@@ %2 = weapon
+@@ --------------------------
+&FUN_ARMOR_MOD FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,armor))][switch(0,t(%q0),0,match(armorstat(%q0,hitloc),%1),0,u(FUN_PROTECT_MOD,weaponstat(%2,pen),armorstat(%q0,protection)))])
+
+@@ --------------------------
+@@ FUN_COVER_MOD
+@@ Determines the lethality modifier based on cover.
+@@ - If not in cover, mod is 0
+@@ - If attacker rolled a 3, they bypass cover so mod is 0
+@@ - Cover has a 50% chance of applying at all since it only covers part of the body
+@@ - Compare weapon pen to default cover value (2)  and reduce lethality accordingly
+@@ %0 = target name
+@@ %1 = attack roll
+@@ %2 = weapon
+@@ --------------------------
+&FUN_COVER_MOD FS3Combat Instance Parent=switch(0,strmatch(u(fun_combatstat,%0,stance),cover),0,lt(%1,3),0,lte(rand(1,100),50),0,u(fun_protect_mod,weaponstat(%2,pen),2))
+
+@@ --------------------------
+@@ FUN_PROTECT_MOD
+@@ Figures out how much to modify lethality based on the ratio between the protection and penetration.
+@@ TODO: This logic is kinda goofy.  Revisit.
+@@ %0 = penetration
+@@ %1 = protection
+@@ --------------------------
+&FUN_PROTECT_MOD FS3Combat Instance Parent=rand(0,u(protect_scale,%0,%1))
+&PROTECT_SCALE FS3Combat Instance Parent=switch(%0,0,0,mul(fdiv(%1,%0),100))
+&TOTAL_PROTECT FS3Combat Instance Parent=33
 
 @@ ================================================================================================================
 @@ ---------------  Turns -----------------
