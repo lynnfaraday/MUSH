@@ -39,8 +39,9 @@
 @@  %4 = Physical or Stun damage
 @@  %5 = Severity (C/S/M/L), applied to both initial and current severity
 
-&CMD-+DAMAGE-INFLICT FS3Combat Damage Commands=$+damage/inflict *=*/*/*/*/*:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is only for staff.),match(real mock,%1),ansi(hr,Damage type must be mock or real.),match(physical stun,%4),ansi(hr,Damage type must be physical or stun.),match(C S M L,%5),ansi(hr,Damage severity must be C S M L.),ansi(hg,You inflict damage upon %0)[dodamage([switch(%0,real,1,0)],%1,%2,%3,%4,%5)])
+&CMD-+DAMAGE-INFLICT FS3Combat Damage Commands=$+damage/inflict *=*/*/*/*/*:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is only for staff.),match(real mock,%1),ansi(hr,Damage type must be mock or real.),match(physical stun,%4),ansi(hr,Damage type must be physical or stun.),match(C S M L,%5),ansi(hr,Damage severity must be C S M L.),ansi(hg,You inflict damage upon %0)[dodamage(%0,[switch(%1,real,1,0)],prettify(%2),prettify(%3),prettify(%4),capstr(%5))])
 
+&CMD-+DAMAGE-INFLICT-CATCH FS3Combat Damage Command=$+damage/inflict *=*:@pemit %#=switch(words(%1,/),5,,[ansi(h,<COMBAT>)] [ansi(hr,The syntax is +damage/inflict <name>=<real or mock>/<hit location>/<weapon>/<physical or stun>/<C S M or L for severity>)])
 
 @@  @@@@@@@@@@@@@@@@@@@@@@
 @@   HEALING COMMANDS
@@ -236,7 +237,6 @@
 @@  %3 = Weapon
 @@  %4 = Physical or Stun damage
 @@  %5 = Severity (C/S/M/L), applied to both initial and current severity
-@@  %6 = 
 @@  Healing points defaulted to 0, notes to empty, and last treated/healed to empty
 @@ Because this is global, must check for staff.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -265,10 +265,10 @@
 @@ %0 = name
 @@ %1 = severity
 @@ %2 = type (stun or physical)
-@@  Note that stun wounds heal 5x faster and vehicles heal 2x faster.
+@@  Note that stun wounds heal 5x faster and vehicles heal 5x faster.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&FUN_HEALPOINTS_SEV FS3Combat Damage Commands=div(after(grab(v(healing_points),%1:*),:),switch(1,isvehicle(%0),2,strmatch(%2,Stun),5,1))
+&FUN_HEALPOINTS_SEV FS3Combat Damage Commands=div(after(grab(v(healing_points),%1:*),:),switch(1,isvehicle(%0),5,strmatch(%2,Stun),5,1))
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ FUN_IS_RESTRICTED
