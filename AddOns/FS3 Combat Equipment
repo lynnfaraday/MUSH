@@ -7,9 +7,9 @@
 &WEAPON_MISSILE_HE  FS3Combat Equipment Stats=High Explosive Anti-Personnel Missile|Gunnery|Reactive|20|10|Explosive|Personal|0|0|0|5000|10|Physical|0
 
 &WEAPON_PISTOL FS3Combat Equipment Stats=Pistol|Firearms|5|0|3|Ranged|Personal|0|10|0|50|0|Physical|0
-&WEAPON_SMG FS3Combat Equipment Stats=Sub-machinegun|Firearms|5|0|3|Ranged|Personal|1|30|15|150|0|Physical|0
-&WEAPON_RIFLE FS3Combat Equipment Stats=Assault Rifle|Firearms|5|0|4|Ranged|Personal|1|20|10|500|0|Physical|0
-&WEAPON_LMG FS3Combat Equipment Stats=Light machinegun/SAW|Firearms|5|0|4|Ranged|Personal|1|100|20|1000|0|Physical|0
+&WEAPON_SMG FS3Combat Equipment Stats=Sub-machinegun|Firearms|5|0|3|Ranged|Personal|1|30|25|150|0|Physical|0
+&WEAPON_RIFLE FS3Combat Equipment Stats=Assault Rifle|Firearms|5|0|4|Ranged|Personal|1|20|20|500|0|Physical|0
+&WEAPON_LMG FS3Combat Equipment Stats=Light machinegun/SAW|Firearms|5|0|4|Ranged|Personal|1|100|30|1000|0|Physical|0
 &WEAPON_SHOTGUN FS3Combat Equipment Stats=Shotgun|Firearms|5|10|3|Ranged|Personal|0|8|0|100|0|Physical|0
 
 &WEAPON_UNARMED FS3Combat Equipment Stats=Unarmed|Melee|Melee|0|0|Melee|Personal|0|0|0|0|0|Stun|0
