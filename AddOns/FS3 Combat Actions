@@ -185,9 +185,9 @@
 @@ FUN_CAN_ACT
 @@ Does general checks as to whether someone can act.
 @@ %0 = name
-@@ SIDE EFFECT!!! sets %q0 to be the person's combat number  (also sets %q1  but we don't care)
+@@ SIDE EFFECT!!! sets %q0 to be the person's combat number  (also sets %qz  but we don't care)
 @@ --------------------------
-&FUN_CAN_ACT FS3Combat Action Commands=[setq(0,u(fun_combat_num,%0))][setq(1,u(fun_combat_num,%N))][and(t(%q1),t(%q0),not(u(%q0/fun_combatstat,%0,ko)),u(%q0/fun_is_actor,%0))]
+&FUN_CAN_ACT FS3Combat Action Commands=[setq(0,u(fun_combat_num,%0))][setq(z,u(fun_combat_num,%N))][and(t(%qz),t(%q0),not(u(%q0/fun_combatstat,%0,ko)),u(%q0/fun_is_actor,%0))]
 
 @@ ---------------   Pass -----------------
 @@ Pass has no options or target
@@ -200,6 +200,8 @@
 @@ FUN_ACTION_PASS
 @@ Registers a pass action.
 @@ %0 = actor name
+@@
+@@ %q0 = combat num (from fun_can_act)
 @@ --------------------------
 &FUN_ACTION_PASS FS3Combat Action Commands=switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,pass,,)])
 
@@ -217,6 +219,8 @@
 @@ FUN_ACTION_RELOAD
 @@ Registers a reload action.
 @@ %0 = actor name
+@@
+@@ %q0 = combat num (from fun_can_act)
 @@ --------------------------
 &FUN_ACTION_RELOAD FS3Combat Action Commands=switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),u(%q0/fun_weaponstat,%0,ammo),ansi(hr,%0's weapon doesn't need to be reloaded.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,reload,,)])
 
@@ -233,6 +237,8 @@
 @@ FUN_ACTION_ESCAPE
 @@ Registers an escape action.
 @@ %0 = actor name
+@@
+@@ %q0 = combat num (from fun_can_act)
 @@ --------------------------
 &FUN_ACTION_ESCAPE FS3Combat Action Commands=switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),t(u(%q0/fun_combatstat,%0,subduedby)),ansi(hr,%0 is not subdued.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,escape,u(%q0/fun_combatstat,%0,subduedby),)])
 
@@ -247,6 +253,8 @@
 @@ Registers a subdue action.
 @@ %0 = actor name
 @@ %1 = target name
+@@
+@@ %q0 = combat num (from fun_can_act)
 @@ --------------------------
 
 &FUN_ACTION_SUBDUE FS3Combat Action Commands=switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),strmatch(weaponstat(u(%q0/fun_combatstat,%0,weapon),wpntype),melee),ansi(hr,Only melee weapons can subdue.),u(%q0/fun_is_targetable,%1),ansi(hr,%1 is not a valid target.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,subdue,%1,)])
@@ -255,8 +263,6 @@
 
 @@ ---------------   Suppress -----------------
 @@ Suppress has a target and no options.  
-@@ TODO: You can target one person or multiple if you have a full-auto weapon.
-
 &CMD-+COMBAT-SUPPRESS FS3Combat Action Commands=$+combat/suppress *:@pemit %#=[ansi(h,<COMBAT>)] [switch(%0,*=*,u(FUN_ACTION_SUPPRESS,before(%0,=),after(%0,=)),u(FUN_ACTION_SUPPRESS,%N,%0))]
 
 @@ --------------------------
@@ -264,8 +270,11 @@
 @@ Registers a suppress action.
 @@ %0 = actor name
 @@ %1 = target name
+@@
+@@ %q0 = combat num (from fun_can_act)
+@@ %q1 = check targets status
 @@ --------------------------
-&FUN_ACTION_SUPPRESS FS3Combat Action Commands=switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),u(%q0/fun_is_targetable,%1),ansi(hr,%1 is not a valid target.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,suppress,%1,)])
+&FUN_ACTION_SUPPRESS FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),lte(words(%1,\,),5),ansi(hr,You cannot target more than 5 targets.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),or(eq(words(%1,1)),u(%q0/fun_weaponstat,%0,auto)),ansi(hr,You cannot suppress multiple targets without a fullauto weapon.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,suppress,%1,)]))
 
 
 @@ ---------------   Aim -----------------
@@ -278,6 +287,8 @@
 @@ Registers an aim action.
 @@ %0 = actor name
 @@ %1 = target name
+@@
+@@ %q0 = combat num (from fun_can_act)
 @@ --------------------------
 &FUN_ACTION_AIM FS3Combat Action Commands=switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),u(%q0/fun_is_targetable,%1),ansi(hr,%1 is not a valid target.),u(%q0/FUN_CAN_ATTACK,%0),ansi(hr,That weapon cannot attack.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,aim,%1,)])
 
@@ -291,8 +302,26 @@
 @@ ---------------   Fullauto -----------------
 @@ Fullauto has a list of targets and no options.  Weapon must be capable of fullauto fire.
 
-@@ TODO: Fullauto not done
-&CMD-+COMBAT-FULLAUTO FS3Combat Action Commands=$+combat/fullauto*:@pemit %#=Sorry, but Faraday has not implemented full auto yet.
+&CMD-+COMBAT-FULLAUTO FS3Combat Action Commands=$+combat/fullauto *:@pemit %#=[ansi(h,<COMBAT>)] [switch(%0,*=*,u(FUN_ACTION_FULLAUTO,before(%0,=),after(%0,=)),u(FUN_ACTION_FULLAUTO,%N,%0))]
+
+@@ --------------------------
+@@ FUN_ACTION_FULLAUTO
+@@ Registers a fullauto attack action.
+@@ %0 = actor name
+@@ %1 = target list
+@@
+@@ %q0 = combat num (from fun_can_act)
+@@ %q1 = check targets status
+@@ --------------------------
+&FUN_ACTION_FULLAUTO FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),u(%q0/FUN_CAN_ATTACK,%0),ansi(hr,That weapon cannot attack.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),lte(words(%1,\,),5),ansi(hr,You cannot target more than 5 targets.),words(u(%q0/fun_combatstat,%0,weapon)),ansi(hr,You don't have a weapon!),u(%q0/fun_weaponstat,%0,auto),ansi(hr,Your weapon cannot fire fullauto.),gte(u(%q0/fun_combatstat,%0,ammo),10),ansi(hr,You don't have enough bullets for fullauto.  Try a short burst instead.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,fullauto,%1,)]))
+
+@@ --------------------------
+@@ FUN_CHECK_TARGETS
+@@ Checks a group of targets.
+@@ %0 = target list
+@@ %1 = combat num
+@@ --------------------------
+&FUN_CHECK_TARGETS FS3Combat Action Commands=localize([setq(0,1)][setq(1,)][iter(%0,switch(u(%1/fun_is_targetable,##),0,[setq(0,0)][setq(1,%q1## is not a valid target.%B)]),\,,)][switch(%q0,1,1,0|%q1)])
 
 @@ ---------------   Attack -----------------
 @@ Attack has a target and can also have options.
@@ -305,11 +334,12 @@
 @@ %0 = actor name
 @@ %1 = target name
 @@ %2 = options list (may be blank)
-@@ TODO: Allow options
-@@ %q0 = combat num (from parent fun - DO NOT LOCALIZE)
+@@ TODO: Allow range and called shot
+@@
+@@ %q0 = combat num (from fun_can_act)
 @@ %q1 = check option status
 @@ --------------------------
-&FUN_ACTION_ATTACK FS3Combat Action Commands=switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),u(%q0/fun_is_targetable,%1),ansi(hr,%1 is not a valid target.),u(%q0/FUN_CAN_ATTACK,%0),ansi(hr,That weapon cannot attack.),[setq(1,u(fun_check_options,%0,%1,%2,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),words(u(%q0/fun_combatstat,%0,weapon)),ansi(hr,You don't have a weapon!),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,attack,%1,%2)])
+&FUN_ACTION_ATTACK FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),u(%q0/fun_is_targetable,%1),ansi(hr,%1 is not a valid target.),u(%q0/FUN_CAN_ATTACK,%0),ansi(hr,That weapon cannot attack.),[setq(1,u(fun_check_options,%0,%1,%2,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),words(u(%q0/fun_combatstat,%0,weapon)),ansi(hr,You don't have a weapon!),not(u(%q0/fun_out_of_ammo,%0)),ansi(hr,%0 is out of ammo.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,attack,%1,%2)]))
 
 @@ --------------------------
 @@ FUN_CHECK_OPTIONS
@@ -318,7 +348,7 @@
 @@ %1 = target name
 @@ %2 = options list (may be blank)
 @@ %3 = combat num
-@@ TODO: Allow options
+@@
 @@ %q0 - fun for current option
 @@ %q1 - return status
 @@ %q2 - current option check status
@@ -348,6 +378,8 @@
 @@ %1 = target name
 @@ %2 = wound num
 @@ TODO: Add treat stuff!
+@@
+@@ %q0 = combat num (from fun_can_act)
 @@ --------------------------
 &FUN_ACTION_TREAT FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),u(%q0/fun_is_combatant,%1),ansi(hr,%1 is not a valid target.),%0 will spend the turn treating %1.  [ansi(hc,Use the +treat command now.)][u(%q0/FUN_SET_ACTION,%0,treat,%1,%2)]))
 
@@ -361,6 +393,8 @@
 @@ Registers a rally action.
 @@ %0 = actor name
 @@ %1 = target name
+@@
+@@ %q0 = combat num (from fun_can_act)
 @@ --------------------------
 &FUN_ACTION_RALLY FS3Combat Action Commands=switch(0,u(fun_can_act,%0),ansi(hr,%0 is either KO'd or not a combatant.),u(%q0/fun_is_combatant,%1),ansi(hr,%1 is not a valid target.),isplayer(%1),ansi(hr,This command may only be used on PCs.),u(%q0/fun_combatstat,%1,ko),ansi(hr,%1 is not KO'd.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,rally,%1,)])
 
