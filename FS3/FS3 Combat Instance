@@ -1,0 +1,631 @@
+
+
+@create FS3Combat Instance Parent
+@set FS3Combat Instance Parent = WIZARD
+@set FS3Combat Instance Parent = SAFE
+@set FS3Combat Instance Parent = !NO_COMMAND
+
+
+@@ DB# of organizer.
+&ORGANIZER FS3Combat Instance Parent=
+
+@@ Team targets. By default only 1 and 2 have target specifications.
+&TEAM1_TARGET FS3Combat Instance Parent=2
+&TEAM2_TARGET FS3Combat Instance Parent=1
+
+@@ List of players who entered their action.
+&ACTED FS3Combat Instance Parent=
+
+@@ Tracks turn #
+&TURN FS3Combat Instance Parent=0
+
+@@ Defaults to real combat
+&REAL FS3Combat Instance=1
+
+@@ STAT_<name>`<stat> stores all combat stats.
+
+
+@@ ================================================================================================================
+@@ ---------------   Attribute Management -----------------
+@@ ================================================================================================================
+
+@@ --------------------------
+@@ FUN_COMBATSTAT
+@@ Gets a combat stat.  Blank if not in combat.
+@@ %0 = name
+@@ %1 = stat
+@@ --------------------------
+
+&COMBATSTATS FS3Combat Instance Parent=type team vehicle weapon stance armor mods luck lastaim suppress action target actoptions hitthisturn ko subduedby ammo 
+&FUN_COMBATSTAT FS3Combat Instance Parent=[v(stat_[unprettify(%0)]`[unprettify(%1)]
+
+@@ --------------------------
+@@  FUN_MOD_COMBATSTAT
+@@  Modifies one of the combat stats.
+@@  %0 = Name
+@@  %1 = The stat to set, from COMBATSTATS.
+@@  %2 = The new value.
+@@ --------------------------
+&FUN_MOD_COMBATSTAT FS3Combat Instance Parent=set(me,stat_[unprettify(%0)]`[unprettify(%1)]:%2)
+
+@@ --------------------------
+@@ FUN_INIT_COMBATSTAT
+@@ %0 = name
+@@ %1 = type
+@@ %2 = vehicle
+@@ %3 = weapon
+@@ Note: 
+@@ - PCs automatically put on team 1, and NPCs on team 2.
+@@ --------------------------
+&FUN_INIT_COMBATSTAT  FS3Combat Instance Parent=iter(v(combatstats),u(fun_mod_combatstat,%0,##,[u(init_##,%0,%1,%2,%3)]))
+
+&INIT_TYPE FS3Combat Instance Parent=[lcstr(trim(%1))]
+&INIT_TEAM FS3Combat Instance Parent=[switch(%1,observer,,npcmaster,,switch(isplayer(%0),1,1,2))]
+&INIT_VEHICLE FS3Combat Instance Parent=[prettify(%2)]
+&INIT_WEAPON FS3Combat Instance Parent=%3
+&INIT_STANCE FS3Combat Instance Parent=normal
+&INIT_ARMOR FS3Combat Instance Parent=
+&INIT_MODS FS3Combat Instance Parent=0
+&INIT_LUCK FS3Combat Instance Parent=
+&INIT_LASTAIM FS3Combat Instance Parent=
+&INIT_SUPPRESS FS3Combat Instance Parent=0
+&INIT_ACTION FS3Combat Instance Parent=pass
+&INIT_TARGET FS3Combat Instance Parent=
+&INIT_ACTOPTIONS FS3Combat Instance Parent=
+&INIT_HITTHISTURN FS3Combat Instance Parent=0
+&INIT_KO FS3Combat Instance Parent=0
+&INIT_SUBDUEDBY FS3Combat Instance Parent=
+&INIT_AMMO FS3Combat Instance Parent=[weaponstat(%3,ammo)]
+
+@@ --------------------------
+@@ FUN_REMOVE
+@@ Removes someone from combat by erasing all their combat attributes.
+@@ also clears out anyone targeting them.
+@@ %0 = name
+@@ --------------------------
+&FUN_REMOVE FS3Combat Instance Parent=[wipe(me/stat_[unprettify(%0)]**)][u(fun_untarget,%0)]
+
+@@ ================================================================================================================
+@@ ---------------  Utilities -----------------
+@@ ================================================================================================================
+
+@@ --------------------------
+@@ FUN_DAMAGEMOD
+@@ Gets the damage modifier, which is for the person (if a soldier) or them + their vehicle (for pilot/passenger)
+@@ %0 = name
+@@ --------------------------
+&FUN_DAMAGEMOD FS3Combat Instance Parent=switch(u(fun_is_in_vehicle,%0),1,add(damagemod(%0),damagemod(u(fun_combatstat,%0,vehicle))),damagemod(%0))
+
+@@ --------------------------
+@@ FUN_WEAPONSTAT
+@@ Shortcut to get a particular weapon stat for someone's weapon.
+@@ %0 = name
+@@ %1 = weapon stat
+@@ --------------------------
+&FUN_WEAPONSTAT FS3Combat Instance Parent=weaponstat(u(fun_combatstat,%0,weapon),%1)
+
+@@ --------------------------
+@@ FUN_VEHICLESTAT
+@@ Shortcut to get a particular vehicle stat for someone's vehicle.
+@@ %0 = name
+@@ %1 = vehicle stat
+@@ --------------------------
+&FUN_VEHICLESTAT FS3Combat Instance Parent=vehtypestat(vehiclestat(u(fun_combatstat,%0,vehicle),type),%1)
+
+@@ --------------------------
+@@ FUN_ARMORSTAT
+@@ Shortcut to get a particular armor stat for a person or vehicle's armor.
+@@ %0 = name (person or vehicle)
+@@ %1 = armor stat
+@@ --------------------------
+&FUN_ARMORSTAT FS3Combat Instance Parent=armorstat(switch(isvehicle(%0),1,vehtypestat(vehiclestat(%0,type),armor),u(fun_combatstat,%0,armor)),%1)
+
+@@ --------------------------
+@@ FUN_OUT_OF_AMMO
+@@ Determines if someone's out of ammo.  You can only be out of ammo if your weapon actually uses ammo, as indicated by the weaponstat ammo.
+@@ %0 = name
+@@ --------------------------
+&FUN_OUT_OF_AMMO FS3Combat Instance Parent=localize([setq(0,u(fun_weaponstat,%0,ammo))][setq(1,u(fun_combatstat,%0,ammo))][switch(%q0,0,0,eq(%q1,0))])
+
+@@ --------------------------
+@@ FUN_SUBTRACT_AMMO
+@@ Subtracts ammo, if applicable.  You only use bullets if your weapon actually uses ammo, as indicated by the weaponstat ammo.
+@@ %0 = name
+@@ %1 = bullets to subtract
+@@ 
+@@ %q0 = whether your gun uses ammo
+@@ %q1 = bullets remaining
+@@ --------------------------
+&FUN_SUBTRACT_AMMO FS3Combat Instance Parent=localize([setq(0,u(fun_weaponstat,%0,ammo))][setq(1,u(fun_combatstat,%0,ammo))][switch(%q0,>0,u(fun_mod_combatstat,%0,ammo,max(0,sub(%q1,%1))))])
+
+
+@@ ================================================================================================================
+@@ ---------------   Participants and Messages -----------------
+@@ ================================================================================================================
+
+@@ --------------------------
+@@ FUN_IS_PARTICIPANT
+@@ FUN_IS_COMBATANT
+@@ FUN_IS_TARGETABLE
+@@ Given a name, returns whether they're a combatant, participant or targetable.
+@@ 'participant' refers to everyone who's joined the combat 
+@@ 'combatant' refers to everyone EXCEPT observers and npcmasters 
+@@ 'targetable' refers to everyone EXCEPT observers npcmasters and passengers and folks in the 'outofsight' stance or KO'd.
+@@ 'actors' refers to everyone EXCEPT observers
+@@ --------------------------
+&FUN_IS_PARTICIPANT FS3Combat Instance Parent=t(u(fun_combatstat,%0,type))
+&FUN_IS_COMBATANT FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,npcmaster,0,1)
+&FUN_IS_TARGETABLE FS3Combat Instance Parent=and(switch(u(fun_combatstat,%0,type),,0,observer,0,passenger,0,npcmaster,0,1),not(u(fun_combatstat,%0,ko)),not(strmatch(u(fun_combatstat,%0,stance),outofsight)))
+&FUN_IS_ACTOR FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),,0,observer,0,1)
+&FUN_IS_NPCMASTER FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),npcmaster,1,0)
+
+@@ --------------------------
+@@ FUN_PARTICIPANTS
+@@ FUN_COMBATANTS
+@@ FUN_TARGETABLE
+@@ Gets an (unpretty) list of the participants, combantants or targetable folks
+@@ --------------------------
+&FUN_PARTICIPANTS FS3Combat Instance Parent=iter(lattr(me/stat_*),after(##,_))
+&FUN_COMBATANTS FS3Combat Instance Parent=iter(lattr(me/stat_*),switch(u(fun_is_combatant,after(##,_)),1,after(##,_)))
+&FUN_TARGETS FS3Combat Instance Parent=iter(lattr(me/stat_*),switch(u(fun_is_targetable,after(##,_)),1,after(##,_)))
+&FUN_ACTORS FS3Combat Instance Parent=iter(lattr(me/stat_*),switch(u(fun_is_actor,after(##,_)),1,after(##,_)))
+&FUN_NPCMASTERS FS3Combat Instance Parent=iter(lattr(me/stat_*),switch(u(fun_is_npcmaster,after(##,_)),1,after(##,_)))
+
+
+@@ --------------------------
+@@ FUN_IS_IN_VEHICLE
+@@ Tells if you're in a vehicle or not.
+@@ %0 = name
+@@ --------------------------
+&FUN_IS_IN_VEHICLE FS3Combat Instance Parent=switch(u(fun_combatstat,%0,type),pilot,1,passenger,1,0)
+
+@@ --------------------------
+@@ FUN_FIND_PILOT
+@@ Finds the pilot of a specified vehicle.
+@@ %0 = vehicle name
+@@ --------------------------
+&FUN_FIND_PILOT FS3Combat Instance Parent=iter(u(fun_combatants),switch(and(strmatch(u(fun_combatstat,##,type),pilot),strmatch(u(fun_combatstat,##,vehicle),%0)),1,##),,)
+
+@@ --------------------------
+@@ FUN_COMBAT_MSG
+@@ Sends a message to all participants.
+@@ %0 = message
+@@ --------------------------
+&FUN_COMBAT_MSG FS3Combat Instance Parent=iter(u(fun_participants),switch(isplayer(##),1,pemit(pmatch(##),[ansi(hb,<COMBAT>)] [regeditalli(%0,##,ansi(hy,prettify(lcstr(##))))])),,)
+
+@@ --------------------------
+@@ FUN_ORG_MSG
+@@ Sends a message to only the organizer.
+@@ %0 = message
+@@ --------------------------
+&FUN_ORG_MSG FS3Combat Instance Parent=pemit(v(organizer),[ansi(hg,<COMBAT>)] %0)
+
+
+@@ ================================================================================================================
+@@ ---------------  Actions -----------------
+@@ ================================================================================================================
+
+
+@@ --------------------------
+@@ FUN_DO_ACTION
+@@ Triggers a character's combat action.
+@@ %0 = name
+@@ --------------------------
+&FUN_DO_ACTION  FS3Combat Instance Parent=u(fun_action_[u(fun_combatstat,%0,action)],%0,u(fun_combatstat,%0,target),u(fun_combatstat,%0,actoptions))
+
+@@ --------------------------
+@@ FUN_ACTION_PASS
+@@ %0 = name
+@@ %1 = target
+@@ %2 = action options
+@@ --------------------------
+&FUN_ACTION_PASS FS3Combat Instance Parent=[u(fun_combat_msg,[prettify(lcstr(%0))] passes.)]
+
+@@ --------------------------
+@@ FUN_ACTION_RELOAD
+@@ %0 = name
+@@ %1 = target
+@@ %2 = action options
+@@ --------------------------
+&FUN_ACTION_RELOAD FS3Combat Instance Parent=[u(fun_combat_msg,[prettify(lcstr(%0))] reloads.)][u(fun_mod_combatstat,%0,ammo,u(fun_weaponstat,%0,ammo))]
+
+@@ --------------------------
+@@ FUN_ACTION_ATTACK
+@@ Attacks just trigger a call to the main 'do attack' method, but we have to translate an attack on a pilot to an attack on his vehicle.
+@@ %0 = name
+@@ %1 = target
+@@ %2 = action options
+@@
+@@ %q0 = remaining ammo
+@@ %q1 = bullets used
+@@ %q2 = weapon recoil stat
+@@ --------------------------
+&FUN_ACTION_ATTACK FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,ammo))][setq(1,switch(grab(%2,burst),,1,min(%q0,3)))][setq(2,u(fun_weaponstat,%0,recoil))][switch(0,t(u(fun_combatstat,%0,weapon)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no weapon!),t(u(fun_combatstat,%0,target)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no target!),not(u(fun_out_of_ammo,%0)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but is [ansi(hr,out of ammo)]!),[switch(%q1,>1,u(fun_combat_msg,[prettify(lcstr(%0))] fires a [ansi(hm,%q1 round burst)]!))][iter(lnum(1,%q1),u(fun_do_attack,%0,switch(u(fun_is_in_vehicle,%1),1,u(fun_combatstat,%1,vehicle),%1),grab(%2,called=*),-[mul(sub(#@,1),%q2)]))][u(fun_subtract_ammo,%0,%q1)][switch(sub(%q0,%q1),0,u(fun_combat_msg,ansi(hm,[prettify(lcstr(%0))]'s weapon clicks empty.)))])]))
+
+
+@@ --------------------------
+@@ FUN_ACTION_FULLAUTO
+@@ Attacks just trigger a call to the main 'do attack' method, but we have to translate an attack on a pilot to an attack on his vehicle.
+@@ %0 = name
+@@ %0 = target list (comma-sep)
+@@ %2 = action options
+@@
+@@ %q0 = remaining ammo
+@@ %q1 = weapon recoil stat
+@@ %q3 = temporary recoil calculation for current bullet
+@@ --------------------------
+&FUN_ACTION_FULLAUTO FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,ammo))][setq(1,u(fun_weaponstat,%0,recoil))][switch(0,t(u(fun_combatstat,%0,weapon)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no weapon!),t(u(fun_combatstat,%0,target)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no target!),not(u(fun_out_of_ammo,%0)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but is [ansi(hr,out of ammo)]!),gt3(%q0,10),u(fun_combat_msg,[prettify(lcstr(%0))] tries to fire fullauto but doesn't have enough bullets.),[u(fun_combat_msg,[prettify(lcstr(%0))] fires [ansi(hr,fullauto)]!)][iter(u(fun_distribute_bullets,%1),iter(lnum(1,after(%i0,:)),[setq(3,min(99,mul(add(mul(sub(inum(1),1),words(%1,\,)),inum(0),-1),%q1)))][pemit(*faraday,%i0-%i1-%q3)]u(fun_do_attack,%0,switch(u(fun_is_in_vehicle,before(%i1,:)),1,u(fun_combatstat,before(%i1,:),vehicle),before(%i1,:)),,-%q3)),\,)][u(fun_subtract_ammo,%0,%q1)][switch(sub(%q0,%q1),0,u(fun_combat_msg,ansi(hm,[prettify(lcstr(%0))]'s weapon clicks empty.)))])])
+
+@@ --------------------------
+@@ FUN_DISTRIBUTE_BULLETS
+@@ Given a list of targets and 10 bullets, divvies up the bullets among them - losing 1 for the 'dead space' between each.
+@@ Returns a list in the form A:2,B:3,C:2
+@@ %0 = target list (comma-sep)
+@@ --------------------------
+&FUN_DISTRIBUTE_BULLETS FS3Combat Instance Parent=localize([setq(0,words(%0,\,))][setq(1,sub(10,sub(%q0,1)))][iter(%0,##:[add(div(%q1,%q0),lte(#@,mod(%q1,%q0)))],\,,\,)])
+
+
+@@ --------------------------
+@@ FUN_ACTION_ESCAPE
+@@ %0 = name
+@@ %1 = target
+@@ %2 = action options
+@@ --------------------------
+@@ TODO - not done
+&FUN_ACTION_ESCAPE FS3Combat Instance Parent=[u(fun_combat_msg,[prettify(lcstr(%0))] attempts to escape but Faraday hasn't coded that yet.)]
+
+@@ --------------------------
+@@ FUN_ACTION_SUBDUE
+@@ %0 = name
+@@ %1 = target
+@@ %2 = action options
+@@ --------------------------
+@@ TODO - not done
+&FUN_ACTION_SUBDUE FS3Combat Instance Parent=[u(fun_combat_msg,[prettify(lcstr(%0))] attempts to subdue [prettify(lcstr(%1))] but Faraday hasn't coded that yet.)]
+
+@@ --------------------------
+@@ FUN_ACTION_TREAT
+@@ Treat, even if unsuccessful, gives them a second chance at a KO roll.
+@@ %0 = name
+@@ %1 = target
+@@ %2 = action options
+@@ --------------------------
+@@ TODO: Do the actual treat stuff.
+&FUN_ACTION_TREAT FS3Combat Instance Parent=[u(fun_combat_msg,[prettify(lcstr(%0))] treats [prettify(lcstr(%1))]. [switch(u(fun_combatstat,%1,ko),1,[prettify(lcstr(%1))] is [switch(1,checkko(%1),still KO'd.,back in the fight![u(fun_mod_combatstat,%1,ko,0)])])])]
+
+
+@@ --------------------------
+@@ FUN_ACTION_RALLY
+@@ Rally gives them a second chance at a KO roll.
+@@ %0 = name
+@@ %1 = target
+@@ %2 = action options
+@@ --------------------------
+&FUN_ACTION_RALLY FS3Combat Instance Parent=[u(fun_combat_msg,[prettify(lcstr(%0))] attempts to rally [prettify(lcstr(%1))] [switch(u(fun_combatstat,%1,ko),0,but they are not KO'd.,and [switch(checkko(%1),1,FAILS,SUCCEEDS. [prettify(lcstr(%1))] is back in the fight![u(fun_mod_combatstat,%1,ko,0)])])])]
+
+@@ --------------------------
+@@ FUN_ACTION_SUPPRESS
+@@ %0 = name
+@@ %0 = target list (comma-sep)
+@@ %2 = action options
+@@ %q0 = attack roll result
+@@ %q1 = defense roll result
+@@ --------------------------
+&FUN_ACTION_SUPPRESS FS3Combat Instance Parent=localize(iter(%1,[u(fun_combat_msg,[prettify(lcstr(%0))] suppresses [prettify(lcstr(##))] with [prettify(u(fun_combatstat,%0,weapon))].%B[setq(0,u(fun_roll_attack,%0,##))][setq(1,u(fun_roll_defense,%0,##))][switch(and(gte(%q0,%q1),gt(%q0,0)),0,<unsuccessful>,<successful>[u(fun_mod_combatstat,##,suppress,add(%q0,u(fun_combatstat,##,suppress)))])])],\,,))
+
+@@ --------------------------
+@@ FUN_ACTION_AIM
+@@ %0 = name
+@@ %1 = target
+@@ %2 = action options
+@@ --------------------------
+&FUN_ACTION_AIM FS3Combat Instance Parent=[u(fun_combat_msg,[prettify(lcstr(%0))] takes careful aim at [prettify(lcstr(%1))].)]
+
+
+@@ ================================================================================================================
+@@ ---------------  Attacking! -----------------
+@@ ================================================================================================================
+
+@@ --------------------------
+@@ FUN_DO_ATTACK
+@@ %qt = the real target - pilot or person
+@@ %qa = attack roll result
+@@ %qd = defense roll result
+@@ %qh = random hit location, in the form location:criticality
+@@ %qz = random damage
+@@ %qw = weapon
+@@ %ql = weapon lethality
+@@ %qc = cover lethality modifier (0 if no cover)
+@@ %qr = armor lethality modifier (0 if no armor)
+@@
+@@ %0 = attacker
+@@ %1 = defender (may be a vehicle name, in which case we have to determine the pilot for certain rolls)
+@@ %2 = targeted hit location
+@@ %3 = special modifier (used for recoil or range)
+@@ TODO: account for range
+@@ TODO: Add suppression from attacks - boost suppression chance for +combat/suppress?
+@@ --------------------------
+
+&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][setq(w,u(fun_combatstat,%0,weapon))][setq(l,weaponstat(%qw,lethality))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] and [switch(1,lte(%qa,0),MISSES!,lt(%qa,%qd),%qt DODGES!,gte(%qc,100),hits COVER.,gte(%qr,100),hits [before(%qh,:)] but ARMOR stops the attack!,HITS! [switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])] wound to [before(%qh,:)][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz)])])
+
+@@ --------------------------
+@@ FUN_RANDOM_HITLOC
+@@ Determines hit location based on attack roll and target type.
+@@ %0 = target name
+@@ %1 = delta between attack/def roll
+@@ %2 = targeted hit location
+@@ TODO: This needs to be finished.
+@@ --------------------------
+&FUN_RANDOM_HITLOC FS3Combat Instance Parent=first(shuffle(v(hitlocs_[switch(u(fun_combatstat,%0,type),soldier,person,plane)])))
+
+&hitlocs_person FS3Combat Instance Parent=Head:Critical Head:Critical Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Chest:Vital Abdomen:Vital Abdomen:Vital Abdomen:Vital Abdomen:Vital RightArm:Normal RightArm:Normal RightArm:Normal RightHand:Normal LeftArm:Normal LeftArm:Normal LeftArm:Normal LeftHand:Normal RightLeg:Normal RightLeg:Normal Rightfoot:Normal LeftLeg:Normal LeftLeg:Normal LeftFoot:Normal
+&hitlocs_plane FS3Combat Instance Parent=Body:Vital Body:Vital Body:Vital Body:Vital Body:Vital Body:Vital Body:Vital Body:Vital Cockpit:Critical Engine:Vital Engine:Vital Engine:Vital Weapon:Normal LandingGear:Normal Nose:Normal Tail:Normal Controls:Vital RightWing:Normal LeftWing:Normal
+
+@@ --------------------------
+@@ FUN_RANDOM_DAMAGE
+@@ Determines damage based on lethality and hit location.
+@@ There's logic so no matter what the modifiers are there's always a chance (albeit small) to get a L, M, S or C wound.
+@@ %0 = hit loc type (critical, vital, normal)
+@@ %1 = weapon lethality
+@@ %2 = cover lethal. mod
+@@ %3 = armor lethal. mod
+@@ --------------------------
+&FUN_RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,rand(1,100))][setq(1,add(%q0,switch(%0,critical,30,vital,15,normal,0),%1,-%2,-%3,-[herofactor()]))][switch(%q0,1,L,50,M,90,S,99,C,switch(%q1,<50,L,<90,M,<98,S,C))][pemit(*faraday,Random Dmg: hitloc=%0 wpn=%1 cov=%2 arm=%3 random=%q0 modified=%q1)])
+
+@@ --------------------------
+@@ FUN_ROLL_ATTACK
+@@ Makes the attack roll, factoring in appropriate modifiers.
+@@ %0 = attacker
+@@ %1 = defender
+@@ %2 = special modifier
+@@ --------------------------
+&FUN_ROLL_ATTACK FS3Combat Instance Parent=localize([setq(9,u(fun_weaponstat,%0,atkskill))][setq(8,add(u(fun_attack_mods,%0,%1),%2))][setq(7,u(fun_get_skill,%0,%q9))][setq(6,roll_ability(pmatch(%0),%q7,%q8))]%q6[pemit(*faraday,%0 attacking %1: skillname=%q9 skilllvl=%q7 mods=%q8 roll=%q6)])
+
+@@ --------------------------
+@@ FUN_ATTACK_MODS
+@@ %0 = attacker
+@@ %1 = defender
+@@ Attack mods include:
+@@ - Damage modifier
+@@ - Suppression value x 10
+@@ - Weapon accuracy
+@@ - Special modifiers
+@@ - Aim modifier (30)
+@@ - Stance modifier
+@@ --------------------------
+&FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),10)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mods),switch(u(fun_combatstat,%0,lastaim),%1,30,0),u(fun_stance_mod,%0,attacker))
+
+@@ --------------------------
+@@ FUN_ROLL_DEFENSE
+@@ Makes the defense roll, factoring in appropriate modifiers.
+@@ %0 = attacker
+@@ %1 = defender
+@@ --------------------------
+&FUN_ROLL_DEFENSE FS3Combat Instance Parent=localize([setq(9,u(fun_weaponstat,%0,defskill))][setq(8,u(fun_defense_mods,%0,%1))][setq(7,u(fun_get_skill,%1,%q9))][setq(6,roll_ability(pmatch(%1),%q7,%q8))]%q6[pemit(*faraday,%1 defending %0:  skillname=%q9 skilllvl=%q7 mods=%q8 roll=%q6)])
+
+@@ --------------------------
+@@ FUN_GET_SKILL
+@@ Gets the appropriate skill level for a PC or NPC.  If neither, defaults to 5.
+@@ %0 = name
+@@ %1 = skill name
+@@ --------------------------
+&FUN_GET_SKILL FS3Combat Instance Parent=switch(1,isnum(%1),%1,isnpc(%0),npcstat(%0,skill),isplayer(%0),ability_level(pmatch(%0),%1),5)
+
+@@ --------------------------
+@@ FUN_DEFENSE_MODS
+@@ %0 = attacker
+@@ %1 = defender
+@@ Defense mods include:
+@@ - Damage modifier
+@@ - Special modifiers
+@@ - Stance mods
+@@ --------------------------
+&FUN_DEFENSE_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%1)],u(fun_combatstat,%0,mods),u(fun_stance_mod,%1,defender))
+
+
+@@ --------------------------
+@@ FUN_STANCE_MOD
+@@ Gets someone's stance modifier.
+@@ %0 = name
+@@ %1 = attacker or defender
+@@ --------------------------
+&FUN_STANCE_MOD FS3Combat Instance Parent=after(grab(v(stancemod_%1),[u(fun_combatstat,%0,stance)]:*),:)
+
+@@ Note: Cover and out of sight are handled specially so they don't have direct modifiers
+&STANCEMOD_ATTACKER FS3Combat Instance Parent=normal:0 banzai:+30 evade:-50 cautious:-15 cover:0 outofsight:0
+&STANCEMOD_DEFENDER FS3Combat Instance Parent=normal:0 banzai:-50 evade:+30 cautious:+15 cover:0 outofsight:0
+
+
+@@ --------------------------
+@@ FUN_ARMOR_MOD
+@@ Determines the lethality modifier based on armor.
+@@ - If not wearing armor, mod is 0
+@@ - If armor doesn't apply to the given hit location, mod is 0
+@@ - Compare weapon pen to armor value and reduce lethality accordingly
+@@ %0 = target name
+@@ %1 = hit location
+@@ %2 = weapon
+@@ --------------------------
+&FUN_ARMOR_MOD FS3Combat Instance Parent=localize([setq(0,u(fun_armorstat,%0,protection))][setq(1,u(fun_armorstat,%0,hitloc))][switch(0,t(%q0),0,match(%q1,%1),0,u(FUN_PROTECT_MOD,weaponstat(%2,pen),%q0))][pemit(*faraday,target=%0 hitloc=%1 protect=%q0)])
+
+@@ --------------------------
+@@ FUN_COVER_MOD
+@@ Determines the lethality modifier based on cover.
+@@ - If not in cover, mod is 0
+@@ - If attacker rolled a 3, they bypass cover so mod is 0
+@@ - Cover has a 50% chance of applying at all since it only covers part of the body
+@@ - Compare weapon pen to default cover value (3)  and reduce lethality accordingly
+@@ %0 = target name
+@@ %1 = attack roll
+@@ %2 = weapon
+@@ --------------------------
+&FUN_COVER_MOD FS3Combat Instance Parent=switch(0,strmatch(u(fun_combatstat,%0,stance),cover),0,lt(%1,3),0,lte(rand(1,100),50),0,u(fun_protect_mod,weaponstat(%2,pen),3))
+
+@@ --------------------------
+@@ FUN_PROTECT_MOD
+@@ Figures out how much to modify lethality based on the ratio between the protection and penetration.
+@@ %0 = penetration
+@@ %1 = protection
+@@ --------------------------
+&FUN_PROTECT_MOD FS3Combat Instance Parent=localize([setq(0,u(FUN_STOP_CHANCE,%0,%1))][setq(2,rand(0,100))][setq(3,switch(1,eq(%q0,0),0,gt(%q0,100),100,lte(%q2,%q0),100,rand(0,%q0)))]%q3[pemit(*faraday,pen=%0 prot=%1 stopchance=%q0 rand=%q2 final=%q3)])
+
+@@ --------------------------
+@@ FUN_STOP_CHANCE
+@@ Determines the chance of armor stopping a weapon.  Complex formula
+@@ determined through great pain.
+@@ %0 = penetration
+@@ %1 = protection
+@@ --------------------------
+&FUN_STOP_CHANCE FS3Combat Instance Parent=localize([setq(0,add(mul(sub(mul(fdiv(%1,%0),2),1),25),10))][switch(1,eq(%0,0),0,eq(%1,0),0,lte(%q0,0),0,%q0)])
+
+@@ ================================================================================================================
+@@ ---------------  Turns -----------------
+@@ ================================================================================================================
+
+@@ --------------------------
+@@ POSE_HOOK
+@@ This can be installed as an @hook after pose/say/semipose/emit to trigger combat notification when all actors have posed.
+@@ --------------------------
+&POSE_HOOK FS3Combat Instance Parent=[setq(c,xget(%#,combat))][switch(t(%qc),1,[set(%qc,posed:[setdiff([xget(%qc,posed)] %N,)])][u(%qc/fun_pose_trigger)])]
+&FUN_POSE_TRIGGER FS3Combat Instance Parent=switch(1,v(allposed),,u(FUN_EVERYONE_POSED),u(fun_org_msg,ansi(hc,Everyone has posed.))[set(me,allposed:1)])
+
+@@ --------------------------
+@@ FUN_EVERYONE_ACTED
+@@ Tells whether all players involved have registered an action.
+@@ --------------------------
+&FUN_EVERYONE_ACTED FS3Combat Instance Parent=not(strmatch(iter(u(fun_actors),switch(isplayer(##),1,t(match(v(acted),##)),1),,),*0*))
+
+
+@@ --------------------------
+@@ FUN_EVERYONE_POSED
+@@ Tells whether all players involved have registered an action.
+@@ --------------------------
+&FUN_EVERYONE_POSED FS3Combat Instance Parent=not(strmatch(iter(u(fun_actors),switch(isplayer(##),1,t(match(v(posed),##)),1),,),*0*))
+
+
+@@ --------------------------
+@@ FUN_TURN_NUM
+@@ Combat turn #
+@@ --------------------------
+&FUN_TURN_NUM FS3Combat Instance Parent=v(turn)
+
+@@ --------------------------
+@@ FUN_NEW_TURN
+@@ Starts a new turn
+@@ - Increment turn #
+@@ - Wipe acted list
+@@ foreach combatant...
+@@   - Check for KO if hit. Note: if vehicle KO'd everyone in it is KO'd as well.
+@@   - Reduce suppression effects by 1/2.  Cap at 3.
+@@   - Reset luck expenditures
+@@   - Set lastaim (to target if aiming, to blank if not)
+@@   - reset 'hit this turn'
+@@
+@@ Note: Must check that they're still a combatant after checking for KO because it may have removed them and we don't
+@@ want to reset their attributes if they're no longer with us.
+@@ --------------------------
+&FUN_NEW_TURN FS3Combat Instance Parent=[u(fun_combat_msg,[ansi(hc,%N has started a new turn.  Pose and choose your action.)])][set(me,turn:[inc(v(turn))])][set(me,acted:)][set(me,posed:)][set(me,allposed:0)][iter(u(fun_combatants),[u(fun_check_for_ko,##)][switch(u(fun_is_combatant,##),1,[u(fun_reduce_suppress,##)][u(fun_reset_aim,##)][u(fun_reset_luck,##)][u(fun_reset_hit,##)])])]
+
+@@ --------------------------
+@@ These are helper functions for FUN_NEW_TURN just to keep things less messy.  
+@@ %0 = name
+@@ --------------------------
+&FUN_CHECK_FOR_KO FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,vehicle))][switch(u(fun_combatstat,%0,hitthisturn),1,switch(checkko(switch(t(%q0),1,%q0,%0)),1,[u(fun_ko,%0)][switch(t(%q0),1,iter(remove(u(fun_combatants),%0),switch(u(fun_combatstat,##,vehicle),%q0,u(fun_ko,##))))]))])
+&FUN_REDUCE_SUPPRESS FS3Combat Instance Parent=u(fun_mod_combatstat,%0,suppress,min(sub(u(fun_combatstat,%0,suppress),2),3))
+&FUN_RESET_LUCK FS3Combat Instance Parent=u(fun_mod_combatstat,%0,luck,)
+&FUN_RESET_AIM FS3Combat Instance Parent=u(fun_mod_combatstat,%0,lastaim,switch(u(fun_combatstat,%0,action),aim,u(fun_combatstat,%0,target),))
+&FUN_RESET_HIT FS3Combat Instance Parent=u(fun_mod_combatstat,%0,hitthisturn,0)
+
+@@ --------------------------
+@@ FUN_KO
+@@ Handles knocking someone out.  Players are set 'ko' and their actions/targets cleared, but NPCs are removed from combat.
+@@ %0 = name
+@@ --------------------------
+&FUN_KO FS3Combat Instance Parent=u(fun_combat_msg,[prettify(lcstr(%0))] has been [ansi(hr,**KO'd**)]!)[switch(isplayer(%0),1,[u(fun_mod_combatstat,%0,ko,1)][u(fun_mod_combatstat,%0,action,pass)][u(fun_mod_combatstat,%0,target,)][u(fun_untarget,%0)][pemit(pmatch(%0),[ansi(h,<COMBAT>)] You may use +combat/hero to spend a luck point and stay in the fight.  Also someone may come along and treat or rally you.  If you are truly out of combat, please switch your type to 'observer' so the pose tracking works properly.)],[u(fun_remove,%0)])][switch(isplayer(%0),0,iter(u(fun_npcmasters),pemit(pmatch(##),[ansi(h,<COMBAT>)] If [prettify(lcstr(%0))] was your only NPC in this combat, please switch your type to 'observer' so the pose tracking works properly.)))]
+
+@@ --------------------------
+@@ FUN_INITIATIVE
+@@ Determines initiative order.
+@@ %0 = name
+@@ --------------------------
+&FUN_INITIATIVE FS3Combat Instance Parent=iter(revwords(sort(iter(u(fun_combatants),[roll_ability(pmatch(##),Reactive)]:##),n)),after(##,:))
+
+@@ --------------------------
+@@ FUN_UNTARGET
+@@ When someone is removed from combat or KO'd, you need to clear out anyone who's targeting them.
+@@ %0 = name
+@@ --------------------------
+&FUN_UNTARGET FS3Combat Instance Parent=iter(u(fun_combatants),u(fun_mod_combatstat,##,target,squish(remove(u(fun_combatstat,##,target),%0))))
+
+@@ ================================================================================================================
+@@ ---------------  Teams -----------------
+@@ ================================================================================================================
+
+@@ --------------------------
+@@ FUN_TEAM_TARGETS
+@@ Limits targets to only ones that are valid based on your team. (unpretty list)
+@@ %0 = your team (will be excluded)
+@@ %1 = if specified, will limit list to ONLY targets on these teams
+@@ --------------------------
+
+&FUN_TEAM_TARGETS FS3Combat Instance Parent=[iter(regraball(iter(u(fun_targets),[u(fun_combatstat,##,team)]:##),\[[edit(remove(switch(%1,,lnum(1,9),%1),%0),%B,|)]\]:),after(##,:))]
+
+@@ --------------------------
+@@ FUN_TEAM_MEMBERS
+@@ Gets unpretty list of names in a team.
+@@ %0 = team
+@@ --------------------------
+&FUN_TEAM_MEMBERS FS3Combat Instance Parent=[squish(iter(u(fun_combatants),switch(u(fun_combatstat,##,team),%0,##)))]
+
+@@ --------------------------
+@@ FUN_ACTIVE_TEAMS
+@@ Gets list of teams with people in them.
+@@ --------------------------
+&FUN_ACTIVE_TEAMS FS3Combat Instance Parent=[sort(setdiff(iter(u(fun_combatants),u(fun_combatstat,##,team)),))]
+
+@@ --------------------------
+@@ FUN_SET_TEAM_TARGET
+@@ Sets a team's target teams
+@@ %0 = team to set
+@@ %1 = list of teams to target
+@@ --------------------------
+&FUN_SET_TEAM_TARGET FS3Combat Instance Parent=set(me,team[trim(%0)]_target:[trim(%1)])
+
+@@ --------------------------
+@@ FUN_PICK_RANDOM_TARGET
+@@ Picks a random target from the appropriate team target list.
+@@ %0 = name
+@@ --------------------------
+&FUN_PICK_RANDOM_TARGET FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,team))][first(shuffle(u(fun_team_targets,%q0,v(team[%q0]_target))))])
+
+
+@@ --------------------------
+@@ FUN_CAN_ATTACK
+@@ Checks if they have an attack-ok weapon (i.e. not a defensive one).
+@@ %0 = name
+@@ --------------------------
+&FUN_CAN_ATTACK FS3Combat Instance Parent=switch(u(fun_weaponstat,%0,wpntype),defensive,0,1)
+
+@@ --------------------------
+@@ FUN_SET_ACTION
+@@ Sets up action attributes.
+@@ %0 = name
+@@ %1 = action 
+@@ %2 = target
+@@ %3 = options
+@@ --------------------------
+&FUN_SET_ACTION FS3Combat Instance Parent=[u(fun_mod_combatstat,%0,action,[lcstr(%1)])][u(fun_mod_combatstat,%0,target,[unprettify(%2)])][u(fun_mod_combatstat,%0,actoptions,%3)][u(fun_combat_msg,[prettify(lcstr(%0))] will [lcstr(%1)][switch(%2,,,%B[prettify(lcstr(%2))])] this turn.[switch(t(%3),1,%BOptions: %3)][u(fun_add_id,%0)])][set(me,acted:[setdiff([v(acted)] %N,)])][switch(u(fun_everyone_acted),1,u(fun_org_msg,[ansi(hc,Everyone has entered their actions.)]))]
+
+
+@@ --------------------------
+@@ FUN_ADD_ID
+@@ Adds an identifier after a command if it's done on a NPC.
+@@ %0=target of the command.
+@@ --------------------------
+&FUN_ADD_ID FS3Combat Instance Parent=switch(%0,%N,,%B\(%N\))
+
+
+@startup FS3Combat Instance Parent=@set me=!no_command
+
+
+
