@@ -30,16 +30,16 @@
 &ARMOR_HEAVY_BODYARMOR FS3Combat Equipment Stats=Military-Grade Kevlar Vest and Helmet|Head Neck Chest Abdomen Groin|4|Personal
 &ARMOR_LIGHT_VEST FS3Combat Equipment Stats=Police-Grade Kevlar Vest|Chest Abdomen|3|Personal
 &ARMOR_LIGHT_BODYARMOR FS3Combat Equipment Stats=Police-Grade Kevlar Vest and Helmet|Head Neck Chest Abdomen|3|Personal
-&ARMOR_CENTURION FS3Combat Equipment Stats=Cylon Centurion Armor|Head Neck Chest Abdomen Groin LeftArm RightArm LeftLeg LeftHand RightHand LeftLeg RightLeg LeftFoot RightFoot|5|Personal
+&ARMOR_CENTURION FS3Combat Equipment Stats=Cylon Centurion Armor|Head Neck Chest Abdomen Groin LeftArm RightArm LeftLeg LeftHand RightHand LeftLeg RightLeg LeftFoot RightFoot|4|Personal
 &ARMOR_VIPER FS3Combat Equipment Stats=Viper Vehicle Armor|Body Engine Nose Tail Controls RightWing LeftWing|10|Vehicle
 &ARMOR_RAIDER FS3Combat Equipment Stats=Cylon Raider Vehicle Armor|Body Cockpit Engine Controls RightWing LeftWing|8|Vehicle
 &ARMOR_RAPTOR FS3Combat Equipment Stats=Raptor Vehicle Armor|Body Engine Nose Tail Controls RightWing LeftWing|15|Vehicle
 &ARMOR_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider Vehicle Armor|Body Cockpit Engine Nose Tail Controls RightWing LeftWing|10|Vehicle
 
-&VEHICLE_VIPER FS3Combat Equipment Stats=Viper space fighter|Piloting|4|Viper|Viper|KEW
-&VEHICLE_RAIDER FS3Combat Equipment Stats=Cylon Raider space fighter|Piloting|1|Raider|Raider|KEW MISSILE_AA NUKE
-&VEHICLE_RAPTOR FS3Combat Equipment Stats=Raptor space command and control|Piloting|6|Raptor|Raptor|ECM MISSILE_HEAT MISSILE_HE NUKE
-&VEHICLE_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider space transport/bomber|Piloting|6|Heavy_Raider|Heavy_Raider|KEW MISSILE_AA NUKE
+&VEHICLE_VIPER FS3Combat Equipment Stats=Viper space fighter|Piloting|5|Viper|Viper|KEW
+&VEHICLE_RAIDER FS3Combat Equipment Stats=Cylon Raider space fighter|Piloting|2|Raider|Raider|KEW MISSILE_AA NUKE
+&VEHICLE_RAPTOR FS3Combat Equipment Stats=Raptor space command and control|Piloting|7|Raptor|Raptor|ECM MISSILE_HEAT MISSILE_HE NUKE
+&VEHICLE_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider space transport/bomber|Piloting|7|Heavy_Raider|Heavy_Raider|KEW MISSILE_AA NUKE
 
 &COVER_PLASTER_WALL FS3Combat Equipment Stats=1
 &COVER_SOFA FS3Combat Equipment Stats=1
@@ -68,7 +68,7 @@
 &CMD-+WEAPONS-REM FS3Combat Equipment Commands=$+weapons:@pemit %#=ansi(hb,Use +gear/weapons.)
 &CMD-+ARMOR-REM FS3Combat Equipment Commands=$+armor:@pemit %#=ansi(hb,Use +gear/armor.)
 
-&CMD-+GEAR-WEAPON-DETAIL FS3Combat Equipment Commands=$+gear/weapon *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(weapons(),%q0),ansi(hr,That is not a valid weapon.),[line()]%R[ansi(h,[prettify(%0)] Weapon Data)]%R%R[ansi(h,Attack Skill:)] [weaponstat(%q0,atkskill)]%R[ansi(h,Defense Skill:)] [weaponstat(%q0,defskill)] %R[ansi(h,Accuracy Modifier:)] [weaponstat(%q0,accuracy)]%R[ansi(h,Lethality Modifier:)] [weaponstat(%q0,lethality)] %R[ansi(h,Penetration:)] [weaponstat(%q0,pen)] %R[ansi(h,Weapon Type:)] [weaponstat(%q0,wpntype)] %R[ansi(h,Damage Type:)] [weaponstat(%q0,dmgtype)] %R[ansi(h,Class:)] [switch(weaponstat(%q0,class),Personal,Anti-Personnel,Anti-Vehicle)] %R[ansi(h,Autofire?:)] [switch(weaponstat(%q0,auto),1,yes,no)] %R[ansi(h,Ammo Clip:)] [switch(weaponstat(%q0,ammo),0,n/a,weaponstat(%q0,ammo))] %R[ansi(h,Recoil Modifier:)] [weaponstat(%q0,recoil)] %R[ansi(h,Range:)] [weaponstat(%q0,range)]m[switch(weaponstat(%q0,wpntype),explosive,%R[ansi(h,Immediate Blast Radius:)] [weaponstat(%q0,blast)]m)]%R%R[ansi(h,Description:)]%R[weaponstat(%q0,desc)]%R[line()])
+&CMD-+GEAR-WEAPON-DETAIL FS3Combat Equipment Commands=$+gear/weapon *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(weapons(),%q0),ansi(hr,That is not a valid weapon.),[line()]%R[ansi(h,[prettify(%0)] Weapon Data)]%R%R[ansi(h,Attack Skill:)] [weaponstat(%q0,atkskill)]%R[ansi(h,Defense Skill:)] [weaponstat(%q0,defskill)] %R[ansi(h,Accuracy Modifier:)] [weaponstat(%q0,accuracy)]%R[ansi(h,Lethality Modifier:)] [weaponstat(%q0,lethality)] %R[ansi(h,Penetration:)] [weaponstat(%q0,pen)] %R[ansi(h,Weapon Type:)] [weaponstat(%q0,wpntype)] %R[ansi(h,Damage Type:)] [weaponstat(%q0,dmgtype)] %R[ansi(h,Class:)] [switch(weaponstat(%q0,class),Personal,Anti-Personnel,Anti-Vehicle)] %R[ansi(h,Autofire?:)] [switch(weaponstat(%q0,auto),1,yes,no)] %R[ansi(h,Ammo Clip:)] [switch(weaponstat(%q0,ammo),0,n/a,weaponstat(%q0,ammo))] %R[ansi(h,Recoil Modifier:)] [weaponstat(%q0,recoil)] %R[ansi(h,Range:)] [weaponstat(%q0,range)]m[switch(weaponstat(%q0,wpntype),explosive,%R[ansi(h,Blast Radius:)] [weaponstat(%q0,blast)]m)]%R%R[ansi(h,Description:)]%R[weaponstat(%q0,desc)]%R[line()])
 &CMD-+GEAR-WEAPON FS3Combat Equipment Commands=$+gear/weapons:@pemit %#=[line()]%R[ansi(h,Weapon[space(15)]Type[space(20)]FullAuto?%B%BClip[space(4)]Pen[space(2)]Range)]%R[ansi(u,Anti-Personnel Weapons)][iter(sortby(fun_sort_weapons,u(fun_filter_wpn_class,Personal)),%R[u(fun_wpn_detail,##)])]%R[ansi(u,Anti-Vehicle Weapons)][iter(sortby(fun_sort_weapons,u(fun_filter_wpn_class,Vehicle)),%R[u(fun_wpn_detail,##)])]%R%RSee [ansi(h,+gear/weapon <type>)] for details.%R[line()]
 &FUN_SORT_WEAPONS FS3Combat Equipment Commands=switch(comp(weaponstat(%0,wpntype),weaponstat(%1,wpntype)),0,comp(%0,%1),comp(weaponstat(%0, wpntype),weaponstat(%1, wpntype)))
 &FUN_WPN_DETAIL FS3Combat Equipment Commands=[padstr(prettify(lcstr(%0)),20)] [ljust([weaponstat(%0,wpntype)]/[weaponstat(%0,dmgtype)],25)]  [switch(weaponstat(%0,auto),1,yes,no%B)][space(7)][ljust(switch(weaponstat(%0,ammo),0,--,weaponstat(%0,ammo)),8)][ljust(weaponstat(%0,pen),5)][weaponstat(%0,range)]m
