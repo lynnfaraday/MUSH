@@ -91,7 +91,7 @@
 
 @@ --------------------------
 @@ FUN_DAMAGEMOD
-@@ Gets the damage modifier, which is for the person (if a soldier) or them + their vehicle (for pilot/passenger)
+@@ Gets the damage modifier, which is for the person (if a soldier) or them + their  (for pilot/passenger)
 @@ %0 = name
 @@ --------------------------
 &FUN_DAMAGEMOD FS3Combat Instance Parent=switch(u(fun_is_in_vehicle,%0),1,add(damagemod(%0),damagemod(u(fun_combatstat,%0,vehicle))),damagemod(%0))
@@ -138,6 +138,14 @@
 @@ --------------------------
 &FUN_SUBTRACT_AMMO FS3Combat Instance Parent=localize([setq(0,u(fun_weaponstat,%0,ammo))][setq(1,u(fun_combatstat,%0,ammo))][switch(%q0,>0,u(fun_mod_combatstat,%0,ammo,max(0,sub(%q1,%1))))])
 
+@@ --------------------------
+@@ FUN_SUPPRESS
+@@ Applies suppression to someone, capping at the max (5)
+@@ %0 = name
+@@ %1 = suppression factor
+@@ --------------------------
+
+&FUN_SUPPRESS FS3Combat Instance Parent=u(fun_mod_combatstat,%0,suppress,min(add(u(fun_combatstat,%0,suppress),%1),5))[pemit(*fara,Suppressing %0 -- %1 now at [u(fun_combatstat,%0,suppress)])]
 
 @@ ================================================================================================================
 @@ ---------------   Participants and Messages -----------------
@@ -241,7 +249,7 @@
 @@ %q1 = bullets used
 @@ %q2 = weapon recoil stat
 @@ --------------------------
-&FUN_ACTION_ATTACK FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,ammo))][setq(1,switch(grab(%2,burst),,1,min(%q0,3)))][setq(2,u(fun_weaponstat,%0,recoil))][switch(0,t(u(fun_combatstat,%0,weapon)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no weapon!),t(u(fun_combatstat,%0,target)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no target!),not(u(fun_out_of_ammo,%0)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but is [ansi(hr,out of ammo)]!),[switch(%q1,>1,u(fun_combat_msg,[prettify(lcstr(%0))] fires a [ansi(hm,%q1 round burst)]!))][iter(lnum(1,%q1),[u(fun_do_attack,%0,switch(u(fun_is_in_vehicle,%1),1,u(fun_combatstat,%1,vehicle),%1),grab(%2,called=*),-[mul(sub(#@,1),%q2)])])][u(fun_mod_combatstat,%1,suppress,add(u(fun_combatstat,%1,suppress),1))][u(fun_subtract_ammo,%0,%q1)][switch(sub(%q0,%q1),0,u(fun_combat_msg,ansi(hm,[prettify(lcstr(%0))]'s weapon clicks empty.)))])]))
+&FUN_ACTION_ATTACK FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,ammo))][setq(1,switch(grab(%2,burst),,1,min(%q0,3)))][setq(2,u(fun_weaponstat,%0,recoil))][switch(0,t(u(fun_combatstat,%0,weapon)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no weapon!),t(u(fun_combatstat,%0,target)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no target!),not(u(fun_out_of_ammo,%0)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but is [ansi(hr,out of ammo)]!),[switch(%q1,>1,u(fun_combat_msg,[prettify(lcstr(%0))] fires a [ansi(hm,%q1 round burst)]!))][iter(lnum(1,%q1),[u(fun_do_attack,%0,switch(u(fun_is_in_vehicle,%1),1,u(fun_combatstat,%1,vehicle),%1),grab(%2,called=*),-[mul(sub(#@,1),%q2)])])][u(fun_suppress,%1,switch(u(fun_weaponstat,%0,wpntype),melee,0,1))][u(fun_subtract_ammo,%0,%q1)][switch(sub(%q0,%q1),0,u(fun_combat_msg,ansi(hm,[prettify(lcstr(%0))]'s weapon clicks empty.)))])]))
 
 
 @@ --------------------------
@@ -256,7 +264,7 @@
 @@ %q1 = weapon recoil stat
 @@ %q3 = temporary recoil calculation for current bullet
 @@ --------------------------
-&FUN_ACTION_FULLAUTO FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,ammo))][setq(1,u(fun_weaponstat,%0,recoil))][switch(0,t(u(fun_combatstat,%0,weapon)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no weapon!),t(u(fun_combatstat,%0,target)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no target!),not(u(fun_out_of_ammo,%0)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but is [ansi(hr,out of ammo)]!),gt3(%q0,10),u(fun_combat_msg,[prettify(lcstr(%0))] tries to fire fullauto but doesn't have enough bullets.),[u(fun_combat_msg,[prettify(lcstr(%0))] fires [ansi(hr,fullauto)]!)][iter(u(fun_distribute_bullets,%1),[iter(lnum(1,after(%i0,:)),[setq(3,min(99,mul(add(mul(sub(inum(1),1),words(%1,\,)),inum(0),-1),%q1)))][u(fun_do_attack,%0,switch(u(fun_is_in_vehicle,before(%i1,:)),1,u(fun_combatstat,before(%i1,:),vehicle),before(%i1,:)),,-%q3)][u(fun_mod_combatstat,before(%i1,:),suppress,add(u(fun_combatstat,before(%i1,:),suppress),1))])],\,)][u(fun_subtract_ammo,%0,%q1)][switch(sub(%q0,%q1),0,u(fun_combat_msg,ansi(hm,[prettify(lcstr(%0))]'s weapon clicks empty.)))])])
+&FUN_ACTION_FULLAUTO FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,ammo))][setq(1,u(fun_weaponstat,%0,recoil))][switch(0,t(u(fun_combatstat,%0,weapon)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no weapon!),t(u(fun_combatstat,%0,target)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no target!),not(u(fun_out_of_ammo,%0)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but is [ansi(hr,out of ammo)]!),gte(%q0,10),u(fun_combat_msg,[prettify(lcstr(%0))] tries to fire fullauto but doesn't have enough bullets.),[u(fun_combat_msg,[prettify(lcstr(%0))] fires [ansi(hr,fullauto)]!)][iter(u(fun_distribute_bullets,%1),[iter(lnum(1,after(%i0,:)),[setq(3,min(99,mul(add(mul(sub(inum(1),1),words(%1,\,)),inum(0),-1),%q1)))][u(fun_do_attack,%0,switch(u(fun_is_in_vehicle,before(%i1,:)),1,u(fun_combatstat,before(%i1,:),vehicle),before(%i1,:)),,-%q3)][u(fun_suppress,before(%i1,:),1)])],\,)][u(fun_subtract_ammo,%0,10)][switch(sub(%q0,10),0,u(fun_combat_msg,ansi(hm,[prettify(lcstr(%0))]'s weapon clicks empty.)))])])
 
 @@ --------------------------
 @@ FUN_DISTRIBUTE_BULLETS
@@ -309,12 +317,14 @@
 @@ FUN_ACTION_SUPPRESS
 @@ Applies a suppress roll based on the attacker's success level.
 @@ %0 = name
-@@ %0 = target list (comma-sep)
+@@ %1 = target list (comma-sep)
 @@ %2 = action options
 @@ %q0 = attack roll result
 @@ %q1 = defense roll result
+@@ %q2 = bullets required
+@@ %q3 = bullets available
 @@ --------------------------
-&FUN_ACTION_SUPPRESS FS3Combat Instance Parent=localize(iter(%1,[u(fun_combat_msg,[prettify(lcstr(%0))] suppresses [prettify(lcstr(##))] with [prettify(u(fun_combatstat,%0,weapon))].%B[setq(0,u(fun_roll_attack,%0,##))][switch(gt(%q0,0),0,<unsuccessful>,<successful>[u(fun_mod_combatstat,##,suppress,add(mul(%q0,2),u(fun_combatstat,##,suppress)))])])],\,,))
+&FUN_ACTION_SUPPRESS FS3Combat Instance Parent=localize([setq(2,switch(u(fun_weaponstat,%0,wpntype),Ranged,words(%1,\,),0))][setq(3,u(fun_combatstat,%0,ammo))][switch(gte(%q3,%q2),0,u(fun_combat_msg,[prettify(lcstr(%0))] tries to suppress but doesn't have enough ammo.),[iter(%1,[u(fun_combat_msg,[prettify(lcstr(%0))] suppresses [prettify(lcstr(##))] with [prettify(u(fun_combatstat,%0,weapon))].%B[setq(0,u(fun_roll_attack,%0,##))][switch(gt(%q0,0),0,<unsuccessful>,<successful>[u(fun_suppress,##,mul(%q0,2))])])],\,,)][switch(%q2,>0,[u(fun_subtract_ammo,%0,%q2)][switch(sub(%q3,%q2),0,u(fun_combat_msg,ansi(hm,[prettify(lcstr(%0))]'s weapon clicks empty.)))])])])
 
 @@ --------------------------
 @@ FUN_ACTION_AIM
@@ -346,10 +356,9 @@
 @@ %2 = targeted hit location
 @@ %3 = special modifier (used for recoil or range)
 @@ TODO: account for range
-@@ TODO: Add suppression from attacks 
 @@ --------------------------
 
-&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][setq(w,u(fun_combatstat,%0,weapon))][setq(l,weaponstat(%qw,lethality))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] and [switch(1,lte(%qa,0),MISSES!,lt(%qa,%qd),%qt DODGES!,gte(%qc,100),hits COVER.,gte(%qr,100),hits [before(%qh,:)] but ARMOR stops the attack!,HITS! [switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])] wound to [before(%qh,:)][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz)])])
+&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][setq(w,u(fun_combatstat,%0,weapon))][setq(l,weaponstat(%qw,lethality))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] and [switch(1,lt(%qa,0),MISSES!,lt(%qa,%qd),[prettify(lcstr(%qt))] DODGES!,gte(%qc,100),hits COVER.,gte(%qr,100),hits [before(%qh,:)] but ARMOR stops the attack!,HITS! [switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])] wound to [before(%qh,:)][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz)])])
 
 @@ --------------------------
 @@ FUN_RANDOM_HITLOC
@@ -390,14 +399,15 @@
 @@ %1 = defender
 @@ Attack mods include:
 @@ - Damage modifier
-@@ - Suppression value x 10
+@@ - Suppression value x 5
 @@ - Weapon accuracy
 @@ - Special modifiers
 @@ - Aim modifier (30)
 @@ - Stance modifier
 @@ - Luck modifier (30 if spending luck on attack)
+@@ - Melee modifier (30)
 @@ --------------------------
-&FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),10)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mod),switch(u(fun_combatstat,%0,lastaim),%1,30,0),u(fun_stance_mod,%0,attacker),u(fun_luck_mod,%0,attack))
+&FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),5)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mod),switch(u(fun_combatstat,%0,lastaim),%1,30,0),u(fun_stance_mod,%0,attacker),u(fun_luck_mod,%0,attack),switch(u(fun_weaponstat,%0,wpntype),Melee,30,0))
 
 @@ --------------------------
 @@ FUN_ROLL_DEFENSE
@@ -424,8 +434,9 @@
 @@ - Special modifiers
 @@ - Stance mods
 @@ - Luck mods (30 if spending luck on defense)
+@@ - Attacker melee (30)
 @@ --------------------------
-&FUN_DEFENSE_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%1)],u(fun_combatstat,%1,mod),u(fun_stance_mod,%1,defender),u(fun_luck_mod,%1,defense))
+&FUN_DEFENSE_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%1)],u(fun_combatstat,%1,mod),u(fun_stance_mod,%1,defender),u(fun_luck_mod,%1,defense),switch(u(fun_weaponstat,%0,wpntype),Melee,30,0))
 
 
 @@ --------------------------
@@ -568,7 +579,7 @@
 @@ When someone is removed from combat or KO'd, you need to clear out anyone who's targeting them.
 @@ %0 = name
 @@ --------------------------
-&FUN_UNTARGET FS3Combat Instance Parent=iter(u(fun_combatants),u(fun_mod_combatstat,##,target,squish(remove(u(fun_combatstat,##,target),unprettify(%0),\,))))
+&FUN_UNTARGET FS3Combat Instance Parent=iter(u(fun_combatants),u(fun_mod_combatstat,##,target,squish(remove(ucstr(u(fun_combatstat,##,target)),ucstr(unprettify(%0)),\,))))
 
 @@ ================================================================================================================
 @@ ---------------  Teams -----------------
@@ -603,6 +614,22 @@
 @@ %1 = list of teams to target
 @@ --------------------------
 &FUN_SET_TEAM_TARGET FS3Combat Instance Parent=set(me,team[trim(%0)]_target:[trim(%1)])
+
+@@ --------------------------
+@@ FUN_PICK_RANDOM_ACTION
+@@ Picks a random action appropriate to their circumstances.
+@@ - If no weapon, pass
+@@ - If out of bullets, reload
+@@ - If defensive weapon, suppress
+@@ %0 = name
+@@ %1 = target, either blank (use random) or set
+@@
+@@ %q0 = weapon type
+@@ %q1 = random action
+@@ %q2 = target, selecting random if necessary
+@@ --------------------------
+
+&FUN_PICK_RANDOM_ACTION FS3Combat Instance Parent=localize([setq(0,u(fun_weaponstat,%0,wpntype))][setq(1,switch(1,not(%q0),pass,strmatch(%q0,Defensive),suppress,u(FUN_OUT_OF_AMMO,%0),reload,attack))][setq(2,switch(%1,,u(fun_pick_random_target,%0),%1))][u(fun_set_action,%0,%q1,switch(%q1,pass,,reload,,%q2))])
 
 @@ --------------------------
 @@ FUN_PICK_RANDOM_TARGET
