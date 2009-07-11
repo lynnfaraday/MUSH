@@ -29,7 +29,7 @@
 
 &CMD-+DAMAGE-DELETE FS3Combat Damage Commands=$+damage/delete */*:@pemit %#=[setq(0,u(fun_get_dmgnum,%0,%1))]switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(%q0),ansi(hr,%0/%1 is not a valid damage value.),ansi(hg,You delete [prettify(%0)]'s damage.)[wipe(#731/%q0)])
 
-&CMD-+DAMAGE-CLEAR FS3Combat Damage Commands=$+damage/clear *:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is for staff only.),gt(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),ansi(hg,You clear all of [prettify(%0)]'s damage.)[wipe(#731/dmg_[unprettify(%0)]_*)])
+&CMD-+DAMAGE-CLEAR FS3Combat Damage Commands=$+damage/clear *:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is for staff only.),gt(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),ansi(hg,You clear all of [prettify(%0)]'s damage.)[u(fun_clear_damage,%0)])
 
 
 @@  %0 = Name 
@@ -70,7 +70,7 @@
 @@   default NPC rating.
 @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&TR_DAILY_HEALING FS3Combat Damage Commands=think iter(lattr(#731/DMG_*),[setq(0,before(after(##,_),_))][setq(1,switch(1,isplayer(%q0),ability_level(pmatch(%q0),xget(#731,toughness_skill)),npc_rating(%q0)))][setq(2,u(fun_dmgstat,##,healing))][setq(3,add(%q2,switch(roll_ability(%q1),-2,0.75,-1,1,0,1,1,1,2,1.25,3,1.5,1),switch(0,match(xget(#731,hospitals),loc(pmatch(%q0))),0,0.5)))][setq(4,u(FUN_HEALPOINTS_WOUND,##))][switch(u(fun_dmgstat,##,currsev),H,,[u(fun_mod_dmgstat,##,healing,%q3)][switch(gte(%q3,%q4),1,[u(fun_mod_dmgstat,##,currsev,switch(u(fun_dmgstat,##,currsev),C,S,S,M,M,L,L,H))][u(fun_mod_dmgstat,##,healing,sub(%q3,%q4))])])])
+&TR_DAILY_HEALING FS3Combat Damage Commands=@dolist lattr(#731/DMG_*)=think [setq(0,before(after(##,_),_))][setq(1,switch(1,isplayer(%q0),ability_level(pmatch(%q0),xget(#731,toughness_skill)),npc_rating(%q0)))][setq(2,u(fun_dmgstat,##,healing))][setq(3,add(%q2,switch(roll_ability(%q1),-2,0.75,-1,1,0,1,1,1,2,1.25,3,1.5,1),switch(0,match(xget(#731,hospitals),loc(pmatch(%q0))),0,0.5)))][setq(4,u(FUN_HEALPOINTS_WOUND,##))][switch(u(fun_dmgstat,##,currsev),H,,[u(fun_mod_dmgstat,##,healing,%q3)][switch(gte(%q3,%q4),1,[u(fun_mod_dmgstat,##,currsev,switch(u(fun_dmgstat,##,currsev),C,S,S,M,M,L,L,H))][u(fun_mod_dmgstat,##,healing,sub(%q3,%q4))])])])
 
 @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  @@  NOTE: Most +damage functions expect to be passed in the damage attribute name  @@@@
@@ -102,6 +102,15 @@
 @@  %0 = Name
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_CLEAR_MOCK FS3Combat Damage Commands=switch(0,isstaff(%!),ansi(hr,You are not allowed to do that.),iter(u(fun_all_dmg,%0),switch(u(fun_dmgstat,##,real),0,wipe(#731/##)),,))
+
+
+@@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@  FUN_CLEAR_DAMAGE
+@@  Clears out ALL damage suffered by someone.
+@@  Because it's global, must check for wiz to prevent unauth access.
+@@  %0 = Name
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_CLEAR_DAMAGE FS3Combat Damage Commands=switch(0,isstaff(%!),ansi(hr,You are not allowed to do that.),[wipe(#731/dmg_[unprettify(%0)]_*)])
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGSTAT
@@ -316,7 +325,7 @@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_TIME_TO_HEAL FS3Combat Damage Commands=max(round(sub(u(FUN_HEALPOINTS_TOTAL,%0),u(fun_dmgstat,%0,healing)),0),0)
 
-@STARTUP FS3Combat Damage Commands=@set me=!no_command;@fun damagemod=me,fun_dmgmod_total;@fun dodamage=me,fun_do_dmg;@fun clearmockdmg=me,fun_clear_mock;@fun checkko=me,fun_check_ko;@fun dmgrestricted=me,fun_display_restricted
+@STARTUP FS3Combat Damage Commands=@set me=!no_command;@fun damagemod=me,fun_dmgmod_total;@fun dodamage=me,fun_do_dmg;@fun clearmockdmg=me,fun_clear_mock;@fun checkko=me,fun_check_ko;@fun dmgrestricted=me,fun_display_restricted;@fun cleardmg=me,fun_clear_damage
 
 
 &CRON_TIME_DAILYHEAL FS3Combat Damage Commands=|||23|57|
