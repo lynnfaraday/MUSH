@@ -25,6 +25,10 @@
 
 &CMD-+COMBAT-SLACKERS FS3Combat Action Commands=$+combat/slackers:@pemit %#=[setq(0,u(fun_combat_num,%N))][ansi(hx,<)][line()]%R[ansi(hx,<)] [ansi(h,Haven't Posed)][iter(u(%q0/fun_actors),[setq(1,u(fun_acted_display,##,%q0))][switch(%q1,+,,p,,%R[ansi(hx,<)] ##)],)]%R[ansi(hx,<)] %R[ansi(hx,<)] [ansi(h,Haven't Chosen Actions)][iter(u(%q0/fun_actors),[setq(1,u(fun_acted_display,##,%q0))][switch(%q1,+,,a,,%R[ansi(hx,<)] ## [switch(u(%q0/fun_is_npcmaster,##),1,\(NPC Master\),\(Last action: [u(%q0/fun_combatstat,##,action)]\))])],)]%R[ansi(hx,<)][line()]
 
+&CMD-+COMBAT-LOG FS3Combat Action Commands=$+combat/log*:think [setq(0,u(fun_combat_num,%N))][setq(1,switch(%0,,1,trim(%0)))][setq(2,sort(lattr(%q0/log_*)))];@dolist line1 [extract(%q2,add(1,mul(sub(%q1,1),10)),10)] line2=@pemit %#=[switch(##,line1,[line()]%R,line2,%R[ansi(h,Page %q1 of [add(1,div(words(%q2),10))])]%R[line()],[convsecs(after(##,_))]%R[u(%q0/##)])
+
+&CMD-+COMBAT-HITLOCS FS3Combat Action Commands=$+combat/hitlocs *:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),You are not in combat.,u(%q0/fun_is_combatant,%0),ansi(hr,%0 is not a valid combatant.),[setq(1,switch(u(%q0/fun_is_in_vehicle,%0),1,u(%q0/fun_combatstat,%0,vehicle),%0))]Possible hit locations for [prettify(%0)][switch(%q1,%0,,%B\(%q1\))]: [ansi(g,u(%q0/fun_valid_hitlocs,%q1))])]
+
 @@ --------------------------
 @@ FUN_DISPLAY_STATUS
 @@ Shows the combat status line for someone.
@@ -76,6 +80,7 @@
 @@ %1 = combat #
 @@ --------------------------
 &FUN_ACTED_DISPLAY FS3Combat Action Commands=switch(1,and(match(xget(%1,posed),%0),match(xget(%1,acted),%0)),+,t(match(xget(%1,posed),%0)),p,t(match(xget(%1,acted),%0)),a,-)
+
 
 @@ ================================================================================================================
 @@ ---------------   Combat Start/Stop/Join/Leave -----------------
@@ -176,6 +181,9 @@
 &CMD-+COMBAT-RETARGET-LIST FS3Combat Action Commands=$+combat/retarget *:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),ansi(hr,You are not in combat.),iter(u(%q0/fun_combatants),switch(isnpc(##),1,[setq(1,grab(%0,[unprettify(##)]=*,\,))][u(%q0/fun_pick_random_action,##,after(%q1,=))])),,)]You force NPCs to pick new targets.
 
 &CMD-+COMBAT-RETARGET FS3Combat Action Commands=$+combat/retarget:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),ansi(hr,You are not in combat.),iter(u(%q0/fun_combatants),switch(isnpc(##),1,[u(%q0/fun_pick_random_action,##),)])),,)]You force NPCs to pick new targets.
+
+&CMD-+COMBAT-REACTION FS3Combat Action Commands=$+combat/reaction:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),ansi(hr,You are not in combat.),iter(u(%q0/fun_combatants),switch(isnpc(##),1,[u(%q0/fun_pick_random_action,##,u(%q0/fun_combatstat,##,target)),)])),,)]You force NPCs to pick new actions.
+
 
 &CMD-+COMBAT-TARGET FS3Combat Action Commands=$+combat/target *=*:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),ansi(hr,You are not in combat.),u(%q0/fun_is_combatant,%0),ansi(hr,%0 is not a combatant.),u(%q0/fun_is_targetable,%1),ansi(hr,%1 is not a valid target.),You target [prettify(%0)] at [prettify(%1)].[u(%q0/fun_mod_combatstat,%0,target,unprettify(%1))][u(%q0/fun_org_msg,[prettify(%0)] targets [prettify(%1)].[u(fun_add_id,%0)])])]
 
@@ -339,7 +347,6 @@
 @@ %0 = actor name
 @@ %1 = target name
 @@ %2 = options list (may be blank)
-@@ TODO: Allow range and called shot
 @@
 @@ %q0 = combat num (from fun_can_act)
 @@ %q1 = check option status
@@ -358,7 +365,7 @@
 @@ %q1 - return status
 @@ %q2 - current option check status
 @@ --------------------------
-&FUN_CHECK_OPTIONS FS3Combat Action Commands=localize([setq(1,1)][iter(%2,[setq(0,fun_check_opt_[before(##,=)])][switch(hasattr(me,%q0),0,setq(1,0|## is not a valid attack option.),[setq(2,u(%q0,%0,%1,after(##,=),%3))][switch(%q2,0*,setq(1,%q2))])],,)]%q1)
+&FUN_CHECK_OPTIONS FS3Combat Action Commands=localize([setq(1,1)][iter(%2,[setq(0,fun_check_opt_[before(##,=)])][switch(hasattr(me,%q0),0,setq(1,0|## is not a valid attack option.),[setq(2,u(%q0,%0,%1,after(##,=),%3))][switch(%q2,0*,setq(1,%q2))])],\,,)]%q1)
 
 @@ %0 = actor name
 @@ %1 = target name
@@ -366,8 +373,7 @@
 @@ %3 = combat num
 &FUN_CHECK_OPT_RANGE FS3Combat Action Commands=switch(0,isnum(%2),0|Range must be a number.,gt(%2,0),0|Range must be greater than 0.,lte(%2,u(%3/fun_weaponstat,%0,range)),0|You cannot exceed your weapon's max range.,1)
 
-@@ TODO: Check hit location
-&FUN_CHECK_OPT_CALLED FS3Combat Action Commands=switch(0,t(%2),0|You must specify a hit location.,1)
+&FUN_CHECK_OPT_CALLED FS3Combat Action Commands=[setq(h,u(%3/fun_valid_hitlocs,switch(u(%3/fun_is_in_vehicle,%1),1,u(%3/fun_combatstat,%1,vehicle),%1)))][switch(0,t(%2),0|You must specify a hit location.,match(%qh,unprettify(%2)),0|That is not a valid hit location for that target.  Try one of these: %qh,1)]
 
 &FUN_CHECK_OPT_BURST FS3Combat Action Commands=switch(0,u(%3/fun_weaponstat,%0,auto),0|Your weapon is not capable of burst fire.,gte(u(%3/fun_combatstat,%0,ammo),2),0|You must have at least 2 bullets in the clip to fire a burst.,1)
 
