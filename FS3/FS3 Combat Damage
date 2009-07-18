@@ -110,7 +110,7 @@
 @@  Because it's global, must check for wiz to prevent unauth access.
 @@  %0 = Name
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_CLEAR_DAMAGE FS3Combat Damage Commands=switch(0,isstaff(%!),ansi(hr,You are not allowed to do that.),[wipe(#731/dmg_[unprettify(%0)]_*)])
+&FUN_CLEAR_DAMAGE FS3Combat Damage Commands=switch(0,isstaff(%!),ansi(hr,You are not allowed to do that.),iter(u(fun_all_dmg,%0),wipe(#731/##),,))
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGSTAT
@@ -198,7 +198,7 @@
 @@  Shows detail for a given damage element.
 @@  %0 = Damage attr name.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_DMG_DETAIL FS3Combat Damage Commands=%R[ansi(h,Wound)]: [u(fun_dmgstat,%0,weapon)] to [u(fun_dmgstat,%0,hitloc)] [switch(u(fun_dmgstat,%0,real),0,%R[ansi(hg,*** MOCK DAMAGE ***)] %R\(will be removed when combat ends\)%R)]  %R[ansi(h,Time of Injury)]: [convsecs(after(after(%0,_),_))]%R[ansi(h,Type)]: [u(fun_dmgstat,%0,type)] %R[ansi(h,Initial Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,initsev))] %R[ansi(h,Current Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,currsev))] %R[ansi(h,Healing Points)]: [u(fun_dmgstat,%0,healing)] %R[ansi(h,Last Treated)]: [u(fun_display_time,u(fun_dmgstat,%0,lasttreat))] %R[ansi(h,Last Healed)]: [u(fun_display_time,u(fun_dmgstat,%0,lastheal))] %R[ansi(h,Notes)]:%R[replace_cr(u(fun_dmgstat,%0,notes))]
+&FUN_DMG_DETAIL FS3Combat Damage Commands=%R[ansi(h,Wound)]: [u(fun_dmgstat,%0,weapon)] to [prettify(u(fun_dmgstat,%0,hitloc))] [switch(u(fun_dmgstat,%0,real),0,%R[ansi(hg,*** MOCK DAMAGE ***)] %R\(will be removed when combat ends\)%R)]  %R[ansi(h,Time of Injury)]: [convsecs(after(after(%0,_),_))]%R[ansi(h,Type)]: [u(fun_dmgstat,%0,type)] %R[ansi(h,Initial Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,initsev))] %R[ansi(h,Current Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,currsev))] %R[ansi(h,Healing Points)]: [u(fun_dmgstat,%0,healing)] %R[ansi(h,Last Treated)]: [u(fun_display_time,u(fun_dmgstat,%0,lasttreat))] %R[ansi(h,Last Healed)]: [u(fun_display_time,u(fun_dmgstat,%0,lastheal))] %R[ansi(h,Notes)]:%R[replace_cr(u(fun_dmgstat,%0,notes))]
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGLIST
@@ -207,7 +207,7 @@
 @@
 @@ %q0 = current severity, %q1 = time to heal
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_DMGLIST FS3Combat Damage Commands=[ansi(h,%b%b%b%b%bSeverity[space(41)]Can%b%bCan)]%r[ansi(h,[space(5)]\(Current\)[space(6)]Type[space(6)]Wound[space(18)]Treat Heal%B%BEst Heal)][iter(u(FUN_ALL_DMG,%0),[setq(0,u(FUN_DMGSTAT,##,currsev))[setq(1,u(FUN_TIME_TO_HEAL,##))]]%R[ljust(#@.,4)] [ljust(ansi(u(fun_wound_color,%q0),[u(fun_wound_name,%q0)]),14)] [ljust(u(FUN_DMGSTAT,##,type),10)][padstr([u(FUN_DMGSTAT,##,weapon)] to [u(FUN_DMGSTAT,##,hitloc)],25)][switch(u(FUN_CAN_BE_TREATED,##),1,+,-)]%B%B%B%B[switch(u(FUN_CAN_BE_HEALED,##),1,+,-)]%B%B%B%B[switch(%q1,0,-,%q1 days)])]
+&FUN_DMGLIST FS3Combat Damage Commands=[ansi(h,%b%b%b%b%bSeverity[space(41)]Can%b%bCan)]%r[ansi(h,[space(5)]\(Current\)[space(6)]Type[space(6)]Wound[space(18)]Treat Heal%B%BEst Heal)][iter(u(FUN_ALL_DMG,%0),[setq(0,u(FUN_DMGSTAT,##,currsev))[setq(1,u(FUN_TIME_TO_HEAL,##))]]%R[ljust(#@.,4)] [ljust(ansi(u(fun_wound_color,%q0),[u(fun_wound_name,%q0)]),14)] [ljust(u(FUN_DMGSTAT,##,type),10)][padstr([u(FUN_DMGSTAT,##,weapon)] to [prettify(u(FUN_DMGSTAT,##,hitloc))],25)][switch(u(FUN_CAN_BE_TREATED,##),1,+,-)]%B%B%B%B[switch(u(FUN_CAN_BE_HEALED,##),1,+,-)]%B%B%B%B[switch(%q1,0,-,%q1 days)])]
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGMOD_TOTAL
@@ -312,11 +312,12 @@
 @@
 @@  Returns 1 if they FAIL their KO check.
 @@  %0 = name
+@@  %1 = combat #
 @@
 @@ %q0=damagemod    %q1=ability level  %q2=random roll  %q3=hero  %q4=ability mod
 @@ %q5=roll target  %q6=result
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_CHECK_KO FS3Combat Damage Commands=localize([setq(0,damagemod(%0))][setq(1,switch(1,isnpc(%0),npcstat(%0,skill),isvehicle(%0),vehtypestat(vehiclestat(%0,type),toughness),isplayer(%0),ability_level(pmatch(%0),xget(#731,toughness_skill)),5))][setq(2,rand(100))][setq(3,switch(isplayer(%0),1,herofactor(),0))][setq(4,mul(sub(%q1,5),5))][setq(5,max(min(sub(sub(%q0,%q4),%q3),95),2))][setq(6,switch(1,eq(%q0,0),0,lte(%q2,%q5),1,0))][pemit(*faraday,%0 checking KO : dmgmod=%q0 ability=%q1 abilmodifier=%q4 randroll=%q2 hero=%q3 rolltarget=%q5%B%B%q6)]%q6)
+&FUN_CHECK_KO FS3Combat Damage Commands=localize([setq(0,damagemod(%0))][setq(1,switch(1,isnpc(%0),npcstat(%0,skill),isvehicle(%0),vehtypestat(vehiclestat(%0,type),toughness),isplayer(%0),ability_level(pmatch(%0),xget(#731,toughness_skill)),5))][setq(2,rand(100))][setq(3,switch(isplayer(%0),1,herofactor(),0))][setq(4,mul(sub(%q1,5),5))][setq(5,max(min(sub(sub(%q0,%q4),%q3),95),2))][setq(6,switch(1,eq(%q0,0),0,lte(%q2,%q5),1,0))][u(%1/fun_combat_log,%0 checking KO : dmgmod=%q0 toughness=%q1 toughmod=%q4 randroll=%q2 hero=%q3 rolltarget=%q5%B%BKOd:%q6)]%q6)
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_TIME_TO_HEAL
