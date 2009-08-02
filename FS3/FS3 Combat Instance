@@ -81,10 +81,10 @@
 @@ --------------------------
 @@ FUN_REMOVE
 @@ Removes someone from combat by erasing all their combat attributes.
-@@ also clears out anyone targeting them.
+@@ also clears out anyone targeting them and anyone they're subduing.
 @@ %0 = name
 @@ --------------------------
-&FUN_REMOVE FS3Combat Instance Parent=[wipe(me/stat_[unprettify(%0)]**)][u(fun_untarget,%0)]
+&FUN_REMOVE FS3Combat Instance Parent=[localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))])][wipe(me/stat_[unprettify(%0)]**)][u(fun_untarget,%0)]
 
 @@ ================================================================================================================
 @@ ---------------  Utilities -----------------
@@ -263,12 +263,12 @@
 
 @@ --------------------------
 @@ FUN_RANGE_MOD
-@@ Calculates a range modifier based on the attacker's weapon.  This is calculated as a simple % of max range.
-@@ max=500 current=100 gives modifier -20.  
+@@ Calculates a range modifier based on the attacker's weapon.  This is calculated as a simple % of max range, divided by 2.
+@@ max=500 current=100 gives modifier -10.  
 @@ %0 = name
 @@ %1 = range
 @@ --------------------------
-&FUN_RANGE_MOD FS3Combat Instance Parent=-[mul(fdiv(%1,u(fun_weaponstat,%0,range)),100)]
+&FUN_RANGE_MOD FS3Combat Instance Parent=-[mul(fdiv(%1,u(fun_weaponstat,%0,range)),50)]
 
 @@ --------------------------
 @@ FUN_ACTION_FULLAUTO
@@ -299,7 +299,7 @@
 @@ %1 = target
 @@ %2 = action options
 @@ --------------------------
-&FUN_ACTION_ESCAPE FS3Combat Instance Parent=localize([u(fun_combat_msg,switch(u(fun_combatstat,%0,subduedby),,[prettify(lcstr(%0))] attempts to escape but is not subdued!,[setq(0,u(fun_roll_attack,%1,%0))][setq(1,u(fun_roll_defense,%1,%0))][switch(1,gte(%q0,%q1),[prettify(lcstr(%0))] attempts to escape from [prettify(lcstr(%1))] but fails!,[prettify(lcstr(%0))] escapes from [prettify(lcstr(%1))].[u(fun_mod_combatstat,%0,subduedby,)][u(fun_mod_combatstat,%1,subduing,)])]))]
+&FUN_ACTION_ESCAPE FS3Combat Instance Parent=localize([u(fun_combat_msg,switch(u(fun_combatstat,%0,subduedby),,[prettify(lcstr(%0))] attempts to escape but is no longer subdued![u(fun_mod_combatstat,%0,action,pass)][u(fun_mod_combatstat,%0,target,)],[setq(0,u(fun_roll_attack,%1,%0))][setq(1,u(fun_roll_defense,%1,%0))][switch(1,gte(%q0,%q1),[prettify(lcstr(%0))] attempts to escape from [prettify(lcstr(%1))] but fails!,[prettify(lcstr(%0))] escapes from [prettify(lcstr(%1))].[u(fun_mod_combatstat,%0,subduedby,)][u(fun_mod_combatstat,%1,subduing,)])]))]
 
 @@ --------------------------
 @@ FUN_ACTION_SUBDUE
@@ -308,7 +308,7 @@
 @@ %2 = action options
 @@ Resets target and action of the subdueee if successful to pass.
 @@ --------------------------
-&FUN_ACTION_SUBDUE FS3Combat Instance Parent=localize([u(fun_combat_msg,switch(u(fun_combatstat,%0,subduing),%1,[prettify(lcstr(%0))] continues to subdue [prettify(lcstr(%1))].,[setq(0,u(fun_roll_attack,%0,%1))][setq(1,u(fun_roll_defense,%0,%1))][switch(1,gte(%q0,%q1),[prettify(lcstr(%0))] subdues [prettify(lcstr(%1))]![u(fun_mod_combatstat,%0,subduing,%1)][u(fun_mod_combatstat,%1,subduedby,%0)][u(fun_mod_combatstat,%1,action,pass)][u(fun_mod_combatstat,%1,target,)],[prettify(lcstr(%0))] tries to subdue [prettify(lcstr(%1))] but fails.)]))]
+&FUN_ACTION_SUBDUE FS3Combat Instance Parent=localize([u(fun_combat_msg,switch(u(fun_combatstat,%1,subduedby),%0,[prettify(lcstr(%0))] continues to subdue [prettify(lcstr(%1))].,,[setq(0,u(fun_roll_attack,%0,%1))][setq(1,u(fun_roll_defense,%0,%1))][switch(1,gte(%q0,%q1),[prettify(lcstr(%0))] subdues [prettify(lcstr(%1))]![u(fun_mod_combatstat,%0,subduing,%1)][u(fun_mod_combatstat,%1,subduedby,%0)][u(fun_mod_combatstat,%1,action,pass)][u(fun_mod_combatstat,%1,target,%0)],[prettify(lcstr(%0))] tries to subdue [prettify(lcstr(%1))] but fails.)],[prettify(lcstr(%0))] attempts to subdue [prettify(lcstr(%1))] but finds them already subdued.))])
 
 
 
@@ -594,7 +594,7 @@
 @@ Note: Must check that they're still a combatant after checking for KO because it may have removed them and we don't
 @@ want to reset their attributes if they're no longer with us.
 @@ --------------------------
-&FUN_NEW_TURN FS3Combat Instance Parent=[u(fun_combat_msg,[ansi(hc,%N has started a new turn.  Pose and choose your action.)])][set(me,turn:[inc(v(turn))])][set(me,acted:)][set(me,posed:)][set(me,allposed:0)][iter(u(fun_combatants),[u(fun_check_for_ko,##)][switch(u(fun_is_combatant,##),1,[u(fun_reduce_suppress,##)][u(fun_reset_subdue,##)][u(fun_reset_aim,##)][u(fun_reset_luck,##)][u(fun_reset_hit,##)])])]
+&FUN_NEW_TURN FS3Combat Instance Parent=[u(fun_combat_msg,[ansi(hc,%N has started a new turn.  Pose and choose your action.)])][set(me,turn:[inc(v(turn))])][set(me,acted:)][set(me,posed:)][set(me,allposed:0)][iter(u(fun_combatants),[u(fun_check_for_ko,##)][switch(u(fun_is_combatant,##),1,[u(fun_reduce_suppress,##)][u(fun_reset_aim,##)][u(fun_reset_luck,##)][u(fun_reset_hit,##)])])]
 
 @@ --------------------------
 @@ These are helper functions for FUN_NEW_TURN just to keep things less messy.  
@@ -700,7 +700,7 @@
 @@ %2 = target
 @@ %3 = options
 @@ --------------------------
-&FUN_SET_ACTION FS3Combat Instance Parent=[u(fun_mod_combatstat,%0,action,[lcstr(trim(%1))])][u(fun_mod_combatstat,%0,target,[iter(%2,[unprettify(trim(##))],\,,\,)])][u(fun_mod_combatstat,%0,actoptions,[iter(%3,[trim(##)],\,,\,)])][u(fun_combat_msg,[prettify(lcstr(%0))] will [lcstr(%1)][switch(%2,,,%B[prettify(lcstr(%2))])] this turn.[switch(t(%3),1,%BOptions: %3)][u(fun_add_id,%0)])][set(me,acted:[setdiff([v(acted)] %N,)])][switch(u(fun_everyone_acted),1,u(fun_org_msg,[ansi(hc,Everyone has entered their actions.)]))]
+&FUN_SET_ACTION FS3Combat Instance Parent=[u(fun_mod_combatstat,%0,action,[lcstr(trim(%1))])][u(fun_mod_combatstat,%0,target,[iter(%2,[unprettify(trim(##))],\,,\,)])][u(fun_mod_combatstat,%0,actoptions,[iter(%3,[trim(##)],\,,\,)])][localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,switch(%1,subdue,,[u(fun_mod_combatstat,%0,subduing,)][u(fun_mod_combatstat,%q0,subduedby,)]))])][u(fun_combat_msg,[prettify(lcstr(%0))] will [lcstr(%1)][switch(%2,,,%B[prettify(lcstr(%2))])] this turn.[switch(t(%3),1,%BOptions: %3)][u(fun_add_id,%0)])][set(me,acted:[setdiff([v(acted)] %N,)])][switch(u(fun_everyone_acted),1,u(fun_org_msg,[ansi(hc,Everyone has entered their actions.)]))]
 
 
 @@ --------------------------
