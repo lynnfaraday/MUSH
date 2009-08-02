@@ -198,7 +198,7 @@
 @@  Shows detail for a given damage element.
 @@  %0 = Damage attr name.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_DMG_DETAIL FS3Combat Damage Commands=%R[ansi(h,Wound)]: [u(fun_dmgstat,%0,weapon)] to [prettify(u(fun_dmgstat,%0,hitloc))] [switch(u(fun_dmgstat,%0,real),0,%R[ansi(hg,*** MOCK DAMAGE ***)] %R\(will be removed when combat ends\)%R)]  %R[ansi(h,Time of Injury)]: [convsecs(after(after(%0,_),_))]%R[ansi(h,Type)]: [u(fun_dmgstat,%0,type)] %R[ansi(h,Initial Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,initsev))] %R[ansi(h,Current Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,currsev))] %R[ansi(h,Healing Points)]: [u(fun_dmgstat,%0,healing)] %R[ansi(h,Last Treated)]: [u(fun_display_time,u(fun_dmgstat,%0,lasttreat))] %R[ansi(h,Last Healed)]: [u(fun_display_time,u(fun_dmgstat,%0,lastheal))] %R[ansi(h,Notes)]:%R[replace_cr(u(fun_dmgstat,%0,notes))]
+&FUN_DMG_DETAIL FS3Combat Damage Commands=%R[ansi(h,Wound)]: [u(fun_dmgstat,%0,weapon)] to [prettify(u(fun_dmgstat,%0,hitloc))] [switch(u(fun_dmgstat,%0,real),0,%R[ansi(hg,*** MOCK DAMAGE ***)] %R\(will be removed when combat ends\)%R)]  %R[ansi(h,Time of Injury)]: [u(fun_display_time,before(after(after(%0,_),_),_))]%R[ansi(h,Type)]: [u(fun_dmgstat,%0,type)] %R[ansi(h,Initial Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,initsev))] %R[ansi(h,Current Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,currsev))] %R[ansi(h,Healing Points)]: [u(fun_dmgstat,%0,healing)] %R[ansi(h,Last Treated)]: [u(fun_display_time,u(fun_dmgstat,%0,lasttreat))] %R[ansi(h,Last Healed)]: [u(fun_display_time,u(fun_dmgstat,%0,lastheal))] %R[ansi(h,Notes)]:%R[replace_cr(u(fun_dmgstat,%0,notes))]
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGLIST
@@ -249,7 +249,7 @@
 @@  Healing points defaulted to 0, notes to empty, and last treated/healed to empty
 @@ Because this is global, must check for staff.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_DO_DMG FS3Combat Damage Commands=switch(0,isstaff(%!),ansi(hr,You aren't allowed to do that.),set(#731,DMG_[edit(%0,_,.,%B,.)]_[secs()]:%1|%2|%3|%4|%5|%5|0|||))
+&FUN_DO_DMG FS3Combat Damage Commands=switch(0,isstaff(%!),ansi(hr,You aren't allowed to do that.),set(#731,DMG_[edit(%0,_,.,%B,.)]_[secs()]_[rand(100000)]:%1|%2|%3|%4|%5|%5|0|||))
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_HEALPOINTS_WOUND
