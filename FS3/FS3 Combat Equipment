@@ -38,11 +38,11 @@
 &ARMOR_HEAVY_BODYARMOR FS3Combat Equipment Stats=Military-Grade Kevlar Vest and Helmet|Head Neck Chest Abdomen Groin|4|Personal
 &ARMOR_LIGHT_VEST FS3Combat Equipment Stats=Police-Grade Kevlar Vest|Chest Abdomen|3|Personal
 &ARMOR_LIGHT_BODYARMOR FS3Combat Equipment Stats=Police-Grade Kevlar Vest and Helmet|Head Neck Chest Abdomen|3|Personal
-&ARMOR_CENTURION FS3Combat Equipment Stats=Cylon Centurion Armor|Head Neck Chest Abdomen Groin LeftArm RightArm LeftLeg LeftHand RightHand LeftLeg RightLeg LeftFoot RightFoot|5|Personal
-&ARMOR_VIPER FS3Combat Equipment Stats=Viper Vehicle Armor|Body Engine Nose Tail Controls RightWing LeftWing|10|Vehicle
-&ARMOR_RAIDER FS3Combat Equipment Stats=Cylon Raider Vehicle Armor|Body Cockpit Engine Controls RightWing LeftWing|5|Vehicle
-&ARMOR_RAPTOR FS3Combat Equipment Stats=Raptor Vehicle Armor|Body Engine Nose Tail Controls RightWing LeftWing|15|Vehicle
-&ARMOR_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider Vehicle Armor|Body Cockpit Engine Nose Tail Controls RightWing LeftWing|10|Vehicle
+&ARMOR_CENTURION FS3Combat Equipment Stats=Cylon Centurion Armor|Head Neck Chest Abdomen Left_Arm Right_Arm Left_Leg Left_Hand Right_Hand Left_Leg Right_Leg Left_Foot Right_Foot|5|Personal
+&ARMOR_VIPER FS3Combat Equipment Stats=Viper Vehicle Armor|Body Controls Engine Right_Wing Left_Wing Tail Nose|10|Vehicle
+&ARMOR_RAIDER FS3Combat Equipment Stats=Cylon Raider Vehicle Armor|Controls Body Engine Right_Wing Left_Wing|5|Vehicle
+&ARMOR_RAPTOR FS3Combat Equipment Stats=Raptor Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cargo|15|Vehicle
+&ARMOR_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cargo|10|Vehicle
 
 &VEHICLE_VIPER FS3Combat Equipment Stats=Viper space fighter|Piloting|5|Viper|Viper|KEW
 &VEHICLE_RAIDER FS3Combat Equipment Stats=Cylon Raider space fighter|Piloting|2|Raider|Raider|KEW MISSILE_AA NUKE
