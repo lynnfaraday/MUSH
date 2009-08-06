@@ -89,9 +89,9 @@
 @@ ================================================================================================================
 
 
-&CMD-+COMBAT-START FS3Combat Action Commands=$+combat/start *:@pemit %#=[ansi(h,<COMBAT>)] [switch(0,not(u(FUN_IS_IN_COMBAT,%#)),ansi(hr,You are already in combat.),match(mock real,%0),ansi(hr,Combat type must be mock or real.),You start a combat.  Your combat number is [setq(0,create(Combat Instance))]%q0.[setq(1,parent(%q0,#806))][set(%q0,organizer:%#)][set(%q0,turn:0)][set(%q0,real:[switch(%0,real,1,0)])])];@switch t(%q0)=1,@fo %#=+combat/join %q0/observer
+&CMD-+COMBAT-START FS3Combat Action Commands=$+combat/start *:@pemit %#=[ansi(h,<COMBAT>)] [switch(0,not(u(FUN_IS_IN_COMBAT,%#)),ansi(hr,You are already in combat.),match(mock real,%0),ansi(hr,Combat type must be mock or real.),You start a combat.  Your combat number is [setq(0,create(Combat Instance))]%q0.[setq(1,parent(%q0,#806))][set(%q0,organizer:%#)][set(%q0,turn_in_progress:0)][set(%q0,turn:0)][set(%q0,real:[switch(%0,real,1,0)])])];@switch t(%q0)=1,@fo %#=+combat/join %q0/observer
 
-&CMD-+COMBAT-SPAR FS3Combat Action Commands=$+combat/spar *:@pemit %#=[ansi(h,<COMBAT>)] [switch(0,not(u(FUN_IS_IN_COMBAT,%#)),ansi(hr,You are already in combat.),not(u(FUN_IS_IN_COMBAT,%0)),ansi(hr,%0 is already in combat.),You start a sparring match with %0.  Your combat number is [setq(0,create(Combat Instance))]%q0.[setq(1,parent(%q0,#806))][set(%q0,organizer:%#)][set(%q0,turn:0)][set(%q0,real:[switch(%0,real,1,0)])])];@switch t(%q0)=1,{@fo %#=+combat/join %q0/soldier;@fo %#=+combat/join %0=%q0/soldier;@fo %#=+combat/weapon Sparring;@fo %#=+combat/weapon %0=Sparring;@fo %#=+combat/attack %0;@fo %#=+combat/attack %0=%N;@fo %#=+combat/team %0=2;@fo %#=+combat/newturn}
+&CMD-+COMBAT-SPAR FS3Combat Action Commands=$+combat/spar *:@pemit %#=[ansi(h,<COMBAT>)] [switch(0,not(u(FUN_IS_IN_COMBAT,%#)),ansi(hr,You are already in combat.),not(u(FUN_IS_IN_COMBAT,%0)),ansi(hr,%0 is already in combat.),You start a sparring match with %0.  Your combat number is [setq(0,create(Combat Instance))]%q0.[setq(1,parent(%q0,#806))][set(%q0,organizer:%#)][set(%q0,turn_in_progress:0)][set(%q0,turn:0)][set(%q0,real:[switch(%0,real,1,0)])])];@switch t(%q0)=1,{@fo %#=+combat/join %q0/soldier;@fo %#=+combat/join %0=%q0/soldier;@fo %#=+combat/weapon Sparring;@fo %#=+combat/weapon %0=Sparring;@fo %#=+combat/attack %0;@fo %#=+combat/attack %0=%N;@fo %#=+combat/team %0=2;@fo %#=+combat/newturn}
 
 
 &CMD-+COMBAT-STOP FS3Combat Action Commands=$+combat/stop *:@switch 0=u(FUN_IS_VALID_COMBAT,%0),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,That is not a valid combat number.)],or(isstaff(%#),match(xget(%0,organizer),%#)),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,Only staff or the organizer can stop a combat.)],{@pemit %#=[ansi(h,<COMBAT>)] You stop combat %0.[u(%0/fun_combat_msg,%N has stopped the combat.)][setq(0,u(%0/fun_participants))];@dolist %q0=think u(FUN_DO_LEAVE,##,%0);@wait mul(words(%q0),2)={@nuke %0;@nuke %0}}
@@ -103,7 +103,7 @@
 
 &CMD-+COMBAT-FORCELEAVE FS3Combat Action Commands=$+combat/leave *:@pemit %#=[setq(0,u(fun_combat_num,%0))][ansi(h,<COMBAT>)] [switch(0,t(%q0),ansi(hr,%0 is not in combat.),[u(%q0/fun_combat_msg,[prettify(%0)] has left the combat.[u(fun_add_id,%0)])][u(fun_do_leave,%0,%q0)])]
 
-&CMD-+COMBAT-NEWTURN FS3Combat Action Commands=$+combat/newturn:think [setq(0,u(fun_combat_num,%N))][setq(1,u(%q0/FUN_INITIATIVE))];@switch 0=t(%q0),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,You are not in combat.)],{@switch u(%q0/fun_turn_num)=0,{@fo %#=+combat/retarget;think u(%q0/fun_combat_msg,%N has started the combat!  Pose and pick your first action.)[set(%q0,turn:1)]},{@pemit %#=[ansi(h,<COMBAT>)] Triggering new turn.;@dolist %q1=@wait [mul(#@,5)]=think u(%q0/fun_do_action,##);@wait [add(mul(words(%q1),5),5)]=think [u(%q0/fun_new_turn)]}
+&CMD-+COMBAT-NEWTURN FS3Combat Action Commands=$+combat/newturn:think [setq(0,u(fun_combat_num,%N))][setq(1,u(%q0/FUN_INITIATIVE))];@switch 0=t(%q0),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,You are not in combat.)],not(xget(%q0,turn_in_progress)),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,A turn is already in progress.)],{think set(%q0,turn_in_progress:1);@switch u(%q0/fun_turn_num)=0,{@fo %#=+combat/retarget;think u(%q0/fun_combat_msg,%N has started the combat!  Pose and pick your first action.)[set(%q0,turn:1)]},{@pemit %#=[ansi(h,<COMBAT>)] Triggering new turn.;@dolist %q1=@wait [mul(#@,5)]=think u(%q0/fun_do_action,##);@wait [add(mul(words(%q1),5),5)]=think [u(%q0/fun_new_turn)]}
 
 @@ --------------------------
 @@ FUN_ADD_ID
@@ -206,14 +206,14 @@
 @@ %1 = action
 @@ SIDE EFFECT!!! sets %q0 to be the person's combat number  (also sets %qz  but we don't care)
 @@ --------------------------
-&FUN_CAN_ACT FS3Combat Action Commands=[setq(0,u(fun_combat_num,%0))][setq(z,u(fun_combat_num,%N))][and(t(%qz),t(%q0),not(u(%q0/fun_combatstat,%0,ko)),u(%q0/fun_is_combatant,%0),switch(t(u(%q0/fun_combatstat,%0,subduedby)),1,switch(%1,pass,1,escape,1,mod,1,luck,1,0),1))]
+&FUN_CAN_ACT FS3Combat Action Commands=[setq(0,u(fun_combat_num,%0))][setq(z,u(fun_combat_num,%N))][and(not(xget(%q0,turn_in_progress)),t(%qz),t(%q0),not(u(%q0/fun_combatstat,%0,ko)),u(%q0/fun_is_combatant,%0),switch(t(u(%q0/fun_combatstat,%0,subduedby)),1,switch(%1,pass,1,escape,1,mod,1,luck,1,0),1))]
 
 @@ --------------------------
 @@ FUN_CANT_ACT_MSG
 @@ Emits the right message if someone can't act.
 @@ %0 = name
 @@ --------------------------
-&FUN_CANT_ACT_MSG FS3Combat Action Commands=ansi(hr,switch(0,t(u(fun_combat_num,%N)),You are not in combat.,t(%q0),[prettify(%0)] is not in combat.,u(%q0/fun_is_combatant,%0),[prettify(%0)] is not a combatant.,not(u(%q0/fun_combatstat,%0,ko)),[prettify(%0)] is KO'd.,not(t(u(%q0/fun_combatstat,%0,subduedby))),[prettify(%0)] is subdued and can only try to escape.,[prettify(%0)] can't act for some unknown reason.  This may be a bug.))
+&FUN_CANT_ACT_MSG FS3Combat Action Commands=ansi(hr,switch(0,not(xget(%q0,turn_in_progress)),Please wait until the new turn message.,t(u(fun_combat_num,%N)),You are not in combat.,t(%q0),[prettify(%0)] is not in combat.,u(%q0/fun_is_combatant,%0),[prettify(%0)] is not a combatant.,not(u(%q0/fun_combatstat,%0,ko)),[prettify(%0)] is KO'd.,not(t(u(%q0/fun_combatstat,%0,subduedby))),[prettify(%0)] is subdued and can only try to escape.,[prettify(%0)] can't act for some unknown reason.  This may be a bug.))
 
 @@ ---------------   Pass -----------------
 @@ Pass has no options or target
@@ -391,21 +391,20 @@
 &FUN_CHECK_OPT_BURST FS3Combat Action Commands=switch(0,u(%3/fun_weaponstat,%0,auto),0|Your weapon is not capable of burst fire.,gte(u(%3/fun_combatstat,%0,ammo),2),0|You must have at least 2 bullets in the clip to fire a burst.,1)
 
 @@ ---------------   Treat -----------------
-@@ Treat has a target and wound number.  
+@@ Treat has a target
 
-&CMD-+COMBAT-TREAT FS3Combat Action Commands=$+combat/treat */*:@pemit %#=[ansi(h,<COMBAT>)] [switch(%0,*=*,u(FUN_ACTION_TREAT,before(%0,=),after(%0,=),%1),u(FUN_ACTION_TREAT,%N,%0,%1))]
+&CMD-+COMBAT-TREAT FS3Combat Action Commands=$+combat/treat *:@pemit %#=[ansi(h,<COMBAT>)] [switch(%0,*=*,u(FUN_ACTION_TREAT,before(%0,=),after(%0,=),%1),u(FUN_ACTION_TREAT,%N,%0))]
 
 @@ --------------------------
 @@ FUN_ACTION_TREAT
 @@ Registers a treat action.
 @@ %0 = actor name
 @@ %1 = target name
-@@ %2 = wound num
-@@ TODO: Add treat stuff!
 @@
 @@ %q0 = combat num (from fun_can_act)
+@@ %qz = temp for treat status
 @@ --------------------------
-&FUN_ACTION_TREAT FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,treat),u(fun_cant_act_msg,%0),u(%q0/fun_is_combatant,%1),ansi(hr,%1 is not a valid target.),%0 will spend the turn treating %1.  [ansi(hc,Use the +treat command now.)][u(%q0/FUN_SET_ACTION,%0,treat,%1,%2)]))
+&FUN_ACTION_TREAT FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,treat),u(fun_cant_act_msg,%0),or(u(%q0/fun_is_combatant,%1),match(u(fun_vehicle_combat_num,%1),%q0)),ansi(hr,%1 is not a valid target.),[setq(z,cantreat(%1,%0))]eq(%qz,1),ansi(hr,after(%qz,|)),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,treat,%1,%2)]))
 
 @@ ---------------   Rally -----------------
 @@ Rally has a target and no options.  
