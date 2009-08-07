@@ -103,7 +103,7 @@
 
 &CMD-+COMBAT-FORCELEAVE FS3Combat Action Commands=$+combat/leave *:@pemit %#=[setq(0,u(fun_combat_num,%0))][ansi(h,<COMBAT>)] [switch(0,t(%q0),ansi(hr,%0 is not in combat.),[u(%q0/fun_combat_msg,[prettify(%0)] has left the combat.[u(fun_add_id,%0)])][u(fun_do_leave,%0,%q0)])]
 
-&CMD-+COMBAT-NEWTURN FS3Combat Action Commands=$+combat/newturn:think [setq(0,u(fun_combat_num,%N))][setq(1,u(%q0/FUN_INITIATIVE))];@switch 0=t(%q0),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,You are not in combat.)],not(xget(%q0,turn_in_progress)),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,A turn is already in progress.)],{think set(%q0,turn_in_progress:1);@switch u(%q0/fun_turn_num)=0,{@fo %#=+combat/retarget;think u(%q0/fun_combat_msg,%N has started the combat!  Pose and pick your first action.)[set(%q0,turn:1)]},{@pemit %#=[ansi(h,<COMBAT>)] Triggering new turn.;@dolist %q1=@wait [mul(#@,5)]=think u(%q0/fun_do_action,##);@wait [add(mul(words(%q1),5),5)]=think [u(%q0/fun_new_turn)]}
+&CMD-+COMBAT-NEWTURN FS3Combat Action Commands=$+combat/newturn:think [setq(0,u(fun_combat_num,%N))][setq(1,u(%q0/FUN_INITIATIVE))];@switch 0=t(%q0),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,You are not in combat.)],not(xget(%q0,turn_in_progress)),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,A turn is already in progress.)],{think set(%q0,turn_in_progress:1);@switch u(%q0/fun_turn_num)=0,{@fo %#=+combat/retarget;think u(%q0/fun_combat_msg,%N has started the combat!  Pose and pick your first action.)[set(%q0,turn:1)][set(%q0,turn_in_progress:0)]},{@pemit %#=[ansi(h,<COMBAT>)] Triggering new turn.;@dolist %q1=@wait [mul(#@,5)]=think u(%q0/fun_do_action,##);@wait [add(mul(words(%q1),5),5)]=think [u(%q0/fun_new_turn)]}
 
 @@ --------------------------
 @@ FUN_ADD_ID
@@ -300,7 +300,7 @@
 @@ %q0 = combat num (from fun_can_act)
 @@ %q1 = check targets status
 @@ --------------------------
-&FUN_ACTION_SUPPRESS FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,suppress),u(fun_cant_act_msg,%0),lte(words(%1,\,),5),ansi(hr,You cannot target more than 5 targets.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),or(eq(words(%1,\,),1),u(%q0/fun_weaponstat,%0,auto)),ansi(hr,You cannot suppress multiple targets without a fullauto weapon.),switch(u(%q0/fun_weaponstat,%0,wpntype),Ranged,gte(u(%q0/fun_combatstat,%0,ammo),words(%1,\,)),1),ansi(hr,You don't have enough bullets.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,suppress,%1,)]))
+&FUN_ACTION_SUPPRESS FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,suppress),u(fun_cant_act_msg,%0),lte(words(%1,\,),5),ansi(hr,You cannot target more than 5 targets.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),or(eq(words(%1,\,),1),match(u(%q0/fun_weaponstat,%0,wpntype),defensive),u(%q0/fun_weaponstat,%0,auto)),ansi(hr,You cannot suppress multiple targets without a fullauto or defensive weapon.),switch(u(%q0/fun_weaponstat,%0,wpntype),Ranged,gte(u(%q0/fun_combatstat,%0,ammo),words(%1,\,)),1),ansi(hr,You don't have enough bullets.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,suppress,%1,)]))
 
 
 @@ ---------------   Aim -----------------
