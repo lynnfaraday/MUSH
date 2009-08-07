@@ -376,7 +376,7 @@
 @@ %3 = special modifier (used for recoil or range)
 @@ --------------------------
 
-&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][setq(w,u(fun_combatstat,%0,weapon))][setq(l,weaponstat(%qw,lethality))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] and [switch(1,lt(%qa,0),MISSES!,match(%qh,MISS*),MISSES!,lt(%qa,%qd),[switch(weaponstat(%qw,wpntype),Melee,[prettify(lcstr(%qt))] DODGES!,MISSES!)],gte(%qc,100),hits COVER.,gte(%qr,100),hits [before(%qh,:)] but ARMOR stops the attack!,HITS! [switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz)])])
+&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][setq(w,u(fun_combatstat,%0,weapon))][setq(l,weaponstat(%qw,lethality))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] and [switch(1,lt(%qa,0),MISSES!,match(%qh,MISS*),MISSES!,lt(%qa,%qd),[switch(weaponstat(%qw,wpntype),Melee,[prettify(lcstr(%qt))] DODGES!,MISSES!)],gte(%qc,100),hits COVER.,gte(%qr,100),hits [before(%qh,:)] but ARMOR stops the attack!,HITS! [switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz,xget(#609,security_code))])])
 
 
 @@ --------------------------
@@ -428,7 +428,7 @@
 @@ %2 = cover lethal. mod
 @@ %3 = armor lethal. mod
 @@ --------------------------
-&FUN_RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,rand(1,100))][setq(1,add(%q0,switch(%0,critical,30,vital,15,normal,0),%1,-%2,-%3,-[herofactor()]))][switch(%q0,1,L,50,M,90,S,99,C,switch(%q1,<40,L,<90,M,<98,S,C))][u(fun_combat_log,DAMAGE: hitloc=%0 wpn=%1 cov=%2 arm=%3 random=%q0 modified=%q1)])
+&FUN_RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,rand(1,100))][setq(1,add(%q0,switch(%0,critical,30,vital,15,normal,0),%1,-%2,-%3,-[xget(#609,hero_factor)]))][switch(%q0,1,L,50,M,90,S,99,C,switch(%q1,<40,L,<90,M,<98,S,C))][u(fun_combat_log,DAMAGE: hitloc=%0 wpn=%1 cov=%2 arm=%3 random=%q0 modified=%q1)])
 
 @@ --------------------------
 @@ FUN_ROLL_ATTACK

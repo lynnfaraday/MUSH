@@ -139,7 +139,7 @@
 @@ %qz = throwaway reg for vehicle combat num
 @@ --------------------------
 
-&FUN_JOIN_VEHICLE_STUFF FS3Combat Action Commands=switch(1,not(match(pilot passenger,%0)),switch(%1,,1,0|You cannot specify a vehicle if you are not a pilot or passenger.),and(match(%0,pilot),t(u(%2/fun_find_pilot,%1))),0|There is already a pilot for that vehicle.,[setq(z,u(fun_vehicle_combat_num,%1))][not(or(match(%qz,%2),not(words(%qz))))],0|That vehicle is already in another combat.,isvehicle(%1),1,not(%1),0|You must specify a vehicle if you are a pilot or passenger.,not(match(vehicletypes(),%1)),0|%1 is not a valid vehicle name or type,t(match(vehicletypes(),%1)),1[setq(1,randvehicle(%1))],0|Unknown error.)
+&FUN_JOIN_VEHICLE_STUFF FS3Combat Action Commands=switch(1,not(match(pilot passenger,%0)),switch(%1,,1,0|You cannot specify a vehicle if you are not a pilot or passenger.),and(match(%0,pilot),t(u(%2/fun_find_pilot,%1))),0|There is already a pilot for that vehicle.,[setq(z,u(fun_vehicle_combat_num,%1))][not(or(match(%qz,%2),not(words(%qz))))],0|That vehicle is already in another combat.,isvehicle(%1),1,not(%1),0|You must specify a vehicle if you are a pilot or passenger.,not(match(vehicletypes(),%1)),0|%1 is not a valid vehicle name or type,t(match(vehicletypes(),%1)),1[setq(1,randvehicle(%1,xget(#609,security_code)))],0|Unknown error.)
 
 @@ --------------------------
 @@ FUN_JOIN_NPC_STUFF
@@ -168,7 +168,7 @@
 @@
 @@ %q0 = vehicle
 @@ --------------------------
-&FUN_DO_LEAVE FS3Combat Action Commands=localize([setq(0,u(%1/fun_combatstat,%0,vehicle))][clearmockdmg(%0)][switch(1,isplayer(%0),wipe([pmatch(%0)]/combat),switch(npcstat(%0,temp),1,deletenpc(%0)))][u(%1/fun_remove,%0)][switch(1,isvehicle(%q0),switch(0,t(u(fun_vehicle_combat_num,%q0)),[clearmockdmg(%q0)][switch(vehiclestat(%q0,temp),1,deletevehicle(%q0))]))][switch(%0,%N,You leave the combat.,You make %0 leave the combat.)])
+&FUN_DO_LEAVE FS3Combat Action Commands=localize([setq(0,u(%1/fun_combatstat,%0,vehicle))][clearmockdmg(%0,xget(#609,security_code))][switch(1,isplayer(%0),wipe([pmatch(%0)]/combat),switch(npcstat(%0,temp),1,deletenpc(%0)))][u(%1/fun_remove,%0)][switch(1,isvehicle(%q0),switch(0,t(u(fun_vehicle_combat_num,%q0)),[clearmockdmg(%q0)][switch(vehiclestat(%q0,temp),1,deletevehicle(%q0,xget(#609,security_code)))]))][switch(%0,%N,You leave the combat.,You make %0 leave the combat.)])
 
 
 @@ ================================================================================================================
@@ -524,4 +524,11 @@
 &HERO_FACTOR FS3Combat Preferences=0
 &DEFAULT_RIFLE FS3Combat Preferences=Rifle
 
-@STARTUP FS3Combat Preferences=@set me=!no_command;@fun herofactor=me,hero_factor;@fun defaultrifle=me,default_rifle
+&FIRSTAID_SKILL FS3Combat Preferences=First_Aid
+&JURYRIG_SKILL FS3Combat Preferences=Repair
+&HEAL_SKILL FS3Combat Preferences=Medicine
+&REPAIR_SKILL FS3Combat Preferences=Repair
+&TOUGHNESS_SKILL FS3Combat Preferences=Athletic
+&HOSPITALS FS3Combat Preferences=#-1
+
+&SECURITY_CODE FS3Combat Preferences=9612
