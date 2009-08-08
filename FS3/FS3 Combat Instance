@@ -83,8 +83,9 @@
 @@ Removes someone from combat by erasing all their combat attributes.
 @@ also clears out anyone targeting them and anyone they're subduing.
 @@ %0 = name
+@@   %qz = temp vehicle register
 @@ --------------------------
-&FUN_REMOVE FS3Combat Instance Parent=[localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))])][wipe(me/stat_[unprettify(%0)]**)][u(fun_untarget,%0)]
+&FUN_REMOVE FS3Combat Instance Parent=[localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))])][switch([setq(z,u(fun_combatstat,%0,vehicle))]t(%qz),1,[set(me,vehicle_%qz:[remove(v(vehicle_%qz),unprettify(%0))])][switch(words(v(vehicle_%qz)),0,wipe(me/vehicle_%qz))][wipe(me/stat_[unprettify(%0)]**)][u(fun_untarget,%0)])]
 
 @@ ================================================================================================================
 @@ ---------------  Utilities -----------------
@@ -600,7 +601,7 @@
 @@ These are helper functions for FUN_NEW_TURN just to keep things less messy.  
 @@ %0 = name
 @@ --------------------------
-&FUN_CHECK_FOR_KO FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,vehicle))][switch(u(fun_combatstat,%0,hitthisturn),1,switch(checkko(switch(t(%q0),1,%q0,%0),num(me)),1,[u(fun_ko,%0)][switch(t(%q0),1,iter(remove(u(fun_combatants),%0),switch(u(fun_combatstat,##,vehicle),%q0,u(fun_ko,##))))]))])
+&FUN_CHECK_FOR_KO FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,vehicle))][switch(u(fun_combatstat,%0,hitthisturn),1,switch(checkko(switch(t(%q0),1,%q0,%0),num(me)),1,[u(fun_ko,%0)][switch(t(%q0),1,iter(remove(v(vehicle_%q0),%0),u(fun_ko,##)))]))])
 &FUN_REDUCE_SUPPRESS FS3Combat Instance Parent=u(fun_mod_combatstat,%0,suppress,max(min(sub(u(fun_combatstat,%0,suppress),2),5),0))
 &FUN_RESET_LUCK FS3Combat Instance Parent=u(fun_mod_combatstat,%0,luck,)
 &FUN_RESET_AIM FS3Combat Instance Parent=u(fun_mod_combatstat,%0,lastaim,switch(u(fun_combatstat,%0,action),aim,u(fun_combatstat,%0,target),))

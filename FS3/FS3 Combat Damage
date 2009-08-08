@@ -29,7 +29,7 @@
 
 &CMD-+DAMAGE-DELETE FS3Combat Damage Commands=$+damage/delete */*:@pemit %#=[setq(0,u(fun_get_dmgnum,%0,%1))]switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(%q0),ansi(hr,%0/%1 is not a valid damage value.),ansi(hg,You delete [prettify(%0)]'s damage.)[wipe(#731/%q0)])
 
-&CMD-+DAMAGE-CLEAR FS3Combat Damage Commands=$+damage/clear *:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is for staff only.),gt(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),ansi(hg,You clear all of [prettify(%0)]'s damage.)[u(fun_clear_damage,%0)])
+&CMD-+DAMAGE-CLEAR FS3Combat Damage Commands=$+damage/clear *:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is for staff only.),gt(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),ansi(hg,You clear all of [prettify(%0)]'s damage.)[u(fun_clear_damage,%0,xget(#609,security_code))])
 
 
 @@  %0 = Name 
