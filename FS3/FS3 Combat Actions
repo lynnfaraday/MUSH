@@ -73,7 +73,7 @@
 @@ Returns the combat # of a vehicle, if it's being used in combat.
 @@ %0 = name
 @@ --------------------------
-&FUN_VEHICLE_COMBAT_NUM  FS3Combat Action Commands=squish(iter(children(#806),iter(u(%i0/fun_combatants),switch(u(%i1/fun_combatstat,%i0,vehicle),unprettify(%0),%i1))))
+&FUN_VEHICLE_COMBAT_NUM  FS3Combat Action Commands=iter(children(#806),switch(hasattr(##,vehicle_[unprettify(%0)]),1,##),,)
 
 @@ --------------------------
 @@ FUN_ACTED_DISPLAY 
@@ -122,7 +122,7 @@
 @@ Returns message to display to enactor.
 @@ --------------------------
 
-&FUN_DO_JOIN FS3Combat Action Commands=localize([setq(0,extract(%1,2,1,/))][setq(1,extract(%1,3,1,/))][setq(2,extract(%1,1,1,/))][switch(0,u(FUN_IS_VALID_COMBAT,%q2),ansi(hr,That is not a valid combat number.),not(u(FUN_IS_IN_COMBAT,%0)),ansi(hr,%0 is already in combat.),match(v(types),%q0),ansi(hr,That is not a valid type.  Pick one of: [v(types)].),[setq(v,u(fun_join_vehicle_stuff,%q0,%q1,%q2))][eq(%qv,1)],ansi(hr,after(%qv,|)),[setq(n,u(fun_join_npc_stuff,%0))][eq(%qn,1)],ansi(hr,after(%qn,|)),[switch(%N,%0,You join combat %q2.,You make %0 join combat %q2.)]%R< Weapon set to: [u(fun_default_weapon,%q0,%q1)][u(%q2/fun_init_combatstat,%0,%q0,%q1,[u(fun_default_weapon,%q0,%q1)])][set(pmatch(%0),combat:%q2)][u(%q2/fun_combat_msg,[prettify(%0)] has joined the combat as a %q0[switch(t(%q1),1,%Bin [prettify(%q1)])][switch(%q0,observer,,npcmaster,,%Bon team [u(%q2/fun_combatstat,%0,team)])].[u(fun_add_id,%0)])])
+&FUN_DO_JOIN FS3Combat Action Commands=localize([setq(0,extract(%1,2,1,/))][setq(1,extract(%1,3,1,/))][setq(2,extract(%1,1,1,/))][switch(0,u(FUN_IS_VALID_COMBAT,%q2),ansi(hr,That is not a valid combat number.),not(u(FUN_IS_IN_COMBAT,%0)),ansi(hr,%0 is already in combat.),match(v(types),%q0),ansi(hr,That is not a valid type.  Pick one of: [v(types)].),[setq(v,u(fun_join_vehicle_stuff,%q0,%q1,%q2))][eq(%qv,1)],ansi(hr,after(%qv,|)),[setq(n,u(fun_join_npc_stuff,%0))][eq(%qn,1)],ansi(hr,after(%qn,|)),[switch(%N,%0,You join combat %q2.,You make %0 join combat %q2.)]%R< Weapon set to: [u(fun_default_weapon,%q0,%q1)][u(%q2/fun_init_combatstat,%0,%q0,%q1,[u(fun_default_weapon,%q0,%q1)])][set(pmatch(%0),combat:%q2)][u(%q2/fun_combat_msg,[prettify(%0)] has joined the combat as a %q0[switch(t(%q1),1,%Bin [prettify(%q1)][append(%q2,vehicle_[unprettify(%q1)],unprettify(%0))])][switch(%q0,observer,,npcmaster,,%Bon team [u(%q2/fun_combatstat,%0,team)])].[u(fun_add_id,%0)])])
 
 
 @@ --------------------------
@@ -168,7 +168,7 @@
 @@
 @@ %q0 = vehicle
 @@ --------------------------
-&FUN_DO_LEAVE FS3Combat Action Commands=localize([setq(0,u(%1/fun_combatstat,%0,vehicle))][clearmockdmg(%0,xget(#609,security_code))][switch(1,isplayer(%0),wipe([pmatch(%0)]/combat),switch(npcstat(%0,temp),1,deletenpc(%0)))][u(%1/fun_remove,%0)][switch(1,isvehicle(%q0),switch(0,t(u(fun_vehicle_combat_num,%q0)),[clearmockdmg(%q0)][switch(vehiclestat(%q0,temp),1,deletevehicle(%q0,xget(#609,security_code)))]))][switch(%0,%N,You leave the combat.,You make %0 leave the combat.)])
+&FUN_DO_LEAVE FS3Combat Action Commands=localize([setq(0,u(%1/fun_combatstat,%0,vehicle))][clearmockdmg(%0,xget(#609,security_code))][switch(1,isplayer(%0),wipe([pmatch(%0)]/combat),switch(npcstat(%0,temp),1,deletenpc(%0,xget(#609,security_code))))][u(%1/fun_remove,%0)][switch(1,isvehicle(%q0),switch(0,t(u(fun_vehicle_combat_num,%q0)),[clearmockdmg(%q0,xget(#609,security_code))][switch(vehiclestat(%q0,temp),1,deletevehicle(%q0,xget(#609,security_code)))]))][switch(%0,%N,You leave the combat.,You make %0 leave the combat.)])
 
 
 @@ ================================================================================================================
