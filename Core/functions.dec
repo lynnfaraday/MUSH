@@ -50,7 +50,7 @@
 &FUN_SORT_NAMES Global Utility Functions=sortby(sortby_names,%0)
 &SORTBY_NAMES Global Utility Functions=comp(name(%0),name(%1))
 &FUN_WEB_EDIT Global Utility Functions=[setq(9,%0)][setq(9,edit(%q9,<,\[))][setq(9,edit(%q9,>,\]))][setq(9,edit(%q9,\\\%r\\\%r,%R<p>))][setq(9,edit(%q9,\\\%R\\\%R,%R<p>))][setq(9,edit(%q9,\\\%r,%R<BR>))][setq(9,edit(%q9,\\\%R,%R<BR>))]%q9
-&FUN_UNPRETTIFY Global Utility Functions=edit(squish(%0),%B,_)
+&FUN_UNPRETTIFY Global Utility Functions=edit(squish(capstr_all(capstr_all(%0,_))),%B,_)
 &FUN_WIKIFI Global Utility Functions=edit(regeditalli(%0,\\\[ansi\\\(\[^\,\]+\,\(\[^\\\)\]+\)\\\)\\\],'''$1'''),\%R,%R%R,\%r,%R%R,\%b,%b,\%B,%b,\%t,,\%T,)
 
 &FUNHELP_APPEND Global Utility Functions=Appends text to an attribute.  Separator is optional and defaults to a blank space.%R%RUsage: append(db#,attribute,text to append,separator)
