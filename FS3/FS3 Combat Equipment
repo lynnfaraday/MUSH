@@ -18,6 +18,8 @@
 &WEAPON_LMG_AP FS3Combat Equipment Stats=Light machinegun/SAW with armor piercing rounds|Firearms|3|-10|6|Ranged|Personal|1|100|30|1000|0|Physical|0
 &WEAPON_SHOTGUN FS3Combat Equipment Stats=Shotgun|Firearms|3|10|3|Ranged|Personal|0|8|0|100|0|Physical|0
 
+&WEAPON_SHRAPNEL FS3Combat Equipment Stats=Random Shrapnel|5|5|0|1|Explosive|Personal|0|0|0|5|5|Physical|0
+
 
 &WEAPON_UNARMED FS3Combat Equipment Stats=Unarmed|Melee|Melee|0|0|Melee|Personal|0|0|0|0|0|Stun|0
 &WEAPON_SPARRING FS3Combat Equipment Stats=Unarmed|Melee|Melee|-25|0|Melee|Personal|0|0|0|0|0|Stun|0
@@ -41,8 +43,8 @@
 &ARMOR_CENTURION FS3Combat Equipment Stats=Cylon Centurion Armor|Head Neck Chest Abdomen Left_Arm Right_Arm Left_Leg Left_Hand Right_Hand Left_Leg Right_Leg Left_Foot Right_Foot|5|Personal
 &ARMOR_VIPER FS3Combat Equipment Stats=Viper Vehicle Armor|Body Controls Engine Right_Wing Left_Wing Tail Nose|10|Vehicle
 &ARMOR_RAIDER FS3Combat Equipment Stats=Cylon Raider Vehicle Armor|Controls Body Engine Right_Wing Left_Wing|5|Vehicle
-&ARMOR_RAPTOR FS3Combat Equipment Stats=Raptor Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cargo|15|Vehicle
-&ARMOR_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cargo|10|Vehicle
+&ARMOR_RAPTOR FS3Combat Equipment Stats=Raptor Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cabin|15|Vehicle
+&ARMOR_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cabin|10|Vehicle
 
 &VEHICLE_VIPER FS3Combat Equipment Stats=Viper space fighter|Piloting|5|Viper|Viper|KEW
 &VEHICLE_RAIDER FS3Combat Equipment Stats=Cylon Raider space fighter|Piloting|2|Raider|Raider|KEW MISSILE_AA NUKE

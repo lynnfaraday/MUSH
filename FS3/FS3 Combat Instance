@@ -85,7 +85,7 @@
 @@ %0 = name
 @@   %qz = temp vehicle register
 @@ --------------------------
-&FUN_REMOVE FS3Combat Instance Parent=[localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))])][switch([setq(z,u(fun_combatstat,%0,vehicle))]t(%qz),1,[set(me,vehicle_%qz:[remove(v(vehicle_%qz),unprettify(%0))])][switch(words(v(vehicle_%qz)),0,wipe(me/vehicle_%qz))][wipe(me/stat_[unprettify(%0)]**)][u(fun_untarget,%0)])]
+&FUN_REMOVE FS3Combat Instance Parent=[localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))])][switch([setq(z,u(fun_combatstat,%0,vehicle))]t(%qz),1,[set(me,vehicle_%qz:[remove(v(vehicle_%qz),unprettify(lcstr(%0)))])][switch(words(v(vehicle_%qz)),0,wipe(me/vehicle_%qz))][wipe(me/stat_[unprettify(%0)]**)][u(fun_untarget,%0)])]
 
 @@ ================================================================================================================
 @@ ---------------  Utilities -----------------
@@ -361,15 +361,13 @@
 
 @@ --------------------------
 @@ FUN_DO_ATTACK
+@@ Does the attack roll part of determining whether someone was hit or not.
 @@ %qt = the real target - pilot or person
 @@ %qa = attack roll result
 @@ %qd = defense roll result
-@@ %qh = random hit location, in the form location:criticality
 @@ %qz = random damage
 @@ %qw = weapon
-@@ %ql = weapon lethality
-@@ %qc = cover lethality modifier (0 if no cover)
-@@ %qr = armor lethality modifier (0 if no armor)
+@@ %qs = successful hit (set by FUN_DO_HIT)
 @@
 @@ %0 = attacker
 @@ %1 = defender (may be a vehicle name, in which case we have to determine the pilot for certain rolls)
@@ -377,8 +375,41 @@
 @@ %3 = special modifier (used for recoil or range)
 @@ --------------------------
 
-&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][setq(w,u(fun_combatstat,%0,weapon))][setq(l,weaponstat(%qw,lethality))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] and [switch(1,lt(%qa,0),MISSES!,match(%qh,MISS*),MISSES!,lt(%qa,%qd),[switch(weaponstat(%qw,wpntype),Melee,[prettify(lcstr(%qt))] DODGES!,MISSES!)],gte(%qc,100),hits COVER.,gte(%qr,100),hits [before(%qh,:)] but ARMOR stops the attack!,HITS! [switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz,xget(#609,security_code))])])
+&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] [switch(1,lt(%qa,0),and MISSES!,lt(%qa,%qd),but [switch(weaponstat(%qw,wpntype),Melee,[prettify(lcstr(%qt))] DODGES!,MISSES!)],[u(fun_do_hit,%0,%1,%2)])])][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))])
 
+
+@@ --------------------------
+@@ FUN_DO_HIT
+@@ Assuming someone was hit, determines armor, cover, hitloc and damage.
+@@ %0 = attacker (not actually required; just kept for synching with do attack method)
+@@ %1 = defender (may be a vehicle name, in which case we have to determine the pilot for certain rolls)
+@@ %2 = targeted hit location, may be blank
+@@
+@@ Requires the following registers be set!  **DO NOT LOCALIZE!!!**
+@@    %qt = the real target - pilot or person
+@@    %qa = attack roll result
+@@    %qd = defense roll result
+@@    %qw = weapon
+@@
+@@ Sets the following additional registers:
+@@    %ql = weapon lethality
+@@    %qh = random hit location, in the form location:criticality
+@@    %qc = cover lethality modifier (0 if no cover)
+@@    %qr = armor lethality modifier (0 if no armor)
+@@    %qs = successful hit
+@@ --------------------------
+
+&FUN_DO_HIT FS3Combat Instance Parent=[setq(s,0)][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][setq(l,weaponstat(%qw,lethality))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))]- [switch(1,match(%qh,MISS*),NEAR MISS!,gte(%qc,100),COVER stops the attack.,gte(%qr,100),ARMOR on [before(%qh,:)] stops the attack!,[switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[setq(s,1)][u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz,xget(#609,security_code))])]
+
+
+@@ --------------------------
+@@ FUN_AUTO_ATTACK
+@@ Takes care of automatic attacks like explosions and crew hits which bypass the attack roll portion of attacking and automatically hits.
+@@ %0 = target
+@@ %1 = weapon
+@@ --------------------------
+
+&FUN_AUTO_ATTACK FS3Combat Instance parent=[setq(a,3)][setq(d,1)][setq(w,%1)][setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][u(fun_do_hit,Auto,%0,first(shuffle(u(fun_valid_hitlocs,%0))))]
 
 @@ --------------------------
 @@ FUN_VALID_HITLOCS
@@ -548,6 +579,30 @@
 @@ %1 = protection
 @@ --------------------------
 &FUN_STOP_CHANCE FS3Combat Instance Parent=localize([setq(0,add(mul(sub(mul(fdiv(%1,%0),2),1),25),10))][switch(1,eq(%0,0),100,eq(%1,0),0,lte(%q0,0),0,%q0)])
+
+
+@@ --------------------------
+@@ FUN_DO_CREW_DAMAGE
+@@ When a vehicle is hit, this figures out whether any of the crew are injured as well.
+@@ %0 = vehicle name
+@@ %1 = damage severity
+@@ %2 = hitloc
+@@   %q0 = crew damage chance
+@@   %q1 = random roll
+@@   %q2 = num of hits
+@@ --------------------------
+&FUN_DO_CREW_DAMAGE FS3Combat Instance Parent=localize([setq(0,u(fun_crew_damage_chance,%0,%1,%2))][iter(v(vehicle_%0),[setq(1,rand(100))][setq(2,rand(1,switch(%1,C,3,S,2,1)))][u(fun_combat_log,CREW: ## veh=%0 dmg=%1 hitloc=%2 dmgchance=%q0 roll=%q1 numhits=%q2)][switch(lt(%q1,%q0),1,iter(lnum(1,%q2),u(fun_combat_msg,CREW HIT! [prettify(lcstr(##))] [u(fun_auto_attack,##,Shrapnel)])))])])
+
+@@ --------------------------
+@@ FUN_CREW_DAMAGE_CHANCE
+@@ Determines the chance that someone would be hurt by a vehicle hit.
+@@ %0 = vehicle name
+@@ %1 = damage severity
+@@ %2 = hitloc
+@@   %q0 = vehicle type
+@@   %q1 = base chance per severity
+@@ --------------------------
+&FUN_CREW_DAMAGE_CHANCE FS3Combat Instance Parent=localize([setq(0,vehiclestat(%0,type))][setq(1,switch(%1,C,80,S,50,M,10,2))]switch(1,match(%2,xget(#732,default_%q0)),%q1,t(match(xget(#732,crewhit_%q0),%2)),mul(%q1,5),0))
 
 @@ ================================================================================================================
 @@ ---------------  Turns -----------------

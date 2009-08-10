@@ -21,6 +21,7 @@
 &DMG_SOLDIER FS3Combat Hit Locations=Head:Critical Neck:Critical Chest:Vital Abdomen:Vital Right_Arm:Normal Left_Arm:Normal Right_Hand:Normal Left_Hand:Normal Right_Leg:Normal Left_Leg:Normal Right_Foot:Normal Left_Foot:Normal
 
 &DEFAULT_SOLDIER FS3Combat Hit Locations=Chest
+&CREWHIT_SOLDIER FS3Combat Hit Locations=
 
 
 &DMG_VIPER FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Tail:Normal Weapon:Normal Nose:Normal
@@ -36,34 +37,38 @@
 &HITLOC_VIPER_NOSE FS3Combat Hit Locations=MISS MISS Cockpit Body Weapon Right_Wing Left_Wing Controls Body Cockpit Nose Nose Nose Nose Nose
 
 &DEFAULT_VIPER FS3Combat Hit Locations=Body
+&CREWHIT_VIPER FS3Combat Hit Locations=Cockpit
 
-&DMG_RAPTOR FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Cargo:Normal ECM:Normal
+&DMG_RAPTOR FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Cabin:Normal ECM:Normal
 
 &HITLOC_RAPTOR_COCKPIT  FS3Combat Hit Locations=MISS MISS MISS MISS Body Right_Wing Left_Wing ECM ECM Cockpit Cockpit Cockpit Cockpit Cockpit Cockpit
 &HITLOC_RAPTOR_CONTROLS FS3Combat Hit Locations=MISS MISS MISS MISS Body Right_Wing Left_Wing ECM Cockpit Cockpit Controls Controls Controls Controls Controls
-&HITLOC_RAPTOR_BODY FS3Combat Hit Locations=Engine Cargo Cargo Right_Wing Left_Wing ECM Engine Engine Cockpit Controls Body Body Body Body Body
-&HITLOC_RAPTOR_ENGINE FS3Combat Hit Locations=MISS MISS Body Body Body Right_Wing Left_Wing Controls Cargo Cargo Engine Engine Engine Engine Engine
-&HITLOC_RAPTOR_RIGHT_WING FS3Combat Hit Locations=MISS MISS MISS Engine Cargo Cargo Cockpit Body Body Cargo Right_Wing Right_Wing Right_Wing Right_Wing Right_Wing
-&HITLOC_RAPTOR_LEFT_WING FS3Combat Hit Locations=MISS MISS MISS Engine Cargo Cargo Cockpit Body Body Cargo Left_Wing Left_Wing Left_Wing Left_Wing Left_Wing
-&HITLOC_RAPTOR_CARGO FS3Combat Hit Locations=MISS MISS Cockpit Body Body Right_Wing Left_Wing Controls Engine Engine Cargo Cargo Cargo Cargo Cargo
+&HITLOC_RAPTOR_BODY FS3Combat Hit Locations=Engine Cabin Cabin Right_Wing Left_Wing ECM Engine Engine Cockpit Controls Body Body Body Body Body
+&HITLOC_RAPTOR_ENGINE FS3Combat Hit Locations=MISS MISS Body Body Body Right_Wing Left_Wing Controls Cabin Cabin Engine Engine Engine Engine Engine
+&HITLOC_RAPTOR_RIGHT_WING FS3Combat Hit Locations=MISS MISS MISS Engine Cabin Cabin Cockpit Body Body Cabin Right_Wing Right_Wing Right_Wing Right_Wing Right_Wing
+&HITLOC_RAPTOR_LEFT_WING FS3Combat Hit Locations=MISS MISS MISS Engine Cabin Cabin Cockpit Body Body Cabin Left_Wing Left_Wing Left_Wing Left_Wing Left_Wing
+&HITLOC_RAPTOR_Cabin FS3Combat Hit Locations=MISS MISS Cockpit Body Body Right_Wing Left_Wing Controls Engine Engine Cabin Cabin Cabin Cabin Cabin
 &HITLOC_RAPTOR_ECM FS3Combat Hit Locations=MISS MISS MISS MISS Right_Wing Left_Wing Cockpit Cockpit Body Body ECM ECM ECM ECM ECM
+
 &DEFAULT_RAPTOR FS3Combat Hit Locations=Body
+&CREWHIT_RAPTOR FS3Combat Hit Locations=Cockpit Cabin
 
 
 
-&DMG_HEAVY_RAIDER FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Cargo:Normal Weapon:Normal
+&DMG_HEAVY_RAIDER FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Cabin:Normal Weapon:Normal
+
 
 &HITLOC_HEAVY_RAIDER_COCKPIT  FS3Combat Hit Locations=MISS MISS MISS MISS Body Right_Wing Left_Wing Weapon Weapon Cockpit Cockpit Cockpit Cockpit Cockpit Cockpit
 &HITLOC_HEAVY_RAIDER_CONTROLS FS3Combat Hit Locations=MISS MISS MISS MISS Body Right_Wing Left_Wing Weapon Cockpit Cockpit Controls Controls Controls Controls Controls
-&HITLOC_HEAVY_RAIDER_BODY FS3Combat Hit Locations=Engine Cargo Cargo Right_Wing Left_Wing Weapon Engine Engine Cockpit Controls Body Body Body Body Body
-&HITLOC_HEAVY_RAIDER_ENGINE FS3Combat Hit Locations=MISS MISS Body Body Body Right_Wing Left_Wing Controls Cargo Cargo Engine Engine Engine Engine Engine
-&HITLOC_HEAVY_RAIDER_RIGHT_WING FS3Combat Hit Locations=MISS MISS MISS Engine Cargo Cargo Cockpit Cargo Body Body Right_Wing Right_Wing Right_Wing Right_Wing Right_Wing
-&HITLOC_HEAVY_RAIDER_LEFT_WING FS3Combat Hit Locations=MISS MISS MISS Engine Cargo Cargo Cockpit Cargo Body Body Left_Wing Left_Wing Left_Wing Left_Wing Left_Wing
-&HITLOC_HEAVY_RAIDER_CARGO FS3Combat Hit Locations=MISS MISS Cockpit Body Body Right_Wing Left_Wing Controls Engine Engine Cargo Cargo Cargo Cargo Cargo
+&HITLOC_HEAVY_RAIDER_BODY FS3Combat Hit Locations=Engine Cabin Cabin Right_Wing Left_Wing Weapon Engine Engine Cockpit Controls Body Body Body Body Body
+&HITLOC_HEAVY_RAIDER_ENGINE FS3Combat Hit Locations=MISS MISS Body Body Body Right_Wing Left_Wing Controls Cabin Cabin Engine Engine Engine Engine Engine
+&HITLOC_HEAVY_RAIDER_RIGHT_WING FS3Combat Hit Locations=MISS MISS MISS Engine Cabin Cabin Cockpit Cabin Body Body Right_Wing Right_Wing Right_Wing Right_Wing Right_Wing
+&HITLOC_HEAVY_RAIDER_LEFT_WING FS3Combat Hit Locations=MISS MISS MISS Engine Cabin Cabin Cockpit Cabin Body Body Left_Wing Left_Wing Left_Wing Left_Wing Left_Wing
+&HITLOC_HEAVY_RAIDER_Cabin FS3Combat Hit Locations=MISS MISS Cockpit Body Body Right_Wing Left_Wing Controls Engine Engine Cabin Cabin Cabin Cabin Cabin
 &HITLOC_HEAVY_RAIDER_WEAPON FS3Combat Hit Locations=MISS MISS MISS MISS Right_Wing Left_Wing Cockpit Cockpit Body Body Weapon Weapon Weapon Weapon Weapon
 
 &DEFAULT_HEAVY_RAIDER FS3Combat Hit Locations=Body
-
+&CREWHIT_HEAVY_RAIDER FS3Combat Hit Locations=Cockpit
 
 &DMG_RAIDER FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Weapon:Normal 
 
@@ -77,3 +82,4 @@
 &HITLOC_RAIDER_WEAPON FS3Combat Hit Locations=MISS MISS MISS MISS Right_Wing Left_Wing Right_Wing Right_Wing Body Body Weapon Weapon Weapon Weapon Weapon
 
 &DEFAULT_RAIDER FS3Combat Hit Locations=Body
+&CREWHIT_RAIDER FS3Combat Hit Locations=Cockpit
