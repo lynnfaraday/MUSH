@@ -22,7 +22,7 @@
 
 &DEFAULT_SOLDIER FS3Combat Hit Locations=Chest
 &CREWHIT_SOLDIER FS3Combat Hit Locations=
-
+&CONCUSS_SOLDIER FS3Combat Hit Locations=Head
 
 &DMG_VIPER FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Tail:Normal Weapon:Normal Nose:Normal
 
@@ -38,6 +38,7 @@
 
 &DEFAULT_VIPER FS3Combat Hit Locations=Body
 &CREWHIT_VIPER FS3Combat Hit Locations=Cockpit
+&CONCUSS_VIPER FS3Combat Hit Locations=Body
 
 &DMG_RAPTOR FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Cabin:Normal ECM:Normal
 
@@ -52,7 +53,7 @@
 
 &DEFAULT_RAPTOR FS3Combat Hit Locations=Body
 &CREWHIT_RAPTOR FS3Combat Hit Locations=Cockpit Cabin
-
+&CONCUSS_RAPTOR FS3Combat Hit Locations=Body
 
 
 &DMG_HEAVY_RAIDER FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Cabin:Normal Weapon:Normal
@@ -69,11 +70,12 @@
 
 &DEFAULT_HEAVY_RAIDER FS3Combat Hit Locations=Body
 &CREWHIT_HEAVY_RAIDER FS3Combat Hit Locations=Cockpit
+&CONCUSS_HEAVY_RAIDER FS3Combat Hit Locations=Body
 
 &DMG_RAIDER FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Weapon:Normal 
 
 
-&HITLOC_RAIDER_COCKPIT  FS3Combat Hit Locations=MISS MISS MISS MISS Body Right_Wing Left_Wing Weapon Right_Wing Right_Wing Cockpit Cockpit Cockpit Cockpit Cockpit
+&HITLOC_RAIDER_COCKPIT  FS3Combat Hit Locations=MISS MISS MISS MISS Body Right_Wing Left_Wing Weapon Right_Wing Body Cockpit Cockpit Cockpit Cockpit Cockpit
 &HITLOC_RAIDER_CONTROLS FS3Combat Hit Locations=MISS MISS MISS MISS Body Right_Wing Left_Wing Right_Wing Cockpit Right_Wing Controls Controls Controls Controls Controls
 &HITLOC_RAIDER_BODY FS3Combat Hit Locations=Engine Left_Wing Left_Wing Right_Wing Left_Wing Weapon Right_Wing Right_Wing Cockpit Controls Body Body Body Body Body
 &HITLOC_RAIDER_ENGINE FS3Combat Hit Locations=MISS MISS Cockpit Body Body Right_Wing Left_Wing Controls Left_Wing Left_Wing Engine Engine Engine Engine Engine
@@ -83,3 +85,4 @@
 
 &DEFAULT_RAIDER FS3Combat Hit Locations=Body
 &CREWHIT_RAIDER FS3Combat Hit Locations=Cockpit
+&CONCUSS_RAIDER FS3Combat Hit Locations=Body
