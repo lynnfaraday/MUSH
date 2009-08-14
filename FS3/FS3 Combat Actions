@@ -526,7 +526,7 @@
 
 &FIRSTAID_SKILL FS3Combat Preferences=First_Aid
 &JURYRIG_SKILL FS3Combat Preferences=Repair
-&HEAL_SKILL FS3Combat Preferences=Medicine
+&MEDICINE_SKILL FS3Combat Preferences=Medicine
 &REPAIR_SKILL FS3Combat Preferences=Repair
 &TOUGHNESS_SKILL FS3Combat Preferences=Athletic
 &HOSPITALS FS3Combat Preferences=#-1

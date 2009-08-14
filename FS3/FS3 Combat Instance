@@ -376,7 +376,7 @@
 @@ %4 = lethality modifier
 @@ --------------------------
 
-&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] [switch(1,lt(%qa,0),and MISSES!,lt(%qa,%qd),but [switch(weaponstat(%qw,wpntype),Melee,[prettify(lcstr(%qt))] DODGES!,MISSES!)],[u(fun_do_hit,%0,%1,%2,%3,%4)])])][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))])
+&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] [switch(1,lt(%qa,0),and MISSES!,lt(%qa,%qd),but [switch(weaponstat(%qw,wpntype),Melee,[prettify(lcstr(%qt))] DODGES!,MISSES!)],[u(fun_do_hit,%0,%1,%2,%3,%4)])])][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))][switch(weaponstat(%qw,shrapnel),1,u(fun_do_shrapnel,%1,sub(%qa,%qd),%4)])
 
 
 @@ --------------------------
@@ -416,11 +416,22 @@
 &FUN_AUTO_ATTACK FS3Combat Instance parent=[setq(a,3)][setq(d,1)][setq(w,%1)][setq(t,switch(isvehicle(%0),1,u(fun_find_pilot,%0),%0))][u(fun_do_hit,Auto,%0,first(shuffle(u(fun_valid_hitlocs,%0))),0,%2)]
 
 @@ --------------------------
+@@ FUN_DO_SHRAPNEL
+@@ Does explosive shrapnel.
+@@ %0 = target
+@@ %1 = diff between attack/def roll
+@@ %2 = lethality mod.  Indirect indication of how much shrapnel the poor schlep should be subjected to.
+@@ --------------------------
+&FUN_DO_SHRAPNEL FS3Combat Instance Parent=
+
+
+@@ --------------------------
 @@ FUN_VALID_HITLOCS
 @@ Lists valid hit locations for a given target, based on type.
 @@ %0 = target name
 @@ --------------------------
 &FUN_VALID_HITLOCS FS3Combat Instance Parent=iter(xget(#732,dmg_[u(fun_target_type,%0)]),before(##,:))
+
 
 @@ --------------------------
 @@ FUN_TARGET_TYPE
