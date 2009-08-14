@@ -60,6 +60,13 @@
 
 &CMD-+HEALING FS3Combat Damage Commands=$+healing:@pemit %#=[line()]%R[ansi(h,Current Patients)][space(15)][ansi(h,Damage Modifier)][space(4)][ansi(h,Status)]%R[line2()][iter(xget(#731,heal_%N),%R[padstr(prettify(##),35)][ljust(-[damagemod(##)],15)][u(fun_display_restricted,##)])]%R%R[ansi(h,Current Vehicles)][space(15)][ansi(h,Damage Modifier)][space(4)][ansi(h,Status)]%R[line2()][iter(xget(#731,repair_%N),%R[padstr(prettify(##),35)][ljust(-[damagemod(##)],15)][u(fun_display_restricted,##)])]%R[line()]
 
+&CMD-+REPAIR-ERROR FS3Combat Damage Commands=$+repair*:@pemit %#=ansi(hm,The +repair command is obsolete.  Use +heal instead.)
+
+&CMD-+HEAL-ERROR FS3Combat Damage Commands=$+heal */*:@pemit %#=ansi(hm,+heal no longer requires a specific wound number.)
+
+&CMD-+TREAT-ERROR FS3Combat Damage Commands=$+treat */*:@pemit %#=ansi(hm,+treat no longer requires a specific wound number.)
+
+
 @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_CAN_TREAT
 @@  %0 = target
