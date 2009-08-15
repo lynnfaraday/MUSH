@@ -333,7 +333,13 @@
 @@  Healing points defaulted to 0, notes to empty, and last treated/healed to empty
 @@ Because this is global, must check for staff.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_DO_DMG FS3Combat Damage Commands=switch(0,match(%6,xget(#609,security_code)),ansi(hr,You aren't allowed to do that.),set(#731,DMG_[edit(%0,_,.,%B,.)]_[secs()]_[rand(100000)]:%1|%2|%3|%4|%5|%5|0|||))
+&FUN_DO_DMG FS3Combat Damage Commands=switch(0,match(%6,xget(#609,security_code)),ansi(hr,You aren't allowed to do that.),set(#731,DMG_[edit(%0,_,.,%B,.)]_[secs()]_[rjust(u(fun_rand_second),4,0)]:%1|%2|%3|%4|%5|%5|0|||))
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@  FUN_RAND_SECOND
+@@  Randomizes a 
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_RAND_SECOND FS3Combat Damage Commands=[setq(0,xget(#731,randsec_[secs()]))][wipe(#731/randsec_*)][set(#731,randsec_[secs()]:[inc(%q0)])][switch(%q0,,0,%q0)]
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_HEALPOINTS_WOUND
