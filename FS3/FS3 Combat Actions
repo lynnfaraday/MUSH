@@ -25,9 +25,9 @@
 
 &CMD-+COMBAT-SLACKERS FS3Combat Action Commands=$+combat/slackers:@pemit %#=[setq(0,u(fun_combat_num,%N))][ansi(hx,<)][line()]%R[ansi(hx,<)] [ansi(h,Haven't Posed)][iter(u(%q0/fun_actors),[setq(1,u(fun_acted_display,##,%q0))][switch(%q1,+,,p,,%R[ansi(hx,<)] ##)],)]%R[ansi(hx,<)] %R[ansi(hx,<)] [ansi(h,Haven't Chosen Actions)][iter(u(%q0/fun_actors),[setq(1,u(fun_acted_display,##,%q0))][switch(%q1,+,,a,,%R[ansi(hx,<)] ## [switch(u(%q0/fun_is_npcmaster,##),1,\(NPC Master\),\(Last action: [u(%q0/fun_combatstat,##,action)]\))])],)]%R[ansi(hx,<)][line()]
 
-&CMD-+COMBAT-LOG FS3Combat Action Commands=$+combat/log*:think [setq(0,u(fun_combat_num,%N))][setq(1,switch(%0,,1,trim(%0)))][setq(2,sort(lattr(%q0/log_*)))];@dolist line1 [extract(%q2,add(1,mul(sub(%q1,1),10)),10)] line2=@pemit %#=[switch(##,line1,[line()]%R,line2,%R[ansi(h,Page %q1 of [add(1,div(words(%q2),10))])]%R[line()],[convsecs(after(##,_))]%R[u(%q0/##)])
+&CMD-+COMBAT-LOG FS3Combat Action Commands=$+combat/log*:think [setq(0,u(fun_combat_num,%N))][setq(1,switch(%0,,1,trim(%0)))][setq(2,sort(lattr(%q0/log`**)))];@dolist line1 [extract(%q2,add(1,mul(sub(%q1,1),10)),10)] line2=@pemit %#=[switch(##,line1,[line()]%R,line2,%R[ansi(h,Page %q1 of [add(1,div(words(%q2),10))])]%R[line()],[convsecs(after(##,_))]%R[u(%q0/##)])
 
-&CMD-+COMBAT-CLEARLOG FS3Combat Action Commands=$+combat/clearlog:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(%q0),ansi(hr,You are not in combat.),ansi(hg,You clear the combat log.)[wipe(%q0/log_*)])]
+&CMD-+COMBAT-CLEARLOG FS3Combat Action Commands=$+combat/clearlog:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(%q0),ansi(hr,You are not in combat.),ansi(hg,You clear the combat log.)[wipe(%q0/log`**)])]
 
 &CMD-+COMBAT-HITLOCS FS3Combat Action Commands=$+combat/hitlocs *:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),You are not in combat.,u(%q0/fun_is_combatant,%0),ansi(hr,%0 is not a valid combatant.),[setq(1,switch(u(%q0/fun_is_in_vehicle,%0),1,u(%q0/fun_combatstat,%0,vehicle),%0))]Possible hit locations for [prettify(%0)][switch(%q1,%0,,%B\(%q1\))]: [ansi(g,u(%q0/fun_valid_hitlocs,%q1))])]
 
@@ -103,7 +103,7 @@
 
 &CMD-+COMBAT-FORCELEAVE FS3Combat Action Commands=$+combat/leave *:@pemit %#=[setq(0,u(fun_combat_num,%0))][ansi(h,<COMBAT>)] [switch(0,t(%q0),ansi(hr,%0 is not in combat.),[u(%q0/fun_combat_msg,[prettify(%0)] has left the combat.[u(fun_add_id,%0)])][u(fun_do_leave,%0,%q0)])]
 
-&CMD-+COMBAT-NEWTURN FS3Combat Action Commands=$+combat/newturn:think [setq(0,u(fun_combat_num,%N))][setq(1,u(%q0/FUN_INITIATIVE))];@switch 0=t(%q0),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,You are not in combat.)],not(xget(%q0,turn_in_progress)),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,A turn is already in progress.)],{think set(%q0,turn_in_progress:1);@switch u(%q0/fun_turn_num)=0,{@fo %#=+combat/retarget;think u(%q0/fun_combat_msg,%N has started the combat!  Pose and pick your first action.)[set(%q0,turn:1)][set(%q0,turn_in_progress:0)]},{@pemit %#=[ansi(h,<COMBAT>)] Triggering new turn.;@dolist %q1=@wait [mul(#@,5)]=think u(%q0/fun_do_action,##);@wait [add(mul(words(%q1),5),5)]=think [u(%q0/fun_new_turn)]}
+&CMD-+COMBAT-NEWTURN FS3Combat Action Commands=$+combat/newturn:think [setq(0,u(fun_combat_num,%N))][setq(1,u(%q0/FUN_INITIATIVE))];@switch 0=t(%q0),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,You are not in combat.)],not(xget(%q0,turn_in_progress)),@pemit %#=[ansi(h,<COMBAT>)] [ansi(hr,A turn is already in progress.)],{think set(%q0,turn_in_progress:1);@switch u(%q0/fun_turn_num)=0,{@fo %#=+combat/retarget;think u(%q0/fun_combat_msg,%N has started the combat!  Pose and pick your first action.)[set(%q0,turn:1)][set(%q0,turn_in_progress:0)]},{@pemit %#=[ansi(h,<COMBAT>)] Triggering new turn.;@dolist %q1=@wait [mul(#@,xget(#609,combat_delay))]=@tr %q0/TR_DO_ACTION=##;@wait [add(mul(words(%q1),xget(#609,combat_delay)),5,xget(#609,combat_delay))]=think [u(%q0/fun_new_turn)]}
 
 @@ --------------------------
 @@ FUN_ADD_ID
@@ -185,7 +185,7 @@
 
 &CMD-+COMBAT-RETARGET-LIST FS3Combat Action Commands=$+combat/retarget *:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),ansi(hr,You are not in combat.),iter(u(%q0/fun_combatants),switch(isnpc(##),1,[setq(1,grab(%0,[unprettify(##)]=*,\,))][u(%q0/fun_pick_random_action,##,after(%q1,=))])),,)]You force NPCs to pick new targets.
 
-&CMD-+COMBAT-RETARGET FS3Combat Action Commands=$+combat/retarget:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),ansi(hr,You are not in combat.),iter(u(%q0/fun_combatants),switch(isnpc(##),1,[u(%q0/fun_pick_random_action,##),)])),,)]You force NPCs to pick new targets.
+&CMD-+COMBAT-RETARGET FS3Combat Action Commands=$+combat/retarget:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),ansi(hr,You are not in combat.),iter(u(%q0/fun_combatants),switch(isnpc(##),1,[u(%q0/fun_pick_random_action,##)]),,))]You force NPCs to pick new targets.
 
 &CMD-+COMBAT-REACTION FS3Combat Action Commands=$+combat/reaction:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,t(%q0),ansi(hr,You are not in combat.),iter(u(%q0/fun_combatants),switch(isnpc(##),1,[u(%q0/fun_pick_random_action,##,u(%q0/fun_combatstat,##,target)),)])),,)]You force NPCs to pick new actions.
 
@@ -320,10 +320,23 @@
 
 
 @@ ---------------   Explode -----------------
-@@ We use the options to store the folks in the three explosive zones: immediate, near, far.
+@@ We use the options to store the folks in the two explosive zones: immediate and near
+@@ immediate targets are stored in the normal 'target' list.  near targets are stored in the 'options' list.
 
-@@ TODO: Explode not done
-&CMD-+COMBAT-EXPLODE FS3Combat Action Commands=$+combat/explode*:@pemit %#=Sorry, but Faraday has not implemented explosions yet.
+&CMD-+COMBAT-EXPLODE FS3Combat Action Commands=$+combat/explode *:@pemit %#=[ansi(h,<COMBAT>)] [switch(%0,*=*,u(FUN_ACTION_EXPLODE,before(%0,=),before(after(%0,=),/),after(after(%0,=),/)),u(FUN_ACTION_EXPLODE,%N,before(%0,/),after(%0,/)))]
+
+@@ --------------------------
+@@ FUN_ACTION_FULLAUTO
+@@ Registers a fullauto attack action.
+@@ %0 = actor name
+@@ %1 = immediate target list
+@@ %2 = near target list
+@@
+@@ %q0 = combat num (from fun_can_act)
+@@ %q1 = check targets status
+@@ --------------------------
+&FUN_ACTION_EXPLODE FS3Combat Action Commands=switch(0,u(fun_can_act,%0,explode),u(fun_cant_act_msg,%0),match(u(%q0/fun_weaponstat,%0,wpntype),Explosive),ansi(hr,[prettify(lcstr(%0))] does not have an explosive weapon.),lte(add(words(%1,\,),words(%2,\,)),10),ansi(hr,You cannot target more than 10 targets total.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),[setq(1,u(fun_check_targets,%2,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,explode,%1,%2)])
+
 
 @@ ---------------   Fullauto -----------------
 @@ Fullauto has a list of targets and no options.  Weapon must be capable of fullauto fire.
@@ -364,7 +377,7 @@
 @@ %q0 = combat num (from fun_can_act)
 @@ %q1 = check option status
 @@ --------------------------
-&FUN_ACTION_ATTACK FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,attack),u(fun_cant_act_msg,%0),u(%q0/fun_is_targetable,%1),ansi(hr,%1 is not a valid target.),u(%q0/FUN_CAN_ATTACK,%0),ansi(hr,That weapon cannot attack.),[setq(1,u(fun_check_options,%0,%1,%2,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),words(u(%q0/fun_combatstat,%0,weapon)),ansi(hr,You don't have a weapon!),not(u(%q0/fun_out_of_ammo,%0)),ansi(hr,%0 is out of ammo.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,attack,%1,%2)]))
+&FUN_ACTION_ATTACK FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,attack),u(fun_cant_act_msg,%0),u(%q0/fun_is_targetable,%1),ansi(hr,%1 is not a valid target.),u(%q0/FUN_CAN_ATTACK,%0),ansi(hr,That weapon cannot attack.),[setq(1,u(fun_check_options,%0,%1,%2,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),words(u(%q0/fun_combatstat,%0,weapon)),ansi(hr,You don't have a weapon!),not(u(%q0/fun_out_of_ammo,%0)),ansi(hr,%0 is out of ammo.),not(match(u(%q0/fun_weaponstat,%0,wpntype),explosive)),ansi(hr,Use +combat/explode for explosive weapons.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,attack,%1,%2)]))
 
 @@ --------------------------
 @@ FUN_CHECK_OPTIONS
@@ -480,7 +493,7 @@
 @@ %1 = armor
 @@ --------------------------
 
-&FUN_PREP_ARMOR FS3Combat Action Commands=[switch(0,u(fun_can_act,%0,armor),u(fun_cant_act_msg,%0),match([armor()] none,unprettify(%1)),ansi(hr,That is not a valid armor type.),not(match(armorstat(%1,class),Vehicle)),ansi(hr,You can't wear vehicle armor.  It's factored in automatically.),[switch(%N,%0,You change your armor.,You change %0's armor.)][u(%q0/fun_mod_combatstat,%0,armor,[switch(%1,none,,unpretify(%1))])][u(%q0/fun_combat_msg,[prettify(%0)] has changed armor to %1.[u(fun_add_id,%0)])])]
+&FUN_PREP_ARMOR FS3Combat Action Commands=[switch(0,u(fun_can_act,%0,armor),u(fun_cant_act_msg,%0),match([armor()] none,unprettify(%1)),ansi(hr,That is not a valid armor type.),not(match(armorstat(%1,class),Vehicle)),ansi(hr,You can't wear vehicle armor.  It's factored in automatically.),[switch(%N,%0,You change your armor.,You change %0's armor.)][u(%q0/fun_mod_combatstat,%0,armor,[switch(%1,none,,unprettify(%1))])][u(%q0/fun_combat_msg,[prettify(%0)] has changed armor to %1.[u(fun_add_id,%0)])])]
 
 @@ ---------------   Mod -----------------
 @@ Sets special modifiers.
@@ -532,3 +545,5 @@
 &HOSPITALS FS3Combat Preferences=#-1
 
 &SECURITY_CODE FS3Combat Preferences=9612
+
+&COMBAT_DELAY FS3Combat Preferences=3
