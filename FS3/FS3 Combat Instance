@@ -217,7 +217,7 @@
 @@ there could be more than one message in a given second so keep anything that's currently there.
 @@ %0 = message
 @@ --------------------------
-&FUN_COMBAT_LOG FS3Combat Instance Parent=localize([setq(0,secs())][set(me,log_%q0:[v(log_%q0)]%0%R)][switch(xget(*Faraday,combat_debug),1,pemit(*faraday,[num(me)] - %0))])
+&FUN_COMBAT_LOG FS3Combat Instance Parent=localize([setq(0,secs())][set(me,log`%q0:[v(log`%q0)]%0%R)][switch(xget(*Faraday,combat_debug),1,pemit(*faraday,[num(me)] - %0))])
 
 @@ ================================================================================================================
 @@ ---------------  Actions -----------------
@@ -225,11 +225,13 @@
 
 
 @@ --------------------------
-@@ FUN_DO_ACTION
+@@ TR_DO_ACTION
 @@ Triggers a character's combat action.
+@@   Needs to be a trigger rather than a function 'cause explosions
+@@   suck.
 @@ %0 = name
 @@ --------------------------
-&FUN_DO_ACTION  FS3Combat Instance Parent=u(fun_action_[u(fun_combatstat,%0,action)],%0,u(fun_combatstat,%0,target),u(fun_combatstat,%0,actoptions))
+&TR_DO_ACTION  FS3Combat Instance Parent=@switch [u(fun_combatstat,%0,action)]=explode,{@tr me/tr_action_explode=%0,u(fun_combatstat,%0,target),u(fun_combatstat,%0,actoptions)},{think u(fun_action_[u(fun_combatstat,%0,action)],%0,u(fun_combatstat,%0,target),u(fun_combatstat,%0,actoptions))}
 
 @@ --------------------------
 @@ FUN_ACTION_PASS
@@ -354,6 +356,15 @@
 @@ --------------------------
 &FUN_ACTION_AIM FS3Combat Instance Parent=[u(fun_combat_msg,[prettify(lcstr(%0))] takes careful aim at [prettify(lcstr(%1))].)]
 
+@@ --------------------------
+@@ TR_ACTION_EXPLODE
+@@ %0 = name
+@@ %1 = zone0 target list
+@@ %2 = zone1 target list (from action options)
+@@   This has to be @triggered because it is crazy function intensive.
+@@ --------------------------
+&TR_ACTION_EXPLODE FS3Combat Instance Parent=think u(fun_combat_msg,[prettify(lcstr(%0))] uses a [prettify(u(fun_combatstat,%0,weapon))]!);@dolist/delimit , %1=think [u(fun_combat_msg,)][u(FUN_EXPLOSIVE_ATTACK,%0,##,0)];@dolist/delimit , %2=think [u(fun_combat_msg,)][u(FUN_EXPLOSIVE_ATTACK,%0,##,1)]
+
 
 @@ ================================================================================================================
 @@ ---------------  Attacking! -----------------
@@ -362,21 +373,22 @@
 @@ --------------------------
 @@ FUN_DO_ATTACK
 @@ Does the attack roll part of determining whether someone was hit or not.
-@@ %qt = the real target - pilot or person
-@@ %qa = attack roll result
-@@ %qd = defense roll result
-@@ %qz = random damage
-@@ %qw = weapon
-@@ %qs = successful hit (set by FUN_DO_HIT)
-@@
 @@ %0 = attacker
 @@ %1 = defender (may be a vehicle name, in which case we have to determine the pilot for certain rolls)
 @@ %2 = targeted hit location, may be blank
 @@ %3 = special modifier (used for recoil or range)
 @@ %4 = lethality modifier
+@@
+@@ Sets the following registers (many required by FUN_DO_HIT)
+@@   %qt = the real target - pilot or person
+@@   %qa = attack roll result
+@@   %qd = defense roll result
+@@   %qw = weapon
+@@   %qs = successful hit (set by FUN_DO_HIT)
+@@   %qz = damage (set by FUN_DO_HIT)
 @@ --------------------------
 
-&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] [switch(1,lt(%qa,0),and MISSES!,lt(%qa,%qd),but [switch(weaponstat(%qw,wpntype),Melee,[prettify(lcstr(%qt))] DODGES!,MISSES!)],[u(fun_do_hit,%0,%1,%2,%3,%4)])])][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))][switch(and(%qs,weaponstat(%qw,shrapnel)),1,u(fun_do_shrapnel,%1,sub(%qa,%qd),%4))])
+&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] [switch(1,lt(%qa,0),and MISSES!,lt(%qa,%qd),but [switch(weaponstat(%qw,wpntype),Melee,[prettify(lcstr(%qt))] DODGES!,MISSES!)],[u(fun_do_hit,%0,%1,%2,%3,%4)])])][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))])
 
 
 @@ --------------------------
@@ -400,30 +412,78 @@
 @@    %qc = cover lethality modifier (0 if no cover)
 @@    %qr = armor lethality modifier (0 if no armor)
 @@    %qs = successful hit
+@@    %qz = random damage
 @@ --------------------------
 
-&FUN_DO_HIT FS3Combat Instance Parent=[setq(s,0)][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][switch(weaponstat(%qw,wpntype),explosive,setq(h,[xget(#732,concuss_[u(fun_target_type,%0)])]:Critical))][setq(l,add(weaponstat(%qw,lethality),%4))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))]- [switch(1,match(%qh,MISS*),NEAR MISS!,gte(%qc,100),COVER stops the attack.,gte(%qr,100),ARMOR on [before(%qh,:)] stops the attack!,[switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[setq(s,1)][u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz,xget(#609,security_code))])]
+&FUN_DO_HIT FS3Combat Instance Parent=[setq(s,0)][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][switch(weaponstat(%qw,wpntype),explosive,setq(h,[xget(#732,concuss_[u(fun_target_type,%0)])]:Critical))][setq(l,add(weaponstat(%qw,lethality),%4))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))]- [switch(1,match(%qh,MISS*),NEAR MISS!,gte(%qc,100),COVER stops the attack.[setq(s,1)],gte(%qr,100),ARMOR on [prettify(before(%qh,:))] stops the attack![setq(s,1)],[switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[setq(s,1)][u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz,xget(#609,security_code))])]
 
 
 @@ --------------------------
 @@ FUN_AUTO_ATTACK
-@@ Takes care of automatic attacks like explosions and crew hits which bypass the attack roll portion of attacking and automatically hits.
+@@ Takes care of automatic attacks like crew hits which bypass the attack roll portion of attacking and automatically hits.
 @@ %0 = target
 @@ %1 = weapon
 @@ %2 = lethality modifier
+@@
+@@ Sets the following registers (required by FUN_DO_HIT)
+@@   %qt = the real target - pilot or person
+@@   %qa = attack roll result (always 3 to give a certain hit)
+@@   %qd = defense roll result (always 1 to give a certain hit)
+@@   %qw = weapon
 @@ --------------------------
 
 &FUN_AUTO_ATTACK FS3Combat Instance parent=[setq(a,3)][setq(d,1)][setq(w,%1)][setq(t,switch(isvehicle(%0),1,u(fun_find_pilot,%0),%0))][u(fun_do_hit,Auto,%0,first(shuffle(u(fun_valid_hitlocs,%0))),0,%2)]
+
+
+@@ --------------------------
+@@ FUN_EXPLOSIVE_ATTACK
+@@ Explosive attacks work differently from normal attacks.  You can't dodge or miss completely, but your defense roll can move you to a safer 'zone' 
+@@ further from the explosion.
+@@
+@@ %0 = attacker 
+@@ %1 = defender (may be a vehicle name, in which case we have to determine the pilot for certain rolls)
+@@ %2 = initial zone (0 for near, 1 for far)
+@@
+@@ Sets the following registers (some used by FUN_DO_HIT)
+@@   %qt = the real target - pilot or person
+@@   %qa = attack roll result 
+@@   %qd = defense roll result 
+@@   %qw = weapon
+@@   %qs = successful hit (set by FUN_DO_HIT)
+@@   %qz = damage (set by FUN_DO_HIT)
+@@
+@@   %qe = explosive zone, modified by attack/def roll.
+@@  Note: Must reduce the lethality modifier for the concussion roll since
+@@  that's automatically to the head and a +80 lethality is a bit much :)
+@@ --------------------------
+&FUN_EXPLOSIVE_ATTACK FS3Combat Instance Parent=[setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][setq(e,switch(%qa,>0,%2,sub(%2,%qa)))][setq(e,switch(%qd,>%qa,add(%qe,sub(%qd,%qa)),%qe))][u(fun_combat_log,EXPLODE: initzone=%2 finalzone=%qe)][u(fun_combat_msg,EXPLOSION!  [switch(%qe,0,[ansi(hr,Right Next To)],1,[ansi(hy,Pretty Close To)],2,[ansi(hg,Close To)],3,[ansi(hg,Far From)],[ansi(hg,Very Far From)])] [prettify(lcstr(%1))] [u(fun_auto_attack,%1,%qw,sub(u(fun_lethal_mod_for_zone,%qe),20))])][switch(and(%qs,weaponstat(%qw,shrapnel)),1,u(fun_do_shrapnel,%1,%qe))][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))]
+
 
 @@ --------------------------
 @@ FUN_DO_SHRAPNEL
 @@ Does explosive shrapnel.
 @@ %0 = target
-@@ %1 = diff between attack/def roll
-@@ %2 = lethality mod.  Indirect indication of how much shrapnel the poor schlep should be subjected to.
+@@ %1 = explosion zone
+@@   %q0 = min shrapnel
+@@   %q1 = max shrapnel 
+@@   %q2 = actual shrapnel
 @@ --------------------------
-&FUN_DO_SHRAPNEL FS3Combat Instance Parent=iter(lnum(1,switch(%2,>0,rand(5,10),rand(1,5))),u(fun_combat_msg,SHRAPNEL! [prettify(lcstr(%0))] [u(fun_auto_attack,%0,Shrapnel,0)])
+&FUN_DO_SHRAPNEL FS3Combat Instance Parent=localize([setq(0,u(fun_shrapnel_for_zone,%1))][setq(1,after(%q0,:))][setq(0,before(%q0,:))][setq(2,rand(%q0,%q1))][u(fun_combat_log,SHRAPNEL: %0 - zone=%1 min=%q0 max=%q1 actual=%q2)][switch(%q2,0,u(fun_combat_msg,[prettify(lcstr(%0))] is not hit by shrapnel.),iter(lnum(1,%q2),u(fun_combat_msg,SHRAPNEL! [prettify(lcstr(%0))] [u(fun_auto_attack,%0,Shrapnel,u(fun_lethal_mod_for_zone,%1))])))
 
+@@ --------------------------
+@@ FUN_SHRAPNEL_FOR_ZONE
+@@ Figures out shrapnel based on the defender's "zone", with 0 being closest to the explosion and 2+ being further away.
+@@ %0 = zone number
+@@   Returns in the form minshrapnel:maxshrapnel
+@@ --------------------------
+&FUN_SHRAPNEL_FOR_ZONE FS3Combat Instance Parent=switch(%0,0,5:10,1,1:5,2,0:2,3,0:1,0:0)
+
+@@ --------------------------
+@@ FUN_LETHAL_MOD_FOR_ZONE
+@@ Determines the lethality modifier based on the explosive zone (0=close, 2+=far)
+@@ %0 = zone number
+@@ --------------------------
+&FUN_LETHAL_MOD_FOR_ZONE FS3Combat Instance Parent=switch(%0,0,50,1,0,2,-25,3,-50,-100)
 
 @@ --------------------------
 @@ FUN_VALID_HITLOCS
@@ -563,7 +623,7 @@
 @@ %1 = hit location
 @@ %2 = weapon
 @@ --------------------------
-&FUN_ARMOR_MOD FS3Combat Instance Parent=localize([setq(0,u(fun_armorstat,%0,protection))][setq(1,u(fun_armorstat,%0,hitloc))][switch(0,t(%q0),0,match(%q1,%1),0,u(FUN_PROTECT_MOD,weaponstat(%2,pen),%q0))][u(fun_combat_log,ARMOR: target=%0 hitloc=%1 protect=%q0)])
+&FUN_ARMOR_MOD FS3Combat Instance Parent=localize([setq(0,u(fun_armorstat,%0,protection))][setq(1,u(fun_armorstat,%0,hitloc))][u(fun_combat_log,ARMOR: target=%0 hitloc=%1 protect=%q0)][switch(0,t(%q0),0,match(%q1,%1),0,u(FUN_PROTECT_MOD,weaponstat(%2,pen),%q0))])
 
 @@ --------------------------
 @@ FUN_COVER_MOD
@@ -700,7 +760,7 @@
 @@ When someone is removed from combat or KO'd, you need to clear out anyone who's targeting them.
 @@ %0 = name
 @@ --------------------------
-&FUN_UNTARGET FS3Combat Instance Parent=iter(u(fun_combatants),u(fun_mod_combatstat,##,target,squish(remove(ucstr(u(fun_combatstat,##,target)),ucstr(unprettify(%0)),\,))),,)
+&FUN_UNTARGET FS3Combat Instance Parent=iter(u(fun_combatants),[u(fun_mod_combatstat,##,target,squish(remove(ucstr(u(fun_combatstat,##,target)),ucstr(unprettify(%0)),\,)))][u(fun_mod_combatstat,##,actoptions,squish(remove(ucstr(u(fun_combatstat,##,actoptions)),ucstr(unprettify(%0)),\,)))],,)
 
 @@ ================================================================================================================
 @@ ---------------  Teams -----------------
@@ -775,7 +835,7 @@
 @@ %2 = target
 @@ %3 = options
 @@ --------------------------
-&FUN_SET_ACTION FS3Combat Instance Parent=[u(fun_mod_combatstat,%0,action,[lcstr(trim(%1))])][u(fun_mod_combatstat,%0,target,[iter(%2,[unprettify(trim(##))],\,,\,)])][u(fun_mod_combatstat,%0,actoptions,[iter(%3,[trim(##)],\,,\,)])][localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,switch(%1,subdue,,[u(fun_mod_combatstat,%0,subduing,)][u(fun_mod_combatstat,%q0,subduedby,)]))])][u(fun_combat_msg,[prettify(lcstr(%0))] will [lcstr(%1)][switch(%2,,,%B[prettify(lcstr(%2))])] this turn.[switch(t(%3),1,%BOptions: %3)][u(fun_add_id,%0)])][set(me,acted:[setdiff([v(acted)] %N,)])][switch(u(fun_everyone_acted),1,u(fun_org_msg,[ansi(hc,Everyone has entered their actions.)]))]
+&FUN_SET_ACTION FS3Combat Instance Parent=[u(fun_mod_combatstat,%0,action,[lcstr(trim(%1))])][u(fun_mod_combatstat,%0,target,[iter(%2,[unprettify(trim(##))],\,,\,)])][u(fun_mod_combatstat,%0,actoptions,[iter(%3,[trim(##)],\,,\,)])][localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,switch(%1,subdue,,[u(fun_mod_combatstat,%0,subduing,)][u(fun_mod_combatstat,%q0,subduedby,)]))])][u(fun_combat_msg,[prettify(lcstr(%0))] will [switch(%1,explode,blow up [lcstr(%2)] \(right next to\)[switch(t(%3),1,%Band [lcstr(%3)] \(nearby\))] this turn.,[lcstr(%1)][switch(%2,,,%B[prettify(lcstr(%2))])] this turn.[switch(t(%3),1,%BOptions: %3)])][u(fun_add_id,%0)])][set(me,acted:[setdiff([v(acted)] %N,)])][switch(u(fun_everyone_acted),1,u(fun_org_msg,[ansi(hc,Everyone has entered their actions.)]))]
 
 
 @@ --------------------------
