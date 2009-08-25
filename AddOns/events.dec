@@ -34,7 +34,7 @@
 &FUN_GET_NAME Events System=extract(xget(#EVENTDB,%0),2,1,|)
 &FUN_GET_REMINDERS Events System=[squish(iter(sortby(sortby_events,lattr(#EVENTDB/event_*)),[setq(9,u(fun_event_distance,##))][switch(and(gte(%q9,0),lte(%q9,2409600)),1,[setq(8,%q8%R[center("[u(fun_get_name,##)]" on [u(fun_get_datetime,##)],78)])])]))][switch(words(%q8),0,%R[center(None Scheduled,78)],%q8)]
 &HELP_+EVENTS Events System=Tinyplot scenes and other events can be listed using the +events command so everyone will be reminded of them.%R%R[ansi(h,+events)] - List all events.%R[ansi(h,+events <#>)] - Views details for a particular event.%R[ansi(h,+events/delete <#>)] - Deletes an event.  Only the submitter can do this.%R[ansi(h,+events/submit <title>=<date-time>/<detailed description>)] - Adds a new event.%R%TNOTE: The date/time must be in the form: Day Month Date Year @ Time%R%TExample: Sun Jun 02 2007 @ 7pm EST%R%TIt is strongly suggested that you list the timezone to avoid confusion.
-&SORTBY_EVENTS Events System=sub(u(fun_event_distance,%0),u(fun_event_distance,%1))
+&SORTBY_EVENTS Events System=localize([setq(0,sub(u(fun_event_distance,%0),u(fun_event_distance,%1)))][switch(%q0,0,sub(after(%0,_),after(%1,_)),%q0)])
 
 
 @create Events Database

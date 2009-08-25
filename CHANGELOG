@@ -7,7 +7,8 @@ Systems now create +jobs for to-do items when installed
 +jobs:  +jobs/new, +jobs/catchup
 FS3!
 FARAMAIL!
-
++bg: Changed name of BG submission job to include player name.
++events:  Events on the same day now sort in a non-random order.
 
 
 Version 4.1 (6/13/08)
