@@ -7,11 +7,11 @@
 @@  @ DAMAGE VIEW COMMANDS
 @@  @@@@@@@@@@@@@@@@@@@@@@
 
-&CMD-+DAMAGE FS3Combat Damage Commands=$+damage:@pemit %#=[line()]%R[ansi(hr,Damage Report for %N)]%R[u(fun_dmglist,%N)]%R%R[ansi(h,Total Wound Modifier:)] -[damagemod(%N)] [u(fun_display_restricted,%N)]%RSee [ansi(h,+damage <#>)] for details on a given wound.%R[line()]
+&CMD-+DAMAGE FS3Combat Damage Commands=$+damage:@pemit %#=[line()]%R[ansi(hr,Damage Report for %N)]%R[u(fun_dmglist,%N)]%R%R[ansi(h,Total Wound Modifier:)] -[damagemod(%N)] [u(fun_display_restricted,%N)][space(15)][ansi(h,Healed By:)] [u(fun_healed_by,%N)]%RSee [ansi(h,+damage <#>)] for details on a given wound.%R[line()]
 
 &CMD-+DAMAGE-DETAIL FS3Combat Damage Commands=$+damage *:@pemit %#=switch(0,isnum(%0),,gt(%0,0),ansi(hr,That is not a valid wound number.),lte(%0,words(u(FUN_ALL_DMG,%N))),ansi(hr,You don't have that many wounds.),[line()]%R[ansi(hr,Damage Report for %N wound %0)]%R[u(fun_dmg_detail,u(fun_get_dmgnum,%N,%0))]%R[line()]
 
-&CMD-+DAMAGE-PERSON FS3Combat Damage Commands=$+damage *:@pemit %#=switch(1,isnum(%0),,strmatch(%0,*/*),,eq(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),[line()]%R[ansi(hr,Damage Report for [prettify(%0)])]%R[u(fun_dmglist,%0)]%R%R[ansi(h,Total Wound Modifier:)] -[damagemod(%0)] [u(fun_display_restricted,%0)]%RSee [ansi(h,+damage <name>/<#>)] for details on a given wound.%R[line()]
+&CMD-+DAMAGE-PERSON FS3Combat Damage Commands=$+damage *:@pemit %#=switch(1,isnum(%0),,strmatch(%0,*/*),,eq(words(u(FUN_ALL_DMG,%0)),0),ansi(hr,No damage report available.  Make sure %0 is a valid PC\, NPC\, or vehicle name.  It could be they have never taken any damage.),[line()]%R[ansi(hr,Damage Report for [prettify(%0)])]%R[u(fun_dmglist,%0)]%R%R[ansi(h,Total Wound Modifier:)] -[damagemod(%0)] [u(fun_display_restricted,%0)][space(15)][ansi(h,Healed By:)] [u(fun_healed_by,%0)]%RSee [ansi(h,+damage <name>/<#>)] for details on a given wound.%R[line()]
 
 &CMD-+DAMAGE-PERSON-DETAIL FS3Combat Damage Commands=$+damage */*:@pemit %#=switch(0,isnum(%1),ansi(hr,That is not a valid wound number.),gt(%1,0),ansi(hr,That is not a valid wound number.),lte(%1,words(u(FUN_ALL_DMG,%0))),ansi(hr,%0 doesn't have that many wounds.),[line()]%R[ansi(hr,Damage Report for [prettify(%0)] wound %1)]%R[u(fun_dmg_detail,u(fun_get_dmgnum,%0,%1))]%R[line()]
 
@@ -49,7 +49,7 @@
 
 &CMD-+DAMAGE-SCAN FS3Combat Damage Commands=$+damage/scan:@pemit %#=[line()]%R[ansi(h,Injured Characters In [name(%l)])]%R[ansi(h,Name[space(16)]Can Treat[space(4)]Healed By[space(5)]Damage Mod[space(5)]Status)][iter(lcon(%l),[setq(0,name(##))]switch(0,or(isplayer(##),isvehicle(%q0)),,damagemod(%q0),,%R[ljust(name(##),20)][ljust(switch(u(fun_any_can_be_treated,##),1,+,-),10)][ljust(u(fun_healed_by,##),15)][ljust(-[damagemod(%q0)],15)][u(fun_display_restricted,%q0)]))]%R%RSee [ansi(h,+damage <name>)] for a detailed damage report.%R[line()]
 
-&CMD-+TREAT FS3Combat Damage Commands=$+treat *:@pemit %#=[setq(0,u(fun_can_treat,%0,%N))]switch(0,eq(%q0,1),ansi(hr,after(%q0,|)),ansi(hg,You treat %0.)[remit(%l,[ansi(hc,%N treats %0:)][u(fun_treat,%0,%N)])])
+&CMD-+TREAT FS3Combat Damage Commands=$+treat *:@pemit %#=[setq(0,u(fun_can_treat,%0,%N))]switch(0,eq(%q0,1),ansi(hr,after(%q0,|)),ansi(hg,You treat %0.)[remit(%l,[ansi(hc,%N treats %0:)][u(fun_treat,%0,%N,xget(#609,security_code))])])
 
 
 @@ %q0 = skill
@@ -88,7 +88,7 @@
 @@  Note that because this is a global function we must check for a valid security code.
 @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&FUN_TREAT FS3Combat Damage Commands=switch(0,match(,ansi(hr,Not authorized!),iter(u(fun_all_dmg,%0),switch(u(fun_can_be_treated,##),1,u(fun_treat_wound,##,%1))))
+&FUN_TREAT FS3Combat Damage Commands=switch(0,match(%2,xget(#609,security_code)),ansi(hr,Not authorized!),iter(u(fun_all_dmg,%0),switch(u(fun_can_be_treated,##),1,u(fun_treat_wound,##,%1))))
 
 
 @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -347,7 +347,7 @@
 @@  lower level.  
 @@  %0 = Damage attr name
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&HEALING_POINTS FS3Combat Damage Commands=C:15 S:10 M:10 L:5 H:0
+&HEALING_POINTS FS3Combat Damage Commands=C:12 S:8 M:6 L:4 H:0
 &FUN_HEALPOINTS_WOUND FS3Combat Damage Commands=u(fun_healpoints_sev,u(fun_name_from_attr,%0),[u(fun_dmgstat,%0,currsev)],u(fun_dmgstat,%0,type))
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
