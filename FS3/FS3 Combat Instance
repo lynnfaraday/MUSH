@@ -637,7 +637,7 @@
 @@ %1 = attack roll
 @@ %2 = weapon
 @@ --------------------------
-&FUN_COVER_MOD FS3Combat Instance Parent=switch(0,strmatch(u(fun_combatstat,%0,stance),cover),0,lt(%1,3),0,lte(rand(1,100),50),0,u(fun_protect_mod,weaponstat(%2,pen),3))
+&FUN_COVER_MOD FS3Combat Instance Parent=switch(0,strmatch(u(fun_combatstat,%0,stance),cover),0,lt(%1,3),0,lte(rand(1,100),75),0,u(fun_protect_mod,weaponstat(%2,pen),3))
 
 @@ --------------------------
 @@ FUN_PROTECT_MOD
