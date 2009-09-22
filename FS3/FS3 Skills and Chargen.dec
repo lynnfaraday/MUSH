@@ -225,6 +225,9 @@
 &FUN_SPENT_POINTS FS3 Chargen Commands=localize([setq(0,0)][iter(attributes actionskills langskills bgskills,setq(0,add(%q0,u(fun_spent_on,%0,##))),,)]%q0)
 @startup FS3 Chargen Commands=@set me=!NO_COMMAND
 
+@wait 1=@fo me=@edit FS3 Chargen Commands/*=#FS3FUN,[num(FS3 Skill Functions)]
+@wait 1=@fo me=@edit FS3 Chargen Commands/*=#FS3DB,[num(FS3 Skill Data)]
+
 
 @create Chargen Exit Parent
 @set Chargen Exit Parent = NO_COMMAND
@@ -254,7 +257,7 @@
 
 
 @create Demographic Commands
-@lock/user:Basic Demographic Commands=me
+@lock Demographic Commands=me
 @set Demographic Commands = DARK
 @set Demographic Commands = WIZARD
 &CMD-+RANKS Demographic Commands=$+ranks:think pemit(%#,[line()]%R[table(%B%B%BOfficer|Enlisted|[iter(lnum(1,10),[ljust(#@,2)] [extract(u(#CGINFO/fun_officer_ranks),#@,1,|)]|[extract(u(#CGINFO/fun_enlisted_ranks),#@,1,|)]|,,)],39,78,|)]%R[line()])
@@ -270,25 +273,24 @@
 @wait 1=@fo me=@edit Demographic Commands/*=#CGINFO,[num(Chargen Info Functions)]
 
 
-@@========================
+@@ ========================
 @@ BEGIN OUTSIDE CG ROOM
-@@========================
+@@ ========================
 
 @dig Chargen=CG;chargen
 
-@lock/user:Basic Chargen=ISOK/1
+@lock Chargen=ISOK/1
 @power Chargen = See_All
 &CHARGEN_OPEN Chargen=1
 @FAILURE Chargen=switch(v(chargen_open),0,Chargen isn't open yet.,Only new players may enter chargen.)
 @set Chargen/FAILURE=no_command prefixmatch
 &ISOK Chargen=or(isstaff(%#),and(orflags(%#,?),not(haspower(%#,guest)),v(chargen_open)))
-Only new players may enter chargen.
 
 CG
 
-@@========================
+@@ ========================
 @@ IN CHARGEN ROOM
-@@========================
+@@ ========================
 
 @set here = NO_COMMAND
 &CG here=1
@@ -298,9 +300,9 @@ CG
 
 N
 
-@@========================
+@@ ========================
 @@ IN DEMOGRAPHICS ROOM
-@@========================
+@@ ========================
 
 &CG here=1
 @DESCRIBE here=In this room, you will set up some basic info about your character's background - how old he is, his job, etc.  This is all subject to approval - you can make yourself an Admiral in chargen, but you won't be approved!%R%R%T[ansi(h,+fullname <full name>)]%R%T[ansi(h,+age <age>)]%R%T[ansi(h,+faction <faction>)] (See +factions) %R%T[ansi(h,+position <position>)] (See +positions)%R%T[ansi(h,+org <organization>)] (see +orgs)%R%R%T[ansi(h,+rank <rank>)] (see +ranks - military chars only)
@@ -314,12 +316,12 @@ N
 &OTHER_ERRORS Next=Military characters must have a rank.
 &REQUIRED_ATTRS Next=faction org position birthdate fullname
 
-drop Demographics Commands
+drop Demographic Commands
 
 
-@@========================
+@@ ========================
 @@ In ABILITIES ROOM
-@@========================
+@@ ========================
 
 N
 
@@ -333,13 +335,13 @@ N
 &OTHER_CHECKS Next=strmatch(xget(%0,cg_errors),1*)
 &OTHER_ERRORS Next=after(xget(%0,cg_errors),|)
 
-drop FS3 Chargen Commands
+drop Chargen Commands
 
 N
 
-@@========================
+@@ ========================
 @@ In BACKGROUND ROOM
-@@========================
+@@ ========================
 
 &CG here=1
 @DESCRIBE here=This is the room where you set up your character's backstory, or background.  Make sure that your background matches your character's skills and other information.%R%RYour background is just another MUSH attribute on yourself, like your description. You can set it by typing [ansi(hg,&bg me=<your background text>)]. You can use the built-in MUSH editing commands (@edit, @dec, etc.) to edit it.%R%RIf your background is particularly long, you can split it into multiple attributes, like:%R%T[ansi(h,&BG1 me=This is the first part of my bg.)]%R%T[ansi(h,&BG2 me=This is the second part of my bg.)]%R%Tetc.%R%RThe [ansi(hg,+bg)] command will let you view your background.
@@ -353,9 +355,9 @@ N
 
 N
 
-@@========================
+@@ ========================
 @@ In APPROVAL ROOM
-@@========================
+@@ ========================
 
 @DESCRIBE here=If you're finished with everything, type [ansi(hg,+bg/submit)] to submit your character for approval.  While you're waiting to be approved, you can hang out in the OOC Center.  Just go through the OOC exit.  If there are any problems with your character, you will be able to re-enter chargen later to fix them.%R%RIf you realize you forgot something, you can use [ansi(h,+bg/unsubmit)] to withdraw your application and go back to make changes.
 
@@ -365,7 +367,7 @@ N
 &OTHER_CHECKS Done=or(t(xget(%0,approval_job)),not(hasflag(%0,unregistered)))
 &OTHER_ERRORS Done=- You must submit your character for approval first.
 
-@lock/user:Basic Back=ISSUBMITTED/0
+@lock Back=ISSUBMITTED/0
 @power Back = See_All
 @FAILURE Back=You must unsubmit your background first.
 &ISSUBMITTED Back=t(xget(%#,approval_job))
@@ -374,9 +376,8 @@ N
 
 
 @@ This has to be done last because otherwise all the previous exits would be locked!
-@lock/Basic Chargen Exit Parent=ISDONE/1
-@lset Chargen Exit Parent/Basic=!no_inherit
-
+@lock Chargen Exit Parent=ISDONE/1
+@lset Chargen Exit Parent=!no_inherit
 
 think setup_attr(h,xp,0)
 think setup_attr(h,actionskills,)
@@ -398,9 +399,6 @@ think setup_attr(h,cg_errors,)
 
 @wait 4=@fo me=@edit FS3 Skill Data/*=#FS3FUN,[num(FS3 Skill Functions)]
 @wait 4=@fo me=@edit FS3 Skill Data/*=#FS3DB,[num(FS3 Skill Data)]
-
-@wait 4=@fo me=@edit FS3 Chargen Commands/*=#FS3FUN,[num(FS3 Skill Functions)]
-@wait 4=@fo me=@edit FS3 Chargen Commands/*=#FS3DB,[num(FS3 Skill Data)]
 
 @wait 5=@fo me=@tr FS3 Skill System/STARTUP
 @wait 5=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
