@@ -16,7 +16,7 @@
 @set MOTD System = !NO_COMMAND
 @ACONNECT MOTD System=@fo %#=+motd
 
-&CMD-+MOTD MOTD System=$+motd:@pemit %#=[line()][switch(hasattr(#MOTDDB,motd),1,%R[center(ansi(xget(#MOTDDB,color),Important Message!),78)]%r[center(u(#MOTDDB/motd),78)]%r)]%R[center(ansi(xget(#MOTDDB,color),Tip of the Day),78)]%R[center(u(fun_get_tip),78)]%R%r[center(ansi(xget(#MOTDDB,color),Global BBS System - Unread Messages \(+bbread\)),78)][u(fun_get_bbs,%#)]%R[center(ansi(xget(#MOTDDB,color),Upcoming Events \(+events\)),78)][event_reminders()]%R%r[center(ansi(xget(#MOTDDB,color),Mail Report \(@mail\)),78)]%r[u(fun_get_mail,%#)]%R[line()]
+&CMD-+MOTD MOTD System=$+motd:@pemit %#=[line()][switch(hasattr(#MOTDDB,motd),1,%R[center(ansi(xget(#MOTDDB,color),Important Message!),78)]%r[center(u(#MOTDDB/motd),78)]%r)]%R[center(ansi(xget(#MOTDDB,color),Tip of the Day),78)]%R[center(u(fun_get_tip),78)]%R%r[center(ansi(xget(#MOTDDB,color),Global BBS System - Unread Messages \(+bbread\)),78)][u(fun_get_bbs,%#)]%R[center(ansi(xget(#MOTDDB,color),Upcoming Events \(+events\)),78)][event_reminders()]%R%r[center(ansi(xget(#MOTDDB,color),Mail Report \([u(fun_mail_command)]\)),78)]%r[u(fun_get_mail,%#)]%R[line()]
 &CMD-+MOTD-CATCHUP MOTD System=$+motd/catchup:@tr me/TR_CATCHUP=%#
 &CMD-+MOTD-CLEAR MOTD System=$+motd/clear:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),ansi(hg,You clear the message of the day.)[wipe(#MOTDDB/motd)])
 &CMD-+MOTD-CLEARTIP MOTD System=$+motd/cleartip *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),hasattr(#MOTDDB,TIP_[squish(%0)]),ansi(hr,There is no such tip.),ansi(hg,You erase tip %0.)[wipe(#MOTDDB/tip_[squish(%0)])])
@@ -33,6 +33,7 @@
 
 &FUN_UNREAD_MAIL MOTD System=switch(xget(#MOTDDB,MAILSYS),builtin,extract(mail(%0),2,1),faramail,unread_mail(%0),ERROR)
 &FUN_TOTAL_MAIL MOTD System=switch(xget(#MOTDDB,MAILSYS),builtin,[add(extract(mail(%0),1,1),extract(mail(%0),2,1))],faramail,total_mail(%0),ERROR)
+&FUN_MAIL_COMMAND MOTD System=switch(xget(#MOTDDB,MAILSYS),builtin,@mail,faramail,+mail,ERROR)
 
 @STARTUP MOTD System=@set me=!no_COMMAND
 &TR_CATCHUP MOTD System=@fo %0=+bbcatchup all
