@@ -305,7 +305,7 @@ N
 @@ ========================
 
 &CG here=1
-@DESCRIBE here=In this room, you will set up some basic info about your character's background - how old he is, his job, etc.  This is all subject to approval - you can make yourself an Admiral in chargen, but you won't be approved!%R%R%T[ansi(h,+fullname <full name>)]%R%T[ansi(h,+age <age>)]%R%T[ansi(h,+faction <faction>)] (See +factions) %R%T[ansi(h,+position <position>)] (See +positions)%R%T[ansi(h,+org <organization>)] (see +orgs)%R%R%T[ansi(h,+rank <rank>)] (see +ranks - military chars only)
+@DESCRIBE here=In this room, you will set up some basic info about your character's background - how old he is, his job, etc.  This is all subject to approval - you can make yourself an Admiral in chargen, but you won't be approved!%R%R%T[ansi(h,+fullname <full name>)]%R%T[ansi(h,+age <age>)]%R%T[ansi(h,@sex <male or female>)]%R%T[ansi(h,+faction <faction>)] (See +factions) %R%T[ansi(h,+position <position>)] (See +positions)%R%T[ansi(h,+org <organization>)] (see +orgs)%R%R%T[ansi(h,+rank <rank>)] (see +ranks - military chars only)
 @set here/DESCRIBE=no_command visual prefixmatch public nearby
 
 @dig Abilities=N;next,B;back
@@ -314,7 +314,7 @@ N
 @power Next = See_All
 &OTHER_CHECKS Next=switch(match(xget(%#,faction),Military),1,t(words(rank(%#))),1)
 &OTHER_ERRORS Next=Military characters must have a rank.
-&REQUIRED_ATTRS Next=faction org position birthdate fullname
+&REQUIRED_ATTRS Next=faction org position birthdate fullname sex
 
 drop Demographic Commands
 
@@ -326,7 +326,7 @@ drop Demographic Commands
 N
 
 &CG here=1
-@DESCRIBE here=Here you will set up your character's Abilities, including Attributes, Action Skills, Background Skills, Language Skills and Quirks.   See [ansi(hg,+help FS3_Chargen)] for help with Chargen.%R%R%T[ansi(h,+reset)] - Deletes all abilities%R%T[ansi(h,+sheet)] - Views your character sheet%R%T[ansi(h,+points)] - Views your points remaining%R%T[ansi(h,+limits)] - Views limits on what you can spend.%R%R%T[ansi(h,+abilities)] - Views all abilities%R%T[ansi(h,+raise <type>/<ability>)] and [ansi(h,+lower <type>/<ability>)]%R%T[ansi(h,+ability <type>/<ability>=<level>)]%R%T- type must be one of attr, action, bg, lang%R%T- type may be omitted for action skills and attributes%R%R%T[ansi(h,+quirk/add <quirk>)] and [ansi(h,+quirk/delete <quirk>)]%R%R%TYou may also want to configure ruling attributes for your%R%Tbackground skills.  See +help +rulingattr
+@DESCRIBE here=Here you will set up your character's Abilities, including Attributes, Action Skills, Background Skills, Language Skills and Quirks.   See [ansi(hg,+help FS3_Chargen)] for help with Chargen.%R%R%T[ansi(h,+reset)] - Starts setting abilities, erasing any current ones.%R%T[ansi(h,+sheet)] - Views your character sheet%R%T[ansi(h,+points)] - Views your points remaining%R%T[ansi(h,+limits)] - Views limits on what you can spend.%R%R%T[ansi(h,+abilities)] - Views all abilities%R%T[ansi(h,+raise <type>/<ability>)] and [ansi(h,+lower <type>/<ability>)]%R%T[ansi(h,+ability <type>/<ability>=<level>)]%R%T- type must be one of attr, action, bg, lang%R%T- type may be omitted for action skills and attributes%R%R%T[ansi(h,+quirk/add <quirk>)] and [ansi(h,+quirk/delete <quirk>)]%R%R%TYou may also want to configure ruling attributes for your%R%Tbackground skills.  See +help +rulingattr
 
 @dig Background=N;next,B;back
 
