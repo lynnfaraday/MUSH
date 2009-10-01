@@ -51,10 +51,10 @@
 &ARMOR_RAPTOR FS3Combat Equipment Stats=Raptor Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cabin|15|Vehicle
 &ARMOR_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cabin|10|Vehicle
 
-&VEHICLE_VIPER FS3Combat Equipment Stats=Viper space fighter|Piloting|5|Viper|Viper|KEW
-&VEHICLE_RAIDER FS3Combat Equipment Stats=Cylon Raider space fighter|Piloting|2|Raider|Raider|KEW MISSILE_AA NUKE
-&VEHICLE_RAPTOR FS3Combat Equipment Stats=Raptor space command and control|Piloting|7|Raptor|Raptor|ECM MISSILE_HEAT MISSILE_HE NUKE
-&VEHICLE_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider space transport/bomber|Piloting|7|Heavy_Raider|Heavy_Raider|KEW MISSILE_AA NUKE
+&VEHICLE_VIPER FS3Combat Equipment Stats=Viper space fighter|Piloting|5|Viper|Viper|KEW|0
+&VEHICLE_RAIDER FS3Combat Equipment Stats=Cylon Raider space fighter|Piloting|2|Raider|Raider|KEW MISSILE_AA NUKE|0
+&VEHICLE_RAPTOR FS3Combat Equipment Stats=Raptor space command and control|Piloting|7|Raptor|Raptor|ECM MISSILE_HEAT MISSILE_HE NUKE|0
+&VEHICLE_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider space transport/bomber|Piloting|7|Heavy_Raider|Heavy_Raider|KEW MISSILE_AA NUKE|0
 
 &COVER_PLASTER_WALL FS3Combat Equipment Stats=1
 &COVER_SOFA FS3Combat Equipment Stats=1
@@ -71,7 +71,7 @@
 
 &ARMORSTATS FS3Combat Equipment Commands=desc hitloc protection class
 &WEAPONSTATS FS3Combat Equipment Commands=desc atkskill defskill lethality pen wpntype class auto ammo recoil range blast dmgtype accuracy shrapnel reloadable
-&VEHICLESTATS FS3Combat Equipment Commands=desc pilotskill toughness armor hitloc weapons
+&VEHICLESTATS FS3Combat Equipment Commands=desc pilotskill toughness armor hitloc weapons dodge
 
 &CMD-+GEAR FS3Combat Equipment Commands=$+gear:@pemit %#=[line()]%R[ansi(h,Gear Commands)]%R+gear/weapons%R+gear/armor%R+gear/vehicles%R+gear/cover%R[line()]
 &CMD-+GEAR-ARMOR-DETAIL FS3Combat Equipment Commands=$+gear/armor *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(armor(),%q0),ansi(hr,That is not a valid armor type.),[line()]%R[ansi(h,[prettify(%0)] Armor Data)]%R%R[ansi(h,Class:)] [armorstat(%q0,class)] %R[ansi(h,Protection:)] [armorstat(%q0,protection)] %R%R[ansi(h,Covered Locations:)] [armorstat(%q0,hitloc)]%R%R[ansi(h,Description:)]%R[armorstat(%q0,desc)]%R[line()])
@@ -91,7 +91,7 @@
 &FUN_WEAPONSTAT FS3Combat Equipment Commands=extract(xget(#724,weapon_[unprettify(%0)]),match(v(weaponstats),%1),1,|)
 &FUN_FILTER_WPN_CLASS FS3Combat Equipment Commands=squish(iter(weapons(),switch(strmatch(weaponstat(##,class),%0),1,##)))
 
-&CMD-+GEAR-VEHICLE-DETAIL FS3Combat Equipment Commands=$+gear/vehicle *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(vehicletypes(),%q0),ansi(hr,That is not a valid vehicle type.),[line()]%R[ansi(h,[prettify(%0)] Vehicle Data)]%R%R[ansi(h,Piloting Skill:)] [vehtypestat(%q0,pilotskill)]%R[ansi(h,Toughness:)] [vehtypestat(%q0,toughness)] %R[ansi(h,Armor Type:)] [vehtypestat(%q0,armor)]%R[ansi(h,Possible Armarment:)] [vehtypestat(%q0,weapons)]%R[ansi(h,Hit Location Chart:)] [vehtypestat(%q0,hitloc)]%R%R[ansi(h,Description:)]%R[vehtypestat(%q0,desc)]%R[line()])
+&CMD-+GEAR-VEHICLE-DETAIL FS3Combat Equipment Commands=$+gear/vehicle *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(vehicletypes(),%q0),ansi(hr,That is not a valid vehicle type.),[line()]%R[ansi(h,[prettify(%0)] Vehicle Data)]%R%R[ansi(h,Piloting Skill:)] [vehtypestat(%q0,pilotskill)]%R[ansi(h,Toughness:)] [vehtypestat(%q0,toughness)] %R[ansi(h,Armor Type:)] [vehtypestat(%q0,armor)]%R[ansi(h,Possible Armarment:)] [vehtypestat(%q0,weapons)]%R[ansi(h,Hit Location Chart:)] [vehtypestat(%q0,hitloc)]%R[ansi(h,Dodge Bonus:)] [vehtypestat(%q0,dodge)]%R%R[ansi(h,Description:)]%R[vehtypestat(%q0,desc)]%R[line()])
 &CMD-+GEAR-VEHICLE FS3Combat Equipment Commands=$+gear/vehicles:@pemit %#=[line()]%R[ansi(h,Vehicle[space(13)]Piloting[space(10)]Weapons)][iter(vehicletypes(),%R[padstr(prettify(lcstr(##)),20)][ljust(vehtypestat(##,pilotskill),18)][vehtypestat(##,weapons)])]%R%RSee [ansi(h,+gear/vehicle <type>)] for details.%R[line()]
 &FUN_VEHICLETYPES FS3Combat Equipment Commands=edit(lattr(#724/vehicle_*),VEHICLE_,)
 &FUN_VEHTYPESTAT FS3Combat Equipment Commands=extract(xget(#724,vehicle_[unprettify(%0)]),match(v(vehiclestats),%1),1,|)

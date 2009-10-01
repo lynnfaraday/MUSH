@@ -569,6 +569,11 @@
 @@ Makes the defense roll, factoring in appropriate modifiers.
 @@ %0 = attacker
 @@ %1 = defender
+@@
+@@  %q9 - wpn defense skill
+@@  %q8 - defense mods
+@@  %q7 - defender skill
+@@  %q6 - roll
 @@ --------------------------
 &FUN_ROLL_DEFENSE FS3Combat Instance Parent=localize([setq(9,u(fun_weaponstat,%0,defskill))][setq(8,u(fun_defense_mods,%0,%1))][setq(7,u(fun_get_skill,%1,%q9))][setq(6,roll_ability(pmatch(%1),%q7,%q8))]%q6[u(fun_combat_log,%1 defending %0:  skillname=%q9 skilllvl=%q7 mods=%q8 roll=%q6)])
 
@@ -590,8 +595,9 @@
 @@ - Stance mods
 @@ - Luck mods (30 if spending luck on defense)
 @@ - Attacker melee (30)
+@@ - Defender vehicle dodge bonus
 @@ --------------------------
-&FUN_DEFENSE_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%1)],u(fun_combatstat,%1,mod),u(fun_stance_mod,%1,defender),u(fun_luck_mod,%1,defense),switch(u(fun_weaponstat,%0,wpntype),Melee,30,0))
+&FUN_DEFENSE_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%1)],u(fun_combatstat,%1,mod),u(fun_stance_mod,%1,defender),u(fun_luck_mod,%1,defense),switch(u(fun_weaponstat,%0,wpntype),Melee,30,0),switch(u(fun_is_in_vehicle,%1),1,u(fun_vehiclestat,%1,dodge)))
 
 
 @@ --------------------------
