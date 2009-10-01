@@ -25,7 +25,7 @@
 
 &CMD-+COMBAT-SLACKERS FS3Combat Action Commands=$+combat/slackers:@pemit %#=[setq(0,u(fun_combat_num,%N))][ansi(hx,<)][line()]%R[ansi(hx,<)] [ansi(h,Haven't Posed)][iter(u(%q0/fun_actors),[setq(1,u(fun_acted_display,##,%q0))][switch(%q1,+,,p,,%R[ansi(hx,<)] ##)],)]%R[ansi(hx,<)] %R[ansi(hx,<)] [ansi(h,Haven't Chosen Actions)][iter(u(%q0/fun_actors),[setq(1,u(fun_acted_display,##,%q0))][switch(%q1,+,,a,,%R[ansi(hx,<)] ## [switch(u(%q0/fun_is_npcmaster,##),1,\(NPC Master\),\(Last action: [u(%q0/fun_combatstat,##,action)]\))])],)]%R[ansi(hx,<)][line()]
 
-&CMD-+COMBAT-LOG FS3Combat Action Commands=$+combat/log*:think [setq(0,u(fun_combat_num,%N))][setq(1,switch(%0,,1,trim(%0)))][setq(2,sort(lattr(%q0/log`**)))];@dolist line1 [extract(%q2,add(1,mul(sub(%q1,1),10)),10)] line2=@pemit %#=[switch(##,line1,[line()]%R,line2,%R[ansi(h,Page %q1 of [add(1,div(words(%q2),10))])]%R[line()],[convsecs(after(##,_))]%R[u(%q0/##)])
+&CMD-+COMBAT-LOG FS3Combat Action Commands=$+combat/log*:think [setq(0,u(fun_combat_num,%N))][setq(1,switch(%0,,1,trim(%0)))][setq(2,sort(lattr(%q0/log`**)))];@dolist line1 [extract(%q2,add(1,mul(sub(%q1,1),10)),10)] line2=@pemit %#=[switch(##,line1,[line()]%R,line2,%R[ansi(h,Page %q1 of [add(1,div(words(%q2),10))])]%R[line()],[convsecs(after(##,`))]%R[u(%q0/##)])
 
 &CMD-+COMBAT-CLEARLOG FS3Combat Action Commands=$+combat/clearlog:@pemit %#=[ansi(h,<COMBAT>)] [setq(0,u(fun_combat_num,%N))][switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(%q0),ansi(hr,You are not in combat.),ansi(hg,You clear the combat log.)[wipe(%q0/log`**)])]
 
@@ -37,7 +37,7 @@
 @@ %0 = name
 @@ %1 = combat #
 @@ --------------------------
-&FUN_DISPLAY_STATUS FS3Combat Action Commands=localize(%R[ansi(hx,<)] [padstr(prettify(lcstr(%0)),15)][setq(1,u(%1/fun_combatstat,%0,type))][padstr([switch(%q1,soldier,[u(%1/fun_combatstat,%0,weapon)][switch(u(%1/fun_weaponstat,%0,ammo),>0,%B\([u(%1/fun_combatstat,%0,ammo)]\))],[u(%1/fun_combatstat,%0,vehicle)]%B\([switch(%q1,pilot,plt,pas)]\))],20)][switch(u(%1/fun_combatstat,%0,ko),1,[ansi(h,*KO*%B)],u(fun_dmg_meter,u(%1/fun_damagemod,%0)))]%B%B%B[switch(u(%1/fun_combatstat,%0,subduedby),,ucstr(mid(u(%1/fun_combatstat,%0,stance),0,3)),SUB)]/[padstr(u(%1/fun_combatstat,%0,action),10)] [padstr(prettify(lcstr(u(%1/fun_combatstat,%0,target))),17)])
+&FUN_DISPLAY_STATUS FS3Combat Action Commands=localize(%R[ansi(hx,<)] [padstr(prettify(lcstr(%0)),15)][setq(1,u(%1/fun_combatstat,%0,type))][padstr([switch(%q1,soldier,[u(%1/fun_combatstat,%0,weapon)][switch(u(%1/fun_weaponstat,%0,ammo),>0,%B\([u(%1/fun_combatstat,%0,ammo)]\))],[u(%1/fun_combatstat,%0,vehicle)]%B\([switch(%q1,pilot,plt,pas)]\))],19)]%B[switch(u(%1/fun_combatstat,%0,ko),1,[ansi(h,*KO*%B)],u(fun_dmg_meter,u(%1/fun_damagemod,%0)))]%B%B%B[switch(u(%1/fun_combatstat,%0,subduedby),,ucstr(mid(u(%1/fun_combatstat,%0,stance),0,3)),SUB)]/[padstr(u(%1/fun_combatstat,%0,action),10)] [padstr(prettify(lcstr(u(%1/fun_combatstat,%0,target))),17)])
 
 @@ --------------------------
 @@ FUN_DMG_METER
@@ -89,7 +89,7 @@
 @@ ================================================================================================================
 
 
-&CMD-+COMBAT-START FS3Combat Action Commands=$+combat/start *:@pemit %#=[ansi(h,<COMBAT>)] [switch(0,not(u(FUN_IS_IN_COMBAT,%#)),ansi(hr,You are already in combat.),match(mock real,%0),ansi(hr,Combat type must be mock or real.),You start a combat.  Your combat number is [setq(0,create(Combat Instance))]%q0.[setq(1,parent(%q0,#806))][set(%q0,organizer:%#)][set(%q0,turn_in_progress:0)][set(%q0,turn:0)][set(%q0,real:[switch(%0,real,1,0)])])];@switch t(%q0)=1,@fo %#=+combat/join %q0/observer
+&CMD-+COMBAT-START FS3Combat Action Commands=$+combat/start *:@pemit %#=[ansi(h,<COMBAT>)] [switch(0,not(u(FUN_IS_IN_COMBAT,%#)),ansi(hr,You are already in combat.),match(mock real,%0),ansi(hr,Combat type must be mock or real.),You start a combat.  Your combat number is [setq(0,create(Combat Instance))]%q0.[setq(1,parent(%q0,#806))][set(%q0,wizard)][set(%q0,organizer:%#)][set(%q0,turn_in_progress:0)][set(%q0,turn:0)][set(%q0,real:[switch(%0,real,1,0)])])];@switch t(%q0)=1,@fo %#=+combat/join %q0/observer
 
 &CMD-+COMBAT-SPAR FS3Combat Action Commands=$+combat/spar *:@pemit %#=[ansi(h,<COMBAT>)] [switch(0,not(u(FUN_IS_IN_COMBAT,%#)),ansi(hr,You are already in combat.),not(u(FUN_IS_IN_COMBAT,%0)),ansi(hr,%0 is already in combat.),You start a sparring match with %0.  Your combat number is [setq(0,create(Combat Instance))]%q0.[setq(1,parent(%q0,#806))][set(%q0,organizer:%#)][set(%q0,turn_in_progress:0)][set(%q0,turn:0)][set(%q0,real:[switch(%0,real,1,0)])])];@switch t(%q0)=1,{@fo %#=+combat/join %q0/soldier;@fo %#=+combat/join %0=%q0/soldier;@fo %#=+combat/weapon Sparring;@fo %#=+combat/weapon %0=Sparring;@fo %#=+combat/attack %0;@fo %#=+combat/attack %0=%N;@fo %#=+combat/team %0=2;@fo %#=+combat/newturn}
 
@@ -142,12 +142,12 @@
 @@ %2 = combat #
 @@
 @@ Returns either 1 or 0|error
-@@ NOTE!!  Overrides %q1 if vehicle type was specified and a random vehicle created.  DO NOT LOCALIZE
+@@ NOTE!!  Overrides %q1 (vehicle) and %q4 (weapon) if vehicle type was specified and a random vehicle created.  DO NOT LOCALIZE
 @@         Do not use other registers from FUN_DO_JOIN!
 @@ %qz = throwaway reg for vehicle combat num
 @@ --------------------------
 
-&FUN_JOIN_VEHICLE_STUFF FS3Combat Action Commands=switch(1,not(match(pilot passenger,%0)),switch(%1,,1,0|You cannot specify a vehicle if you are not a pilot or passenger.),and(match(%0,pilot),t(u(%2/fun_find_pilot,%1))),0|There is already a pilot for that vehicle.,[setq(z,u(fun_vehicle_combat_num,%1))][not(or(match(%qz,%2),not(words(%qz))))],0|That vehicle is already in another combat.,isvehicle(%1),1,not(%1),0|You must specify a vehicle if you are a pilot or passenger.,not(match(vehicletypes(),%1)),0|%1 is not a valid vehicle name or type,t(match(vehicletypes(),%1)),1[setq(1,randvehicle(%1,xget(#609,security_code)))],0|Unknown error.)
+&FUN_JOIN_VEHICLE_STUFF FS3Combat Action Commands=switch(1,not(match(pilot passenger,%0)),switch(%1,,1,0|You cannot specify a vehicle if you are not a pilot or passenger.),and(match(%0,pilot),t(u(%2/fun_find_pilot,%1))),0|There is already a pilot for that vehicle.,[setq(z,u(fun_vehicle_combat_num,%1))][not(or(match(%qz,%2),not(words(%qz))))],0|That vehicle is already in another combat.,isvehicle(%1),1,not(%1),0|You must specify a vehicle if you are a pilot or passenger.,not(match(vehicletypes(),unprettify(%1))),0|%1 is not a valid vehicle name or type,t(match(vehicletypes(),unprettify(%1))),1[setq(1,randvehicle(%1,xget(#609,security_code)))][setq(4,u(fun_default_weapon,%q0,%q1))],0|Unknown error.)
 
 @@ --------------------------
 @@ FUN_JOIN_NPC_STUFF
@@ -166,7 +166,7 @@
 @@ %0 = type
 @@ %1 = vehicle
 @@ --------------------------
-&FUN_DEFAULT_WEAPON FS3Combat Action Commands=switch(%0,soldier,defaultrifle(),pilot,first(vehtypestat(vehiclestat(%1,type),weapons)),)
+&FUN_DEFAULT_WEAPON FS3Combat Action Commands=switch(%0,soldier,xget(#609,default_rifle),pilot,first(vehtypestat(vehiclestat(%1,type),weapons)),)
 
 
 @@ --------------------------
@@ -176,7 +176,7 @@
 @@
 @@ %q0 = vehicle
 @@ --------------------------
-&FUN_DO_LEAVE FS3Combat Action Commands=localize([setq(0,u(%1/fun_combatstat,%0,vehicle))][clearmockdmg(%0,xget(#609,security_code))][switch(1,isplayer(%0),wipe([pmatch(%0)]/combat),switch(npcstat(%0,temp),1,deletenpc(%0,xget(#609,security_code))))][u(%1/fun_remove,switch(t(pmatch(%0)),1,name(pmatch(%0)),%0))][switch(1,isvehicle(%q0),switch(0,t(u(fun_vehicle_combat_num,%q0)),[clearmockdmg(%q0,xget(#609,security_code))][switch(vehiclestat(%q0,temp),1,deletevehicle(%q0,xget(#609,security_code)))]))][switch(%0,%N,You leave the combat.,You make %0 leave the combat.)])
+&FUN_DO_LEAVE FS3Combat Action Commands=localize([u(%1/fun_remove,switch(t(pmatch(%0)),1,name(pmatch(%0)),%0))][switch(%0,%N,You leave the combat.,You make %0 leave the combat.)])
 
 
 @@ ================================================================================================================
@@ -215,7 +215,7 @@
 @@ %1 = action
 @@ SIDE EFFECT!!! sets %q0 to be the person's combat number  (also sets %qz  but we don't care)
 @@ --------------------------
-&FUN_CAN_ACT FS3Combat Action Commands=[setq(0,u(fun_combat_num,%0))][setq(z,u(fun_combat_num,%N))][and(not(xget(%q0,turn_in_progress)),t(%qz),t(%q0),not(u(%q0/fun_combatstat,%0,ko)),u(%q0/fun_is_combatant,%0),switch(t(u(%q0/fun_combatstat,%0,subduedby)),1,switch(%1,pass,1,escape,1,mod,1,luck,1,0),1))]
+&FUN_CAN_ACT FS3Combat Action Commands=[setq(0,u(fun_combat_num,%0))][setq(z,u(fun_combat_num,%N))][and(not(xget(%q0,turn_in_progress)),t(%qz),t(%q0),not(u(%q0/fun_combatstat,%0,ko)),u(%q0/fun_is_combatant,%0),switch(t(u(%q0/fun_combatstat,%0,subduedby)),1,switch(%1,pass,1,escape,1,mod,1,lethal,1,luck,1,0),1))]
 
 @@ --------------------------
 @@ FUN_CANT_ACT_MSG
@@ -257,7 +257,7 @@
 @@
 @@ %q0 = combat num (from fun_can_act)
 @@ --------------------------
-&FUN_ACTION_RELOAD FS3Combat Action Commands=switch(0,u(fun_can_act,%0,reload),u(fun_cant_act_msg,%0),u(%q0/fun_weaponstat,%0,ammo),ansi(hr,%0's weapon doesn't need to be reloaded.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,reload,,)])
+&FUN_ACTION_RELOAD FS3Combat Action Commands=switch(0,u(fun_can_act,%0,reload),u(fun_cant_act_msg,%0),u(%q0/fun_weaponstat,%0,reloadable),ansi(hr,%0's weapon can't be reloaded.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,reload,,)])
 
 
 @@ ---------------   Escape -----------------
@@ -477,7 +477,7 @@
 @@ %1 = weapon
 @@ --------------------------
 
-&FUN_PREP_WEAPON FS3Combat Action Commands=[switch(0,u(fun_can_act,%0,weapon),u(fun_cant_act_msg,%0),match(weapons(),unprettify(%1)),ansi(hr,That is not a valid weapon.),[switch(%N,%0,You change your weapon.,You change %0's weapon.)] Action and target have been reset.  [switch(1,and(u(%q0/FUN_IS_IN_VEHICLE,%0),not(match(u(%q0/fun_vehiclestat,%0,weapons),%1))),ansi(hm,%R< %1 is not a normal weapon for %0's vehicle.  Please make sure it makes sense ICly.))][u(%q0/fun_mod_combatstat,%0,weapon,unprettify(%1))][u(%q0/fun_mod_combatstat,%0,ammo,u(%q0/fun_weaponstat,%0,ammo))][u(%q0/fun_mod_combatstat,%0,target,)][u(%q0/fun_mod_combatstat,%0,action,pass)][u(%q0/fun_combat_msg,[prettify(%0)] has changed weapons to %1.[u(fun_add_id,%0)])])]
+&FUN_PREP_WEAPON FS3Combat Action Commands=[switch(0,u(fun_can_act,%0,weapon),u(fun_cant_act_msg,%0),match(weapons(),unprettify(%1)),ansi(hr,That is not a valid weapon.),[switch(%N,%0,You change your weapon.,You change %0's weapon.)] Action and target have been reset.  [switch(1,and(u(%q0/FUN_IS_IN_VEHICLE,%0),not(match(u(%q0/fun_vehiclestat,%0,weapons),unprettify(%1)))),ansi(hm,%R< %1 is not a normal weapon for %0's vehicle.  Please make sure it makes sense ICly.))][u(%q0/fun_mod_combatstat,%0,weapon,unprettify(%1))][u(%q0/fun_mod_combatstat,%0,ammo,u(%q0/fun_weaponstat,%0,ammo))][u(%q0/fun_mod_combatstat,%0,target,)][u(%q0/fun_mod_combatstat,%0,action,pass)][u(%q0/fun_combat_msg,[prettify(%0)] has changed weapons to %1.[u(fun_add_id,%0)])])]
 
 @@ ---------------   Stance -----------------
 
@@ -517,6 +517,22 @@
 @@ --------------------------
 
 &FUN_PREP_MOD FS3Combat Action Commands=[switch(0,u(fun_can_act,%0,mod),u(fun_cant_act_msg,%0),isnum(%1),ansi(hr,Modifiers must be a number.),You apply a modifier to [switch(%N,%0,yourself,prettify(lcstr(%0)))].[u(%q0/fun_mod_combatstat,%0,mod,trim(%1))][u(%q0/fun_org_msg,%N has applied a %1 modifier to %0.)])]
+
+@@ ---------------   Lethal -----------------
+@@ Sets a lethality modifier.
+
+&CMD-+COMBAT-LETHAL FS3Combat Action Commands=$+combat/lethal *:@pemit %#=[ansi(h,<COMBAT>)] [switch(%0,*=*,u(FUN_PREP_LETHAL,before(%0,=),after(%0,=)),u(FUN_PREP_LETHAL,%N,%0))]
+
+@@ --------------------------
+@@ FUN_PREP_LETHAL
+@@ Message is sent only to organizer so GMs can apply sneaky mods.
+@@ %0 = name
+@@ %1 = mod
+@@ --------------------------
+
+&FUN_PREP_LETHAL FS3Combat Action Commands=[switch(0,u(fun_can_act,%0,lethal),u(fun_cant_act_msg,%0),isnum(%1),ansi(hr,Modifiers must be a number.),You apply a lethality modifier to [switch(%N,%0,yourself,prettify(lcstr(%0)))].[u(%q0/fun_mod_combatstat,%0,lethal,trim(%1))][u(%q0/fun_org_msg,%N has applied a %1 lethality modifier to %0.)])]
+
+
 
 @@ ---------------   Luck -----------------
 @@ Sets luck modifiers.

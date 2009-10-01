@@ -36,7 +36,7 @@
 @@ %1 = stat
 @@ --------------------------
 
-&COMBATSTATS FS3Combat Instance Parent=type team vehicle weapon stance armor mod luck lastaim suppress action target actoptions hitthisturn ko subduedby subduing ammo 
+&COMBATSTATS FS3Combat Instance Parent=type team vehicle weapon stance armor mod luck lastaim suppress action target actoptions hitthisturn ko subduedby subduing ammo lethal
 &FUN_COMBATSTAT FS3Combat Instance Parent=[v(stat_[unprettify(%0)]`[unprettify(%1)]
 
 @@ --------------------------
@@ -77,6 +77,7 @@
 &INIT_SUBDUEDBY FS3Combat Instance Parent=
 &INIT_SUBDUING FS3Combat Instance Parent=
 &INIT_AMMO FS3Combat Instance Parent=[weaponstat(%3,ammo)]
+&INIT_LETHAL FS3Combat Instance Parent=0
 
 @@ --------------------------
 @@ FUN_REMOVE
@@ -85,7 +86,7 @@
 @@ %0 = name
 @@   %qz = temp vehicle register
 @@ --------------------------
-&FUN_REMOVE FS3Combat Instance Parent=[localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))][switch([setq(z,u(fun_combatstat,%0,vehicle))]t(%qz),1,[set(me,vehicle_%qz:[remove(v(vehicle_%qz),unprettify(lcstr(%0)))])][switch(words(v(vehicle_%qz)),0,wipe(me/vehicle_%qz))])][wipe(me/stat_[unprettify(%0)]**)][u(fun_untarget,%0)])]
+&FUN_REMOVE FS3Combat Instance Parent=[localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))][switch([setq(z,u(fun_combatstat,%0,vehicle))]t(%qz),1,[set(me,vehicle_%qz:[remove(v(vehicle_%qz),unprettify(lcstr(%0)))])][switch(words(v(vehicle_%qz)),0,wipe(me/vehicle_%qz))])][clearmockdmg(%0,xget(#609,security_code))][switch(1,and(t(%qz),not(u(fun_vehicle_combat_num,%qz))),[clearmockdmg(%qz,xget(#609,security_code))][switch(vehiclestat(%qz,temp),1,deletevehicle(%qz,xget(#609,security_code)))])][switch(1,isplayer(%0),wipe([pmatch(%0)]/combat),switch(npcstat(%0,temp),1,deletenpc(%0,xget(#609,security_code))))][wipe(me/stat_[unprettify(%0)]**)][u(fun_untarget,%0)][u(fun_combat_log,Removing %0 - vehicle %qz=[vehiclestat(%qz,temp)] [u(fun_vehicle_combat_num,%qz)].)])]
 
 @@ ================================================================================================================
 @@ ---------------  Utilities -----------------
@@ -364,7 +365,7 @@
 @@ %2 = zone1 target list (from action options)
 @@   This has to be @triggered because it is crazy function intensive.
 @@ --------------------------
-&TR_ACTION_EXPLODE FS3Combat Instance Parent=think u(fun_combat_msg,[prettify(lcstr(%0))] uses a [prettify(u(fun_combatstat,%0,weapon))]!);@dolist/delimit , %1=think [u(fun_combat_msg,)][u(FUN_EXPLOSIVE_ATTACK,%0,##,0)];@dolist/delimit , %2=think [u(fun_combat_msg,)][u(FUN_EXPLOSIVE_ATTACK,%0,##,1)]
+&TR_ACTION_EXPLODE FS3Combat Instance Parent=think u(fun_combat_msg,[prettify(lcstr(%0))] uses a [prettify(u(fun_combatstat,%0,weapon))]!);@dolist/delimit , %1=think [u(fun_combat_msg,)][u(FUN_EXPLOSIVE_ATTACK,%0,switch(u(fun_is_in_vehicle,##),1,u(fun_combatstat,##,vehicle),##),0)];@dolist/delimit , %2=think [u(fun_combat_msg,)][u(FUN_EXPLOSIVE_ATTACK,%0,switch(u(fun_is_in_vehicle,##),1,u(fun_combatstat,##,vehicle),##),1)]
 
 
 @@ ================================================================================================================
@@ -399,7 +400,7 @@
 @@ %1 = defender (may be a vehicle name, in which case we have to determine the pilot for certain rolls)
 @@ %2 = targeted hit location, may be blank
 @@ %3 = special modifier (used for recoil or range)
-@@ %4 = lethality modifier
+@@ %4 = lethality modifier (will be augmented by attackers lethality mod)
 @@
 @@ Requires the following registers be set!  **DO NOT LOCALIZE!!!**
 @@    %qt = the real target - pilot or person
@@ -416,7 +417,7 @@
 @@    %qz = random damage
 @@ --------------------------
 
-&FUN_DO_HIT FS3Combat Instance Parent=[setq(s,0)][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][switch(weaponstat(%qw,wpntype),explosive,setq(h,[xget(#732,concuss_[u(fun_target_type,%0)])]:Critical))][setq(l,add(weaponstat(%qw,lethality),%4))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))]- [switch(1,match(%qh,MISS*),NEAR MISS!,gte(%qc,100),COVER stops the attack.[setq(s,1)],gte(%qr,100),ARMOR on [prettify(before(%qh,:))] stops the attack![setq(s,1)],[switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[setq(s,1)][u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz,xget(#609,security_code))])]
+&FUN_DO_HIT FS3Combat Instance Parent=[setq(s,0)][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][switch(weaponstat(%qw,wpntype),explosive,setq(h,[xget(#732,concuss_[u(fun_target_type,%1)])]:Critical))][u(fun_combat_log,LETHAL:  weapon=[weaponstat(%qw,lethality)] special=%4 mod=[u(fun_combatstat,%0,lethal)])][setq(l,add(weaponstat(%qw,lethality),%4,u(fun_combatstat,%0,lethal)))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))]- [switch(1,match(%qh,MISS*),NEAR MISS!,gte(%qc,100),COVER stops the attack.[setq(s,1)],gte(%qr,100),ARMOR on [prettify(before(%qh,:))] stops the attack![setq(s,1)],[switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[setq(s,1)][u(fun_mod_combatstat,%qt,hitthisturn,1)][dodamage(%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz,xget(#609,security_code))])]
 
 
 @@ --------------------------
@@ -457,7 +458,7 @@
 @@  Note: Must reduce the lethality modifier for the concussion roll since
 @@  that's automatically to the head and a +80 lethality is a bit much :)
 @@ --------------------------
-&FUN_EXPLOSIVE_ATTACK FS3Combat Instance Parent=[setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][setq(e,switch(%qa,>0,%2,sub(%2,%qa)))][setq(e,switch(%qd,>%qa,add(%qe,sub(%qd,%qa)),%qe))][u(fun_combat_log,EXPLODE: initzone=%2 finalzone=%qe)][u(fun_combat_msg,EXPLOSION!  [switch(%qe,0,[ansi(hr,Right Next To)],1,[ansi(hy,Pretty Close To)],2,[ansi(hg,Close To)],3,[ansi(hg,Far From)],[ansi(hg,Very Far From)])] [prettify(lcstr(%1))] [u(fun_auto_attack,%1,%qw,sub(u(fun_lethal_mod_for_zone,%qe),20))])][switch(and(%qs,weaponstat(%qw,shrapnel)),1,u(fun_do_shrapnel,%1,%qe))][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))]
+&FUN_EXPLOSIVE_ATTACK FS3Combat Instance Parent=[setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][setq(e,switch(%qa,>0,%2,sub(%2,%qa)))][setq(e,switch(%qd,>%qa,add(%qe,sub(%qd,%qa)),%qe))][u(fun_combat_log,EXPLODE: target=%1 initzone=%2 finalzone=%qe)][u(fun_combat_msg,EXPLOSION!  [switch(%qe,0,[ansi(hr,Right Next To)],1,[ansi(hy,Pretty Close To)],2,[ansi(hg,Close To)],3,[ansi(hg,Far From)],[ansi(hg,Very Far From)])] [prettify(lcstr(%1))] [u(fun_auto_attack,%1,%qw,sub(u(fun_lethal_mod_for_zone,%qe),20))])][switch(and(%qs,weaponstat(%qw,shrapnel)),1,u(fun_do_shrapnel,%1,%qe))][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))]
 
 
 @@ --------------------------
@@ -499,7 +500,7 @@
 @@ Determines a target's type.
 @@ %0 = target name
 @@ --------------------------
-&FUN_TARGET_TYPE FS3Combat Instance Parent=switch(isvehicle(%0),1,vehiclestat(%0,type),soldier)
+&FUN_TARGET_TYPE FS3Combat Instance Parent=switch(isvehicle(%0),1,vehtypestat(vehiclestat(%0,type),hitloc),soldier)
 
 @@ --------------------------
 @@ FUN_HITLOC_ZONE
@@ -536,7 +537,7 @@
 @@ %2 = cover lethal. mod
 @@ %3 = armor lethal. mod
 @@ --------------------------
-&FUN_RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,rand(1,100))][setq(1,add(%q0,switch(%0,critical,30,vital,15,normal,0),%1,-%2,-%3,-[xget(#609,hero_factor)]))][switch(%q0,1,L,50,M,90,S,99,C,switch(%q1,<40,L,<90,M,<98,S,C))][u(fun_combat_log,DAMAGE: hitloc=%0 wpn=%1 cov=%2 arm=%3 random=%q0 modified=%q1)])
+&FUN_RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,die(2,50))][setq(1,add(%q0,switch(%0,critical,30,vital,15,normal,0),%1,-%2,-%3,-[xget(#609,hero_factor)]))][switch(%q0,2,L,50,M,90,S,99,C,switch(%q1,<40,L,<80,M,<105,S,C))][u(fun_combat_log,DAMAGE: hitloc=%0 wpn=%1 cov=%2 arm=%3 random=%q0 modified=%q1)])
 
 @@ --------------------------
 @@ FUN_ROLL_ATTACK
@@ -836,7 +837,7 @@
 @@ %2 = target
 @@ %3 = options
 @@ --------------------------
-&FUN_SET_ACTION FS3Combat Instance Parent=[u(fun_mod_combatstat,%0,action,[lcstr(trim(%1))])][u(fun_mod_combatstat,%0,target,[iter(%2,[unprettify(trim(##))],\,,\,)])][u(fun_mod_combatstat,%0,actoptions,[iter(%3,[trim(##)],\,,\,)])][localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,switch(%1,subdue,,[u(fun_mod_combatstat,%0,subduing,)][u(fun_mod_combatstat,%q0,subduedby,)]))])][u(fun_combat_msg,[prettify(lcstr(%0))] will [switch(%1,explode,blow up [lcstr(%2)] \(right next to\)[switch(t(%3),1,%Band [lcstr(%3)] \(nearby\))] this turn.,[lcstr(%1)][switch(%2,,,%B[prettify(lcstr(%2))])] this turn.[switch(t(%3),1,%BOptions: %3)])][u(fun_add_id,%0)])][set(me,acted:[setdiff([v(acted)] %N,)])][switch(u(fun_everyone_acted),1,u(fun_org_msg,[ansi(hc,Everyone has entered their actions.)]))]
+&FUN_SET_ACTION FS3Combat Instance Parent=[u(fun_mod_combatstat,%0,action,[lcstr(trim(%1))])][u(fun_mod_combatstat,%0,target,[iter(%2,[unprettify(trim(##))],\,,\,)])][u(fun_mod_combatstat,%0,actoptions,[iter(%3,[trim(##)],\,,\,)])][localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,switch(%1,subdue,,[u(fun_mod_combatstat,%0,subduing,)][u(fun_mod_combatstat,%q0,subduedby,)]))])][u(fun_combat_msg,[prettify(lcstr(%0))] will [switch(%1,explode,use an explosive this turn. [capstr_all(lcstr(%2))] is right next to the explosion[switch(t(%3),1,%Band [capstr_all(lcstr(%3))] is nearby)].,[lcstr(%1)][switch(%2,,,%B[prettify(lcstr(%2))])] this turn.[switch(t(%3),1,%BOptions: %3)])][u(fun_add_id,%0)])][set(me,acted:[setdiff([v(acted)] %N,)])][switch(u(fun_everyone_acted),1,u(fun_org_msg,[ansi(hc,Everyone has entered their actions.)]))]
 
 
 @@ --------------------------
