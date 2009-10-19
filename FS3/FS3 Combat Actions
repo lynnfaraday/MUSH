@@ -308,8 +308,9 @@
 @@
 @@ %q0 = combat num (from fun_can_act)
 @@ %q1 = check targets status
+@@ %qz = tmporary ammo register
 @@ --------------------------
-&FUN_ACTION_SUPPRESS FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,suppress),u(fun_cant_act_msg,%0),lte(words(%1,\,),5),ansi(hr,You cannot target more than 5 targets.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),or(eq(words(%1,\,),1),match(u(%q0/fun_weaponstat,%0,wpntype),defensive),u(%q0/fun_weaponstat,%0,auto)),ansi(hr,You cannot suppress multiple targets without a fullauto or defensive weapon.),switch(u(%q0/fun_weaponstat,%0,wpntype),Ranged,gte(u(%q0/fun_combatstat,%0,ammo),words(%1,\,)),1),ansi(hr,You don't have enough bullets.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,suppress,%1,)]))
+&FUN_ACTION_SUPPRESS FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,suppress),u(fun_cant_act_msg,%0),lte(words(%1,\,),5),ansi(hr,You cannot target more than 5 targets.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),or(eq(words(%1,\,),1),match(u(%q0/fun_weaponstat,%0,wpntype),defensive),u(%q0/fun_weaponstat,%0,auto)),ansi(hr,You cannot suppress multiple targets without a fullauto or defensive weapon.),switch(u(%q0/fun_weaponstat,%0,wpntype),Ranged,[setq(z,u(%q0/fun_combatstat,%0,ammo))]or(eq(%qz,0),gte(%qz,words(%1,\,))),1),ansi(hr,You don't have enough bullets.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,suppress,%1,)]))
 
 
 @@ ---------------   Aim -----------------
@@ -361,7 +362,7 @@
 @@ %q0 = combat num (from fun_can_act)
 @@ %q1 = check targets status
 @@ --------------------------
-&FUN_ACTION_FULLAUTO FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,fullauto),u(fun_cant_act_msg,%0),u(%q0/FUN_CAN_ATTACK,%0),ansi(hr,That weapon cannot attack.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),lte(words(%1,\,),5),ansi(hr,You cannot target more than 5 targets.),words(u(%q0/fun_combatstat,%0,weapon)),ansi(hr,You don't have a weapon!),u(%q0/fun_weaponstat,%0,auto),ansi(hr,Your weapon cannot fire fullauto.),gte(u(%q0/fun_combatstat,%0,ammo),1),ansi(hr,You don't have enough bullets for fullauto fire.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,fullauto,%1,)]))
+&FUN_ACTION_FULLAUTO FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,fullauto),u(fun_cant_act_msg,%0),u(%q0/FUN_CAN_ATTACK,%0),ansi(hr,That weapon cannot attack.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),lte(words(%1,\,),5),ansi(hr,You cannot target more than 5 targets.),words(u(%q0/fun_combatstat,%0,weapon)),ansi(hr,You don't have a weapon!),u(%q0/fun_weaponstat,%0,auto),ansi(hr,Your weapon cannot fire fullauto.),u(%q0/fun_has_enough_ammo,%0,words(%1,\,)),ansi(hr,You don't have enough bullets for fullauto fire.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,fullauto,%1,)]))
 
 @@ --------------------------
 @@ FUN_CHECK_TARGETS
@@ -460,10 +461,12 @@
 @@ %0 = name
 @@ %1 = type
 @@ %2 = vehicle
-@@ Uses %qv for temp vehicle stuff 
+@@ Uses %qv for temp vehicle stuff 1 or 0|error
+@@      %q1 is set for vehicle type
+@@      %q4 for weapon
 @@ --------------------------
 
-&FUN_PREP_TYPE FS3Combat Action Commands=[switch(0,u(fun_can_act,%0,type),[u(fun_cant_act_msg,%0)][switch(u(%q0/fun_combatstat,%0,type),observer,ansi(hr,%BObservers must leave the combat and rejoin to change their type.))],match(v(types),%1),ansi(hr,That is not a valid type.),[setq(v,u(FUN_JOIN_VEHICLE_STUFF,%1,%2,%q0))][eq(%qv,1)],after(%qv,|),[switch(%N,%0,You change your type.,You change %0's type.)]%R< Weapon set to: [u(fun_default_weapon,%1,%2)][u(%q0/fun_init_combatstat,%0,%1,%2,u(fun_default_weapon,%1,%2))][u(%q0/fun_combat_msg,[prettify(%0)] has changed type to %1[switch(t(%2),1,%Bin [prettify(%2)])].[u(fun_add_id,%0)])])]
+&FUN_PREP_TYPE FS3Combat Action Commands=[switch(0,u(fun_can_act,%0,type),[u(fun_cant_act_msg,%0)][switch(u(%q0/fun_combatstat,%0,type),observer,ansi(hr,%BObservers must leave the combat and rejoin to change their type.))],match(v(types),%1),ansi(hr,That is not a valid type.),[setq(1,%2)][setq(4,u(fun_default_weapon,%1,%q1))][setq(v,u(FUN_JOIN_VEHICLE_STUFF,%1,%2,%q0))][eq(%qv,1)],after(%qv,|),[switch(%N,%0,You change your type.,You change %0's type.)]%R< Weapon set to: %q4[u(%q0/fun_init_combatstat,%0,%1,%q1,%q4)][u(%q0/fun_combat_msg,[prettify(%0)] has changed type to %1[switch(t(%2),1,%Bin [prettify(%q1)])].[u(fun_add_id,%0)])])]
 
 @@ ---------------   Weapon -----------------
 @@ Warn them if they pick an invalid vehicle weapon but don't restrict it.  This allows for special cases like a rifleman poking his
