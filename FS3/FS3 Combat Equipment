@@ -1,6 +1,14 @@
 @create FS3Combat Equipment Stats
 @set FS3Combat Equipment Stats = SAFE
 
+@create FS3Combat Equipment Commands
+@set FS3Combat Equipment Commands = WIZARD
+@set FS3Combat Equipment Commands = SAFE
+@set FS3Combat Equipment Commands = !NO_COMMAND
+
+
+@@ -------------------------------
+@@  EQUIPMENT STATS
 
 &WEAPON_HANDGRENADE_FRAG FS3Combat Equipment Stats=Fragmentation Hand Grenade|Athletic|Reactive|0|7|Explosive|Personal|0|0|0|40|15|Physical|0|1|0
 &WEAPON_HANDGRENADE_FLASH FS3Combat Equipment Stats=Flashbang Hand Grenade which blinds/deafens human targets for 5 secs.  No effect on Centurions.|Athletic|Reactive|-75|7|Explosive|Personal|0|0|0|40|10|Stun|0|0|0
@@ -18,7 +26,7 @@
 &WEAPON_RIFLE FS3Combat Equipment Stats=Assault Rifle|Firearms|5|0|4|Ranged|Personal|1|20|20|500|0|Physical|0|0|1
 &WEAPON_RIFLE_AP FS3Combat Equipment Stats=Assault Rifle with armor piercing rounds.|Firearms|5|-10|6|Ranged|Personal|1|20|20|500|0|Physical|0|0|1
 &WEAPON_LMG FS3Combat Equipment Stats=Light machinegun/SAW|Firearms|5|0|4|Ranged|Personal|1|100|30|1000|0|Physical|0|0|1
-&WEAPON_LMG_TRIPOD FS3Combat Equipment Stats=Light machinegun/SAW with bipod|Firearms|5|0|4|Ranged|Personal|1|100|-10|1000|0|Physical|0|0|1
+&WEAPON_LMG_TRIPOD FS3Combat Equipment Stats=Light machinegun/SAW with bipod|Firearms|5|0|4|Ranged|Personal|1|100|10|1000|0|Physical|0|0|1
 &WEAPON_LMG_AP FS3Combat Equipment Stats=Light machinegun/SAW with armor piercing rounds|Firearms|5|-10|6|Ranged|Personal|1|100|30|1000|0|Physical|0|0|1
 &WEAPON_SHOTGUN FS3Combat Equipment Stats=Shotgun|Firearms|5|10|3|Ranged|Personal|0|8|0|100|0|Physical|0|0|1
 &WEAPON_HUNTING_RIFLE FS3Combat Equipment Stats=Hunting Rifle|Firearms|5|0|3|Ranged|Personal|0|10|20|500|0|Physical|0|0|1
@@ -50,11 +58,15 @@
 &ARMOR_RAIDER FS3Combat Equipment Stats=Cylon Raider Vehicle Armor|Controls Body Engine Right_Wing Left_Wing|5|Vehicle
 &ARMOR_RAPTOR FS3Combat Equipment Stats=Raptor Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cabin|15|Vehicle
 &ARMOR_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cabin|10|Vehicle
+&ARMOR_AA_BATTERY FS3Combat Equipment Stats=Anti-Aircraft Battery|Body Controls Weapon|12|Vehicle
+
+
 
 &VEHICLE_VIPER FS3Combat Equipment Stats=Viper space fighter|Piloting|5|Viper|Viper|KEW|0
 &VEHICLE_RAIDER FS3Combat Equipment Stats=Cylon Raider space fighter|Piloting|2|Raider|Raider|KEW MISSILE_AA NUKE|0
-&VEHICLE_RAPTOR FS3Combat Equipment Stats=Raptor space command and control|Piloting|7|Raptor|Raptor|ECM MISSILE_HEAT MISSILE_HE NUKE|0
+&VEHICLE_RAPTOR FS3Combat Equipment Stats=Raptor space command and control|Piloting|7|Raptor|Raptor|ECM MISSILE_AP MISSILE_HE NUKE|0
 &VEHICLE_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider space transport/bomber|Piloting|7|Heavy_Raider|Heavy_Raider|KEW MISSILE_AA NUKE|0
+&VEHICLE_AA_BATTERY FS3Combat Equipment Stats=Anti-Aircraft Battery|5|1|AA_Battery|AA_Battery|MISSILE_AA|0
 
 &COVER_PLASTER_WALL FS3Combat Equipment Stats=1
 &COVER_SOFA FS3Combat Equipment Stats=1
@@ -63,10 +75,9 @@
 &COVER_BRICK_WALL FS3Combat Equipment Stats=5
 &COVER_STEEL_DOOR FS3Combat Equipment Stats=6
 
-@create FS3Combat Equipment Commands
-@set FS3Combat Equipment Commands = WIZARD
-@set FS3Combat Equipment Commands = SAFE
-@set FS3Combat Equipment Commands = !NO_COMMAND
+
+@@ -------------------------------------
+@@  EQUIPMENT COMMANDS
 
 
 &ARMORSTATS FS3Combat Equipment Commands=desc hitloc protection class
@@ -77,8 +88,8 @@
 &CMD-+GEAR-ARMOR-DETAIL FS3Combat Equipment Commands=$+gear/armor *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(armor(),%q0),ansi(hr,That is not a valid armor type.),[line()]%R[ansi(h,[prettify(%0)] Armor Data)]%R%R[ansi(h,Class:)] [armorstat(%q0,class)] %R[ansi(h,Protection:)] [armorstat(%q0,protection)] %R%R[ansi(h,Covered Locations:)] [armorstat(%q0,hitloc)]%R%R[ansi(h,Description:)]%R[armorstat(%q0,desc)]%R[line()])
 &CMD-+GEAR-ARMOR FS3Combat Equipment Commands=$+gear/armor:@pemit %#=[line()]%R[ansi(h,Armor[space(15)]Class[space(8)]Protection)][iter(sortkey(KEY_ARMOR_SORT,armor()),%R[padstr(prettify(lcstr(##)),20)][ljust(armorstat(##,class),15)][armorstat(##,protection)])]%R%RSee [ansi(h,+gear/armor <type>)] for details.%R[line()]
 &KEY_ARMOR_SORT FS3Combat Equipment Commands=armorstat(%0,class)
-&FUN_ARMOR FS3Combat Equipment Commands=edit(lattr(#724/armor_*),ARMOR_,)
-&FUN_ARMORSTAT FS3Combat Equipment Commands=extract(xget(#724,armor_[unprettify(%0)]),match(v(armorstats),%1),1,|)
+&FUN_ARMOR FS3Combat Equipment Commands=edit(lattr(#FS3_EQUIPDB/armor_*),ARMOR_,)
+&FUN_ARMORSTAT FS3Combat Equipment Commands=extract(xget(#FS3_EQUIPDB,armor_[unprettify(%0)]),match(v(armorstats),%1),1,|)
 
 &CMD-+WEAPONS-REM FS3Combat Equipment Commands=$+weapons:@pemit %#=ansi(hb,Use +gear/weapons.)
 &CMD-+ARMOR-REM FS3Combat Equipment Commands=$+armor:@pemit %#=ansi(hb,Use +gear/armor.)
@@ -87,17 +98,17 @@
 &CMD-+GEAR-WEAPON FS3Combat Equipment Commands=$+gear/weapons:@pemit %#=[line()]%R[ansi(h,Weapon[space(15)]Type[space(20)]FullAuto?%B%BClip[space(4)]Pen[space(2)]Range)]%R[ansi(u,Anti-Personnel Weapons)][iter(sortby(fun_sort_weapons,u(fun_filter_wpn_class,Personal)),%R[u(fun_wpn_detail,##)])]%R[ansi(u,Anti-Vehicle Weapons)][iter(sortby(fun_sort_weapons,u(fun_filter_wpn_class,Vehicle)),%R[u(fun_wpn_detail,##)])]%R%RSee [ansi(h,+gear/weapon <type>)] for details.%R[line()]
 &FUN_SORT_WEAPONS FS3Combat Equipment Commands=switch(comp(weaponstat(%0,wpntype),weaponstat(%1,wpntype)),0,comp(%0,%1),comp(weaponstat(%0, wpntype),weaponstat(%1, wpntype)))
 &FUN_WPN_DETAIL FS3Combat Equipment Commands=[padstr(prettify(lcstr(%0)),20)] [ljust([weaponstat(%0,wpntype)]/[weaponstat(%0,dmgtype)],25)]  [switch(weaponstat(%0,auto),1,yes,no%B)][space(7)][ljust(switch(weaponstat(%0,ammo),0,--,weaponstat(%0,ammo)),8)][ljust(weaponstat(%0,pen),5)][weaponstat(%0,range)]m
-&FUN_WEAPONS FS3Combat Equipment Commands=edit(lattr(#724/weapon_*),WEAPON_,)
-&FUN_WEAPONSTAT FS3Combat Equipment Commands=extract(xget(#724,weapon_[unprettify(%0)]),match(v(weaponstats),%1),1,|)
+&FUN_WEAPONS FS3Combat Equipment Commands=edit(lattr(#FS3_EQUIPDB/weapon_*),WEAPON_,)
+&FUN_WEAPONSTAT FS3Combat Equipment Commands=extract(xget(#FS3_EQUIPDB,weapon_[unprettify(%0)]),match(v(weaponstats),%1),1,|)
 &FUN_FILTER_WPN_CLASS FS3Combat Equipment Commands=squish(iter(weapons(),switch(strmatch(weaponstat(##,class),%0),1,##)))
 
 &CMD-+GEAR-VEHICLE-DETAIL FS3Combat Equipment Commands=$+gear/vehicle *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(vehicletypes(),%q0),ansi(hr,That is not a valid vehicle type.),[line()]%R[ansi(h,[prettify(%0)] Vehicle Data)]%R%R[ansi(h,Piloting Skill:)] [vehtypestat(%q0,pilotskill)]%R[ansi(h,Toughness:)] [vehtypestat(%q0,toughness)] %R[ansi(h,Armor Type:)] [vehtypestat(%q0,armor)]%R[ansi(h,Possible Armarment:)] [vehtypestat(%q0,weapons)]%R[ansi(h,Hit Location Chart:)] [vehtypestat(%q0,hitloc)]%R[ansi(h,Dodge Bonus:)] [vehtypestat(%q0,dodge)]%R%R[ansi(h,Description:)]%R[vehtypestat(%q0,desc)]%R[line()])
 &CMD-+GEAR-VEHICLE FS3Combat Equipment Commands=$+gear/vehicles:@pemit %#=[line()]%R[ansi(h,Vehicle[space(13)]Piloting[space(10)]Weapons)][iter(vehicletypes(),%R[padstr(prettify(lcstr(##)),20)][ljust(vehtypestat(##,pilotskill),18)][vehtypestat(##,weapons)])]%R%RSee [ansi(h,+gear/vehicle <type>)] for details.%R[line()]
-&FUN_VEHICLETYPES FS3Combat Equipment Commands=edit(lattr(#724/vehicle_*),VEHICLE_,)
-&FUN_VEHTYPESTAT FS3Combat Equipment Commands=extract(xget(#724,vehicle_[unprettify(%0)]),match(v(vehiclestats),%1),1,|)
+&FUN_VEHICLETYPES FS3Combat Equipment Commands=edit(lattr(#FS3_EQUIPDB/vehicle_*),VEHICLE_,)
+&FUN_VEHTYPESTAT FS3Combat Equipment Commands=extract(xget(#FS3_EQUIPDB,vehicle_[unprettify(%0)]),match(v(vehiclestats),%1),1,|)
 
-&CMD-+GEAR-COVER FS3Combat Equipment Commands=$+gear/cover:@pemit %#=[line()]%R[ansi(h,Cover[space(15)]Protection)][iter(sortkey(key_cover_sort,lattr(#724/cover_*)),%R[padstr(prettify(after(lcstr(##),_)),23)][xget(#724,##)])]%R%R[ansi(hg,Note:)] These are just sample numbers and are not meant to be all-inclusive.%R[line()]
-&KEY_COVER_SORT FS3Combat Equipment Commands=xget(#724,%0)
+&CMD-+GEAR-COVER FS3Combat Equipment Commands=$+gear/cover:@pemit %#=[line()]%R[ansi(h,Cover[space(15)]Protection)][iter(sortkey(key_cover_sort,lattr(#FS3_EQUIPDB/cover_*)),%R[padstr(prettify(after(lcstr(##),_)),23)][xget(#FS3_EQUIPDB,##)])]%R%R[ansi(hg,Note:)] These are just sample numbers and are not meant to be all-inclusive.%R[line()]
+&KEY_COVER_SORT FS3Combat Equipment Commands=xget(#FS3_EQUIPDB,%0)
 
 
 @STARTUP FS3Combat Equipment Commands=@set me=!no_command;@fun weaponstat=me,fun_weaponstat;@fun weapons=me,fun_weapons;@fun armor=me,fun_armor;@fun armorstat=me,fun_armorstat;@fun vehicletypes=me,fun_vehicletypes;@fun vehtypestat=me,fun_vehtypestat

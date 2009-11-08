@@ -86,3 +86,17 @@
 &DEFAULT_RAIDER FS3Combat Hit Locations=Body
 &CREWHIT_RAIDER FS3Combat Hit Locations=Cockpit
 &CONCUSS_RAIDER FS3Combat Hit Locations=Body
+
+
+&DMG_AA_BATTERY FS3Combat Hit Locations=Controls:Vital Weapon:Critical Body:Vital
+
+&HITLOC_AA_BATTERY_CONTROLS  FS3Combat Hit Locations=MISS MISS MISS MISS Body Body Body Body Body Body Body Controls Controls Controls Controls
+
+&HITLOC_AA_BATTERY_WEAPON  FS3Combat Hit Locations=MISS MISS MISS MISS Body Body Body Body Body Body Body Weapon Weapon Weapon Weapon
+
+&HITLOC_AA_BATTERY_BODY  FS3Combat Hit Locations=MISS MISS Weapon Weapon Controls Body Body Body Body Body Body Body Body Body Body
+
+&DEFAULT_AA_BATTERY FS3Combat Hit Locations=Body
+&CREWHIT_AA_BATTERY FS3Combat Hit Locations=
+&CONCUSS_AA_BATTERY FS3Combat Hit Locations=Body
+
