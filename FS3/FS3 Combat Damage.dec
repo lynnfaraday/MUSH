@@ -1,10 +1,16 @@
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
 
-@create FS3Combat Damage Commands
+@describe FS3 Damage Commands=See the FS3Combat Action Commands object for important copyright/license information.
 @set FS3Combat Damage Commands = WIZARD
 @set FS3Combat Damage Commands = SAFE
 
-@create FS3Combat Damage Database
 @set FS3Combat Damage Database = NO_COMMAND
+@describe FS3Combat Damage Database=See the FS3Combat Action Commands object for important copyright/license information.
 
 
 

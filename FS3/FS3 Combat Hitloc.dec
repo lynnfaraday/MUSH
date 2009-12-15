@@ -1,6 +1,14 @@
-@create FS3Combat Hit Locations
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
 @set FS3Combat Hit Locations = SAFE
 @set FS3Combat Hit Locations = !NO_COMMAND
+@describe FS3Combat Hit Locations=See the FS3Combat Action Commands object for important copyright/license information.
+
 
 &HITLOC_SOLDIER_RIGHT_ARM FS3Combat Hit Locations=MISS MISS Head Right_Leg Chest Neck Right_Leg Chest Chest Right_Hand Right_Arm Right_Arm Right_Arm Right_Arm Right_Arm
 &HITLOC_SOLDIER_RIGHT_LEG FS3Combat Hit Locations=MISS Chest Right_Arm Left_Hand Right_Hand Abdomen Left_Foot Left_Leg Right_Foot Abdomen Right_Leg Right_Leg Right_Leg Right_Leg Right_Leg

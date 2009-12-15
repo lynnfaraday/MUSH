@@ -1,0 +1,203 @@
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@describe FS3 Chargen Commands=Commands for setting up abilities in Chargen using the FS3 system.  See the FS3 skills command object for important copyright/license information.
+@set FS3 Chargen Commands = DARK
+@set FS3 Chargen Commands = !NO_COMMAND
+@set FS3 Chargen Commands = WIZARD
+@set FS3 Chargen Commands = SAFE
+&CMD-+ABILITY FS3 Chargen Commands=$+ability */*=*:think pemit(%#,switch(isnum(%2),0,ansi(hr,That is not a valid rating.),u(fun_set,[trim(%0)],%1,sub(%2,ability_level(%#,%1)))))
+&CMD-+ABILITY-ERROR FS3 Chargen Commands=$+ability *=*:think switch(%0,*/*,,[setq(0,u(#FS3_SKILLFUN/FUN_ABILITY_TYPE,%#,%0))]pemit(%#,switch(isnum(%1),0,ansi(hr,That is not a valid rating.),switch(%q0,background,ansi(hr,Remember to specify a type\, such as +raise background/Basketweaving.),u(fun_set,%q0,%0,sub(%1,ability_level(%#,%0))))))
+&CMD-+LOWER FS3 Chargen Commands=$+lower */*:think pemit(%#,u(fun_set,[trim(%0)],%1,-1))
+&CMD-+LOWER-ERROR FS3 Chargen Commands=$+lower *:think switch(%0,*/*,,[setq(0,u(#FS3_SKILLFUN/FUN_ABILITY_TYPE,%#,%0))]pemit(%#,switch(%q0,background,ansi(hr,Remember to specify a type\, such as +raise background/Basketweaving.),u(fun_set,%q0,%0,-1)))
+&CMD-+POINTS FS3 Chargen Commands=$+points:think pemit(%#,u(fun_display_points,%#))
+&CMD-+RAISE FS3 Chargen Commands=$+raise */*:think pemit(%#,u(fun_set,[trim(%0)],%1,1))
+&CMD-+RAISE-ERROR FS3 Chargen Commands=$+raise *:think switch(%0,*/*,,[setq(0,u(#FS3_SKILLFUN/FUN_ABILITY_TYPE,%#,%0))]pemit(%#,switch(%q0,background,ansi(hr,Remember to specify a type\, such as +raise background/Basketweaving.),u(fun_set,%q0,%0,1)))
+&CMD-+RESET FS3 Chargen Commands=$+reset:think pemit(%#,ansi(hg,You reset your abilities.))[set(%#,attributes:[iter(lattr(#FS3_SKILLDB/attribute_*),[capstr(lcstr(after(##,_)))]:4)])][iter(langskills bgskills actionskills quirks,set(%#,##:))][set(%#,langskills:[xget(#FS3_SKILLDB,default_lang)]:7)]
+&CMD-+QUIRK-ADD FS3 Chargen Commands=$+quirk/add *:think [setq(0,xget(%#,quirks))]pemit(%#,switch(1,u(#FS3_SKILLFUN/fun_has_quirk,%#,%0),ansi(hr,You already have that quirk.),match(%0,*|*),ansi(hr,Quirks may not contain the '|' character.),ansi(hg,You add the %0 quirk.)[set(%#,quirks:%q0[switch(words(%q0,|),>0,|)][squish(%0)])][setq(z,u(fun_check_errors,%#))]))
+&CMD-+QUIRK-DELETE FS3 Chargen Commands=$+quirk/delete *:think [setq(0,xget(%#,quirks))]pemit(%#,switch(0,u(#FS3_SKILLFUN/fun_has_quirk,%#,%0),ansi(hr,You don't have that quirk.),ansi(hg,You remove the %0 quirk.)[set(%#,quirks:[setdiff(find_and_replace(%q0,squish(%0),,|),,|)])][setq(z,u(fun_check_errors,%#))]))
+&FUN_SET FS3 Chargen Commands=localize([setq(0,u(#FS3_SKILLFUN/fun_set_ability,%#,%0,%1,%2))][switch(%q0,1,[ansi(hg,You [switch(%2,>0,raise,lower)] the [prettify(%1)] ability by [abs(%2)] points.)][u(fun_display_points,%#)],ansi(hr,after(%q0,|)))])
+@STARTUP FS3 Chargen Commands=@set me=!no_command
+&FUN_AVAILABLE_POINTS FS3 Chargen Commands=xget(#FS3_SKILLDB,starting_points)
+
+&CHECK_1 FS3 Chargen Commands=gte(u(fun_points_left,%0),0)
+&ERROR_1 FS3 Chargen Commands=You have spent too many points.
+
+&CHECK_2 FS3 Chargen Commands=lte(u(fun_spent_on,%0,attributes),xget(#FS3_SKILLDB,max_points_attributes))
+&ERROR_2 FS3 Chargen Commands=You have spent too many points on attributes.  The maximum is [xget(#FS3_SKILLDB,max_points_attributes)].
+
+&CHECK_3 FS3 Chargen Commands=lte(u(fun_spent_on,%0,actionskills),xget(#FS3_SKILLDB,max_points_action))
+&ERROR_3 FS3 Chargen Commands=You have spent too many points on action skills.  The maximum is [xget(#FS3_SKILLDB,max_points_action)].
+
+&CHECK_4 FS3 Chargen Commands=lte(u(#FS3_SKILLFUN/fun_high_abilities,%0),xget(#FS3_SKILLDB,max_high_abilities))
+&ERROR_4 FS3 Chargen Commands=You have too many high abilities.  The maximum is [xget(#FS3_SKILLDB,max_high_abilities)] at or above level [xget(#FS3_SKILLDB,HIGH_ABILITY_LEVEL)].
+
+&CHECK_5 FS3 Chargen Commands=lte(words(xget(%0,quirks),|),xget(#FS3_SKILLDB,max_quirks))
+&ERROR_5 FS3 Chargen Commands=You have too many quirks.  The maximum is [xget(#FS3_SKILLDB,max_quirks)].
+
+&CHECK_6 FS3 Chargen Commands=gte(words(xget(%0,bgskills)),xget(#FS3_SKILLDB,min_bgskills))
+&ERROR_6 FS3 Chargen Commands=You must have at least [xget(#FS3_SKILLDB,min_bgskills)] background skills.
+
+&CHECK_7 FS3 Chargen Commands=gte(words(xget(%0,quirks),|),xget(#FS3_SKILLDB,min_quirks))
+&ERROR_7 FS3 Chargen Commands=You must have at least [xget(#FS3_SKILLDB,min_quirks)] quirks.
+
+&CHECK_8 FS3 Chargen Commands=not(match(iter(lattr(#FS3_SKILLDB/attribute_*),gt(ability_level(%0,after(##,_)),0),,),*0*))
+&ERROR_8 FS3 Chargen Commands=You can't have attributes at 0.
+
+&CHECK_9 FS3 Chargen Commands=localize([setq(0,0)][iter(xget(%0,langskills),switch(after(##,:),>6,setq(0,1)),,)]%q0)
+&ERROR_9 FS3 Chargen Commands=You must be a native speaker (rating 7) in at least one language.
+
+&FUN_CHECK_ERRORS FS3 Chargen Commands=localize([setq(0,1)][setq(1,)][iter(lattr(me/check_*),switch(u(check_#@,%0),0,[setq(0,0)][setq(1,%q1%R[u(error_#@)])]),,)][set(%0,cg_errors:[squish(%q0|%q1)])][squish(%q0|%q1)])
+
+&FUN_DISPLAY_POINTS FS3 Chargen Commands=localize([setq(0,u(fun_points_left,%0))][setq(1,u(FUN_CHECK_ERRORS,%0))][line()]%RYou have spent [ansi(h,u(fun_spent_points,%0))] of your [ansi(h,u(fun_available_points,%0))] available points.%R[switch(%q0,<0,ansi(hr,[abs(%q0)] points overspent.),ansi(hg,%q0 points remaining.))][switch(%q1,0*,%R%R[ansi(hr,ERRORS:%R)][after(%q1,|)])]%R[line()])
+
+&FUN_POINTS_LEFT FS3 Chargen Commands=sub(u(fun_available_points,%0),u(fun_spent_points,%0))
+&FUN_SPENT_ON FS3 Chargen Commands=localize([setq(0,0)][iter(xget(%0,%1),setq(0,add(%q0,after(itext(0),:))),,)]%q0)
+&FUN_SPENT_POINTS FS3 Chargen Commands=localize([setq(0,0)][iter(attributes actionskills langskills bgskills,setq(0,add(%q0,u(fun_spent_on,%0,##))),,)]%q0)
+@startup FS3 Chargen Commands=@set me=!NO_COMMAND
+
+
+@set Chargen Exit Parent = NO_COMMAND
+@power Chargen Exit Parent = See_All
+@DESCRIBE Chargen Exit Parent=Stores some functions common to chargen exits.  It will require that they have set something in every attribute listed in REQUIRED_ATTRS on the child exit.  It will also call a function OTHER_CHECKS, which should return 0 or 1 depending on whether there's anything else wrong.  If OTHER_CHECKS returns 0, the exit parent will call OTHER_ERRORS to tell the user what the problem is.
+@FAILURE Chargen Exit Parent=ansi(hr,You have not set everything yet.[squish(iter(v(required_attrs),switch(strlen(xget(%#,##)),0,%R- Missing ##)))]%R[u(other_errors,%#)])
+&ISDONE Chargen Exit Parent=[and(not(t(edit(iter(v(required_attrs),eq(strlen(xget(%#,##)),0)),%B,))),u(other_checks,%#))]
+
+
+@set Chargen Info Functions = WIZARD
+@DESCRIBE Chargen Info Functions=Functions related to chargen but also useful outside of it.
+@set Chargen Info Functions/DESCRIBE=no_command visual prefixmatch public nearby
+&FUN_DISPLAY_BIRTHDATE Chargen Info Functions=[switch(xget(%0,birthdate),,-,[extract(v(months),before(xget(%0,birthdate),/),1)] [extract(xget(%0,birthdate),2,1,/)])
+&FUN_GET_AGE Chargen Info Functions=switch(xget(%0,birthdate),,0,add(sub(last(time()),add(after(after(xget(%0,birthdate),/),/),1)),switch(match(v(months),extract(time(),2,1)),<[before(xget(%0,birthdate),/)],0,[before(xget(%0,birthdate),/)],switch(gte(extract(time(),3,1),before(after(xget(%0,birthdate),/),/)),1,1,0),1))
+&FUN_IS_VALID_FACTION Chargen Info Functions=t(match(factions(),%0))
+&FUN_IS_VALID_ORG Chargen Info Functions=t(match(orgs(),%0))
+&FUN_IS_VALID_POSITION Chargen Info Functions=t(match(positions(),%0))
+&FUN_IS_VALID_RANK Chargen Info Functions=t(match(u(fun_ranks),%0))
+&FUN_ENLISTED_RANKS Chargen Info Functions=Private|Private First Class|Lance Corporal|Corporal|Sergeant|Staff Sergeant|Gunnery Sergeant|Master Sergeant|Sergeant Major
+&FUN_OFFICER_RANKS Chargen Info Functions=2nd Lieutenant|1st Lieutenant|Captain|Major|Lt. Colonel|Colonel|Brigadier General|Major General|Lieutenant General|General
+&FUN_RANK Chargen Info Functions=xget(%0,rank)
+&FUN_RANKS Chargen Info Functions=[u(FUN_ENLISTED_RANKS)]|[u(FUN_OFFICER_RANKS)]
+&MONTHS Chargen Info Functions=Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+@STARTUP Chargen Info Functions=@set me=!no_command;@fun AGE=[num(me)]/FUN_GET_AGE;@fun RANK=[num(me)]/FUN_RANK;@fun BIRTHDATE=[num(me)]/fun_display_birthdate
+@set Chargen Info Functions/STARTUP=no_command prefixmatch
+
+
+@lock Demographic Commands=me
+@set Demographic Commands = DARK
+@set Demographic Commands = WIZARD
+&CMD-+RANKS Demographic Commands=$+ranks:think pemit(%#,[line()]%R[table(%B%B%BOfficer|Enlisted|[iter(lnum(1,10),[ljust(#@,2)] [extract(u(#CGINFO/fun_officer_ranks),#@,1,|)]|[extract(u(#CGINFO/fun_enlisted_ranks),#@,1,|)]|,,)],39,78,|)]%R[line()])
+&CMD-+AGE Demographic Commands=$+age *:think pemit(%#,switch(0,isnum(%0),ansi(hr,Your name must be a number.),lte(%0,75),ansi(hr,You cannot be that old without special staff permission. Contact a member of staff.),gte(%0,11),ansi(hr,You cannot be that young without special staff permission.  Contact a member of staff.),[set(%#,birthdate:[rand(1,12)]/[rand(1,28)]/[sub(last(time()),%0)])][ansi(hg,You set your age to %0.%R%RYour birthdate has been randomly set to: [birthdate(%#)].  If you would like a different random birthday you can use the command again.  If you would like a specific birthday, contact a staff member.)]))
+&CMD-+FACTION Demographic Commands=$+faction *:think pemit(%#,switch(0,t(match(factions(),%0)),ansi(hr,That is not a valid faction.  Use one of: [factions()].),ansi(hg,You set your faction to %0.)[set(%#,rank:)][set(%#,faction:[trim(capstr(%0))])]))
+&CMD-+FULLNAME Demographic Commands=$+fullname *:think pemit(%#,ansi(hg,You set your full name to %0.))[set(%#,fullname:%0)]
+&CMD-+ORG Demographic Commands=$+org *:think pemit(%#,switch(0,u(#CGINFO/fun_is_valid_org,%0),ansi(hr,That is not a valid org. Use one of: [orgs()].),ansi(hg,You set your organization to %0.)[set(%#,org:[trim(capstr(%0))])]))
+&CMD-+POSITION Demographic Commands=$+position *:think pemit(%#,switch(0,u(#CGINFO/fun_is_valid_position,%0),ansi(hr,That is not a valid position.  See +positions.),ansi(hg,You set your position to %0.)[set(%#,position:[trim(capstr(%0))])])))
+&CMD-+RANK Demographic Commands=$+rank *:think pemit(%#,switch(0,match(u(#CGINFO/fun_ranks),%0,|),ansi(hr,That is not a valid rank.),not(match(xget(%#,faction),Civilian)),ansi(hr,Ranks are not for civilians.),ansi(hg,You set your rank to [prettify(%0)].)[set(%#,rank:[prettify(%0)])]))
+@DESCRIBE Demographic Commands=Chargen commands for setting demographic information.
+@STARTUP Demographic Commands=@set me=!no_command
+
+
+
+@@ ========================
+@@ BEGIN OUTSIDE CG ROOM
+@@ ========================
+
+@dig Chargen=CG;chargen
+
+@lock Chargen=ISOK/1
+@power Chargen = See_All
+&CHARGEN_OPEN Chargen=1
+@FAILURE Chargen=switch(v(chargen_open),0,Chargen isn't open yet.,Only new players may enter chargen.)
+@set Chargen/FAILURE=no_command prefixmatch
+&ISOK Chargen=or(isstaff(%#),and(orflags(%#,?),not(haspower(%#,guest)),v(chargen_open)))
+
+CG
+
+@@ ========================
+@@ IN CHARGEN ROOM
+@@ ========================
+
+@set here = NO_COMMAND
+&CG here=1
+@DESCRIBE here=The next few rooms will guide you through the process of creating your character.  Each room will give you instructions about what to set.  Before starting, you should have a good idea of the character you wish to create.  You can always go back to a previous room if you need to change something (without losing your other stats).  If you have any questions, ask on the Newbie channel by typing [ansi(hg,+n <message>)].
+
+@dig Demographics=N;next,B;back
+
+N
+
+@@ ========================
+@@ IN DEMOGRAPHICS ROOM
+@@ ========================
+
+&CG here=1
+@DESCRIBE here=In this room, you will set up some basic info about your character's background - how old he is, his job, etc.  This is all subject to approval - you can make yourself an Admiral in chargen, but you won't be approved!%R%R%T[ansi(h,+fullname <full name>)]%R%T[ansi(h,+age <age>)]%R%T[ansi(h,@sex <male or female>)]%R%T[ansi(h,+faction <faction>)] (See +factions) %R%T[ansi(h,+position <position>)] (See +positions)%R%T[ansi(h,+org <organization>)] (see +orgs)%R%R%T[ansi(h,+rank <rank>)] (see +ranks - military chars only)
+@set here/DESCRIBE=no_command visual prefixmatch public nearby
+
+@dig Abilities=N;next,B;back
+
+@parent Next=Chargen Exit Parent
+@power Next = See_All
+&OTHER_CHECKS Next=switch(match(xget(%#,faction),Military),1,t(words(rank(%#))),1)
+&OTHER_ERRORS Next=Military characters must have a rank.
+&REQUIRED_ATTRS Next=faction org position birthdate fullname sex
+
+
+@@ ========================
+@@ In ABILITIES ROOM
+@@ ========================
+
+N
+
+&CG here=1
+@DESCRIBE here=Here you will set up your character's Abilities, including Attributes, Action Skills, Background Skills, Language Skills and Quirks.   See [ansi(hg,+help FS3_Chargen)] for help with Chargen.%R%R%T[ansi(h,+reset)] - Starts setting abilities, erasing any current ones.%R%T[ansi(h,+sheet)] - Views your character sheet%R%T[ansi(h,+points)] - Views your points remaining%R%T[ansi(h,+limits)] - Views limits on what you can spend.%R%R%T[ansi(h,+abilities)] - Views all abilities%R%T[ansi(h,+raise <type>/<ability>)] and [ansi(h,+lower <type>/<ability>)]%R%T[ansi(h,+ability <type>/<ability>=<level>)]%R%T- type must be one of attr, action, bg, lang%R%T- type may be omitted for action skills and attributes%R%R%T[ansi(h,+quirk/add <quirk>)] and [ansi(h,+quirk/delete <quirk>)]%R%R%TYou may also want to configure ruling attributes for your%R%Tbackground skills.  See +help +rulingattr
+
+@dig Background=N;next,B;back
+
+@parent Next=Chargen Exit Parent
+@power Next=see_all
+&OTHER_CHECKS Next=strmatch(xget(%0,cg_errors),1*)
+&OTHER_ERRORS Next=after(xget(%0,cg_errors),|)
+
+N
+
+@@ ========================
+@@ In BACKGROUND ROOM
+@@ ========================
+
+&CG here=1
+@DESCRIBE here=This is the room where you set up your character's backstory, or background.  Make sure that your background matches your character's skills and other information.%R%RYour background is just another MUSH attribute on yourself, like your description. You can set it by typing [ansi(hg,&bg me=<your background text>)]. You can use the built-in MUSH editing commands (@edit, @dec, etc.) to edit it.%R%RIf your background is particularly long, you can split it into multiple attributes, like:%R%T[ansi(h,&BG1 me=This is the first part of my bg.)]%R%T[ansi(h,&BG2 me=This is the second part of my bg.)]%R%Tetc.%R%RThe [ansi(hg,+bg)] command will let you view your background.
+
+@dig Approval=N;next,B;back
+
+@parent Next=Chargen Exit Parent
+@power Next = See_All
+&OTHER_CHECKS Next=or(hasattr(%0,bg),hasattr(%0,bg1))
+&OTHER_ERRORS Next=- You must set your background to proceed.
+
+N
+
+@@ ========================
+@@ In APPROVAL ROOM
+@@ ========================
+
+@DESCRIBE here=If you're finished with everything, type [ansi(hg,+bg/submit)] to submit your character for approval.  While you're waiting to be approved, you can hang out in the OOC Center.  Just go through the OOC exit.  If there are any problems with your character, you will be able to re-enter chargen later to fix them.%R%RIf you realize you forgot something, you can use [ansi(h,+bg/unsubmit)] to withdraw your application and go back to make changes.
+
+@open Done;D;N;next
+@parent Done=Chargen Exit Parent
+@power Done = See_All
+&OTHER_CHECKS Done=or(t(xget(%0,approval_job)),not(hasflag(%0,unregistered)))
+&OTHER_ERRORS Done=- You must submit your character for approval first.
+
+@lock Back=ISSUBMITTED/0
+@power Back = See_All
+@FAILURE Back=You must unsubmit your background first.
+&ISSUBMITTED Back=t(xget(%#,approval_job))
+
+@@ This has to be done last because otherwise all the previous exits would be locked!
+@lock Chargen Exit Parent=ISDONE/1
+@lset Chargen Exit Parent=!no_inherit
+
+

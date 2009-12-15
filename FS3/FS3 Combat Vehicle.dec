@@ -1,11 +1,18 @@
-@create FS3Combat vehicle DB
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
 @set FS3Combat vehicle DB = SAFE
+@describe FS3Combat Vehicle DB=See the FS3Combat Action Commands object for important copyright/license information.
 
 
-@create FS3Combat vehicle Commands
 @set FS3Combat vehicle Commands = WIZARD
 @set FS3Combat vehicle Commands = SAFE
 @set FS3Combat vehicle Commands = !NO_COMMAND
+@describe FS3Combat Vehicle Commands=See the FS3Combat Action Commands object for important copyright/license information.
 
 
 &VEHICLESTATS FS3Combat vehicle Commands=type notes temp

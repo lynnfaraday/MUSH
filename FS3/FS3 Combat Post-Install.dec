@@ -1,0 +1,67 @@
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@fo me=think patchreg(FS3_COMBATHELP,num(FS3Combat Help))
+@fo me=think patchreg(FS3_PREFS,num(FS3Combat Preferences))
+@fo me=think patchreg(FS3_VEHDB,num(FS3Combat Vehicle DB))
+@fo me=think patchreg(FS3_NPCDB,num(FS3Combat NPC DB))
+@fo me=think patchreg(FS3_INSTANCE,num(FS3Combat Instance Parent))
+@fo me=think patchreg(FS3_EQUIPDB,num(FS3Combat Equipment Stats))
+@fo me=think patchreg(FS3_DMGDB,num(FS3Combat Damage Database))
+@fo me=think patchreg(FS3_HITLOC,num(FS3Combat Hit Locations))
+
+@fo me=think patchreg(FS3_VEHCMD,num(FS3Combat Vehicle Commands))
+@fo me=think patchreg(FS3_EQUIPCMD,num(FS3Combat Equipment Commands))
+@fo me=think patchreg(FS3_NPCCMD,num(FS3Combat NPC Commands))
+@fo me=think patchreg(FS3_DMGCMD,num(FS3Combat Damage Commands))
+@fo me=think patchreg(FS3_ACTCMD,num(FS3Combat Action Commands))
+
+@fo me=think patchreg(FS3_SKILLHELP,num(FS3 Skill Help))
+@fo me=think patchreg(FS3_SKILLFUN,num(FS3 Skill Functions))
+@fo me=think patchreg(FS3_SKILLDDB,num(FS3 Skill Data))
+
+@fo me=think patchreg(FS3_SKILLCMD,num(FS3 Skill System))
+@fo me=think patchreg(FS3_XPCMD,num(FS3 XP))
+
+@fo me=think patchreg(FS3_CGINFO,num(Chargen Info Functions))
+@fo me=think patchreg(FS3_DEMOGCMD,num(Demographic Commands))
+
+@wait 2=+farapatch FS3_COMBATHELP
+@wait 2=+farapatch FS3_PREFS
+@wait 2=+farapatch FS3_VEHDB
+@wait 2=+farapatch FS3_NPCDB
+@wait 2=+farapatch FS3_INSTANCE
+@wait 2=+farapatch FS3_EQUIPDB
+@wait 2=+farapatch FS3_DMGDB
+@wait 2=+farapatch FS3_HITLOC
+
+@wait 2=+farapatch FS3_VEHCMD
+@wait 2=+farapatch FS3_EQUIPCMD
+@wait 2=+farapatch FS3_NPCCMD
+@wait 2=+farapatch FS3_DMGCMD
+@wait 2=+farapatch FS3_ACTCMD
+
+@wait 2=+farapatch FS3_SKILLHELP
+@wait 2=+farapatch FS3_SKILLFUN
+@wait 2=+farapatch FS3_SKILLDDB
+
+@wait 2=+farapatch FS3_SKILLCMD
+@wait 2=+farapatch FS3_XPCMD
+
+@wait 2=+farapatch FS3_CGINFO
+@wait 2=+farapatch FS3_DEMOGCMD
+
+
+think setup_attr(h,combat)
+
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
+
+@wait 5=@set me=!quiet
+
+
+

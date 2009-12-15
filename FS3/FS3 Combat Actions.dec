@@ -1,10 +1,19 @@
-@create FS3Combat Action Commands
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
 @set FS3Combat Action Commands = WIZARD
 @set FS3Combat Action Commands = SAFE
 @set FS3Combat Action Commands = !NO_COMMAND
 
+&VERSION FS3Combat Action Commands=2.0
+&CREDITS FS3Combat Action Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
+@DESCRIBE FS3Combat Action Commands=These are the commands for the FS3 skills system.%R%R[u(Credits)]
 
-@create FS3Combat Preferences
+@describe FS3Combat Preferences=See the FS3Combat Action Commands object for important copyright/license information.
 @set FS3Combat Preferences = !NO_COMMAND
 @set FS3Combat Preferences = WIZARD
 
@@ -165,7 +174,7 @@
 @@ Returns either 1 or 0|error
 @@ --------------------------
 
-&FUN_JOIN_NPC_STUFF FS3Combat Action Commands=switch(1,isplayer(%0),1,isnpc(%0),1,createnpc(%0,u(fun_rand_npc_skill),1))
+&FUN_JOIN_NPC_STUFF FS3Combat Action Commands=switch(1,isplayer(%0),1,isnpc(%0),1,u(#FS3_NPCCMD/FUN_CREATE_NPC,%0,u(fun_rand_npc_skill),1))
 &FUN_RAND_NPC_SKILL FS3Combat Action Commands=first(shuffle(2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 6 6 6 7 8))
 
 @@ --------------------------

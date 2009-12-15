@@ -1,9 +1,15 @@
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
 
 
-@create FS3Combat Instance Parent
 @set FS3Combat Instance Parent = WIZARD
 @set FS3Combat Instance Parent = SAFE
 @set FS3Combat Instance Parent = !NO_COMMAND
+@describe FS3Combat Instance Parent=See the FS3Combat Action Commands object for important copyright/license information.
 
 
 @@ DB# of organizer.
@@ -569,7 +575,7 @@
 @@ - Special modifiers
 @@ - Aim modifier (30)
 @@ - Stance modifier
-@@ - Luck modifier (30 if spending luck on attack)
+@@ - Luck modifier (75 if spending luck on attack)
 @@ - Melee modifier (30)
 @@ --------------------------
 &FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),5)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mod),switch(u(fun_combatstat,%0,lastaim),%1,30,0),u(fun_stance_mod,%0,attacker),u(fun_luck_mod,%0,attack),switch(u(fun_weaponstat,%0,wpntype),Melee,30,0))
@@ -603,7 +609,7 @@
 @@ - Damage modifier
 @@ - Special modifiers
 @@ - Stance mods
-@@ - Luck mods (30 if spending luck on defense)
+@@ - Luck mods (75 if spending luck on defense)
 @@ - Attacker melee (30)
 @@ - Defender vehicle dodge bonus
 @@ --------------------------
@@ -628,7 +634,7 @@
 @@ %0 = name
 @@ %1 = attack, defense or initative
 @@ --------------------------
-&FUN_LUCK_MOD FS3Combat Instance Parent=switch(u(fun_combatstat,%0,luck),%1,30,0)
+&FUN_LUCK_MOD FS3Combat Instance Parent=switch(u(fun_combatstat,%0,luck),%1,75,0)
 
 
 @@ --------------------------

@@ -1,10 +1,17 @@
-@create FS3Combat Equipment Stats
-@set FS3Combat Equipment Stats = SAFE
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
 
-@create FS3Combat Equipment Commands
+@set FS3Combat Equipment Stats = SAFE
+@describe FS3Combat Equipment Stats=See the FS3Combat Action Commands object for important copyright/license information.
+
 @set FS3Combat Equipment Commands = WIZARD
 @set FS3Combat Equipment Commands = SAFE
 @set FS3Combat Equipment Commands = !NO_COMMAND
+@describe FS3Combat Equipment Commands=See the FS3Combat Action Commands object for important copyright/license information.
 
 
 @@ -------------------------------

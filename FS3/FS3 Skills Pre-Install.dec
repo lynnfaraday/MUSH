@@ -1,0 +1,20 @@
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=%R%R[ansi(hg,Beginning Installation)]
+
+@create FS3 Skill Data
+@create FS3 Skill System
+@create FS3 Skill Functions
+@create FS3 Skill Help
+
+@create FS3 Chargen Commands
+@create Chargen Exit Parent
+@create Chargen Info Functions
+@create Demographic Commands
