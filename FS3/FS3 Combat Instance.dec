@@ -5,6 +5,9 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
 
+@set me=quiet
+@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Instance module.)] [ansi(hr,NOTE: This may take a minute.)]
+
 
 @set FS3Combat Instance Parent = WIZARD
 @set FS3Combat Instance Parent = SAFE
@@ -873,4 +876,5 @@
 @startup FS3Combat Instance Parent=@set me=!no_command
 
 
-
+@wait 5=@set me=!quiet
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]

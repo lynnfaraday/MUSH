@@ -5,28 +5,18 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
 
-@fo me=think patchreg(FS3_SKILLHELP,num(FS3 Skill Help))
-@fo me=think patchreg(FS3_SKILLFUN,num(FS3 Skill Functions))
-@fo me=think patchreg(FS3_SKILLDDB,num(FS3 Skill Data))
+@set me=QUIET
+@pemit/silent %#=%R%R[ansi(hg,Setting up database numbers.)]
 
-@fo me=think patchreg(FS3_SKILLCMD,num(FS3 Skill System))
-@fo me=think patchreg(FS3_XPCMD,num(FS3 XP))
 
-@fo me=think patchreg(FS3_CGINFO,num(Chargen Info Functions))
-@fo me=think patchreg(FS3_DEMOGCMD,num(Demographic Commands))
-@fo me=think patchreg(FS3_CGCMD,num(FS3 Chargen Commands))
+@fo me=+install FS3_SKILLHELP=[num(FS3 Skill Help)]
+@fo me=+install FS3_SKILLFUN=[num(FS3 Skill Functions)]
+@fo me=+install FS3_SKILLDB=[num(FS3 Skill Data)]
 
-@wait 2=+farapatch FS3_SKILLHELP
-@wait 2=+farapatch FS3_SKILLFUN
-@wait 2=+farapatch FS3_SKILLDDB
-
-@wait 2=+farapatch FS3_SKILLCMD
-@wait 2=+farapatch FS3_XPCMD
-
-@wait 2=+farapatch FS3_CGINFO
-@wait 2=+farapatch FS3_DEMOGCMD
-@wait 2=+farapatch FS3_CGCMD
-
+@fo me=+install FS3_SKILLCMD=[num(FS3 Skill System)]
+@fo me=+install FS3_CGINFO=[num(Chargen Info Functions)]
+@fo me=+install FS3_DEMOGCMD=[num(Demographic Commands)]
+@fo me=+install FS3_CGCMD=[num(FS3 Chargen Commands)]
 
 think setup_attr(h,xp,0)
 think setup_attr(h,actionskills,)
@@ -37,12 +27,16 @@ think setup_attr(h,quirks,)
 think setup_attr(h,ruling_attr,)
 think setup_attr(h,cg_errors,)
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Moving objects.)]
 
-@wait 5=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
+@wait 5=@tel FS3 Skill System=#2
+@wait 5=@fo me=+copyhelp [num(FS3 Skill Help)]
 
-@wait 5=@set me=!quiet
+@wait 6=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
 
-@wait 5=@pemit/silent %#=%R%R[ansi(hg,You'll need to put the chargen objects into their appropriate rooms.)]
+@wait 6=@set me=!quiet
+
+@wait 6=@pemit/silent %#=%R%R[ansi(hg,You'll need to put the chargen objects into their appropriate rooms.)]
 
 
 

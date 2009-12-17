@@ -5,7 +5,10 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
 
-@describe FS3 Damage Commands=See the FS3Combat Action Commands object for important copyright/license information.
+@set me=quiet
+@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Damage module.)] [ansi(hr,NOTE: This may take a minute.)]
+
+@describe FS3Combat Damage Commands=See the FS3Combat Action Commands object for important copyright/license information.
 @set FS3Combat Damage Commands = WIZARD
 @set FS3Combat Damage Commands = SAFE
 
@@ -427,3 +430,6 @@
 
 &CRON_TIME_DAILYHEAL FS3Combat Damage Commands=|||23|57|
 &CRON_JOB_DAILYHEAL FS3Combat Damage Commands=@tr #FS3_DMGCMD/tr_daily_healing
+
+@wait 5=@set me=!quiet
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]

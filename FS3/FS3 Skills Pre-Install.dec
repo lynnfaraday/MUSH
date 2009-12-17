@@ -7,7 +7,7 @@
 
 @set me=quiet
 
-@pemit/silent %#=%R%R[ansi(hg,Beginning Installation)]
+@pemit/silent %#=%R%R[ansi(hg,Beginning FS3 skills system installation.  Creating objects.)]
 
 @create FS3 Skill Data
 @create FS3 Skill System
@@ -18,3 +18,6 @@
 @create Chargen Exit Parent
 @create Chargen Info Functions
 @create Demographic Commands
+
+@wait 3=@set me=!quiet
+@wait 3=@pemit/silent %#=%R%R[ansi(hg,Objects created.  Please install the Skills module next.)]

@@ -7,7 +7,7 @@
 
 @set me=quiet
 
-@pemit/silent %#=%R%R[ansi(hg,Beginning Installation)]
+@pemit/silent %#=%R%R[ansi(hg,Beginning FS3 Combat System Installation)]
 
 @create FS3Combat Action Commands
 @create FS3Combat Preferences
@@ -22,3 +22,6 @@
 @create FS3Combat NPC Commands
 @create FS3Combat Vehicle DB
 @create FS3Combat Vehicle Commands
+
+@wait 3=@set me=!quiet
+@wait 3=@pemit/silent %#=%R%R[ansi(hg,Objects created.  Please install the combat modules one by one.)]

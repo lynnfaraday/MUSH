@@ -5,6 +5,9 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
 
+@set me=quiet
+@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Vehicle module.)]
+
 @set FS3Combat vehicle DB = SAFE
 @describe FS3Combat Vehicle DB=See the FS3Combat Action Commands object for important copyright/license information.
 
@@ -17,7 +20,7 @@
 
 &VEHICLESTATS FS3Combat vehicle Commands=type notes temp
 
-&CMD-+VEHICLES FS3Combat vehicle Commands=$+vehicles:@pemit %#=[line()]%R[ansi(h,Name)][space(16)][ansi(h,Type)][space(16)]Damage Status[iter(sort(lattr(#FS3_VEHDB/vehicle_*)),[setq(0,after(##,_))]%R[padstr(prettify(lcstr(%q0)),20)][padstr(vehiclestat(%q0,type),20)][u(#FS3_DMGCMD/fun_damage_restricted,%q0)])]%R%RUse [ansi(h,+vehicle <name>)] to view details.%R[line()]
+&CMD-+VEHICLES FS3Combat vehicle Commands=$+vehicles:@pemit %#=[line()]%R[ansi(h,Name)][space(16)][ansi(h,Type)][space(16)]Damage Status[iter(sort(lattr(#FS3_VEHDB/vehicle_*)),[setq(0,after(##,_))]%R[padstr(prettify(lcstr(%q0)),20)][padstr(vehiclestat(%q0,type),20)][u(#FS3_DMGCMD/fun_display_restricted,%q0)])]%R%RUse [ansi(h,+vehicle <name>)] to view details.%R[line()]
 
 &CMD-+VEHICLE FS3Combat vehicle Commands=$+vehicle *:@pemit %#=switch(0,isvehicle(%0),ansi(hr,There is no vehicle by that name.),[setq(0,unprettify(%0))][setq(1,damagemod(%0))][line()]%R[ansi(h,Name:)] [prettify(%0)]%R[ansi(h,Type:)] [vehiclestat(%q0,type)]%R[ansi(h,Damage Modifier:)] %q1 [u(#FS3_DMGCMD/fun_damage_restricted,%q0)]%R[ansi(h,Notes:)]%R[replace_cr(vehiclestat(%q0,notes))]%R[line()]
 
@@ -74,3 +77,6 @@
 &FUN_DELETE_VEHICLE FS3Combat Vehicle Commands=switch(0,isvehicle(%0),0|There is no Vehicle by that name.,wipe(#FS3_VEHDB/vehicle_[unprettify(%0)])[u(#FS3_DMGCMD/fun_clear_damage,%0)])
 
 @STARTUP FS3Combat vehicle Commands=@set me=!no_command;@fun vehiclestat=me,FUN_VEHICLESTAT;@fun isvehicle=me,fun_isvehicle
+
+@wait 5=@set me=!quiet
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]

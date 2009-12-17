@@ -5,9 +5,14 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
 
+@set me=quiet
+@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Actions module.)] [ansi(hr,NOTE: This may take a minute.)]
+
 @set FS3Combat Action Commands = WIZARD
 @set FS3Combat Action Commands = SAFE
 @set FS3Combat Action Commands = !NO_COMMAND
+
+@startup FS3Combat Action Commands=@set me=!no_command
 
 &VERSION FS3Combat Action Commands=2.0
 &CREDITS FS3Combat Action Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
@@ -573,8 +578,6 @@
 &LUCK_OPTIONS FS3Combat Action Commands=attack defense initiative
 
 
-@STARTUP FS3Combat Action Commands=@set me=!no_command
-
 @@ ===========================================================================@@ COMBAT PREFS
 
 &HERO_FACTOR FS3Combat Preferences=0
@@ -592,3 +595,6 @@
 
 
 &COMBAT_DELAY FS3Combat Preferences=3
+
+@wait 5=@set me=!quiet
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]

@@ -5,6 +5,11 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
 
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Installing FS3 Chargen module.  Please wait...)]%R
+
+
 @describe FS3 Chargen Commands=Commands for setting up abilities in Chargen using the FS3 system.  See the FS3 skills command object for important copyright/license information.
 @set FS3 Chargen Commands = DARK
 @set FS3 Chargen Commands = !NO_COMMAND
@@ -89,6 +94,7 @@
 @lock Demographic Commands=me
 @set Demographic Commands = DARK
 @set Demographic Commands = WIZARD
+@set Demographic Commands = !NO_COMMAND
 &CMD-+RANKS Demographic Commands=$+ranks:think pemit(%#,[line()]%R[table(%B%B%BOfficer|Enlisted|[iter(lnum(1,10),[ljust(#@,2)] [extract(u(#CGINFO/fun_officer_ranks),#@,1,|)]|[extract(u(#CGINFO/fun_enlisted_ranks),#@,1,|)]|,,)],39,78,|)]%R[line()])
 &CMD-+AGE Demographic Commands=$+age *:think pemit(%#,switch(0,isnum(%0),ansi(hr,Your name must be a number.),lte(%0,75),ansi(hr,You cannot be that old without special staff permission. Contact a member of staff.),gte(%0,11),ansi(hr,You cannot be that young without special staff permission.  Contact a member of staff.),[set(%#,birthdate:[rand(1,12)]/[rand(1,28)]/[sub(last(time()),%0)])][ansi(hg,You set your age to %0.%R%RYour birthdate has been randomly set to: [birthdate(%#)].  If you would like a different random birthday you can use the command again.  If you would like a specific birthday, contact a staff member.)]))
 &CMD-+FACTION Demographic Commands=$+faction *:think pemit(%#,switch(0,t(match(factions(),%0)),ansi(hr,That is not a valid faction.  Use one of: [factions()].),ansi(hg,You set your faction to %0.)[set(%#,rank:)][set(%#,faction:[trim(capstr(%0))])]))
@@ -200,4 +206,5 @@ N
 @lock Chargen Exit Parent=ISDONE/1
 @lset Chargen Exit Parent=!no_inherit
 
-
+@wait 5=@set me=!quiet
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,FS3 Chargen module installed.  Please run the post-install script.)]

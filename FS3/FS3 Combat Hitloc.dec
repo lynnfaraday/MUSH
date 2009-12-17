@@ -5,6 +5,9 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
 
+@set me=quiet
+@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Hit Locations module.)]
+
 @set FS3Combat Hit Locations = SAFE
 @set FS3Combat Hit Locations = !NO_COMMAND
 @describe FS3Combat Hit Locations=See the FS3Combat Action Commands object for important copyright/license information.
@@ -108,3 +111,6 @@
 &CREWHIT_AA_BATTERY FS3Combat Hit Locations=
 &CONCUSS_AA_BATTERY FS3Combat Hit Locations=Body
 
+
+@wait 5=@set me=!quiet
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]

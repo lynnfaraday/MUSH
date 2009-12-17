@@ -5,6 +5,11 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
 
+
+@set me=quiet
+@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Equipment module.)]
+
+
 @set FS3Combat Equipment Stats = SAFE
 @describe FS3Combat Equipment Stats=See the FS3Combat Action Commands object for important copyright/license information.
 
@@ -119,3 +124,7 @@
 
 
 @STARTUP FS3Combat Equipment Commands=@set me=!no_command;@fun weaponstat=me,fun_weaponstat;@fun weapons=me,fun_weapons;@fun armor=me,fun_armor;@fun armorstat=me,fun_armorstat;@fun vehicletypes=me,fun_vehicletypes;@fun vehtypestat=me,fun_vehtypestat
+
+
+@wait 5=@set me=!quiet
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]
