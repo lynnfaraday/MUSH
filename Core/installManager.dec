@@ -1,0 +1,37 @@
+@@ Faraday's Install Manager
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
+@create Install Manager
+@set Install Manager = WIZARD
+@set Install Manager = SAFE
+@set Install Manager = !NO_COMMAND
+&CMD-+patchall Install Manager=$+patchall:@dolist lattr([v(INSTALLDB)]/obj_*)=@fo %#=+patch [after(##,_)]
+&CMD-+install Install Manager=$+install *=*:@pemit %#=u(fun_register,%0,%1);@fo %#=+patch %0
+&CMD-+patch Install Manager=$+patch *:@switch/first [setq(0,v(INSTALLDB))][setq(1,obj_[unprettify(%0)])][setq(2,xget(%q0,%q1))]0=[hasattr(%q0,%q1)],@pemit %#=ansi(hr,I can't find a object named %0.),{@pemit %#=ansi(hc,You update database references on object %0.);think switch(words(lattr(%q2/*)),<2,pemit(%#,ansi(hr,It appears object %q2 \([name(%q2)]\) may not be properly installed.    Please double-check!)));@dolist lattr(%q0/obj_*)=think u(fun_patch,%q2,#[after(##,_)],xget([v(INSTALLDB)],##));@tr %q2/startup}
+&FUN_PATCH Install Manager=iter(lattr(%0),set(%0,##:[edit(xget(%0,##),%1,%2)])
+&FUN_REGISTER Install Manager=[setq(0,OBJ_[unprettify(%0)])][switch(hasattr(v(INSTALLDB),%q0),1,ansi(hb,Name %0 already registered with Install Manager.  Replacing old entry.%R))][ansi(hb,Object %1 registered with name %0 in the Install Manager.)][set(v(INSTALLDB),%q0:%1)]
+&INSTALLDB Install Manager=#INSTALLDB
+@STARTUP Install Manager=@set me=!no_command
+
+
+@create Install DB
+@set Install DB = NO_COMMAND
+
+
+@wait 6=@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
+@wait 6=@fo me=@edit Install Manager/*=#INSTALLDB,[num(Install DB)]
+@wait 6=@tr Install Manager/Startup
+
+@wait 7=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
+
+
