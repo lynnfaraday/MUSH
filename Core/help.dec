@@ -45,8 +45,9 @@
 
 @pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
 
-@fo me=@edit +help Commands/*=#HELPDB,[num(+help Database)]
-@fo me=@edit +help Database/*=#HELPDB,[num(+help Database)]
+@wait 4=@fo me=+install HelpCMD=[num(+help Commands)]
+@wait 4=@fo me=+install HelpDB=[num(+help Database)]
+
 
 @wait 5=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
 
