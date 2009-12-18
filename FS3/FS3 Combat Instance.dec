@@ -704,7 +704,7 @@
 @@   %q0 = vehicle type
 @@   %q1 = base chance per severity
 @@ --------------------------
-&FUN_CREW_DAMAGE_CHANCE FS3Combat Instance Parent=localize([setq(0,vehiclestat(%0,type))][setq(1,switch(%1,C,50,S,25,M,10,2))]min(switch(1,match(%2,xget(#FS3_HITLOC,default_%q0)),%q1,t(match(xget(#FS3_HITLOC,crewhit_%q0),%2)),mul(%q1,5),0),90))
+&FUN_CREW_DAMAGE_CHANCE FS3Combat Instance Parent=localize([setq(0,vehtypestat(vehiclestat(%0,type)))][setq(1,switch(%1,C,50,S,25,M,10,2))]min(switch(1,match(%2,xget(#FS3_HITLOC,default_%q0)),%q1,t(match(xget(#FS3_HITLOC,crewhit_%q0),%2)),mul(%q1,5),0),90))
 
 @@ ================================================================================================================
 @@ ---------------  Turns -----------------
