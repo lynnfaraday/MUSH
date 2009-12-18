@@ -82,7 +82,7 @@
 &FIND_ROOMS Room Parent=switch(xget(%0,show_rooms),0,,iter(lattr(%0/room*),extract(xget(%0,##),3,1,|)))
 &FORMAT_SPECIAL Room Parent=[iter(squish([switch(words([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)]),>0,LHELP)]%B[switch(gt(words(lattr(me/msg_*)),0),1,MSG)]%B[switch(hasattr(%l,combat),1,COMBAT)]%B[switch(words(lattr(%l/detail_*)),>0,DETAIL)]%B[switch(xget(%l,PLACESMAX),>0,PLACES)]),[switch(#@,1,%R%R[ansi(c,Special:)][space(6)][switch(##,LHELP,[ansi(h,+lhelp)] - Local Help Available,MSG,[ansi(h,+com/msg)] - Answering Machine Blinking,COMBAT,[ansi(h,+combat)] - Combat In Progress please join in!,DETAIL,[ansi(h,+detail)] - Details available,PLACES,[ansi(h,places)] - Special Places Available)],%R[space(14)][switch(##,LHELP,[ansi(h,+lhelp)] - Local Help Available,MSG,[ansi(h,+com/msg)] - Answering Machine Blinking,COMBAT,[ansi(h,+combat)] - Combat In Progress please join in,DETAIL,[ansi(h,+detail)] - Details available,PLACES,[ansi(h,places)] - Special Places Available)])])]
 &AREA Room Parent=
-@NAMEFORMAT Room Parent=[ansi(c,line_no_color())]%R[ljust(ansi(h,[name(%0)]%B[switch(orflags(%#,WrJ),1,\(%0[flags(%0)]\))]),50)][rjust(ansi(h,xget(%0,area)),28)] %R[center(ansi(c,u(room_date)),78)]%r[ansi(c,repeat(-,78))]
+@NAMEFORMAT Room Parent=[ansi(c,line_no_color())]%R[ljust(ansi(h,[name(%0)]%B[switch(or(orflags(%#,WrJ),match(%#,owner(me))),1,\(%0[flags(%0)]\))]),50)][rjust(ansi(h,xget(%0,area)),28)] %R[center(ansi(c,u(room_date)),78)]%r[ansi(c,repeat(-,78))]
 &ROOM_DATE Room Parent=[ictime()] -- [time()]
 &SHOW_OCCUPANTS Room Parent=[table(iter(lcon(me),switch(1,hastype(##,player),switch(1,hasflag(##,dark),,not(match(lwho(),##)),,[name(##)]))),20,78,,)]
 &SORT_REGULAR_EXITS Room Parent=comp(name(%0),name(%1))
@@ -119,6 +119,10 @@
 &cmd-+lhelp TP Room Parent=$+lhelp*:think switch(words([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)]),0,pemit(%#,ansi(c,There are no local help files here.)),switch(%0,,pemit(%#,[line()]%rLocal Help Topics::%r%r[setq(0,iter([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)],after(##,_)))][table([sort(%q0)],15,78,,)]%r%rType [ansi(hb,+lhelp <topic>)] for more information about a given topic.%r[line()]),pemit(%#,[line()]%rLocal Help Topic : [ansi(hr,[ucstr(%0)])]%r%r[u(help_[trim(%0)])]%r[line()])))
 &CREDITS TP Room Parent=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 &VERSION TP Room Parent=5.x
+
+@create TP Room Foyer
+&fun_avail_rooms TP Room Foyer=[center([ansi(h,Room Availability)],78)][iter(sort_names(v(room_exits)),[switch(mod(#@,3),1,%R%T)][padstr([last(name(##))]: [switch(1,xget(##,islocked),ansi(hr,Locked),t(lvplayers(loc(##))),[ansi(hr,Occupied)],t(lplayers(loc(##))),[ansi(hy,Available*)],[ansi(hg,Available)])],18)])]
+&ROOM_EXITS TP Room Foyer=
 
 @create Room Parent Holder
 
