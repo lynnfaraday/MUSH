@@ -453,7 +453,7 @@
 @@   %qw = weapon
 @@ --------------------------
 
-&FUN_AUTO_ATTACK FS3Combat Instance parent=[setq(a,3)][setq(d,1)][setq(w,%1)][setq(t,switch(isvehicle(%0),1,u(fun_find_pilot,%0),%0))][u(fun_do_hit,Auto,%0,first(shuffle(u(fun_valid_HITLOC,%0))),0,%2)]
+&FUN_AUTO_ATTACK FS3Combat Instance parent=[setq(a,3)][setq(d,1)][setq(w,%1)][setq(t,switch(isvehicle(%0),1,u(fun_find_pilot,%0),%0))][u(fun_do_hit,Auto,%0,first(shuffle(u(fun_valid_HITLOCS,%0))),0,%2)]
 
 
 @@ --------------------------
@@ -507,11 +507,11 @@
 &FUN_LETHAL_MOD_FOR_ZONE FS3Combat Instance Parent=switch(%0,0,50,1,0,2,-25,3,-50,-100)
 
 @@ --------------------------
-@@ FUN_VALID_HITLOC
+@@ FUN_VALID_HITLOCS
 @@ Lists valid hit locations for a given target, based on type.
 @@ %0 = target name
 @@ --------------------------
-&FUN_VALID_HITLOC FS3Combat Instance Parent=iter(xget(#FS3_HITLOC,dmg_[u(fun_target_type,%0)]),before(##,:))
+&FUN_VALID_HITLOCS FS3Combat Instance Parent=iter(xget(#FS3_HITLOC,dmg_[u(fun_target_type,%0)]),before(##,:))
 
 
 @@ --------------------------
