@@ -132,11 +132,16 @@
 @@    %q0 = skill required, based on target type
 @@    %q1 = healer skill level, based on PC or NPC
 @@    %q2 = skill roll
+@@    %q3 = current healpoints
+@@    %q4 = points just healed
 @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&FUN_HEAL_WOUND FS3Combat Damage Commands=localize([setq(0,switch(isvehicle(%0),1,xget(#FS3_PREFS,repair_skill),xget(#FS3_PREFS,medicine_skill)))][setq(1,switch(isplayer(%1),1,ability_level(pmatch(%1),%q0),npcstat(%1,skill)))][setq(2,roll_ability(pmatch(%1),%q1,xget(#FS3_PREFS,hero_factor)))][setq(3,u(fun_dmgstat,%0,healing))][u(fun_mod_dmgstat,%0,healing,add(%q3,switch(%q2,-2,-1,-1,-0.5,0,0,1,1.75,2,2.25,3,2.75,0)))])
+&FUN_HEAL_WOUND FS3Combat Damage Commands=localize([setq(0,switch(isvehicle(%0),1,xget(#FS3_PREFS,repair_skill),xget(#FS3_PREFS,medicine_skill)))][setq(1,switch(isplayer(%1),1,ability_level(pmatch(%1),%q0),npcstat(%1,skill)))][setq(2,roll_ability(pmatch(%1),%q1,xget(#FS3_PREFS,hero_factor)))][setq(3,u(fun_dmgstat,%0,healing))][setq(4,switch(%q2,-2,-1,-1,-0.5,0,0,1,1.75,2,2.25,3,2.75,0))][u(fun_mod_dmgstat,%0,healing,add(%q3,%q4))][u(fun_healing_log,%1 healed %0: old=%q3 plus=%q4)])
 
 &FUN_HEALED_BY FS3Combat Damage Commands=prettify(lcstr(iter(lattr(#FS3_DMGDB/[switch(isvehicle(%0),1,repair,heal)]_*),switch(1,t(match(xget(#FS3_DMGDB,##),unprettify(%0))),after(##,_))))
+
+
+&FUN_HEALING_LOG FS3Combat Damage Commands=switch(v(debug_healing_log),1,[setq(0,secs())]set(#FS3_DMGDB,heallog_%q0:[xget(#FS3_DMGDB,heallog_%q0)]%0|))
 
 @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@   TR_DAILY_HEALING
@@ -144,16 +149,31 @@
 @@   This is based on a 'toughness' skill roll, with a bonus if you're in a designated
 @@   hospital.  NPCs roll their rating.  Vehicles don't have a rating so they just use the
 @@   default NPC rating.
+@@ 
+@@  This is done in seventeen thousand steps because of the goofiness of nested dolists
+@@  and the fact that lattr conks out with even a moderately sized list of damage attrs.
+@@  Argh.  
+@@    Step 1 = Apply healing points from docs (uses TR_HEAL_PATIENTS for each doc)
+@@    Step 2 = Determine how many groups of 100 damage attrs we have. 
+@@    Step 3 = Triggers TR_HEAL_ATTR_GROUP for each group of 100 damage attrs.
+@@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+&TR_DAILY_HEALING FS3Combat Damage Commands=@dolist [lattr(#FS3_DMGDB/heal_*)] [lattr(#FS3_DMGDB/repair_*)] NEXTHEALING={@switch ##=NEXTHEALING,@tr me/TR_DAILY_HEALING2,@tr me/TR_HEAL_PATIENTS=##}
+
+&TR_HEAL_PATIENTS FS3Combat Damage Commands=@dolist [xget(#FS3_DMGDB,%0)]=think [u(fun_heal,##,after(%0,_))]
+
+&TR_DAILY_HEALING2 FS3Combat Damage Commands=@dolist [lnum(1,ceil(fdiv(nattr(#FS3_DMGDB/DMG_*),100)))]=@tr me/TR_DAILY_HEALING3=##
+
+&TR_DAILY_HEALING3 FS3Combat Damage Commands=@tr me/TR_HEAL_ATTR_GROUP=xattr(#FS3_DMGDB/DMG_*,add(1,mul(sub(%0,1),100)),100)
+
 @@     %q0 = patient name
 @@     %q1 = toughness ability level (or npc rating)
 @@     %q2 = current heal points
 @@     %q3 = new healing points
 @@     %q4 = healing points required for the wound to heal 1 lvl
-@@     %q5 = doctor name for the healing rolls
+@@     %q5 = current sev
 @@     %q6 = 1 if a wound was totally healed, 0 otherwise.  used to cut down on iterations
-@@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-&TR_DAILY_HEALING FS3Combat Damage Commands=think iter([lattr(#FS3_DMGDB/heal_*)] [lattr(#FS3_DMGDB/repair_*)],[setq(5,after(##,_))][iter(xget(#FS3_DMGDB,%i0),u(fun_heal,%i0,%q5))]);@dolist lattr(#FS3_DMGDB/DMG_*)=think [setq(0,edit(before(after(##,_),_),.,_))][setq(1,switch(1,isplayer(%q0),ability_level(pmatch(%q0),xget(#FS3_PREFS,toughness_skill)),isnpc(%q0),npcstat(%q0,skill),5))][setq(2,u(fun_dmgstat,##,healing))][setq(3,add(%q2,switch(roll_ability(NoPlayer,%q1,xget(#FS3_PREFS,hero_factor)),-2,0.75,-1,1,0,1,1,1,2,1.25,3,1.5,1),switch(0,match(xget(#FS3_PREFS,hospitals),loc(pmatch(%q0))),0,0.5)))][setq(4,u(FUN_HEALPOINTS_WOUND,##))][switch(u(fun_dmgstat,##,currsev),H,,[u(fun_mod_dmgstat,##,healing,%q3)][setq(6,0)][switch(gte(%q3,%q4),1,[u(fun_mod_dmgstat,##,currsev,switch(u(fun_dmgstat,##,currsev),C,S,S,M,M,L,L,H[setq(6,1)]))][u(fun_mod_dmgstat,##,healing,sub(%q3,%q4))][switch(%q6,1,switch(words(u(fun_healable_wounds,%q0)),0,u(fun_clear_healing,%q0)))])])])
+&TR_HEAL_ATTR_GROUP FS3Combat Damage Commands=@dolist %0=think [setq(5,u(fun_dmgstat,##,currsev))][switch(%q5,H,,[setq(0,edit(before(after(##,_),_),.,_))][setq(1,switch(1,isplayer(%q0),ability_level(pmatch(%q0),xget(#FS3_PREFS,toughness_skill)),isnpc(%q0),npcstat(%q0,skill),5))][setq(2,u(fun_dmgstat,##,healing))][setq(3,add(%q2,switch(roll_ability(NoPlayer,%q1,xget(#FS3_PREFS,hero_factor)),-2,0.75,-1,1,0,1,1,1,2,1.25,3,1.5,1),switch(0,match(xget(#FS3_PREFS,hospitals),loc(pmatch(%q0))),0,0.5)))][setq(4,u(FUN_HEALPOINTS_WOUND,##))][u(fun_mod_dmgstat,##,healing,%q3)][setq(6,0)][switch(gte(%q3,%q4),1,[u(fun_mod_dmgstat,##,currsev,switch(%q5,C,S,S,M,M,L,L,H[setq(6,1)]))][u(fun_mod_dmgstat,##,healing,sub(%q3,%q4))][switch(%q6,1,[switch(words(u(fun_healable_wounds,%q0)),0,u(fun_clear_healing,%q0))][switch(isplayer(%q0),0,wipe(#FS3_DMGDB/##))])])][u(fun_healing_log,%q0 healed ##: sev:%q5 old:%q2 new:%q3 healedDown:[gte(%q3,%q4)] healedCompletely:%q6)]
 
 @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  @@  NOTE: Most +damage functions expect to be passed in the damage attribute name  @@@@
@@ -301,7 +321,7 @@
 @@
 @@ %q0 = current severity, %q1 = time to heal
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-&FUN_DMGLIST FS3Combat Damage Commands=[ansi(h,%b%b%b%b%bSeverity[space(41)]Can%b%bCan)]%r[ansi(h,[space(5)]\(Current\)[space(6)]Type[space(6)]Wound[space(18)]Treat Heal%B%BEst Heal)][iter(u(FUN_ALL_DMG,%0),[setq(0,u(FUN_DMGSTAT,##,currsev))[setq(1,u(FUN_TIME_TO_HEAL,##))]]%R[ljust(#@.,4)] [ljust(ansi(u(fun_wound_color,%q0),[u(fun_wound_name,%q0)]),14)] [ljust(u(FUN_DMGSTAT,##,type),10)][padstr([u(FUN_DMGSTAT,##,weapon)] to [prettify(u(FUN_DMGSTAT,##,hitloc))],25)][switch(u(FUN_CAN_BE_TREATED,##),1,+,-)]%B%B%B%B[switch(u(FUN_CAN_BE_HEALED,##),1,+,-)]%B%B%B%B[switch(%q1,0,-,%q1 days)])]
+&FUN_DMGLIST FS3Combat Damage Commands=[ansi(h,%b%b%b%b%bSeverity[space(41)]Can)]%r[ansi(h,[space(5)]\(Current\)[space(6)]Type[space(6)]Wound[space(18)]Treat%B%BEst Heal)][iter(u(FUN_ALL_DMG,%0),[setq(0,u(FUN_DMGSTAT,##,currsev))[setq(1,u(FUN_TIME_TO_HEAL,##))]]%R[ljust(#@.,4)] [ljust(ansi(u(fun_wound_color,%q0),[u(fun_wound_name,%q0)]),14)] [ljust(u(FUN_DMGSTAT,##,type),10)][padstr([u(FUN_DMGSTAT,##,weapon)] to [prettify(u(FUN_DMGSTAT,##,hitloc))],25)][switch(u(FUN_CAN_BE_TREATED,##),1,+,-)]%B%B%B%B[switch(%q1,0,-,%q1 days)])]
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGMOD_TOTAL
