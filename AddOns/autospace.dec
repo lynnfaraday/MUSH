@@ -11,30 +11,24 @@
 
 @pemit/silent %#=[ansi(hr,Creating Objects...)]%R
 
-@create Pose Autospacer
-@set Pose Autospacer = WIZARD
-@set Pose Autospacer = SAFE
-@set Pose Autospacer = !NO_COMMAND
+
+think install_create(AUTOSPACE_CMD,Pose Autospacer,1,0,5.0,Automatically puts blank lines between poses.)
+
 
 &CMD-+AUTOSPACE Pose Autospacer=$+autospace:think [pemit(%#,switch(xget(%#,autospace),1,ansi(hg,You turn autospacing OFF.),ansi(hg,You turn autospacing ON.)))][set(%#,autospace:[not(xget(%#,autospace))])]
 &HELP_+AUTOSPACE Pose Autospacer=This MUSH is set up to put blank lines before each pose, say or emit automatically. You can turn this on or off using the +autospace command.  Just type [ansi(h,+autospace)] and it will toggle the spaces on and off.
 &LINE_HOOK Pose Autospacer=iter(lplayers(loc(%#)),switch(xget(##,autospace),0,,pemit(##,%B)))
 @STARTUP Pose Autospacer=@hook/before pose=[num(me)],LINE_HOOK;@hook/before say=[num(me)],LINE_HOOK;@hook/before @emit=[num(me)],LINE_HOOK;@hook/before semipose=[num(me)],LINE_HOOK;@set me=!no_command
+&VATTR_AUTOSPACE Pose Autospacer=1
 
 
-@DESCRIBE Pose Autospacer=Automatically puts spaces between poses.%R[u(credits)]
-&CREDITS Pose Autospacer=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Pose Autospacer=4.0
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
-@wait 4=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
-@wait 4=@fo %#=+copyhelp [num(Pose Autospacer)]
-@wait 4=think setup_attr(h,autospace,1)
-@wait 4=@trigger Pose Autospacer/startup
+@wait 2=+install/updategroup AUTOSPACE
 
-@wait 5=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
-@wait 5=@tel Pose Autospacer=#2
+@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
-@wait 6=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
+@wait 10=@set me=!quiet
 
-@wait 6=@set me=!quiet
+
 
