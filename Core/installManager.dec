@@ -11,27 +11,103 @@
 
 @pemit/silent %#=[ansi(hr,Creating Objects...)]%R
 
-@create Install Manager
+think [setq(0,#-1)][squish(iter([lcon(%l)] [lcon(%#)],switch(name(##),Install Manager,setq(0,##))))][switch(%q0,#-1,Install Manager created: DB# [create(Install Manager)].  Install DB created: DB# [create(Install DB)].   Install Object Storage created: DB# [create(Install Object Storage)],Install Manager already exists.  Assuming other objects exist as well.)]
+
+@pemit/silent %#=[ansi(hr,Setting Object Attributes...)]%R
+
 @set Install Manager = WIZARD
 @set Install Manager = SAFE
 @set Install Manager = !NO_COMMAND
-&CMD-+patchall Install Manager=$+patchall:@dolist lattr([v(INSTALLDB)]/obj_*)=@fo %#=+patch [after(##,_)]
-&CMD-+install Install Manager=$+install *=*:@pemit %#=u(fun_register,%0,%1);@fo %#=+patch %0
-&CMD-+patch Install Manager=$+patch *:@switch/first [setq(0,v(INSTALLDB))][setq(1,obj_[unprettify(%0)])][setq(2,xget(%q0,%q1))]0=[hasattr(%q0,%q1)],@pemit %#=ansi(hr,I can't find a object named %0.),{@pemit %#=ansi(hc,You update database references on object %0.);think switch(words(lattr(%q2/*)),<2,pemit(%#,ansi(hr,It appears object %q2 \([name(%q2)]\) may not be properly installed.    Please double-check!)));@dolist lattr(%q0/obj_*)=think u(fun_patch,%q2,#[after(##,_)],xget([v(INSTALLDB)],##));@tr %q2/startup}
-&FUN_PATCH Install Manager=iter(lattr(%0),set(%0,##:[edit(xget(%0,##),%1,%2)])
-&FUN_REGISTER Install Manager=[setq(0,OBJ_[unprettify(%0)])][switch(hasattr(v(INSTALLDB),%q0),1,ansi(hb,Name %0 already registered with Install Manager.  Replacing old entry.%R))][ansi(hb,Object %1 registered with name %0 in the Install Manager.)][set(v(INSTALLDB),%q0:%1)]
-&INSTALLDB Install Manager=#INSTALLDB
-@STARTUP Install Manager=@set me=!no_command
+
+&CMD-+install-update Install Manager=$+install/update *:@switch/first [setq(0,xget(#INSTALL_DB,obj_[unprettify(%0)]))]0=[u(fun_is_registered,%0)],@pemit %#=ansi(hr,I can't find a object named %0.),{@pemit %#=ansi(c,Updating database references on object %0.);think switch(u(fun_is_installed_properly,%0),0,pemit(%#,ansi(hr,It appears object %q0 \([name(%q0)]\) may not be properly installed.  Please double-check.)));@dolist [lattr(#INSTALL_DB/obj_*)] ALLDONE=@switch ##=ALLDONE,{@fo %#=+install/finalize %0},{think u(FUN_UPDATE,%q0,#[after(##,_)],xget(#INSTALL_DB,##))}}
+
+&CMD-+install-finalize Install Manager=$+install/finalize *:think [setq(0,u(fun_get_dbref,%0))];@tr %q0/startup;+copyhelp %q0;think u(fun_setup_attrs,%q0);think u(fun_setup_cron,%q0);@switch extract(%0,2,1,_)=CMD,@tel %q0=v(MASTER_ROOM),@tel %q0=#INSTALL_STORAGE;@pemit %#=ansi(c,%0 installed.)
+
+@@ --------------------------
+@@  FUN_SETUP_CREATE
+@@  Will either create a new object or find the existing one and move it to your inventory.
+@@  %0 = Alias
+@@  %1 = Object name
+@@  %2 = Wizard Flag (0 or 1)
+@@  %3 = No Command Flag (0 or 1)
+@@  %4 = Version
+@@  %5 = Description
+@@ --------------------------
+&FUN_SETUP_CREATE Install Manager=pemit(%#,[switch(0,isstaff(%#),ansi(hr,This function is restricted.),u(fun_is_registered,%0),[setq(0,create(%1))][u(fun_register,%0,%q0)][tel(%q0,%#)][ansi(hc,Created object %0 with DB# %q0.)],[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(hc,Found object %0.)])][set(%q0,SAFE)][switch(%2,1,set(%q0,wizard))][switch(%3,0,set(%q0,!NO_COMMAND),set(%q0,NO_COMMAND))][set(%q0,version:%4)][set(%q0,describe:%5%R\[u(credits)\])][set(%q0,credits:[v(credits)])])
+
+&CREDITS Install Manager=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+
+@@ --------------------------
+@@  FUN_SETUP_ATTRS
+@@  Installs player setup attributes (named SETUPATTR_*) to the player setup object
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_SETUP_ATTRS Install Manager=switch(0,match(functions(),setup_attrs),pemit(%#,ansi(hr,Player setup object not installed.  You'll have to set up the player attributes from object %0 manually.)),setup_attrs(%0))
+
+@@ --------------------------
+@@  FUN_SETUP_CRON
+@@  Installs cron jobs (named CRON*) to the cron system.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_SETUP_CRON Install Manager=switch(0,match(functions(),setup_cron),pemit(%#,ansi(hr,Cron object not installed.  You'll have to set up the cron jobs from object %0 manually.)),setup_cron(%0))
 
 
-@create Install DB
+@@ --------------------------
+@@  FUN_SETUP_HELP
+@@  Installs help files (named HELP*) to the help system.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_SETUP_HELP Install Manager=switch(0,match(functions(),setup_help),pemit(%#,ansi(hr,+help system not installed.  You'll have to set up the help files from object %0 manually.)),setup_help(%0))
+
+@@ --------------------------
+@@  FUN_UPDATE
+@@  Updates the DB references for all attributes on an object.
+@@  %0 = Object DB#
+@@  %1 = Alias to replace (e.g., #FOO_DB)
+@@  %2 = DB# to use in place of the alias
+@@ --------------------------
+&FUN_UPDATE Install Manager=iter(lattr(%0),set(%0,##:[edit(xget(%0,##),%1,%2)])
+
+@@ --------------------------
+@@  FUN_IS_INSTALLED_PROPERLY
+@@  Checks to make sure the object in question has at least one attribute, thus indicating that its data was actually installed.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_IS_INSTALLED_PROPERLY Install Manager=t(words(lattr([u(fun_get_dbref,%0)]/*)))
+
+@@ --------------------------
+@@  FUN_REGISTER
+@@  Maps an alias to its DB# in the database
+@@  %0 = Alias
+@@  %1 = DB#
+@@ --------------------------
+&FUN_REGISTER Install Manager=localize([setq(0,OBJ_[unprettify(%0)])][set(#INSTALL_DB,%q0:%1)])
+
+@@ --------------------------
+@@  FUN_IS_REGISTERED
+@@  Checks if an alias is registered with the database.
+@@  %0 = Alias
+@@ --------------------------
+&FUN_IS_REGISTERED Install Manager=hasattr(#INSTALL_DB,OBJ_[unprettify(%0)])
+
+@@ --------------------------
+@@  FUN_GET_DBREF
+@@  Gets the DB# for a registered alias.
+@@  %0 = Alias
+@@ --------------------------
+&FUN_GET_DBREF Install Manager=switch(u(fun_is_registered,%0),0,#-1,xget(#INSTALL_DB,OBJ_[unprettify(%0)]))
+
+@STARTUP Install Manager=@set me=!no_command;@fun setup_create=me,FUN_SETUP_CREATE
+
 @set Install DB = NO_COMMAND
 
 
-@wait 6=@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
-@wait 6=@fo me=@edit Install Manager/*=#INSTALLDB,[num(Install DB)]
-@wait 6=@tr Install Manager/Startup
+@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
+@fo me=@edit Install Manager/*=#INSTALL_DB,[num(Install DB)]
+@fo me=@edit Install Manager/*=#INSTALL_STORAGE,[num(Install Object Storage)]
+@wait 2=@tel Install DB=Install Object Storage
+@tr Install Manager/Startup
 
-@wait 7=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
+@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
 
 
