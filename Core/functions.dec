@@ -7,19 +7,19 @@
 
 @set me=quiet
 
-@pemit/silent %#=[ansi(hr,Beginning Installation.  Please wait until the Installation Complete message appears...)]%R
+@pemit/silent %#=[ansi(hg,Beginning Installation.  Please wait until the Installation Complete message appears...)]%R
 
-@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-@create Global Utility Functions
-@set Global Utility Functions = WIZARD
-@set Global Utility Functions = SAFE
-@set Global Utility Functions = NO_COMMAND
-@DESCRIBE Global Utility Functions=This object contains useful global utility functions.  They include:%R[iter(lattr(me/fun_*),after(##,_))]%R%R[u(credits)]
-@set Global Utility Functions/DESCRIBE=no_command visual prefixmatch public nearby
+think install_create(GLOBFUN_FUN,Global Utility Functions,1,1,5.0,Useful utility functions.)
+think install_create(GLOBFUN_DB,Global Utility Function Data,1,1,5.0,Customizable utility functions and related data.)
+
+
+@pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
+
 &FUN_APPEND Global Utility Functions=localize([setq(0,xget(%0,%1))][set(%0,%1:%q0[switch(words(%q0),>0,switch(%3,,%B,%3))]%2)])
-&FUN_IS_REAL_PLAYER Global Utility Functions=and(pmatch(%0),not(match(v(non_players),%0)))
-&fun_wikifi Global Utility Functions=edit(regeditalli(%0,\\\[ansi\\\(\[^\,\]+\,\(\[^\\\)\]+\)\\\)\\\],'''$1'''),\%R,%R%R,\%r,%R%R,\%b,%b,\%B,%b,\%t,,\%T,)
+&FUN_IS_REAL_PLAYER Global Utility Functions=and(pmatch(%0),not(match(xget(#GLOBFUN_DB,non_players),%0)))
+&FUN_WIKIFI Global Utility Functions=edit(regeditalli(%0,\\\[ansi\\\(\[^\,\]+\,\(\[^\\\)\]+\)\\\)\\\],'''$1'''),\%R,%R%R,\%r,%R%R,\%b,%b,\%B,%b,\%t,,\%T,)
 &FUN_REAL_PLAYERS Global Utility Functions=setdiff(lsearch(all,type,player),v(non_players))
 &FUN_CENTER_STR Global Utility Functions=[center(mid(%0,0,%1),%1)]
 &FUN_ESCAPE_CR Global Utility Functions=[edit(edit(%0,%r,\\\%r),%R,\\\%R)]
@@ -28,15 +28,9 @@
 &FUN_CAPSTR_ALL Global Utility Functions=iter(%0,capstr(##),switch(%1,,%B,%1),switch(%1,,%B,%1))
 &fun_monthname Global Utility Functions=switch(0,isnum(%0),#-1,gt(%0,0),#-1,lt(%0,13),#-1,extract(v(months),%0,1,))
 &MONTHS Global Utility Functions=Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
-&FUN_ICTIME Global Utility Functions=time()
 &FUN_ISIC Global Utility Functions=match(xget(%0,status),IC)
 &FUN_ISPLAYER Global Utility Functions=t(pmatch(%0))
-&FUN_ISSTAFF Global Utility Functions=orflags(%0,WrJ)
-&FUN_LINE Global Utility Functions=[ansi(rand_color(),+==~~~~~====~~~~====~~~~====~~~~=====~~~~=====~~~~====~~~~====~~~~====~~~~~==+)]
-&FUN_LINE2 Global Utility Functions=[ansi(rand_color(),[repeat(~,78)])]
-&FUN_LINE_NO_COLOR Global Utility Functions=+===~~~~~====~~~~====~~~~====~~~~=====~~~~=====~~~~====~~~~====~~~~====~~~~~==+
-&FUN_LINE_WITH_TEXT Global Utility Functions=[ansi(rand_color(),+==~~~~~====~~~~====~~~~===[padstr(%B%0%B,25,center,~)]==~~~~====~~~~====~~~~~==+)]
-&FUN_MATCHCON Global Utility Functions=[setq(9,#-1)][first(trim(iter([lcon(%1)] %1,switch(strmatch(name(##),%0*),1,##[setq(9,1)]))))][switch(%q9,#-1,#-1)]
+&FUN_MATCHCON Global Utility Functions=localize([setq(9,#-1)][first(trim(iter([lcon(%1)] %1,switch(strmatch(name(##),%0*),1,##[setq(9,1)]))))][switch(%q9,#-1,#-1)])
 &FUN_NUMCOMP Global Utility Functions=switch(1,gt(%0,%1),1,lt(%0,%1),-1,eq(%0,%1),0)
 &FUN_ORDINAL Global Utility Functions=switch(%0,1,first,2,second,3,third,4,fourth,5,fifth,6,sixth,7,seventh,8,eighth,9,ninth,10,tenth,11,eleventh,12,twelvth,13,thirteenth,14,fourteenth,15,fifteenth,16,sixteenth,17,seventeenth,18,eighteenth,19,nineteenth,20,twentieth,30,thirtieth,40,fourtieth,50,fiftieth,60,sixtieth,70,seventieth,80,eightieth,90,ninetieth,100,onehundreth,>1000,error,>900,nine-hundred-[ordinal(mod(%0,900))],>800,eight-hundred-[ordinal(mod(%0,800))],>700,seven-hundred-[ordinal(mod(%0,700))],>600,six-hundred-[ordinal(mod(%0,600))],>500,five-hundred-[ordinal(mod(%0,500))],>400,four-hundred-[ordinal(mod(%0,400))],>300,three-hundred-[ordinal(mod(%0,300))],>200,two-hundred-[ordinal(mod(%0,200))],>100,one-hundred-[ordinal(mod(%0,100))],>90,ninety-[ordinal(mod(%0,90))],>80,eighty-[ordinal(mod(%0,80))],>70,seventy-[ordinal(mod(%0,70))],>60,sixty-[ordinal(mod(%0,60))],>50,fifty-[ordinal(mod(%0,50))],>40,forty-[ordinal(mod(%0,40))],>30,thirty-[ordinal(mod(%0,30))],>20,twenty-[ordinal(mod(%0,20))])
 &FUN_PADSTR Global Utility Functions=[switch(%2,center,center(mid({%0},0,%1),%1,%3),right,rjust(mid({%0},0,%1),%1,%3),ljust(mid({%0},0,%1),%1,%3))]
@@ -48,10 +42,14 @@
 &FUN_SORT_OLDEST Global Utility Functions=sortby(sortby_oldest,%0)
 &FUN_SORT_RECENT Global Utility Functions=sortby(sortby_recent,%0)
 &FUN_SORT_NAMES Global Utility Functions=sortby(sortby_names,%0)
-&SORTBY_NAMES Global Utility Functions=comp(name(%0),name(%1))
 &FUN_WEB_EDIT Global Utility Functions=[setq(9,%0)][setq(9,edit(%q9,<,\[))][setq(9,edit(%q9,>,\]))][setq(9,edit(%q9,\\\%r\\\%r,%R<p>))][setq(9,edit(%q9,\\\%R\\\%R,%R<p>))][setq(9,edit(%q9,\\\%r,%R<BR>))][setq(9,edit(%q9,\\\%R,%R<BR>))]%q9
 &FUN_UNPRETTIFY Global Utility Functions=edit(squish(capstr_all(capstr_all(%0,_))),%B,_)
 &FUN_WIKIFI Global Utility Functions=edit(regeditalli(%0,\\\[ansi\\\(\[^\,\]+\,\(\[^\\\)\]+\)\\\)\\\],'''$1'''),\%R,%R%R,\%r,%R%R,\%b,%b,\%B,%b,\%t,,\%T,)
+
+&SORTBY_NAMES Global Utility Functions=comp(name(%0),name(%1))
+&SORTBY_OLDEST Global Utility Functions=sub(after(%0,_),after(%1,_))
+&SORTBY_RECENT Global Utility Functions=sub(after(%1,_),after(%0,_))
+@STARTUP Global Utility Functions=@dolist lattr(me/fun_*)={@function after(##,_)=num(me),##}
 
 &FUNHELP_APPEND Global Utility Functions=Appends text to an attribute.  Separator is optional and defaults to a blank space.%R%RUsage: append(db#,attribute,text to append,separator)
 &FUNHELP_CAPSTR_ALL Global Utility Functions=This function will capitalize each word of a multi-word string. It defaults to a space-delimited string but you can pass a delimiter if you want.%R%RUsage: capstr_all(<string>,\[delimiter\])
@@ -67,7 +65,7 @@
 &FUNHELP_LINE2 Global Utility Functions=This is a rather plain-looking line.  You can edit this to customize the style of your lines.%RUsage: line2()%R%RSee also related functions: line(), line_no_color(), and line_with_text()
 &FUNHELP_LINE_NO_COLOR Global Utility Functions=The same style of line as the line() function, but without color.%RUsage: line_no_color()%R%RSee also related functions: line(), line2(), and line_with_text()
 &FUNHELP_LINE_WITH_TEXT Global Utility Functions=The same style of line as the line() function, but text centered in the middle of the line.%RUsage: line_with_text()%R%RSee also related functions: line(), line2(), and line_no_color()
-&FUNHELP_MATCHCON Global Utility Functions=This function searches the contents of a room to find a match (either an object or a player) to a given name.  It returns the DB# of the first match it finds, or #-1 if no match is found.%R%RUsage: matchcon(<room DB#>, <name search string>)%R%RNote: This function uses register 9.
+&FUNHELP_MATCHCON Global Utility Functions=This function searches the contents of a room to find a match (either an object or a player) to a given name.  It returns the DB# of the first match it finds, or #-1 if no match is found.%R%RUsage: matchcon(<name search string>,<room DB#>)
 &FUNHELP_MONTHNAME Global Utility Functions=Takes in a number from 1-12 and gives back a month name in the format that makes convtime() happy.  Returns #-1 if you give it something nonsensical.%R%RUsage: monthname(<number>)
 &FUNHELP_NUMCOMP Global Utility Functions=This function compares two numbers,much like strcmp compares strings. If the first number is bigger, it returns 1.  If the first number is smaller, it returns -1.  If the numbers are equal, it returns 0.%R%RUsage: numcomp(<num1>, <num2>)
 &FUNHELP_ORDINAL Global Utility Functions=This function gives the ordinal representation "first, second, third, etc.) of a number.%R%RUsage: ordinal(<number>)
@@ -87,26 +85,39 @@
 &FUNHELP_WIKIFI Global Utility Functions=This function will take a MUSH string and perform basic formatting to turn it into a Mediawiki-friendly version.%R%RUsage: wikifi(<string>)
 
 
-&SORTBY_OLDEST Global Utility Functions=sub(after(%0,_),after(%1,_))
-&SORTBY_RECENT Global Utility Functions=sub(after(%1,_),after(%0,_))
-&NON_PLAYERS Global Utility Functions=#1
-@STARTUP Global Utility Functions=@dolist lattr(me/fun_*)={@function after(##,_)=num(me),##}
-&CREDITS Global Utility Functions=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Global Utility Functions=x.x
+@STARTUP Global Utility Function Data=@dolist lattr(me/fun_*)={@function after(##,_)=num(me),##}
 
-@wait 6=@pemit/silent %#=%R%R[ansi(hr,Activating Functions...)]%R
-@wait 6=@trigger Global Utility Functions/startup
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+&NON_PLAYERS Global Utility Function Data=#1
+&FUN_ICTIME Global Utility Function Data =time()
+&FUN_ISSTAFF Global Utility Function Data =orflags(%0,WrJ)
+&FUN_LINE Global Utility Function Data =[ansi(rand_color(),+==~~~~~====~~~~====~~~~====~~~~=====~~~~=====~~~~====~~~~====~~~~====~~~~~==+)]
+&FUN_LINE2 Global Utility Function Data =[ansi(rand_color(),[repeat(~,78)])]
+&FUN_LINE_NO_COLOR Global Utility Function Data =+===~~~~~====~~~~====~~~~====~~~~=====~~~~=====~~~~====~~~~====~~~~====~~~~~==+
+&FUN_LINE_WITH_TEXT Global Utility Function Data=[ansi(rand_color(),+==~~~~~====~~~~====~~~~===[padstr(%B%0%B,25,center,~)]==~~~~====~~~~====~~~~~==+)]
 
-@wait 6=@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
-@wait 7=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
+@wait 2=+install/updategroup GLOBFUN
 
+@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
-@wait 8=@pemit/silent %#=[ansi(hr,Please move the functions object to a safe place.%RInside the globals object or a store room usually works well.)]%R
-
-
-
-@wait 8=@set me=!quiet
+@wait 10=@set me=!quiet
 
