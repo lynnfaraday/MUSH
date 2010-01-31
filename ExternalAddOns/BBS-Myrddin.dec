@@ -11,7 +11,7 @@
 
 @set me=quiet
 @@ WEB OFF
-@pemit/silent me=[repeat(=,78)]%r[center(Constructing Myrddin's BBS v50.0.0,78)]%r[repeat(-,78)]%rPlease wait...%r
+@pemit/silent me=[repeat(=,78)]%r[center(Constructing Myrddin's BBS v4.0.6.0,78)]%r[repeat(-,78)]%rPlease wait...%r
 
 @create bbpocket=10
 @@ WEB ON
@@ -53,7 +53,7 @@
 &TR_POST_NOTIFY bbpocket=@switch hasflag(%0,DARK)=0,{@pemit/list iter(remove(lwho(),%0),switch(or(member([get(##/bb_omit)] [get(##/bb_silent)],%1),not(u(%1/canread,##))),0,##))=(New BB message ([member(v(groups),%1)]/%2) posted to '[name(%1)]' by [ifelse(hasattr(%1,anonymous),get(%1/anonymous),name(%0))]: %3)}
 &FN_TIMEOUT_CLOSE bbpocket=switch(%0:[lte(sub(%0,secs()),259200)],0:*,0,*:1,1,0)
 &FN_HASCONFIG bbpocket=or(hasattr(%0,anonymous),neq(get(%0/config_timeout),get(#BBPOCKET/config_timeout)))
-&VERSION bbpocket=4.0.6c
+&VERSION bbpocket=4.0.6.0
 @set bbpocket=!HALT
 @set bbpocket=INHERIT
 @set bbpocket=SAFE
@@ -188,4 +188,10 @@
 
 @wait 4=@tel BBS=#2
 
+@wait 4=+bbnewgroup Announcements
+@wait 4=+bbnewgroup Staff Job Notices
+@fo %#=+jobs/create CODE=BBS Config/Lock the announcements and staff job boards to staff.
+
 @wait 5=@pemit/silent me=%rBulletin Board construction complete.  Enjoy!%r[repeat(=,78)]
+
+
