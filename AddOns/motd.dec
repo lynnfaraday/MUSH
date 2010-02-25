@@ -9,121 +9,72 @@
 
 @pemit/silent %#=[ansi(hr,Beginning MOTD System Installation.  Please wait until the Installation Complete message appears...)]%R
 
-@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
 
-@create MOTD System
-@set MOTD System = WIZARD
-@set MOTD System = !NO_COMMAND
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_create(MOTD_CMD,MOTD System,1,0,5.0,Message of the day commands.)
+think install_create(MOTD_DB,MOTD Database,0,1,5.0,Message of the day data storage.)
+
+
 @ACONNECT MOTD System=@fo %#=+motd
-
-&CMD-+MOTD MOTD System=$+motd:@pemit %#=[line()][switch(hasattr(#MOTDDB,motd),1,%R[center(ansi(xget(#MOTDDB,color),Important Message!),78)]%r[center(u(#MOTDDB/motd),78)]%r)]%R[center(ansi(xget(#MOTDDB,color),Tip of the Day),78)]%R[center(u(fun_get_tip),78)]%R%r[center(ansi(xget(#MOTDDB,color),Global BBS System - Unread Messages \(+bbread\)),78)][u(fun_get_bbs,%#)]%R[center(ansi(xget(#MOTDDB,color),Upcoming Events \(+events\)),78)][event_reminders()]%R%r[center(ansi(xget(#MOTDDB,color),Mail Report \([u(fun_mail_command)]\)),78)]%r[u(fun_get_mail,%#)]%R[line()]
+&CMD-+MOTD MOTD System=$+motd:@pemit %#=[line()][switch(hasattr(#MOTD_DB,motd),1,%R[center(ansi(xget(#MOTD_DB,color),Important Message!),78)]%r[center(u(#MOTD_DB/motd),78)]%r)]%R[center(ansi(xget(#MOTD_DB,color),Global BBS System - Unread Messages \(+bbread\)),78)][u(fun_get_bbs,%#)]%R[center(ansi(xget(#MOTD_DB,color),Upcoming Events \(+events\)),78)][event_reminders()]%R%r[center(ansi(xget(#MOTD_DB,color),Mail Report \([u(fun_mail_command)]\)),78)]%r[u(fun_get_mail,%#)]%R[line()]
 &CMD-+MOTD-CATCHUP MOTD System=$+motd/catchup:@tr me/TR_CATCHUP=%#
-&CMD-+MOTD-CLEAR MOTD System=$+motd/clear:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),ansi(hg,You clear the message of the day.)[wipe(#MOTDDB/motd)])
-&CMD-+MOTD-CLEARTIP MOTD System=$+motd/cleartip *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),hasattr(#MOTDDB,TIP_[squish(%0)]),ansi(hr,There is no such tip.),ansi(hg,You erase tip %0.)[wipe(#MOTDDB/tip_[squish(%0)])])
-&CMD-+MOTD-EDITTIP MOTD System=$+motd/edittip *=*/*:think [setq(0,squish(%0))]pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),hasattr(#MOTDDB,TIP_%q0),ansi(hr,There is no such tip.),[set(#MOTDDB,tip_%q0:[edit(xget(#MOTDDB,tip_%q0),{%1},{%2})])]ansi(hg,You edit tip %0.  It now reads: [u(#MOTDDB/tip_%q0)]))
+&CMD-+MOTD-CLEAR MOTD System=$+motd/clear:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),ansi(hg,You clear the message of the day.)[wipe(#MOTD_DB/motd)])
 &CMD-+MOTD-OPTION MOTD System=$^\+motd/(on|off)$:think switch(%1,on,pemit(%#,ansi(hy,You will now see the message of the day when you connect.))[set(%#,tips:1)],off,pemit(%#,ansi(hy,You will no longer see the message of the day when you connect.))[set(%#,tips:0)],pemit(%#,ansi(hy,That is not a valid option.  Use "on" or "off".)))
 @set MOTD System/CMD-+MOTD-OPTION=regexp
-&CMD-+MOTD-SET MOTD System=$+motd/set *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),ansi(hg,You set the message of the day to: %0)[set(#MOTDDB,motd:%0)])
-&CMD-+MOTD-SHOWTIPS MOTD System=$+motd/showtips:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),[line()]%R[ansi(hg,Tips of the Day)]%R[iter(lattr(#MOTDDB/TIP_*),%R[after(##,_)])]%R%R[ansi(h,Use +motd/viewtip <title> to view a tip.)]%R[line()])
-&CMD-+MOTD-TIP MOTD System=$+motd/tip *=*:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),ansi(hg,You add a tip with the subject %0 and text %1)[set(#MOTDDB,tip_[edit(squish(%0),%B,_)]:%1)])
-&CMD-+MOTD-VIEWTIP MOTD System=$+motd/viewtip *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),hasattr(#MOTDDB,TIP_[squish(%0)]),ansi(hr,There is no such tip.),[line()]%R[ansi(hg,Tip: %0)]%R[u(#MOTDDB/TIP_[squish(%0)])]%R[line()])
-&FUN_GET_BBS MOTD System=[switch(hasattr(xget(#MOTDDB,BBPOCKET),BB_POST_HDR_%#),1,%R[center(** BB Warning: You are in the middle of writing a bbpost. **,78)])][switch(setdiff(iter(setr(0,u([xget(#MOTDDB,BBPOCKET)]/VALID_GROUPS,%#,read)),get(##/MESS_LST)),setr(1,get(%#/BB_READ))),,%r[center(None.,78)]%r,[setq(9,get([xget(#MOTDDB,BBPOCKET)]/GROUPS))][trim(iter(%q0,switch(setr(2,setdiff(setr(3,get(##/MESS_LST)),%q1)),,,%R[center([ansi(h,[name(##)] \(#[member(%q9,##)]\):%b)][words(%q2)] unread \([u([xget(#MOTDDB,BBPOCKET)]/FN_UNREAD_LIST,%q2,%q3)]\),78)]),,),b)]%R)]
+&CMD-+MOTD-SET MOTD System=$+motd/set *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff members only.),ansi(hg,You set the message of the day to: %0)[set(#MOTD_DB,motd:%0)])
+&FUN_GET_BBS MOTD System=[switch(hasattr(xget(#MOTD_DB,BBPOCKET),BB_POST_HDR_%#),1,%R[center(** BB Warning: You are in the middle of writing a bbpost. **,78)])][switch(setdiff(iter(setr(0,u([xget(#MOTD_DB,BBPOCKET)]/VALID_GROUPS,%#,read)),get(##/MESS_LST)),setr(1,get(%#/BB_READ))),,%r[center(None.,78)]%r,[setq(9,get([xget(#MOTD_DB,BBPOCKET)]/GROUPS))][trim(iter(%q0,switch(setr(2,setdiff(setr(3,get(##/MESS_LST)),%q1)),,,%R[center([ansi(h,[name(##)] \(#[member(%q9,##)]\):%b)][words(%q2)] unread \([u([xget(#MOTD_DB,BBPOCKET)]/FN_UNREAD_LIST,%q2,%q3)]\),78)]),,),b)]%R)]
 &FUN_GET_MAIL MOTD System=[center([ansi(h,[u(fun_unread_mail,%0)] Unread)] -- [u(fun_total_mail,%0)] Total,78)][switch([extract(mail(%#),1,1)],>25,ansi(r,%r[center(You have more than 25 mail messages.,78)]%r[center(Please archive and erase ones that you do not need!,78)]))]
-&FUN_GET_TIP MOTD System=u(#MOTDDB/[extract(lattr(#MOTDDB/tip_*),add(1,rand(words(lattr(#MOTDDB/tip_*)))),1)])
+&FUN_GET_TIP MOTD System=u(#MOTD_DB/[extract(lattr(#MOTD_DB/tip_*),add(1,rand(words(lattr(#MOTD_DB/tip_*)))),1)])
 
-&FUN_UNREAD_MAIL MOTD System=switch(xget(#MOTDDB,MAILSYS),builtin,extract(mail(%0),2,1),faramail,unread_mail(%0),ERROR)
-&FUN_TOTAL_MAIL MOTD System=switch(xget(#MOTDDB,MAILSYS),builtin,[add(extract(mail(%0),1,1),extract(mail(%0),2,1))],faramail,total_mail(%0),ERROR)
-&FUN_MAIL_COMMAND MOTD System=switch(xget(#MOTDDB,MAILSYS),builtin,@mail,faramail,+mail,ERROR)
+&HATTR_MOTD MOTD System=1
+&HATTR_TIPS MOTD System=1
+
+&FUN_UNREAD_MAIL MOTD System=switch(xget(#MOTD_DB,MAILSYS),builtin,extract(mail(%0),2,1),faramail,unread_mail(%0),ERROR)
+&FUN_TOTAL_MAIL MOTD System=switch(xget(#MOTD_DB,MAILSYS),builtin,[add(extract(mail(%0),1,1),extract(mail(%0),2,1))],faramail,total_mail(%0),ERROR)
+&FUN_MAIL_COMMAND MOTD System=switch(xget(#MOTD_DB,MAILSYS),builtin,@mail,faramail,+mail,ERROR)
 
 @STARTUP MOTD System=@set me=!no_COMMAND
 &TR_CATCHUP MOTD System=@fo %0=+bbcatchup all
 &HELP_+MOTD MOTD System=Whenever you login, the Message Of The Day screen will be presented to you automatically. It shows any important news for the day, as well as a summary of unread items (mail, bulletin boards, events, etc.). %r%rThere is a "catchup" command for the MOTD. This will catch up on all unread items at once (except mail).%r%r[ansi(h,+motd)] - Views the welcome screen. %R[ansi(h,+motd/<on or off>)]- Sets whether to show the screen when you connect. %r[ansi(h,+motd/catchup)] - Catches up on posts.
-&SHELP_+MOTD MOTD System=Staff members can change the message of the day, and also add and edit tips that show up randomly on the "tip of the day" section.%R%R[ansi(h,+motd/set <message>)] - Set the important message of the day.%R[ansi(h,+motd/clear)] - Clears the important message.%R%R[ansi(h,+motd/tip <title>=<tip text>)] - Adds a tip.%R[ansi(h,+motd/showtips)] - Shows a list of all tip titles.%R[ansi(h,+motd/viewtip <title>)] - Views a tip.%R[ansi(h,+motd/cleartip <title>)] - Erases a tip%R[ansi(h,+motd/edittip <title>=<find>/<replace>)] - Edits a tip.%R%RIf you want integration with Myrddin's BBS to show unread BBS postings, you need to configure the BBPOCKET attribute on #MOTDDB to be the DB# of the BBS "bbpocket" object.%R%RIf using FaraMail, set the MAILSYS attribute on #MOTD to faramail (the default is builtin for @mail)
-@DESCRIBE MOTD System=Stores the message of the day commands.%R[u(credits)]
-&CREDITS MOTD System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION MOTD System=4.0
+&SHELP_+MOTD MOTD System=Staff members can change the message of the day, and also add and edit tips that show up randomly on the "tip of the day" section.%R%R[ansi(h,+motd/set <message>)] - Set the important message of the day.%R[ansi(h,+motd/clear)] - Clears the important message.%R%R[ansi(h,+motd/tip <title>=<tip text>)] - Adds a tip.%R[ansi(h,+motd/showtips)] - Shows a list of all tip titles.%R[ansi(h,+motd/viewtip <title>)] - Views a tip.%R[ansi(h,+motd/cleartip <title>)] - Erases a tip%R[ansi(h,+motd/edittip <title>=<find>/<replace>)] - Edits a tip.%R%RIf you want integration with Myrddin's BBS to show unread BBS postings, you need to configure the BBPOCKET attribute on #MOTD_DB to be the DB# of the BBS "bbpocket" object.%R%RIf using FaraMail, set the MAILSYS attribute on #MOTD to faramail (this is the default).  Otherwise use builtin for @mail.
 
 
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-@create MOTD Database
-@describe MOTD Database=Stores tips and MOTD info.
-@set MOTD Database = NO_COMMAND
+
 &COLOR MOTD Database=hb
 
 &MOTD MOTD Database=[center(This is an important notice for today!,78)]%R[center(NOTE: There may not always be an important message.,78)]
 &BBPOCKET MOTD Database=#0
-&MAILSYS MOTD Database=builtin
-
-&TIP_ALTS MOTD Database=Remember to register your alternate characters using the +alts command.
-&TIP_CENSUS MOTD Database=You can use the +census command to see what other characters are out there.
-&TIP_CENSUS2 MOTD Database=The +census command can show you a breakdown of characters by various fields.
-&TIP_CENSUS3 MOTD Database=Looking for a detective?  Doctor?  Lawyer?  Do a +census/search to find other characters' concepts.
-&TIP_DESC MOTD Database=The MUSH has a multi-descer (+desc) that lets you store multiple descriptions.
-&TIP_DESC2 MOTD Database=The MUSH multi-descer (+desc) contains pre-made descriptions.
-&TIP_DETAIL MOTD Database=You can add details to your character using the +detail command.
-&TIP_DETAIL2 MOTD Database=A "+detail" after the room contents indicates that there are +detail views available in the room.
-&TIP_DETAIL3 MOTD Database=You can add detailed descriptions - like jewelry or special quirks about your character - using the +detail command.
-&TIP_EVENTS MOTD Database=You can use the +events system to schedule upcoming events.
-&TIP_EVENTS2 MOTD Database=You can use the +events system to schedule upcoming events.
-&TIP_EVENTS3 MOTD Database=Got a plot event coming up? Use +events to schedule it!
-&TIP_FINGER MOTD Database=There are a variety of +finger fields you can set.
-&TIP_FINGER2 MOTD Database=Going on vacation?  Set your Vacation field in +finger so other players will know where you've gone and how to RP around you while you're away.
-&TIP_FRIENDS MOTD Database=The +friends command lets you keep track of your friends.
-&TIP_FRIENDS2 MOTD Database=The +friends command lets you know when your friends log in and out.
-&TIP_GLANCE MOTD Database=The +glance command will show you a summary of other nearby players.
-&TIP_HELP MOTD Database=Did you know that you can search +help? Use +help/search.
-&TIP_IDLE MOTD Database=Please do not idle on the IC grid.  The +idle command will take you to the Idle Lounge.
-&TIP_KNOCK MOTD Database=You can use the +knock command to knock on doors.
-&TIP_LIST MOTD Database=You can use +list to see all available mailing lists- and the people on each list.
-&TIP_LIST2 MOTD Database=You can create your own personal mailing lists using the +list command.
-&TIP_LIST3 MOTD Database=You can send mail to any mailing list  - global or personal -  using +mail.
-&TIP_MAIL MOTD Database=Did you know that you can make your own mailing lists using +mail?
-&TIP_MAIL2 MOTD Database=The +mail system can automatically save a copy of your sent mail.
-&TIP_MAIL3 MOTD Database=The MUSH +mail system allows you to compose messages a piece at a time- like MUX mail- instead of having to type it all at once.
-&TIP_MAIL4 MOTD Database=You can forward mail messages using +mail/fwd- and even add your own notes to the top of the message- like "Here's the mail I got from Joe.  What do you think about it??"
-&TIP_MAIL5 MOTD Database=You can send messages to any combination of mailing lists or players using the +mail system.  For example: +mail Fred Staff Joe Friends=Subject/Body
-&TIP_MAP MOTD Database=Having trouble getting around the MUSH?  Use the +map command!
-&TIP_MAP2 MOTD Database=The +map command shows you maps of the IC areas of the MUSH.
-&TIP_MAP3 MOTD Database=Use +map/areas to see a list of what maps are available.
-&TIP_MOTD MOTD Database=You can use the +motd command to turn this screen on or off when you connect.
-&TIP_PLACES MOTD Database=Many rooms on the MUSH are equipped with places code.  A "places" after the room contents indicates that there are places in the room.
-&TIP_REQUEST MOTD Database=Use the +request command to submit questions, requests, bug reports, or any other item requiring staff attention.
-&TIP_REQUEST2 MOTD Database=Use the +request command to submit questions, requests, bug reports, or any other item requiring staff attention.
-&TIP_REQUEST3 MOTD Database=Use the +request command to submit questions, requests, bug reports, or any other item requiring staff attention.
-&TIP_ROLL MOTD Database=You can use the +roll commands to simulate NPC skill rolls.
-&TIP_ROLL2 MOTD Database=The +roll command can roll attributes, skills, or any trait level.
-&TIP_ROLL3 MOTD Database=The +roll command can do opposed or unopposed skill rolls.
-&TIP_RP MOTD Database=Use the +ic and +ooc commands to travel to and from the IC and OOC areas.
-&TIP_RP2 MOTD Database=Use the +ic and +ooc commands to travel to and from the IC and OOC areas.
-&TIP_RPSEARCH MOTD Database=Looking for RP?  Check out the +rpsearch command!
-&TIP_RPSEARCH2 MOTD Database=Looking for RP?  Check out the +rpsearch command!
-&TIP_RPSEARCH3 MOTD Database=Looking for RP?  Use +rpsearch to find others who are too.
-&TIP_RPSEARCH4 MOTD Database=Available for RP?  List yourself on +rpsearch so others can find you!
-&TIP_SHOUT MOTD Database=You can shout a message to adjacent rooms using the +shout command.
-&TIP_TIME MOTD Database=The +time command gives you the current time in the IC world- as well as the OOC time in the MUSH timezone and your local timezone.
-&TIP_COOKIE MOTD Database=Seen some good RP or a good TP?  Give the player a +cookie!
-&TIP_COOKIE3 MOTD Database=Seen some good RP or a good TP?  Give the player a +cookie!
-&TIP_WHERE2 MOTD Database=You can keep your location from showing up on +where by typing: @set me=UNFINDABLE
-&TIP_WHO MOTD Database=The +who/age command can show you the 25 oldest players.
+&MAILSYS MOTD Database=faramail
 
 
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
-@fo me=@edit MOTD System/*=#MOTDDB,[num(MOTD Database)]
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
-@wait 3=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
-@wait 3=@fo %#=+copyhelp [num(MOTD System)]
+@wait 2=+install/updategroup MOTD
 
-@wait 4=think setup_attr(h,motd,1)
-@wait 4=think setup_attr(h,tips,1)
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
-@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
-
-@wait 4=@tel MOTD Database=MOTD System
-@wait 5=@tel MOTD System=#2
+@wait 5=@set me=!quiet
 
 @wait 5=+jobs/create CODE=MOTD BBS/Set BBPOCKET attribute for the MOTD object.  See +shelp +motd.
-@wait 5=+jobs/create CODE=Tips/Review the tips on the MOTD object and add/delete ones as needed.  See +shelp +motd. 
 @wait 5=+jobs/create CODE=MOTD/Set the important message (if there is one).  See +shelp +motd.
 
 @wait 5=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R

@@ -9,14 +9,12 @@
 
 @pemit/silent %#=[ansi(hr,Beginning Staff Command System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
 
-@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
 
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
+think install_create(STAFF_CMD,Staff Commands,1,0,5.0,Staff-only commands.)
 
-@create Staff Commands
 @lock/Use Staff Commands=ISSTAFF/1
-@set Staff Commands = WIZARD
-@set Staff Commands = !NO_COMMAND
 @STARTUP Staff Commands=@set me=!no_command
 &ISSTAFF Staff Commands=isstaff(%#)
 
@@ -39,22 +37,11 @@
 &cmd-+send Staff Commands=$+send *=*:think [setq(0,lsearch(all,type,room))][setq(1,0)][squish(iter(%q0,switch(and(strmatch(name(##),*%1*),not(%q1)),1,[setq(1,##)])))][switch(%q1,0,pemit(%#,ansi(hr,That is not a valid location.)),iter(%0,[setq(2,pmatch(##))][pemit(%#,[switch(0,t(%q2),ansi(hr,That is not a valid player.),match(xget(%q2,STATUS),IC),ansi(hr,## is not IC.),[ansi(hg,You send [name(%q2)] to [name(%q1)].)][remit(loc(%q2),[ansi(hy,<OOC> %N whisks [name(%q2)] away.)])][tel(%q2,%q1)])]))]
 &SHELP_+SEND Staff Commands=The +send command is a people-mover for teleporting a bunch of folks to a specific room.  Like +hop, it will attempt to find the first matching room name for what you give it.  If your MUSH has too many rooms, you may need to increase your function invocation limit to make the command work.%R%R+send <list of players>=<room name>
 
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
-@DESCRIBE Staff Commands=Miscellaneous staff commands.%R%R[u(credits)]
-&VERSION Staff Commands=4.0
-&CREDITS Staff Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+@wait 2=+install/updategroup STAFF
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
-
-@wait 4=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
-@wait 4=@fo %#=+copyhelp [num(Staff Commands)]
-
-
-@wait 5=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
-
-@wait 6=@tel Staff Commands=#2
-
-@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
-
-@wait 10=@set me=!quiet
+@wait 5=@set me=!quiet
 

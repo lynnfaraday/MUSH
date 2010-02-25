@@ -10,8 +10,7 @@
 
 @pemit/silent %#=[ansi(hr,Beginning Idle Purger Installation.  Please wait until you see the 'Installation Complete' message...)]%R
 
-@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
-
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 think install_create(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
 
@@ -75,8 +74,10 @@ think install_create(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
 
 @wait 2=+install/updategroup IDLE
 
-@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R
 
-@wait 10=@set me=!quiet
+@wait 5=@set me=!quiet
 
-+jobs/create CODE=Idle Purge Protection/Add builders and other potentially-idle staff characters to the protected list so they don't get nuked by the idle purger.  See +shelp +idle.
+@wait 5=+jobs/create CODE=Idle Purge Protection/Add builders and other potentially-idle staff characters to the protected list so they don't get nuked by the idle purger.  See +shelp +idle.
+@wait 5=+jobs/create CODE=Idle Purge Mailing List/Configure the mailing list object on the idle purger so deleted characters get removed from mailing lists.  See +shelp +idle.
+@wait 5=+jobs/create CODE=Idle Purge Actions/Set up any additional actions to take upon purging a character, such as room or object cleanup.  See +shelp +idle.

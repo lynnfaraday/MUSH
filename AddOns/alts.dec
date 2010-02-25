@@ -7,25 +7,16 @@
 
 @set me=quiet
 
-@pemit/silent %#=[ansi(hr,Beginning Alts System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+@pemit/silent %#=[ansi(hg,Beginning Alts System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
 
-@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-
-@create Alts System
-@set Alts System = WIZARD
-@set Alts System = !NO_COMMAND
-@STARTUP Alts System=@set me=!no_command
-
-
-@STARTUP Alts System=@set me=!no_command
-&CREDITS Alts System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Alts System=4.0
+think install_create(ALTS_CMD,Alts System,1,0,5.0,Alt tracker.)
+think install_create(ALTS_DB,Alts DB,0,1,5.0,Alt database.)
 
 
 &HELP_+ALTS Alts System=The +alts command lets you record who your alternate characters are.  Alts must be registered so that staff knows who's playing who.  Alt information may only be seen by staff.  If you want people to know your alts, put it in +finger in the PUBLICALTS attribute.%R%R[ansi(h,+alts/register <character>)] - Registers a character as your alt.%R[ansi(h,+alts/unregister <character>)] - Use if a character is no longer your alt.%R%TUsually you'd only use this if your char was @nuked or something.%R%R[ansi(h,+alts/mail)] - Shows if your alts have unread messages.
 &SHELP_+ALTS Alts System=Use the +alts command to view a character's alts.%R%R[ansi(h,+alts <character>)] - Lists alts.%R[ansi(h,+alts/add <main>=<alt>)] - Adds an alt.%R[ansi(h,+alts/remove <main>=<alt>)] - Removes an alt.%r%rSet the NOTIFY_STAFF attribute to 1 to submit a job every time someone registers or unregisters an alt.%R%RIf using FaraMail, set the MAILSYS attribute on #ALTDB to faramail (the default is builtin for @mail)
-
 &CMD-+ALTS Alts System=$+alts:@pemit %#=ansi(hc,Your alts:  [remove(u(fun_find_alts,%N),%N)])
 &CMD-+ALTS-ADD Alts System=$+alts/add *=*:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(pmatch(%0)),ansi(hr,%0 is not a valid player!),t(pmatch(%1)),ansi(hr,%1 is not a valid player!),not(u(fun_is_alt,%0,%1)),ansi(hr,%0 is already %1's alt.),ansi(hg,You add %0 as an alt of %1.)[u(fun_register,%0,%1)])
 &CMD-+ALTS-MAIL Alts System=$+alts/mail:think pemit(%#,[line()]%R[ansi(h,Alt Mail Report)][iter(u(fun_find_alts,%N),%R[ljust(##,15)][u(fun_unread_mail,pmatch(##))] unread messages)]%R[line()])
@@ -43,26 +34,39 @@
 &FUN_REGISTER Alts System=localize([setq(0,u(fun_find_main,%0))][setq(1,u(fun_find_main,%1))][switch(1,and(%q0,%q1),u(fun_merge_alts,%q0,%q1),t(%q0),u(fun_add_alt,%q0,%1),t(%q1),u(fun_add_alt,%q1,%0),[u(fun_add_main,%0)][setq(0,u(fun_find_main,%0))][u(fun_add_alt,%q0,%1)])])
 &FUN_UNREAD_MAIL Alts System=switch(xget(#ALTDB,MAILSYS),builtin,extract(mail(%0),2,1),faramail,unread_mail(%0),ERROR)
 &FUN_UNREGISTER Alts System=localize([setq(0,u(fun_find_main,%0))][setq(1,pmatch(%1))][switch(1,t(%q0),set(#ALTDB,%q0:[remove(xget(#ALTDB,%q0),switch(t(%q1),1,name(%q1),%1))]))])
+&HATTR_ALTS Alts System=
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
-@create Alts DB
 &MAILSYS Alts DB=builtin
 &NOTIFY_STAFF Alts DB=0
 &ALT_ID Alts DB=1
 
-@wait 4=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
-@wait 4=@fo %#=+copyhelp [num(Alts System)]
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-@wait 4=think setup_attr(h,alts,)
 
-@wait 5=@pemit/silent %#=[ansi(hr,Setting up DB Numbers...)]%R
-@wait 5=@fo me=@edit Alts System/*=#ALTDB,[num(Alts DB)]
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
-@wait 6=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+@wait 2=+install/updategroup ALTS
 
-@wait 6=@tel Alts System=#2
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
-@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+@wait 5=@set me=!quiet
 
-@wait 10=@set me=!quiet
+
 
