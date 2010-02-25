@@ -7,28 +7,26 @@
 
 @set me=quiet
 
-@pemit/silent %#=[ansi(hg,Beginning Player Setup Commands Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+@pemit/silent %#=[ansi(hg,Beginning Player Setup Object Installation.  Please wait until you see the 'Installation Complete' message...)]%R
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think install_create(SETUP_CMD,Player Setup Commands,1,0,5.0,Sets up attributes on new players.)
-think install_create(SETUP_DB,Player Setup Database,1,1,5.0,Stores player setup data.)
+think install_create(SETUP_CMD,Player Setup Object,1,0,5.0,Sets up attributes on new players.)
+think install_create(SETUP_DB,Player Setup Data,1,1,5.0,Stores player setup data.)
 
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 
-@set Player Setup Commands = DARK
-@set Player Setup Commands = MONITOR
-@startup Player Setup Commands = @set me=!NO_COMMAND
-@AHEAR Player Setup Commands=@switch 0=hasattr(%#,status),{@tr #SETUP_DB/ADDITIONAL_SETUP=%#;think [iter(lattr(#SETUP_DB/hattr_*),[setq(0,after(##,_))][set(%#,%q0:[u(#SETUP_DB/##,%#)])][set(%#/%q0,mortal_dark)][atrlock(%#/%q0,on)])][iter(lattr(#SETUP_DB/vattr_*),[setq(0,after(##,_))][set(%#,%q0:[u(#SETUP_DB/##,%#)])])]}
-&FUN_SETUP_ATTR Player Setup Commands=switch(%0,h,[set(#SETUP_DB,HATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:[u(#SETUP_DB/HATTR_%1)]))][set(##/%1,mortal_dark)][atrlock(##/%1,on)])][ansi(h,%RYou set up a Hidden Locked attribute named %1)],v,[set(#SETUP_DB,VATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:[u(#SETUP_DB/VATTR_%1)]))][ansi(h,%RYou set up a Visible Unlocked attribute named %1)],[ansi(hb,%0 is not a valid setting.)])
-@LISTEN Player Setup Commands=* has connected.
-&SHELP_PLAYER_SETUP Player Setup Commands=In the welcome room (#0), there is a dark "Player Setup Commands" (#SETUP_DB) that does initial player setup. It initializes things like their starting IC location, status, etc. If any coded systems require attributes to be locked/initialized, add an attribute to the setup object. Use HATTR_<name> for attributes that should be hidden and locked, and VATTR_<name> for attributes that should be visible and unlocked.%R%RFor example:%R%R%T&HATTR_ICLOC Player Setup=#66%R%RThis will set an "ICLOC" attribute on every player with a starting value of #66. That attribute will be locked and invisible to players.%R%R%T&VATTR_ADESC Player Setup=think <OOC> %N looked at you.%R%RThis will set up an @adesc attribute that the player can see and change.%R%RNote: The player's DB# is passed to each attribute as \%0.
+@set Player Setup Object = DARK
+@set Player Setup Object = MONITOR
+@startup Player Setup Object = @set me=!NO_COMMAND
+@AHEAR Player Setup Object=@switch 0=hasattr(%#,status),{@tr #SETUP_DB/ADDITIONAL_SETUP=%#;think [iter(lattr(#SETUP_DB/hattr_*),[setq(0,after(##,_))][set(%#,%q0:[u(#SETUP_DB/##,%#)])][set(%#/%q0,mortal_dark)][atrlock(%#/%q0,on)])][iter(lattr(#SETUP_DB/vattr_*),[setq(0,after(##,_))][set(%#,%q0:[u(#SETUP_DB/##,%#)])])]}
+&FUN_SETUP_ATTR Player Setup Object=switch(isstaff(%#),0,ansi(hr,This command is for staff only.),switch(%0,h,[set(#SETUP_DB,HATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:[u(#SETUP_DB/HATTR_%1)]))][set(##/%1,mortal_dark)][atrlock(##/%1,on)])][ansi(h,%RYou set up a Hidden Locked attribute named %1)],v,[set(#SETUP_DB,VATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:[u(#SETUP_DB/VATTR_%1)]))][ansi(h,%RYou set up a Visible Unlocked attribute named %1)],[ansi(hb,%0 is not a valid setting.)]))
+@LISTEN Player Setup Object=* has connected.
+&SHELP_PLAYER_SETUP Player Setup Object=In the welcome room (#0), there is a dark "Player Setup Object" (#SETUP_DB) that does initial player setup. It initializes things like their starting IC location, status, etc. If any coded systems require attributes to be locked/initialized, add an attribute to the setup object. Use HATTR_<name> for attributes that should be hidden and locked, and VATTR_<name> for attributes that should be visible and unlocked.%R%RFor example:%R%R%T&HATTR_ICLOC Player Setup=#66%R%RThis will set an "ICLOC" attribute on every player with a starting value of #66. That attribute will be locked and invisible to players.%R%R%T&VATTR_ADESC Player Setup=think <OOC> %N looked at you.%R%RThis will set up an @adesc attribute that the player can see and change.%R%RNote: The player's DB# is passed to each attribute as \%0.
 
-&CMD-+INSTALL_ATTR Player Setup Commands=$+install/attr *:@dolist lattr(%0/?ATTR_*)=think u(fun_setup_attr,mid(##,0,1),after(##,_),xget(%0,##))
-
-@startup Player Setup Database=@set me=!NO_COMMAND
+@startup Player Setup Object=@set me=!NO_COMMAND;@fun setup_attr=me,fun_setup_attr
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -41,10 +39,10 @@ think install_create(SETUP_DB,Player Setup Database,1,1,5.0,Stores player setup 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&VATTR_ADESCRIBE Player Setup Database=think <OOC> \%N looked at you.
-&HATTR_CREATE_DATE Player Setup Database=[time()]
-&HATTR_STATUS Player Setup Database=NEW
-&ADDITIONAL_SETUP Player Setup Database=@fo %0=@chan/on newbie;@fo %0=@chan/on public;@dolist lwho()=@pemit ##=[ansi(hg,<Newbie>)] [name(%0)] has just created a character!  Welcome to [mudname()]!;@set %0=unregistered;@fo %0=@lock me=me
+&VATTR_ADESCRIBE Player Setup Data=think <OOC> \%N looked at you.
+&HATTR_CREATE_DATE Player Setup Data=[time()]
+&HATTR_STATUS Player Setup Data=NEW
+&ADDITIONAL_SETUP Player Setup Data=@fo %0=@chan/on newbie;@fo %0=@chan/on public;@dolist lwho()=@pemit ##=[ansi(hg,<Newbie>)] [name(%0)] has just created a character!  Welcome to [mudname()]!;@set %0=unregistered;@fo %0=@lock me=me
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -180,4 +180,4 @@ think install_create(MAIL_DB_LISTS,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 +jobs/create CODE=Mail Setup/Add @fo \%0=+mail/init to the ADDITIONAL_SETUP attr on the Player Setup Data Object.  (Or if you're not using my Player Setup object, make sure that command gets executed when a new player is created.)
 +jobs/create CODE=Disable @mail/Disable @mail in the server-side config.
 +jobs/create CODE=Setup MOTD Mail/If using my MOTD system, set the MAILSYS flag to faramail to display unread mail properly.
-
++jobs/create CODE=Mail Purge/Set up idle purger to clear out old mail objects and set up the MAILING_LIST_OBJECT on the Idle Purger so nuked players are removed from mailing lists.
