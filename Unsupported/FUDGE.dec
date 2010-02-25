@@ -1,0 +1,530 @@
+@@ Faraday's FUDGE Skills/Chargen System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hr,Beginning FUDGE Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+
+
+@create FUDGE Skill System
+@set FUDGE Skill System = WIZARD
+@set FUDGE Skill System = !NO_COMMAND
+&CMD-+ATTRIBUTES FUDGE Skill System=$+attributes:think pemit(%#,[line()]%R[ansi(hg,Attributes List)]%R[table(sort(u(#SKILLFUNC/fun_attr_list)),25,78)]%R%RSee [ansi(h,+attributes <attr>)] for a description of each attribute.%RSee [ansi(h,+attributes/all)] to view all of them at once.%R[line()])
+&CMD-+ATTRIBUTES-ALL FUDGE Skill System=$+attributes/all:think pemit(%#,[iter(u(#SKILLFUNC/fun_attr_list),%R[ansi(hc,##)]%R%T[u(#SKILLDB/attr_desc_##)])])
+&CMD-+ATTRIBUTES-DESC FUDGE Skill System=$+attributes *:think pemit(%#,switch(0,u(#SKILLFUNC/fun_is_valid_attr,%0),ansi(hr,That is not a valid attribute.),[line()]%R[ansi(hm,capstr_all(%0))]%R[line2()]%R[u(#SKILLDB/attr_desc_[trim(%0)])]%R[line()]))
+&CMD-+ROLL FUDGE Skill System=$+roll *:think [setq(0,u(#SKILLFUNC/fun_parse_roll_params,%0))][setq(1,u(#SKILLFUNC/fun_translate_level,first(%q0),%#))][setq(2,last(%q0))][setq(3,u(#SKILLFUNC/fun_get_rolled_degree,%q1,%q2))][switch(%q1,#-1,pemit(%#,ansi(hr,That is not a valid skill\, attribute or trait level.)),u(#SKILLFUNC/FUN_NOTIFY_ROLL_RESULTS,%l,[ansi(hy,<Trait Roll>)] %N rolls [capstr_all(%0)] and achieves a degree of [u(#SKILLFUNC/fun_level_name,%q3)] \([u(#SKILLFUNC/fun_print_num,%q3)]\). [switch(%qb,-1,[ansi(hr,***BOTCH***)],1,[ansi(hg,***CRITICAL SUCCESS***)])]))]
+&CMD-+ROLL-OPPOSED FUDGE Skill System=$+roll/opposed */*=*/*:think [setq(0,u(#SKILLFUNC/fun_parse_roll_params,%1))][setq(1,u(#SKILLFUNC/fun_translate_level,first(%q0),pmatch(%0)))][setq(2,last(%q0))][setq(3,u(#SKILLFUNC/fun_parse_roll_params,%3))][setq(4,u(#SKILLFUNC/fun_translate_level,first(%q3),pmatch(%2)))][setq(5,last(%q3))][setq(6,u(#SKILLFUNC/fun_get_rolled_degree,%q1,%q2))][setq(7,%qb)][setq(8,u(#SKILLFUNC/fun_get_rolled_degree,%q4,%q5))][setq(9,%qb)][switch(#-1,%q1,pemit(%#,ansi(hr,%1 is not a valid skill\, attribute or trait level.)),%q3,pemit(%#,ansi(hr,%3 is not a valid skill\, attribute or trait level.)),[u(#SKILLFUNC/fun_notify_roll_results,%l,[ansi(hy,<Opposed Roll>)] [ansi(hg,[capstr(%0)] - [capstr_all(%1,_)])] versus [ansi(hr,[capstr(%2)] - [capstr_all(%3,_)])]%R%T<Roll1> [capstr(%0)]: [u(#SKILLFUNC/fun_level_name,%q6)] [switch(%q7,-1,[ansi(hr,***BOTCH***)],1,[ansi(hg,***CRITICAL SUCCESS***)])]%T<Roll2> [capstr(%2)]: [u(#SKILLFUNC/fun_level_name,%q8)] [switch(%q9,-1,[ansi(hr,***BOTCH***)],1,[ansi(hg,***CRITICAL SUCCESS***)])]%R%T<Result> [switch(1,eq(%q6,%q8),DRAW!,gt(%q6,%q8),[capstr(%0)] WINS by [sub(%q6,%q8)].,[capstr(%2)] WINS by [sub(%q8,%q6)].)]))]   
+&CMD-+SHEET FUDGE Skill System=$+sheet:think pemit(%#,u(#SKILLFUNC/fun_display_sheet,%#))
+&CMD-+SHEET-STAFF FUDGE Skill System=$+sheet *:think pemit(%#,switch(0,or(isstaff(%#),xget(#SKILLDB,PLAYER_VISIBLE_SHEETS)),ansi(hr,That command is restricted to staff.),t(pmatch(%0)),ansi(hr,That is not a valid player.),u(#SKILLFUNC/fun_display_sheet,pmatch(%0))))
+&CMD-+SKILLS FUDGE Skill System=$+skills:think pemit(%#,[line()]%R[ansi(h,Skills List)][iter(lattr(#SKILLDB/skill_cat_*),%R%R[ansi(hr,last(##,_))]%R[table(xget(#SKILLDB,##),25,78)])]%R%RType [ansi(h,+skills <skill>)] for a description of each skill. %RType [ansi(h,+skills/all)] to be spammed by all the skills and their descriptions.%R[line()])
+&CMD-+SKILLS-ALIAS FUDGE Skill System=$+skill *:@fo %#=+skills %0
+&CMD-+SKILLS-ALL FUDGE Skill System=$+skills/all:think pemit(%#,[iter(u(#SKILLFUNC/fun_skills_list),%R[ansi(hc,##)]%R%T[u(#SKILLDB/skill_desc_##)])])
+&CMD-+SKILLS-CAT FUDGE Skill System=$+skills/cat:think pemit(%#,[line()]%R[ansi(h,Skills By Category)][iter(lattr(#SKILLDB/skill_cat_*),%R%R[ansi(hr,last(##,_))]%R[table(xget(#SKILLDB,##),25,78)])]%R[line()])
+&CMD-+SKILLS-DESC FUDGE Skill System=$+skills *:think pemit(%#,switch(0,u(#SKILLFUNC/fun_is_valid_skill,%0),ansi(hr,That is not a valid skill.),[line()]%R[ansi(hm,capstr_all(%0))]%R[line2()]%R[u(#SKILLDB/skill_desc_[trim(%0)])]%R[line()]))
+@DESCRIBE FUDGE Skill System=These are the commands for the FUDGE skills system.%R%R[u(Credits)]
+@STARTUP FUDGE Skill System=@set me=!no_command
+&VERSION FUDGE Skill System=4.0
+&CREDITS FUDGE Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%RBased on FUDGE rules by Steffan O'Sullivan.  See +help FUDGE.
+&CMD-+SKILLCENSUS FUDGE Skill System=$+skillcensus *=*:think pemit(%#,switch(0,or(isstaff(%#),xget(#SKILLDB,PLAYER_VISIBLE_SHEETS)),ansi(hr,That command is restricted to staff.),u(#SKILLFUNC/fun_is_valid_skill,%0),ansi(hr,That's not a valid skill.),u(#SKILLFUNC/fun_is_valid_level_name,%1),ansi(hr,That's not a valid level.),[line()]%RCharacters with %0 at %1 or higher%R[iter(u(#SKILLFUNC/fun_skill_census,%0,%1),%R[padstr(name(after(##,:)),15)][u(#SKILLFUNC/fun_level_name,before(##,:))])]%R[line()]))
+&CMD-+SKILLCENSUS-GENERAL FUDGE Skill System=$+skillcensus *:think switch(%0,*=*,,pemit(%#,switch(0,or(isstaff(%#),xget(#SKILLDB,PLAYER_VISIBLE_SHEETS)),ansi(hr,That command is restricted to staff.),u(#SKILLFUNC/fun_is_valid_skill,%0),ansi(hr,That is not a valid skill.),not(match(%0,*=*)),,[line()]%RCharacters with [capstr(%0)]%R[iter(u(#SKILLFUNC/fun_skill_census,%0,Poor),%R[padstr(name(after(##,:)),15)][u(#SKILLFUNC/fun_level_name,before(##,:))])]%R[line()])))
+
+@create FUDGE Skill Functions
+@set FUDGE Skill Functions = WIZARD
+@set FUDGE Skill Functions = NO_COMMAND
+@DESCRIBE FUDGE Skill Functions=Functions for the FUDGE skills system.
+@STARTUP FUDGE Skill Functions=@fun TRAIT_NUM=[num(me)],FUN_GET_TRAIT_LVL_NUM;@fun TRAIT_NAME=[num(me)],FUN_GET_TRAIT_LVL_NAME;@fun ROLL_TRAIT=[num(me)],FUN_GET_ROLLED_DEGREE;@FUN ROLL_PLAYER_TRAIT=[num(me)],FUN_ROLL_PLAYER_TRAIT;@fun LEVEL_NUM=[num(me)],FUN_LEVEL_NUM;@fun LEVEL_NAME=[num(me)],FUN_LEVEL_NAME;@fun PRETTY_LEVEL_NUM=[num(me)],FUN_PRINT_NUM
+&FUN_ATTR_LIST FUDGE Skill Functions=iter(lattr(#SKILLDB/ATTR_DESC_*),capstr_all(lcstr(after(after(##,_),_)),_))
+&FUN_SKILLS_LIST FUDGE Skill Functions=iter(lattr(#SKILLDB/SKILL_DESC_*),capstr_all(lcstr(after(after(##,_),_)),_))
+&FUN_NOTIFY_ROLL_RESULTS FUDGE Skill Functions=[remit(%0,%1)][cemit(SkillRolls,<[ansi(hc,SkillRolls)]> %1
+&FUN_SKILL_CENSUS FUDGE Skill Functions=localize([iter(lsearch(all,type,player),[setq(0,[u(#SKILLFUNC/fun_get_trait_lvl_num,##,%0)])][switch(gte(%q0,u(#SKILLFUNC/fun_level_num,%1)),1,setq(1,%q1 %q0:##))])][sort(%q1,n)])
+&FUN_DISPLAY_SHEET FUDGE Skill Functions=[line()]%R[center([xget(%0,fullname)] \([name(%0)]\),78)]%R%R[ansi(hr,Physical Profile)]%R[line2()]%R[padstr([ansi(h,Height:%B%B%B%B)] [xget(%0,height)],38)][ansi(h,Weight:)] %B%B%B%B[xget(%0,weight)]%R[padstr([ansi(h,Hair Color:)] [xget(%0,hair)],38)][ansi(h,Eye Color:)] %B[xget(%0,eyes)]%R[padstr([ansi(h,Skin Color:)] [xget(%0,skin)],38)][ansi(h,Handedness:)] [xget(%0,hand)]%R%R[ansi(hb,Demographics)]%R[line2()]%R[padstr([ansi(h,Faction:)][space(4)][xget(%0,faction)],38)][ansi(h,Org:)][space(8)][xget(%0,org)]%R[padstr([ansi(h,Position:)]%B%B%B[xget(%0,position)],38)][ansi(h,Age:)][space(8)][age(%0)] \([u(#CGFUN/fun_display_birthdate,%0)]\)%R%R[ansi(hg,Attributes)]%R[line2()]%R[table(iter(xget(%0,attributes),[padstr(ansi(h,[before(##,:)]:),15)]%B[u(fun_print_name_and_num,after(##,:))],,|),37,78,|)]%R%R[ansi(hm,Skills)]%R[line2()]%R[table(iter(sort(xget(%0,skills)),[padstr(ansi(h,[before(##,:)]:),15)]%B[u(fun_print_name_and_num,after(##,:))],,|),37,78,|)]%R%R[ansi(h,Experience Points:)] [xget(%0,xp)]%R[line()]
+&FUN_GET_RELATIVE_DEGREE FUDGE Skill Functions=sub(u(fun_get_rolled_degree,%0,%1),u(fun_get_rolled_degree,%2,%3))
+&FUN_GET_ROLLED_DEGREE FUDGE Skill Functions=add(%0,u(fun_roll_fudge_dice),%1)
+&FUN_GET_TRAIT_LVL_NAME FUDGE Skill Functions=u(fun_level_name,u(fun_get_trait_lvl_num,%0,%1))
+&FUN_GET_TRAIT_LVL_NUM FUDGE Skill Functions=localize([setq(9,grab(xget(%0,[switch(u(#SKILLFUNC/FUN_IS_VALID_ATTR,%1),1,attributes,skills)]),%1:*))][switch(%q9,*:*,after(%q9,:),[xget(#SKILLDB,MIN_TRAIT_LEVEL)])])
+&FUN_ROLL_PLAYER_TRAIT FUDGE Skill Functions=u(fun_get_rolled_degree,u(fun_get_trait_lvl_num,%0,%1),%2)
+&FUN_IS_VALID_ATTR FUDGE Skill Functions=hasattr(#SKILLDB,ATTR_DESC_%0)
+&FUN_IS_VALID_LEVEL_NAME FUDGE Skill Functions=t(match(xget(#SKILLDB,trait_levels),%0:*))
+&FUN_IS_VALID_LEVEL_NUM FUDGE Skill Functions=t(match(xget(#SKILLDB,trait_levels),*:%0))
+&FUN_IS_VALID_SKILL FUDGE Skill Functions=hasattr(#SKILLDB,SKILL_DESC_%0)
+&FUN_LEVEL_NAME FUDGE Skill Functions=before(grab(xget(#SKILLDB,trait_levels),*:%0),:)
+&FUN_LEVEL_NUM FUDGE Skill Functions=after(grab(xget(#SKILLDB,trait_levels),%0:*),:)
+&FUN_PARSE_ROLL_PARAMS FUDGE Skill Functions=[switch(%0,*+*,[trim(before(%0,+))] [trim(after(%0,+))],*-*,[trim(before(%0,-))] -[trim(after(%0,-))],%0 0)]
+&FUN_PRINT_NAME_AND_NUM FUDGE Skill Functions=[u(fun_level_name,%0)] \([u(fun_print_num,%0)]\)
+&FUN_PRINT_NUM FUDGE Skill Functions=sub(%0,[xget(#SKILLDB,MIN_TRAIT_LEVEL)])
+&FUN_ROLL_FUDGE_DICE FUDGE Skill Functions=[setq(z,switch(die(3,6),3,-4,4,-4,5,-3,6,-2,7,-2,8,-1,9,-1,10,0,11,0,12,1,13,1,14,2,15,2,16,3,17,4,18,4))][switch(%qz,-4,setq(b,-1),4,setq(b,1),setq(b,0))]%qz
+&FUN_SKILLS_ABOVE_LVL Skill Functions=localize([setq(0,0)][iter(xget(%0,skills),switch(gt(after(##,:),%1),1,setq(0,inc(%q0))),,)]%q0)
+&FUN_ATTRS_ABOVE_LVL Skill Functions=localize([setq(0,0)][iter(xget(%0,attributes),switch(gt(after(##,:),%1),1,setq(0,inc(%q0))),,)]%q0)
+&FUN_MAX_SKILLS_ABOVE_LVL Skill Functions=switch(hasattr(#SKILLDB,MAX_SKILLS_ABOVE_%0),1,xget(#SKILLDB,MAX_SKILLS_ABOVE_%0),9999)
+&FUN_MAX_ATTRS_ABOVE_LVL Skill Functions=switch(hasattr(#SKILLDB,MAX_ATTRIBUTES_ABOVE_%0),1,xget(#SKILLDB,MAX_ATTRIBUTES_ABOVE_%0),9999)
+&FUN_SET_TRAIT FUDGE Skill Functions=switch(u(#SKILLFUNC/FUN_IS_VALID_ATTR,%1),1,u(#SKILLFUNC/FUN_SET_ATTR,%0,%1,%2),u(#SKILLFUNC/FUN_SET_SKILL,%0,%1,%2))
+&FUN_SET_ATTR FUDGE Skill Functions=set(%0,attributes:[find_and_replace(xget(%0,attributes),%1:*,%1:%2)])
+&FUN_SET_SKILL FUDGE Skill Functions=localize([setq(0,xget(%0,skills))][switch(0,gt(%2,[xget(#SKILLDB,MIN_TRAIT_LEVEL)]),set(%0,skills:[remove(%q0,extract(%q0,match(%q0,%1:*),1))]),match(%q0,%1:*),set(%0,skills:[trim(%q0%B%1:%2)]),set(%0,skills:[trim(find_and_replace(%q0,%1:*,%1:%2))]))])
+&FUN_TRANSLATE_LEVEL FUDGE Skill Functions=switch(1,u(#SKILLFUNC/fun_is_valid_level_name,%0),u(#SKILLFUNC/fun_level_num,%0),u(#SKILLFUNC/fun_get_trait_lvl_num,%1,%0))
+&HELP_SKILLS FUDGE Skill Functions=This MUSH uses a skills system based on the FUDGE rules, copyright by Steffan O'Sullivan.%R%R[ansi(h,+sheet)] - Displays your character sheet.[switch(xget(#SKILLDB,PLAYER_VISIBLE_SHEETS),1,%R[ansi(h,+sheet <player>)] - View someone else's sheet.  Don't abuse this info.)]%R[ansi(h,+limits)] - Views skill and attribute limits.%R%R[ansi(h,+roll <trait + optional modifier>)]%RThis roll command is used when there is no direct opponent.  It will give you the degree of success.  Most tasks require only a Fair degree.  Harder tasks may require more.  You can specify an optional + or - modifier to the roll.  You can also specify a trait level (e.g. Fair or Medicore) instead of a trait name to simulate NPCs.  Examples:%R%T+roll jumping%R%T+roll strength-1%R%T+roll fair%R%R[ansi(h,+roll <name>/<trait + mod>=<name>/<trait + mod.>)] %RThis roll command is used to pit two players or NPCs against each other.  It will tell you who won, and by how much.  Again, you can use NPC names and trait levels (like Fair) to simulate NPC rolls, and you can optionally include modifiers to the roll.[switch(xget(#SKILLDB,PLAYER_VISIBLE_SHEETS),1,%R%R[ansi(h,+skillcensus <skill>)] - Reports what characters have that skill.%R[ansi(h,+skillcensus <skill>=<level name: good, fair, etc.>)] - Reports what characters have that skill above a certain level.)]%R%RRelated help topics:%R[ansi(h,FUDGE:)] FUDGE copyright info%R[ansi(h,TRAITS:)] Info on trait levels and descriptions.%R[ansi(h,ROLLS:)] Detailed info on how trait rolls work%R[ansi(h,PACKAGES:)] Info on skill packages, used in character generation.%R[ansi(h,XP:)] Info on experience points and improving traits.
+&MORE_HELP_FUDGE FUDGE Skill Functions=FUDGE is a role-playing game written by Steffan O'Sullivan, with    extensive input from the Usenet community of rec.games.design.  The    basic rules of FUDGE are available on the internet via anonymous ftp    at ftp.csua.berkeley.edu, and in book form or on disk from Grey    Ghost Games, P.O. Box 838, Randolph, MA 02368.  They may be used    with any gaming genre.  While an individual work derived from FUDGE    may specify certain attributes and skills, many more are possible    with FUDGE.  Every Game Master using FUDGE is encouraged to add or    ignore any character traits.  Anyone who wishes to distribute such    material for free may do so - merely include this ABOUT FUDGE notice    and disclaimer (complete with FUDGE copyright notice).  If you wish    to charge a fee for such material, other than as an article in a    magazine or other periodical, you must first obtain a royalty-free    license from the author of FUDGE, Steffan O'Sullivan, P.O. Box 465,    Plymouth, NH 03264.%R%ROn the web at: http://members.dsl-only.net/~bing/frp/fudge/fudge_toc.html
+&MORE_HELP_PACKAGES FUDGE Skill Functions=The skill package system lets you automatically pick skills (and minimum levels) your character should have based on his chosen profession.  Packages are just suggestions, so you can move points around after you've taken one to customize your character.  However, bear in mind that the suggestions are there for a reason.  Be prepared to have a good justification in your background if you start ditching skills.%R%RTaking a package will never LOWER any of your skills.  If you already have a skill at the minimum level or higher, it will just skip that one.  You get no point benefit from picking a package.  It costs the same as it would if you just manually took the skills.  It's just a convenience.%R%RNote that many careers will have multiple packages.  For example, it takes a lot of work to be a fighter pilot, or a doctor, so you won't have as many points for other things as most characters.%R%R[ansi(h,+package/<faction>)] - Shows faction-based skill packages%R%R[ansi(h,+package <package>)] - Views details on a package, including the skills and cost.%R[ansi(h,+package/take <package>)] - Takes a package, raising any skills you don't already have to the minimum suggested level.%R%RNOTE: You can only take a package in chargen.
+&MORE_HELP_ROLLS FUDGE Skill Functions=FUDGE uses a unique die system.  You roll "FUDGE dice", which are 6-siders with the sides labeled either -1, +0, or +1.  You add the dice together to get a result from -4 to +4.  You add that to your trait level and get the final result (which is called the Rolled Degree). The degrees have the same names as the traits.  Most tasks require only a Fair degree. Others will be easier or harder.%R%RExample: Mary is trying to jump across a chasm. Its not that wide, so she only needs a Fair success (3). Her jumping skill is Good (4) and she rolls a -1. Adding the skill and roll together gives a rolled degree of Fair (3). She succeeded, but barely. If it had been a wide chasm, with a difficulty level of Good, she would have failed.%R%RA similar mechanic applies for opposed checks. Each player rolls, and you compare their rolled degrees.%R%RExample: Jane and Joe are playing tug-of-war. Theres no particular skill involved, so they both roll strength. Jane gets a rolled degree of Mediocre (2) and Joe gets a rolled degree of Good (4). Joe wins and rolled 2 levels higher than Janes roll.%R%RSometimes there are action modifiers that affect the roll. +1/-1 is normal, +2/-2 is a large modifier, and +3/-3 is an extreme modifier.%R%RIts possible to roll better than Superb and worse than Terrible. Those rolls are generally labeled with *'s BeyondSuperb*, BeyondSuperb**, etc.
+&MORE_HELP_TRAITS FUDGE Skill Functions=Traits (skills and attributes) are rated in descriptive levels.  Each rating is given a number (0 to 6).%R%R[ansi(h,Level)][space(11)][ansi(h,Skill Meaning)][space(13)][ansi(h,Attribute Meaning)]%R[ljust(ansi(r,(0) Terrible),15)] [ljust(No training,25)] Near-handicapped%R[ljust(ansi(b,(1) Poor),15)] [ljust(Very basic training,25)] Seriously below average%R[ljust(ansi(m,(2) Mediocre),15)] [ljust(Casual hobbyist/student,25)] Below average%R[ljust(ansi(y,(3) Fair),15)] [ljust(Junior professional,25)] Average%R[ljust(ansi(g,(4) Good),15)] [ljust(Normal professional,25)] Above Average%R[ljust(ansi(c,(5) Great),15)] [ljust(Seasoned/Veteran,25)] Gifted%R[ljust(ansi(r,(6) Superb),15)] [ljust(World-class expert,25)] Savant %R%R[ansi(h,+skills)] - Shows the list of skills (and their descriptions)%R[ansi(h,+attributes)] - Shows you the list of attributes (and their descriptions)
+&SHELP_SKILLS FUDGE Skill Functions=Staff skill commands:%R%R[ansi(h,+sheet <char>)] - Views another player's sheet.%R%R[ansi(h,+skillcensus <skill>)] - See who has that skill.%R[ansi(h,+skillcensus <skill>=<level name: good, fair, etc>)] - Sees who has that skill above that level.%R%R[ansi(h,+checkskills <player>)] - Checks a player's skills versus the packages set up for their position.  Informs you if any are too low.%R%RStaff can also use the basic +roll commands (see +help skills) to simulate rolls for NPCs.  Roll results are emitted to the [ansi(hc,SkillRolls)] channel if there is one.  Staff members can join that channel to see skill rolls from afar.%R%RSee also [ansi(h,+shelp skills_config)]
+&MORE_SHELP_SKILLS_CONFIG Skill Functions=Customize skill and attribute data on object #SKILLDB.  Look at that object for more info.%R[ansi(hr,Important:)] Do not use spaces or hyphens in skill or attribute names.%R%RNOTE:  Although the trait numbers are displayed from 0-6 to the players, internally they are tracked as -3 to +3 because that's how FUDGE works.  Bear that in mind when editing attributes and/or tweaking the code.%R%RYou'll also need to set up a weekly cron job to run the TR-WEEKLY-XP command on the XP system.%R%RYou can integrate the skills system into your other code using the following global functions:%R%RTRAIT_NUM(<playerDB#>,<trait>) - Gets the trait value, as a number%RTRAIT_NAME(<playerDB#>,<trait>) - Gets the trait value, as a name (Good, Fair, etc)%RROLL_TRAIT(<level number - -2, 0, etc.>,<modifier>) - Rolls skill dice and reports the result (from -3 to +3 before modifiers)%RROLL_PLAYER_TRAIT(<playerDB#>,<trait>,<modifier>) - Same as roll trait, but gets the player's trait number for you.%RLEVEL_NAME(<level number>) - Given a level number (like 0), returns the name of that level (Fair)%RLEVEL_NUM(<level name>) - Given a level name (like fair), returns the level number (0)%RPRETTY_LEVEL_NUM(<level num>) - Converts a raw level num (-3 to +3) to a pretty player-friendly level (0 to 6)
+
+@create FUDGE Skill Data
+@set FUDGE Skill Data = NO_COMMAND
+@DESCRIBE FUDGE Skill Data=This object stores the skills and attributes lists. %R%RATTR_DESC_<name> and SKILL_DESC_<name>: Skill/attribute descriptions%R[ansi(hr,Important:)] Do not use spaces or hyphens in skill or attribute names.%R%RSKILL_CAT_<category>: Used for +skills to list skills by category.%R%RSKILL_POINTS and ATTR_POINTS: Starting chargen skill and attribute point numbers.%R%RMAX_SKILLS_ABOVE_<level> and MAX_ATTRIBUTES_ABOVE_<level>: Configures how many different skills or attributes they can have above a certain level.  Level must be one of 0, 1, or 2.%R%RMAX_TRAIT_LEVEL and MAX_TRAIT_LEVEL: The min/max trait levels allowed in chargen and such.  Changing these from the default of +3/-3 can have serious impacts on the skill system (anyone with a skill above +3 would rarely fail) and would also require a bunch of changes to the documentation.%R%RTRAIT_LEVELS: You can change the name of the traits.%RNote that your TRAIT_LEVELS should go above the min/max to account for roll results.  (They rolled Terrible, but with a -3 modifier applied, so it's 3 beyond terrible)
+
+&MIN_TRAIT_LEVEL FUDGE Skill Data=-3
+&MAX_TRAIT_LEVEL FUDGE Skill Data=3
+&TRAIT_LEVELS FUDGE Skill Data=BeyondTerrible****:-12 BeyondTerrible****:-11 BeyondTerrible****:-10 BeyondTerrible****:-9 BeyondTerrible****:-8 BeyondTerrible***:-7 BeyondTerrible**:-6 BeyondTerrible*:-5 BeyondTerrible:-4 Terrible:-3 Poor:-2 Mediocre:-1 Fair:0 Good:1 Great:2 Superb:3 BeyondSuperb:4 BeyondSuperb*:5 BeyondSuperb**:6 BeyondSuperb***:7 BeyondSuperb****:8 BeyondSuperb****:9 BeyondSuperb****:10 BeyondSuperb****:11 BeyondSuperb****:12
+&ATTR_DESC_AGILITY FUDGE Skill Data=Reflexes, speed and coordination.
+&ATTR_DESC_CHARISMA FUDGE Skill Data=Charm and beauty.
+&ATTR_DESC_INTELLIGENCE FUDGE Skill Data=IQ and memory
+&ATTR_DESC_STRENGTH FUDGE Skill Data=Raw physical strength.
+&ATTR_DESC_TOUGHNESS FUDGE Skill Data=Ability to withstand physical punishment and to avoid illness.
+&ATTR_DESC_WILLPOWER FUDGE Skill Data=Strength of will.
+&ATTR_POINTS FUDGE Skill Data=3
+&SKILL_CAT_ACADEMIC FUDGE Skill Data=Astronomy Biology Business Chemistry Cryptography History Law Literature Mathematics Philosophy Physics Planet_Sci Politics Psychology Religion Teaching Writing
+&SKILL_CAT_GENERAL FUDGE Skill Data=Appraisal Art Cooking Drive Gambling Film Forgery Investigation Journalism Music Pilot Profession Sports Streetwise Theatrics
+&SKILL_CAT_MEDICAL FUDGE Skill Data=Medicine Nursing Surgery
+&SKILL_CAT_MILITARY FUDGE Skill Data=Demolitions Firearms Gunnery Heavy_Weapons Melee_Combat Protocol Tactics Unarmed_Combat
+&SKILL_CAT_SOCIAL FUDGE Skill Data=Bargain Con Empathy Etiquette Interrogation Leadership Seduction
+&SKILL_CAT_TECHNICAL FUDGE Skill Data=Computer_Use Electronics Engineering Mechanics Programming Security_Sys 
+
+&SKILL_DESC_APPRAISAL FUDGE Skill Data=Determining the value of items by examining them.  Good for black market types or legit businessmen (like jewelers).
+&SKILL_DESC_ART FUDGE Skill Data=Painting, sculpting, sketching, and other visual arts.
+&SKILL_DESC_ASTRONOMY FUDGE Skill Data=Study of the stars and other celestial bodies.
+&SKILL_DESC_BARGAIN FUDGE Skill Data=Haggling and bargaining through legit means.  The Con skill covers con artistry.
+&SKILL_DESC_BIOLOGY FUDGE Skill Data=Study of living things.
+&SKILL_DESC_BUSINESS FUDGE Skill Data=Includes various business skills, like Marketing and Accounting.
+&SKILL_DESC_CHEMISTRY FUDGE Skill Data=Study of chemical compounds.
+&SKILL_DESC_COMPUTER_USE FUDGE Skill Data=Knowing how to use computers.
+&SKILL_DESC_CON FUDGE Skill Data=Bluffing or conning people into believing or doing something.
+&SKILL_DESC_COOKING FUDGE Skill Data=The ability to cook things that people will actually want to eat.
+&SKILL_DESC_CRYPTOGRAPHY FUDGE Skill Data=Making and breaking codes.
+&SKILL_DESC_DEMOLITIONS FUDGE Skill Data=Knowing how to blow things up without blowing yourself up.
+&SKILL_DESC_DRIVE FUDGE Skill Data=The ability to drive ground vehicles.
+&SKILL_DESC_ELECTRONICS FUDGE Skill Data=Knowing how to build and repair electronic devices, including computers and ship systems.  This is a "handyman" skill.  For theoretical (design) knowledge, take the Engineering skill instead.
+&SKILL_DESC_EMPATHY FUDGE Skill Data=The ability to relate to and empathize with people.  People with a high empathy score are the ones who always have people confiding in them or crying on their shoulders.
+&SKILL_DESC_ENGINEERING FUDGE Skill Data=Practical application of science to design and develop things.  Note that this is a more theoretical skill.  For hands-on building and repair skills, take the Electronics, Mechanics or Programming skills instead.
+&SKILL_DESC_ETIQUETTE FUDGE Skill Data=The ability to handle yourself well in social situations, like knowing which fork to use first or how to address the secretary of education.
+&SKILL_DESC_FILM FUDGE Skill Data=Covers photography and video filmmaking.
+&SKILL_DESC_FIREARMS FUDGE Skill Data=Covers small arms and rifles.  Heavier weapons (grenade launchers, machine guns, etc.) use the Heavy_Weapons skill instead.  Vehicle weapons use the Weapon_Sys skill.
+&SKILL_DESC_FORGERY FUDGE Skill Data=The ability to create forged documents.
+&SKILL_DESC_GAMBLING FUDGE Skill Data=Knowing how to bet and calculate odds.  Note that this mainly applies to games that are more luck-based than skill-based.  For skill-based games, the Games skill would also factor in.
+&SKILL_DESC_HEAVY_WEAPONS FUDGE Skill Data=Knowing how to operate heavy personal weapons like grenade launchers and machineguns.  Smaller guns (pistols and rifles) fall under the Firearms skill.  Vehicle weapons fall under the Gunnery skill.
+&SKILL_DESC_GUNNERY FUDGE Skill Data=Knowing how to operate large vehicle guns, including missiles and fighter weapons.
+&SKILL_DESC_HISTORY FUDGE Skill Data=Knowledge of past events.
+&SKILL_DESC_INTERROGATION FUDGE Skill Data=The ability to question people and get answers.  This covers verbal as well as physical interrogation, so it's good for journalists as well as torturers.
+&SKILL_DESC_INVESTIGATION FUDGE Skill Data=Covers police-type investigational skills, including forensics and basic rules of evidence.
+&SKILL_DESC_JOURNALISM FUDGE Skill Data=Journalism.
+&SKILL_DESC_LAW FUDGE Skill Data=Knowledge of colonial law.
+&SKILL_DESC_LEADERSHIP FUDGE Skill Data=The ability to lead people and get them to do what you want.
+&SKILL_DESC_LITERATURE FUDGE Skill Data=Knowledge of literary works of art, like great novels and poetry.
+&SKILL_DESC_MATHEMATICS FUDGE Skill Data=Advanced math skills.  Even with a "Terrible" rating, it's assumed that you can count and multiply!
+&SKILL_DESC_MECHANICS FUDGE Skill Data=The ability to build and repair mechanical devices, from car engines to watches.  Note that this is a "handyman" type of skill.  For theoretical mechanical design, pick the Engineering skill instead.
+&SKILL_DESC_MEDICINE FUDGE Skill Data=Medical care and treatment.  Low levels (Terrible-Poor) reflect basic first aid, middle levels (Mediocre-Fair) reflect paramedic or nurse training, and higher levels (Good and above) are for doctors.
+&SKILL_DESC_MELEE_COMBAT FUDGE Skill Data=Melee combat with hand-to-hand weapons (knives, swords, etc.).  Note that many martial arts teach both unarmed and armed combat, so consider whether you should also have the Unarmed skill.
+&SKILL_DESC_MUSIC FUDGE Skill Data=Covers singing and musical instruments.
+&SKILL_DESC_NAVIGATION FUDGE Skill Data=The ability to plot a course and "steer" a large ship like a Battlestar.  Also covers knowledge of plotting jumps.
+&SKILL_DESC_NURSING FUDGE Skill Data=Nursing patients back to health.  Nurses should also have the Medicine skill.
+&SKILL_DESC_PHILOSOPHY FUDGE Skill Data=Esoteric topics like logic, ethics and metaphysics.
+&SKILL_DESC_PHYSICS FUDGE Skill Data=Study of the laws of the universe - energy, motion, and other cool things.
+&SKILL_DESC_PILOT FUDGE Skill Data=Knowing how to fly planes and/or ships.
+&SKILL_DESC_PLANET_SCI FUDGE Skill Data=Study of planetary science, including metallurgy and meterology.
+&SKILL_DESC_POLITICS FUDGE Skill Data=Knowledge of bureaucracy and government.
+&SKILL_DESC_PROFESSION FUDGE Skill Data=A generic skill to cover professions that don't have their own special skill.  If you're a Viper Pilot, you don't need this.  But if you're a Carpenter, or a Maid, this is the skill for you.
+&SKILL_DESC_PROGRAMMING FUDGE Skill Data=Knowledge of computer software programming.
+&SKILL_DESC_PROTOCOL FUDGE Skill Data=Military protocol, rules and regulations, discipline, etc.
+&SKILL_DESC_PSYCHOLOGY FUDGE Skill Data=Knowledge of the human mind.  Note that clinical psychiatrists are also doctors, and should have the Medicine skill.
+&SKILL_DESC_RELIGION FUDGE Skill Data=Knowledge of the theory of religion.
+&SKILL_DESC_SECURITY_SYS FUDGE Skill Data=Knowledge of security systems, including how they work and how to get around them.
+&SKILL_DESC_SEDUCTION FUDGE Skill Data=The ability to carouse and seduce people.
+&SKILL_DESC_SPORTS FUDGE Skill Data=Skill at playing various sports, including Pyramid.
+&SKILL_DESC_STREETWISE FUDGE Skill Data=Covers shady dealings and knowing where to get what you need.
+&SKILL_DESC_SURGERY FUDGE Skill Data=Performing surgery.  Surgeons should also have the Medicine skill.
+&SKILL_DESC_TACTICS FUDGE Skill Data=Military tactics and strategy.
+&SKILL_DESC_TEACHING FUDGE Skill Data=The ability to instruct others.
+&SKILL_DESC_THEATRICS FUDGE Skill Data=Covers acting, makeup, and other theatrical skills.
+&SKILL_DESC_UNARMED_COMBAT FUDGE Skill Data=Unarmed hand-to-hand fighting, including things like boxing, wrestling and martial arts.  Note that many martial arts also teach hand-to-hand weapons fighting (knives, swords, etc.), which is covered by the Melee skill.
+&SKILL_DESC_WRITING FUDGE Skill Data=The ability to put words down on paper in a sensible fashion.
+&SKILL_POINTS FUDGE Skill Data=40
+
+&PLAYER_VISIBLE_SHEETS FUDGE Skill Data=0
+@set FUDGE Skill Data/PLAYER_VISIBLE_SHEETS=visual
+
+&MAX_SKILLS_ABOVE_2 FUDGE Skill Data=1
+&MAX_SKILLS_ABOVE_1 FUDGE Skill Data=2
+&MAX_SKILLS_ABOVE_0 FUDGE Skill Data=5
+&MAX_ATTRIBUTES_ABOVE_2 FUDGE Skill Data=1
+&MAX_ATTRIBUTES_ABOVE_1 FUDGE Skill Data=1
+&MAX_ATTRIBUTES_ABOVE_0 FUDGE Skill Data=3
+
+@create Chargen Skill Packages
+@desc Chargen Skill Packages=This stores all the defined skill packages for the game.  There are three important sets of attributes:%R%RIMPORTANT_PACKS: Lists important skill packages, which will be highlighted on the lists.%R%RPACKAGE_<packname>: Defines a skill package.  Attribute stores NAME|DESCRIPTION|SKILLS|FACTIONS%R%TSKILLS should be a space-separated list of Name:Rating pairs%R%TFACTIONS should be a space-separated list of factions to which the package applies, or "All" if it applies to all factions.%R%RSTARTING_<position>: Defines the list of skill packages that will automatically be applied to someone with that position.
+&IMPORTANT_PACKS Chargen Skill Packages=Everyone
+&PACKAGE_COLLEGE Chargen Skill Packages=University Education|Applies to anyone with a university education - including the a military academy. Feel free to substitute other academic skills for the ones listed.  This template assumes a literature major.|Literature:-1 History:-2 Writing:-2|all
+&PACKAGE_COP Chargen Skill Packages=Police|Law enforcement officers.|Firearms:0 Law:0 Unarmed_Combat:-1 Interrogation:-1 Investigation:0 Bargain:-1|all
+&PACKAGE_CRIMINAL Chargen Skill Packages=Criminals|Generic criminal package.  Feel free to swap out the actual criminal skills (for example, taking Forgery instead of Con for a forger).|Con:0 Streetwise:1 Appraisal:0|all
+&PACKAGE_TECH Chargen Skill Packages=Technician|Electrical or Mechanical technician.  Feel free to switch the levels of electronics/mechanics to represent your character's specialty.|Electronics:-1 Mechanics:1|All
+&PACKAGE_DOCTOR Chargen Skill Packages=Doctors|General medical doctors.  Surgeons would have a higher level of surgery.  Psychiatrists would have Psychology.  Military doctors are always officers.|Biology:0 Chemistry:-1 Medicine:1 Surgery:-1 Empathy:-1|All
+&PACKAGE_ENGINEER Chargen Skill Packages=Engineer|Designers who apply science to build things.  This template is for a computer engineer.  There are other types, who may have more mechanical/science skills.|Engineering:1 Programming:1 Mathematics:0 Electronics:-1|All
+&PACKAGE_EVERYONE Chargen Skill Packages=Skills for everyone.|Unless you live under a rock, you should probably have these skills.  Feel free to substitute any 'Academic' skills for History and lit - they're just examples.|Etiquette:-2 Computer_Use:-1 History:-2 Literature:-2|All
+&PACKAGE_LAWYER Chargen Skill Packages=Lawyers|Laywers.  Military lawyers are always officers.|Law:1 Writing:0 Politics:-1 Interrogation:0 Etiquette:-1 History:-1|All
+&PACKAGE_MARINE Chargen Skill Packages=Marines|For troops trained in ground combat.  May choose an alternate specialty (Medicine, Demolitions, Electronics, etc.) instead of Heavy Weapons.|Firearms:1 Unarmed_Combat:0 Melee_Combat:-1 Heavy_Weapons:0|All
+&PACKAGE_MEDIC Chargen Skill Packages=Paramedics|Emergency Medical Services|Biology:-1 Medicine:-1 Empathy:-1|All
+&PACKAGE_NURSE Chargen Skill Packages=Nurses|Nursing staff.  Military nurses are always officers.|Biology:-1 Medicine:-1 Empathy:-1|All
+&PACKAGE_MILITARY Chargen Skill Packages=Basic Military Training|All soldiers - enlisted and officer - should have these skills.|Firearms:-1 Tactics:-2 Unarmed_Combat:-2 Protocol:-1 Ship_Ops:-2 Medicine:-2|All
+&PACKAGE_OFFICER Chargen Skill Packages=Military Officer Training|All military officers - including pilots - should have these skills.  NOTE: Many officers also went to college (or to the Colonial Academy, which is equivalent to college) so they should also have the college package.|Tactics:0 Leadership:0 Protocol:0|All
+&PACKAGE_PILOT Chargen Skill Packages=Civilian Pilot|A shuttle pilot or pilot of a mid-sized vessel.|Pilot:1 Navigation:0 Computer_Use:-1|All
+&PACKAGE_POLITICIAN Chargen Skill Packages=Politicians|Bureaucrats and politicians.|Law:-1 Politics:1 Leadership:0 Etiquette:0|All
+&PACKAGE_REPORTER Chargen Skill Packages=Journalists|Covers reporters/journalists.  Support staff (editors, cameramen, etc.) would have a subset of these skills.|Writing:-1 Investigation:0 Interrogation:0 Etiquette:-1 Journalism:1|All
+&PACKAGE_SCIENTIST Chargen Skill Packages=Scientists|General scientist package.  Feel free to juggle the points to emphasize whatever your chosen science is, but bear in mind that most scientists will have a background in multiple sciences.|Mathematics:0 Chemistry:-1 Physics:1 Writing:-1 Computer_Use:0|All
+&PACKAGE_TEACHER Chargen Skill Packages=Schoolteachers|This template is for a teacher of literature (i.e. an English teacher).  Feel free to juggle the points to represent your character's field of instruction.|Teaching:1 Litearture:1 Leadership:-1 Writing:-1 Psychology:-1|All
+&PACKAGE_FIGHTER_PILOT Chargen Skill Packages=Fighter pilots|Flight training for fighter pilots.  All fighter pilots are officers, so they should also have the Military and Officer packages.|Pilot:1 Navigation:-1 Gunnery:0|All
+
+&STARTING_DOCTOR Chargen Skill Packages=Everyone College Doctor
+&STARTING_Lawyer Chargen Skill Packages=Everyone College Lawer
+&STARTING_COP Chargen Skill Packages=Everyone Cop
+&STARTING_CRIMINAL Chargen Skill Packages=Everyone Criminal
+&STARTING_TECH Chargen Skill Packages=Everyone Tech
+&STARTING_ENGINEER Chargen Skill Packages=Everyone College Engineer
+&STARTING_MARINE Chargen Skill Packages=Everyone Marine
+&STARTING_MEDIC Chargen Skill Packages=Everyone Medic
+&STARTING_NURSE Chargen Skill Packages=Everyone College Nurse
+&STARTING_OTHER Chargen Skill Packages=Everyone
+&STARTING_PILOT Chargen Skill Packages=Everyone Pilot
+&STARTING_POLITICIAN Chargen Skill Packages=Everyone College Politician
+&STARTING_REPORTER Chargen Skill Packages=Everyone College Reporter
+&STARTING_SCIENTIST Chargen Skill Packages=Everyone College Scientist
+&STARTING_TEACHER Chargen Skill Packages=Everyone College Teacher
+&STARTING_FIGHTER_PILOT Chargen Skill Packages=Everyone Fighter_Pilot
+@STARTUP Chargen Skill Packages=@set me=!no_command
+
+
+@create Chargen Info Commands
+@set Chargen Info Commands = DARK
+@set Chargen Info Commands = WIZARD
+@set Chargen Info Commands = !NO_COMMAND
+@DESCRIBE Chargen Info Commands=Part of the FUDGE skills system.
+
+&cmd-+limits Chargen Info Commands=$+limits:think pemit(%#,[line()]%R[ansi(h,Attribute Limits)][iter(lattr(#SKILLDB/MAX_ATTRIBUTES_ABOVE_*),%RAbove [u(#SKILLFUNC/fun_level_name,[last(##,_)])] - [u(#SKILLFUNC/FUN_MAX_ATTRS_ABOVE_LVL,[last(##,_)])])]%R%R[ansi(h,Skill Limits)][iter(lattr(#SKILLDB/MAX_SKILLS_ABOVE_*),%RAbove [u(#SKILLFUNC/fun_level_name,[last(##,_)])] - [u(#SKILLFUNC/FUN_MAX_SKILLS_ABOVE_LVL,[last(##,_)])])]%R%RPlease note that the numbers above are TOTALS. So if it says you can only have 5 skills above Fair, that means you can have 1 Superb/1 Great/3 Good, or 5 Good, or 1 Great/4 Good, or any other combination that adds up to 5.%R[line()])
+&CMD-+PACKAGES-alias1 Chargen Info Commands=$+package:@fo %#=+package/[xget(%#,faction)]
+&CMD-+PACKAGES-alias2 Chargen Info Commands=$+packages:@fo %#=+package/[xget(%#,faction)]
+&cmd-+packages-alias3 Chargen Info Commands=$+packages/all:@fo %#=+package/all
+&CMD-+PACKAGE-FACTION Chargen Info Commands=$+package/*:think switch(%0,take,,view,,switch(0,or(u(#CGFUN/FUN_IS_VALID_FACTION,%0),match(%0,all)),pemit(%#,ansi(hr,That is not a valid faction.)),pemit(%#,[line()]%R[ansi(hg,[capstr(%0)] Skill Packages)][iter(u(#CGFUN/FUN_FACTION_PACKAGES,%0),%R[padstr(switch(match(xget(#SKILLPACKDB,important_packs),after(##,_)),0,after(##,_),ansi(hG,after(##,_))),15)][u(#CGFUN/FUN_PACKAGE_SHORT_DESC,##)])]%R%RPay particular attention to the highlighted packages.  Note that some other faction's packages may also be adaptable.  Contact staff with any questions.%R%RUse [ansi(h,+package <package>)] for details on a particular package or [ansi(h,+packages/all)] to see packages for other factions.%R[line()])))
+&CMD-+PACKAGE-VIEW Chargen Info Commands=$+package *:think pemit(%#,switch(0,u(#CGFUN/fun_is_valid_package,%0),ansi(hr,There is no such package.),[line()]%R[ansi(h,Package %0)]%R[u(#CGFUN/FUN_PACKAGE_LONG_DESC,%0)]%R[u(#CGFUN/FUN_PRINT_PACKAGE_SKILLS,%0)]%R%R%R[ansi(hg,Your Point Cost: [u(#CGFUN/fun_package_cost,%0,%#)])]%R[line()]))
+&CMD-+CHECKSKILLS Chargen Info Commands=$+checkskills *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(pmatch(%0)),ansi(hr,That is not a valid player.),[line()]%RPossible Missing Skills for %0:%R%R[u(#CGFUN/fun_check_packages,pmatch(%0))]%R%RRemember that some skills are just guidelines and they may have validly picked a different one instead.%R[line()]))
+
+
+@create Chargen Info Functions
+@set Chargen Info Functions = WIZARD
+@set Chargen Info Functions = !NO_COMMAND
+@DESCRIBE Chargen Info Functions=Functions related to chargen but also useful outside of it.
+@STARTUP Chargen Info Functions=@set me=!no_command;@fun AGE=[num(me)],FUN_GET_AGE
+&fun_display_birthdate Chargen Info Functions=[switch(xget(%0,birthdate),,-,[extract(xget(#CGFUN,months),before(xget(%0,birthdate),/),1)] [extract(xget(%0,birthdate),2,1,/)])
+&fun_get_age Chargen Info Functions=switch(xget(%0,birthdate),,0,add(sub(last(time()),add(after(after(xget(%0,birthdate),/),/),1)),switch(match(xget(#CGFUN,months),extract(time(),2,1)),<[before(xget(%0,birthdate),/)],0,[before(xget(%0,birthdate),/)],switch(gte(extract(time(),3,1),before(after(xget(%0,birthdate),/),/)),1,1,0),1))
+&fun_is_valid_org Chargen Info Functions=t(match(orgs(),%0))
+&FUN_IS_VALID_POSITION Chargen Info Functions=t(match(positions(),%0))
+&fun_is_valid_faction Chargen Info Functions=t(match(factions(),%0))
+&months Chargen Info Functions=Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+&FUN_IS_VALID_PACKAGE Chargen Info Functions=hasattr(#SKILLPACKDB,PACKAGE_%0)
+&FUN_APPLY_PACKAGE Chargen Info Functions=localize(pemit(%1,[iter(u(#CGFUN/FUN_PACKAGE_SKILLS,%0),[setq(0,before(##,:))][setq(1,after(##,:))][setq(2,u(#SKILLFUNC/fun_level_name,%q1))][switch(1,lt(u(#SKILLFUNC/fun_get_trait_lvl_num,%1,%q0),%q1),[u(#SKILLFUNC/fun_set_skill,%1,%q0,%q1)])])]))
+&FUN_PACKAGE_LONG_DESC Chargen Info Functions=extract(xget(#SKILLPACKDB,PACKAGE_%0),2,1,|)
+&FUN_PACKAGE_SHORT_DESC Chargen Info Functions=extract(xget(#SKILLPACKDB,PACKAGE_%0),1,1,|)
+&FUN_PACKAGE_SKILLS Chargen Info Functions=extract(xget(#SKILLPACKDB,PACKAGE_%0),3,1,|)
+&FUN_FACTION_PACKAGES Chargen Info Functions=sort(iter(lattr(#SKILLPACKDB/package_*),switch(%0,all,##,switch(extract(xget(#SKILLPACKDB,##),4,1,|),*%0*,##,all,##))))
+&FUN_PACKAGE_COST Chargen Info Functions=localize(squish([setq(9,0)][iter(u(FUN_PACKAGE_SKILLS,%0),[setq(9,add(%q9,max(0,sub(after(##,:),u(#SKILLFUNC/fun_get_trait_lvl_num,%1,before(##,:))))))])]%q9))
+&FUN_PRINT_PACKAGE_SKILLS Chargen Info Functions=iter(u(#CGFUN/FUN_PACKAGE_SKILLS,%0),%R[padstr(before(##,:),20)][u(#SKILLFUNC/fun_print_name_and_num,after(##,:))])
+&FUN_POSITION_PACKAGES Chargen Info Functions=xget(#SKILLPACKDB,STARTING_%0)
+&FUN_CHECK_PACKAGES Chargen Info Functions=[iter(xget(#SKILLPACKDB,STARTING_[xget(%0,position)]),u(#CGFUN/fun_check_package,##,%0))]
+&fun_check_package Chargen Info Functions=localize([iter(u(fun_package_skills,%0),[setq(0,before(##,:))][setq(1,after(##,:))][setq(2,u(#SKILLFUNC/fun_level_name,%q1))][setq(3,u(#SKILLFUNC/fun_get_trait_lvl_num,%1,%q0))][switch(1,lt(%q3,%q1),%R%q0: [u(#SKILLFUNC,FUN_LEVEL_NAME,%q3)] \(Should be [u(#SKILLFUNC,FUN_LEVEL_NAME,%q1)]\))])])
+
+
+
+@create XP System
+@set XP System = WIZARD
+@set XP System = SAFE
+@set XP System=!no_command
+@describe XP System=Part of the FUDGE skills system.
+
+&CMD-+PRACTICE XP System=$+practice *:think [setq(1,switch(u(#SKILLFUNC/fun_is_valid_skill,%0),1,skills,attributes))][setq(2,u(#SKILLFUNC/fun_get_trait_lvl_num,%#,%0,%q1))][setq(6,switch(%q2,<-1,1,-1,.75,0,.5,1,.25,>1,.25))]pemit(%#,switch(0,or(u(#SKILLFUNC/fun_is_valid_skill,%0),u(#SKILLFUNC/fun_is_valid_attr,%0)),ansi(hr,That is not a valid skill or attribute.),not(xget(%#,has_practiced)),ansi(hr,You have already practiced once this week.),ansi(hg,You practice [capstr_all(%0,_)].  You gain %q6 XP.  Please remember to only use this command when it makes sense ICly.)[set(%#,has_practiced:1)][set(#XPDATA,log_practice:[xget(#XPDATA,log_practice)]|%N practiced %0 for %q6 XP.)][u(fun_add_xp,%#,trim(%0),%q6)])
+&CMD-+TRAIN XP System=$+train *=*:think [setq(0,pmatch(%0))][setq(1,switch(u(#SKILLFUNC/fun_is_valid_skill,%1),1,skills,attributes))][setq(2,u(#SKILLFUNC/fun_get_trait_lvl_num,%#,%1,%q1))][setq(3,u(#SKILLFUNC/fun_get_trait_lvl_num,%q0,%1,%q1))][setq(4,u(#SKILLFUNC/fun_get_trait_lvl_num,%#,teaching,skills))][setq(5,u(#SKILLFUNC/fun_get_rolled_degree,%q4,0))][setq(6,switch(%q5,<-1,0,-1,.25,0,.5,1,.75,>1,1))]pemit(%#,switch(0,or(u(#SKILLFUNC/fun_is_valid_skill,%1),u(#SKILLFUNC/fun_is_valid_attr,%1)),ansi(hr,That is not a valid skill or attribute.),t(%q0),ansi(hr,That is not a valid player.),not(match(%q0,%#)),ansi(hr,You can't train yourself silly!),match(lcon(%l),%q0),ansi(hr,You can't train someone who's not here.),hasflag(%q0,connected),ansi(hr,You can't train someone who's not here.),gte(%q2,%q3),ansi(hr,You can't teach someone who knows more than you.),not(xget(%#,has_trained)),ansi(hr,You have already trained someone this week.),not(xget(%q0,has_been_trained)),ansi(hr,That person has already been trained this week.),ansi(hg,You train [capstr(%0)] in [capstr_all(%1,_)].  You both gain %q6 XP.  Please remember to only use this command when it makes sense ICly.)[pemit(%q0,ansi(hg,%N trains you in [capstr_all(%1,_)].  You gain %q6 XP.))][set(#XPDATA,log_train:[xget(#XPDATA,log_train)]|%N trained %0 on %1 for %q6 XP.)][set(%#,has_trained:1)][set(%q0,has_been_trained:1)][u(fun_add_xp,%#,trim(%1),%q6)][u(fun_add_xp,%q0,trim(%1),%q6)])
+&CMD-+XP XP System=$+xp:think pemit(%#,[line()]%R[ansi(h,Trait[space(15)]Spent[space(5)]To Go[space(5)]Progress)][iter(sort(xget(%#,xpspent)),%R[setq(0,u(fun_xp_to_next_lvl,%#,before(##,:)))][padstr(before(##,:),20)][padstr(after(##,:),10)][padstr(switch(%q0,9999,---,sub(%q0,after(##,:))),10)][switch(%q0,9999,---,[round(mul(fdiv(after(##,:),%q0),100),0)]\%)])]%R%RYou have [ansi(h,xget(%#,xp))] unspent XP.%R[line()])
+&CMD-+XP-AWARD XP System=$+xp/award *=*/*:@switch [setq(0,pmatch(%0))]0=isstaff(%#),@pemit %#=ansi(hr,Restricted to staff.),t(%q0),@pemit %#=ansi(hr,There is no such player.),isnum(%1),@pemit %#=ansi(hr,That is not a number.),{@pemit %#=ansi(hg,You award %0 %1 XP for %2.);+bbpost 4/XP Award - [name(%q0)]=%N awarded [name(%q0)] with %1 XP for %2.;@fo %#=+mail [name(%q0)]=XP Award/Congratulations!  You have received %1 XP for %2.;think set(%q0,xp:[add(xget(%q0,xp),%1)])
+&CMD-+XP-COSTS XP System=$+xp/costs:think pemit(%#,[line()]%R[ansi(hr,Experience Point Costs)]%R%R[ljust(ansi(h,CURRENT Level),25)][ljust(ansi(h,Skill Cost),20)][ljust(ansi(h,Attribute Cost),20)]%R[line2()][iter(xget(#SKILLFUNC,trait_levels),[setq(0,after(##,:))][setq(1,u(fun_get_skill_xp_cost,%q0))][setq(2,u(fun_get_attr_xp_cost,%q0))][switch(%q1,,,%R[ljust(u(#SKILLFUNC/fun_level_name,%q0),25)][center(%q1,10)][space(10)][center(%q2,10)])],,)]%R[line()]
+&CMD-+XP-LOWER XP System=$+xp/lower *:think [setq(1,switch(u(#SKILLFUNC/fun_is_valid_skill,%0),1,skills,attributes))][setq(2,u(#SKILLFUNC/fun_get_trait_lvl_num,%#,%0,%q1))][setq(3,u(FUN_GET_[switch(%q1,skills,SKILL,ATTR)]_XP_COST,sub(%q2,1)))]pemit(%#,switch(0,not(hasflag(%#,unregistered)),ansi(hr,Only approved characters can use this.),or(u(#SKILLFUNC/fun_is_valid_skill,%0),u(#SKILLFUNC/fun_is_valid_attr,%0)),ansi(hr,That is not a valid skill or attribute.),gt(%q2,0),ansi(hr,You can't lower that any further.  Contact staff.),not(xget(%#,has_lowered)),ansi(hr,You have already lowered one trait this week.),ansi(hg,You lower %0.  You receive [div(%q3,3)] XP back.)[set(#XPDATA,log_xplower:[xget(#XPDATA,log_xplower)]|%N lowered %0 to [sub(%q2,1)])][set(%#,xp:[add(xget(%#,xp),div(%q3,3))])][set(%#,has_lowered:1)][u(#SKILLFUNC/fun_set_[switch(%q1,skills,skill,attr)],%#,[capstr_all(%0,_)],sub(%q2,1))]))
+&CMD-+XP-SPEND XP System=$+xp/spend *=*:think [setq(1,switch(u(#SKILLFUNC/fun_is_valid_skill,%0),1,skills,attributes))][setq(2,u(#SKILLFUNC/fun_get_trait_lvl_num,%#,%0,%q1))][setq(3,u(FUN_XP_TO_GO,%#,%0))]pemit(%#,switch(0,not(hasflag(%#,unregistered)),ansi(hr,Only approved characters can use this.),or(u(#SKILLFUNC/fun_is_valid_skill,%0),u(#SKILLFUNC/fun_is_valid_attr,%0)),ansi(hr,That is not a valid skill or attribute.),lte(%1,%q3),ansi(hr,You only need %q3 points to get to the next level.  Don't spend more than that.),isnum(%1),ansi(hr,That is not a number.),gt(%1,0),ansi(hr,You can't spend negative XP!),gte(xget(%#,xp),%1),ansi(hr,You don't have that many XP.),lt(%q2,3),ansi(hr,You can't improve that skill any more.),ansi(hg,You spend %1 XP on [capstr_all(%0,_)].)[set(#XPDATA,log_xpspent:[xget(#XPDATA,log_xpspent)]|%N spent %1 on %0)][u(fun_add_xp,%#,trim(%0),%1)][set(%#,xp:[sub(xget(%#,xp),%1)])]))
+&FUN_ADD_XP XP System=localize([setq(0,xget(%0,XPSPENT))][setq(1,switch(match(%q0,%1:*),0,0,after(grab(%q0,%1:*),:)))][setq(2,sub(u(fun_xp_to_next_lvl,%0,%1),add(%q1,%2)))][setq(3,[switch(u(#SKILLFUNC/fun_is_valid_skill,%1),1,skills,attributes)])][u(FUN_SET_XPSPENT,%0,[capstr_all(%1,_)],[add(%q1,%2)])][switch(lte(%q2,0),1,switch(u(FUN_CAN_IMPROVE,%0,%1),0,ansi(hr,You can't improve %1 without lowering something else first.),[pemit(%0,ansi(hb,Your %1 trait has improved.))][u(#SKILLFUNC/fun_set_[switch(%q3,skills,SKILL,ATTR)],%0,[capstr_all(%1,_)],add(1,u(#SKILLFUNC/fun_get_trait_lvl_num,%0,%1,%q3)))][u(FUN_SET_XPSPENT,%0,[capstr_all(%1,_)],[sub(0,%q2)])])
+&FUN_CAN_IMPROVE XP System=localize([switch(u(#SKILLFUNC/fun_is_valid_skill,%1),0,1,[setq(1,u(#SKILLFUNC/fun_skills_above_lvl,%0,0))][setq(2,u(#SKILLFUNC/fun_skills_above_lvl,%0,1))][setq(3,u(#SKILLFUNC/fun_skills_above_lvl,%0,2))][switch(u(#SKILLFUNC/fun_get_trait_lvl_num,%0,%1,skills),0,setq(1,inc(%q1)),1,[setq(1,inc(%q1))][setq(2,inc(%q2))],2,[setq(1,inc(%q1))][setq(2,inc(%q2))][setq(3,inc(%q3))])][switch(1,gt(%q1,xget(#SKILLDB,max_skills_above_0)),setq(0,1),gt(%q2,xget(#SKILLDB,max_skills_above_1)),setq(0,1),gt(%q3,xget(#SKILLDB,max_skills_above_2)),setq(0,1),setq(0,0))][not(%q0)])
+&FUN_GET_ATTR_XP_COST XP System=mul(after(grab(xget(#XPDATA,xp_skills_costs),%0:*),:),xget(#XPDATA,ATTR_COST_MULTIPLIER))
+&FUN_GET_SKILL_XP_COST XP System=after(grab(xget(#XPDATA,xp_skills_costs),%0:*),:)
+&FUN_SET_XPSPENT XP System=localize([setq(0,xget(%0,xpspent))][switch(0,gt(%2,0),set(%0,xpspent:[remove(%q0,extract(%q0,match(%q0,%1:*),1))]),match(%q0,%1:*),set(%0,xpspent:[trim(%q0%B%1:%2)]),set(%0,xpspent:[trim(find_and_replace(%q0,%1:*,%1:%2))]))])
+&FUN_XP_TO_GO XP System=sub(u(fun_xp_to_next_lvl,%0,%1),switch(match(xget(%0,xpspent),%1:*),0,0,after(grab(xget(%0,xpspent),%1:*),:))
+&FUN_XP_TO_NEXT_LVL XP System=switch(u(#SKILLFUNC/fun_is_valid_skill,%1),1,u(fun_get_skill_xp_cost,u(#SKILLFUNC/fun_get_trait_lvl_num,%0,%1,skills)),u(fun_get_attr_xp_cost,u(#SKILLFUNC/fun_get_trait_lvl_num,%0,%1,attributes))
+&MORE_HELP_+PRACTICE XP System=See +help XP
+&MORE_HELP_+TRAIN XP System=See +help XP
+&MORE_HELP_XP XP System=XP is awarded weekly to reflect your character learning and improving.  XP shows up on your character sheet.  You spend XP using the [ansi(h,+xp/spend)] command.  You don't have to save up all your points and spend them all at once.  In fact, you -can't-, as there is a maximum cap on how much XP you can have saved up ([xget(#XPDATA,XP_SAVE_CAP)] points).  Instead, you spend XP a little as a time as you're learning things.  Once you have spent enough points, you advance to the next level.%R%RYou can get bonus XP through training with other PCs.  When you RP being taught something, have the other player use the [ansi(h,+train)] command on you.   You will both get bonus XP.  You can only train/be trained once per week.  +train is more effective with the Teaching skill.%R%RYou may also get bonus XP by RPing practicing the skill *with other players*.  For example: target practice in the firing range.  For this, you use the [ansi(h,+practice)] command.  Again, you can only do this once per week.  [ansi(hr,Both +train and +practice are done on the honor system.  Use them only when supported by actual RP.)]%R%RAs in Chargen, there are limits on how many high skills you can have (+limits).  If you want to raise a new skill, you may need to first lower an existing one.  Nobody can be good at everything.  You can lower a skill using the [ansi(h,+xp/lower)] command.  You get back a fraction of the XP you spent to raise the skill.%R%R[ansi(h,+xp)] - Shows you a summary of what XP you've spent.%R[ansi(h,+xp/costs)] - Shows you the costs of improving a stat.%R[ansi(h,+xp/spend <skill or attribute>=<number of XP>)] - Spend XP on a stat.%R[ansi(h,+xp/lower <skill or attribute>)] - Lower a skill or attribute.%R%R[ansi(h,+practice <skill or attribute>)] - Use when RPing practice with other PCs.%R[ansi(h,+train <player>=<skill or attribute>)] - Use when RPing teaching someone.  The /teacher/ uses this command.
+&SHELP_XP XP System=Staff can award bonus XP using the [ansi(h,+xp/award <player>=<# of XP>/<reason>)].%R%RYou can edit the skill costs for various levels on the #XPDATA object.
+@STARTUP XP System=@set me=!no_command
+@set XP System/STARTUP=no_command prefixmatch
+&TR-WEEKLY-XP XP System=@dolist lsearch(all,type,player)=think [set(##,XP:[add(xget(##,xp),xget(#XPDATA,XP_PER_WEEK))])][switch(gt(xget(##,xp),xget(#XPDATA,xp_save_cap)),1,set(##,xp:[xget(#XPDATA,xp_save_cap)]))][set(##,has_trained:0)][set(##,has_been_trained:0)][set(##,has_lowered:0)][set(##,has_practiced:0)]
+&CRON_JOB_XP XP System=@tr #XPSYS/tr-weekly-xp
+&CRON_TIME_XP XP System=||Sun|23|59|
+
+
+@create XP Data
+@desc XP Data=Stores data for the XP system.  You can edit XP_SAVE_CAP, which is how many points players can carry over week to week, and XP_SKILLS_COSTS, which is how many XP it costs to raise skills to various levels (attributes are ATTR_COST_MULTIPLIER times as much), and XP_PER_WEEK, which is how many XP the players get each week.
+@set XP Data = NO_COMMAND
+&XP_SAVE_CAP XP Data=5
+&XP_PER_WEEK XP Data=1
+@set XP Data/XP_SAVE_CAP=visual
+&XP_SKILLS_COSTS XP Data=-3:4 -2:8 -1:16 0:24 1:32 2:48 3:9999
+&ATTR_COST_MULTIPLIER XP Data=3
+
+@create Chargen Exit Parent
+@set Chargen Exit Parent = NO_COMMAND
+@power Chargen Exit Parent = See_All
+@DESCRIBE Chargen Exit Parent=Stores some functions common to chargen exits.  It will require that they have set something in every attribute listed in REQUIRED_ATTRS on the child exit.  It will also call a function OTHER_CHECKS, which should return 0 or 1 depending on whether there's anything else wrong.  If OTHER_CHECKS returns 0, the exit parent will call OTHER_ERRORS to tell the user what the problem is.
+@FAILURE Chargen Exit Parent=ansi(hr,You have not set everything yet.[squish(iter(v(required_attrs),switch(strlen(xget(%#,##)),0,%R- Missing ##)))]%R[u(other_errors,%#)])
+&ISDONE Chargen Exit Parent=[and(not(t(edit(iter(v(required_attrs),eq(strlen(xget(%#,##)),0)),%B,))),u(other_checks,%#))]
+
+@create Profile Commands
+@lock/Basic Profile Commands=me
+@set Profile Commands = DARK
+@set Profile Commands = WIZARD
+@set Profile Commands = !NO_COMMAND
+&CMD-+EYES Profile Commands=$+eyes *:think pemit(%#,ansi(hg,You set your eye color to: %0.))[set(%#,eyes:[capstr(%0)])]
+&CMD-+HAIR Profile Commands=$+hair *:think pemit(%#,ansi(hg,You set your hair color to: %0.))[set(%#,hair:[capstr(%0)])]
+&CMD-+HAND Profile Commands=$+hand *:think pemit(%#,switch(0,t(match(left right ambidextrous,%0)),ansi(hr,That is not a valid setting.  Use 'right' 'left' or 'ambidextrous'.),ansi(hg,You set your handeness to: %0.)[set(%#,hand:[capstr(%0)])]))
+&CMD-+HEIGHT Profile Commands=$+height *:think pemit(%#,ansi(hg,You set your height to: %0.))[set(%#,height:%0)]
+&CMD-+SKIN Profile Commands=$+skin *:think pemit(%#,ansi(hg,You set your skin color to: %0.))[set(%#,skin:[capstr(%0)])]
+&CMD-+WEIGHT Profile Commands=$+weight *:think pemit(%#,ansi(hg,You set your weight to: %0.))[set(%#,weight:%0)]
+@DESCRIBE Profile Commands=Chargen commands for setting physical profile.
+@set Profile Commands/DESCRIBE=no_command visual prefixmatch public nearby
+@STARTUP Profile Commands=@set me=!no_COMMAND
+@set Profile Commands/STARTUP=no_command prefixmatch
+
+@create Demographic Commands
+@lock/Basic Demographic Commands=me
+@set Demographic Commands = DARK
+@set Demographic Commands = WIZARD
+@set Demographic Commands = !NO_COMMAND
+&cmd-+age Demographic Commands=$+age *:think pemit(%#,switch(0,isnum(%0),ansi(hr,Your name must be a number.),lte(%0,75),ansi(hr,You cannot be that old without special staff permission. Contact a member of staff.),gte(%0,11),ansi(hr,You cannot be that young without special staff permission.  Contact a member of staff.),[set(%#,birthdate:[rand(1,12)]/[rand(1,28)]/[sub(last(time()),%0)])][ansi(hg,You set your age to %0.%R%RYour birthdate has been randomly set to: [u(#CGFUN/fun_display_birthdate,%#)].  If you would like a different random birthday you can use the command again.  If you would like a specific birthday, contact a staff member.)]))
+&CMD-+ORG Demographic Commands=$+org *:think pemit(%#,switch(0,u(#CGFUN/fun_is_valid_org,%0),ansi(hr,That is not a valid org. Use one of: [orgs()].),ansi(hg,You set your organization to %0.)[set(%#,org:[trim(capstr(%0))])]))
+&CMD-+FACTION Demographic Commands=$+faction *:think pemit(%#,switch(0,t(match(factions(),%0)),ansi(hr,That is not a valid faction.  Use one of: [factions()].),ansi(hg,You set your faction to %0.)[set(%#,faction:[trim(capstr(%0))])]))
+&CMD-+FULLNAME Demographic Commands=$+fullname *:think pemit(%#,ansi(hg,You set your full name to %0.))[set(%#,fullname:%0)]
+&CMD-+POSITION Demographic Commands=$+position *:think pemit(%#,switch(0,u(#CGFUN/fun_is_valid_position,%0),ansi(hr,That is not a valid position.  See +positions.),ansi(hg,You set your position to %0.)[set(%#,position:[trim(capstr(%0))])])))
+@DESCRIBE Demographic Commands=Chargen commands for setting demographic information.
+@STARTUP Demographic Commands=@set me=!no_command
+@fo me=@edit Demographic Commands/*=#CGFUN,[num(Chargen Info Functions)]
+
+@create Skill Chargen Commands
+@lock/Basic Skill Chargen Commands=me
+@set Skill Chargen Commands = DARK
+@set Skill Chargen Commands = WIZARD
+@set Skill Chargen Commands = !NO_COMMAND
+&CMD-+LOWER Skill Chargen Commands=$+lower *:think switch(1,u(#SKILLFUNC/fun_is_valid_attr,%0),u(fun_attr_lower,%#,%0),u(fun_skill_lower,%#,%0))
+&CMD-+POINTS Skill Chargen Commands=$+points:think pemit(%#,[ansi(hg,[xget(%#,attr_points)] Attribute Points Remaining)]%R[ansi(hm,[xget(%#,skill_points)] Skill Points Remaining)])
+&CMD-+RAISE Skill Chargen Commands=$+raise *:think switch(1,u(#SKILLFUNC/fun_is_valid_attr,%0),u(fun_attr_raise,%#,%0),u(fun_skill_raise,%#,%0))
+&CMD-+START Skill Chargen Commands=$+start:think pemit(%#,ansi(hg,You can now raise your skills and attributes to the desired levels.%RAny existing skills have been reset.))[set(%#,skills:)][set(%#,attributes:[iter(sort(u(#SKILLFUNC/fun_attr_list)),##:0)])][set(%#,skill_points:[xget(#SKILLDB,skill_points)])][set(%#,attr_points:[xget(#SKILLDB,attr_points)])];@dolist [u(#CGFUN/FUN_POSITION_PACKAGES,xget(%#,position))]=@fo %#=+package/take ##;@wait 2=@pemit %#=%R%R[ansi(hc,Remember, you can adjust the points that were spent automatically by the packages.  You can also take additional packages if you so desire.)]
+&CMD-+PACKAGE-TAKE Skill Chargen Commands=$+package/take *:think [setq(0,u(#CGFUN/fun_package_cost,%0,%#))]pemit(%#,switch(0,u(#CGFUN/fun_is_valid_package,%0),ansi(hr,%0 is not a valid package.),gte(xget(%#,skill_points),%q0),ansi(hr,You don't have enough points for that.),[set(%#,skill_points:[sub(xget(%#,skill_points),%q0)])][u(#CGFUN/fun_apply_package,%0,%#)][ansi(hg,[capstr(%0)] package taken!  You have [xget(%#,skill_points)] skill points remaining.)]%R%T[u(#CGFUN/FUN_PACKAGE_LONG_DESC,%0)]))
+@DESCRIBE Skill Chargen Commands=Commands for setting up skills and attributes.
+&FUN_ATTR_LOWER Skill Chargen Commands=[setq(0,u(#SKILLFUNC/fun_get_trait_lvl_num,%0,%1))][setq(1,sub(%q0,1))][setq(2,xget(%0,attr_points))][pemit(%0,switch(0,u(#SKILLFUNC/fun_is_valid_attr,%1),ansi(hr,That is not a valid attribute.),gte(%q1,[xget(#SKILLDB,MIN_TRAIT_LEVEL)]),ansi(hr,You can't lower that attribute any further.),ansi(hg,You lower the %1 attribute to [u(#SKILLFUNC/fun_print_name_and_num,%q1)].  You have [inc(%q2)] attribute points remaining.)[u(#SKILLFUNC/fun_set_attr,%0,[capstr_all(%1)],%q1)][set(%0,attr_points:[inc(%q2)])]))]
+&FUN_ATTR_RAISE Skill Chargen Commands=[setq(0,u(#SKILLFUNC/fun_get_trait_lvl_num,%0,%1))][setq(1,add(%q0,1))][setq(2,xget(%0,attr_points))][pemit(%0,switch(0,u(#SKILLFUNC/fun_is_valid_attr,%1),ansi(hr,That is not a valid attribute.),lte(%q1,[xget(#SKILLDB,MAX_TRAIT_LEVEL)]),ansi(hr,You can't raise that attribute any further.),gt(%q2,0),ansi(hr,You don't have any attribute points left.),ansi(hg,You raise the %1 attribute to [u(#SKILLFUNC/fun_print_name_and_num,%q1)].  You have [dec(%q2)] attribute points remaining.)[u(#SKILLFUNC/fun_set_attr,%0,[capstr_all(%1)],%q1)][set(%0,attr_points:[dec(%q2)])]))]
+&FUN_SKILL_LOWER Skill Chargen Commands=[setq(0,u(#SKILLFUNC/fun_get_trait_lvl_num,%0,%1))][switch(%q0,#-1,setq(0,[xget(#SKILLDB,MIN_TRAIT_LEVEL)]))][setq(1,sub(%q0,1))][setq(2,xget(%0,skill_points))][pemit(%0,switch(0,u(#SKILLFUNC/fun_is_valid_skill,%1),ansi(hr,That is not a valid skill.),gte(%q1,[xget(#SKILLDB,MIN_TRAIT_LEVEL)]),ansi(hr,You can't lower that skill any further.),ansi(hg,You lower the %1 skill to [u(#SKILLFUNC/fun_print_name_and_num,%q1)].  You have [inc(%q2)] skill points remaining.)[u(#SKILLFUNC/fun_set_skill,%0,[capstr_all(%1)],%q1)][set(%0,skill_points:[inc(%q2)])]))]
+&FUN_SKILL_RAISE Skill Chargen Commands=[setq(0,u(#SKILLFUNC/fun_get_trait_lvl_num,%0,%1))][switch(%q0,#-1,setq(0,[xget(#SKILLDB,MIN_TRAIT_LEVEL)]))][setq(1,add(%q0,1))][setq(2,xget(%0,skill_points))][pemit(%0,switch(0,u(#SKILLFUNC/fun_is_valid_skill,%1),ansi(hr,That is not a valid skill.),lte(%q1,[xget(#SKILLDB,MAX_TRAIT_LEVEL)]),ansi(hr,You can't raise that skill any further.),gt(%q2,0),ansi(hr,You don't have any skill points left.),ansi(hg,You raise the %1 skill to [u(#SKILLFUNC/fun_print_name_and_num,%q1)].  You have [dec(%q2)] skill points remaining.)[u(#SKILLFUNC/fun_set_skill,%0,[capstr_all(%1)],%q1)][set(%0,skill_points:[dec(%q2)])]))]
+@STARTUP Skill Chargen Commands=@set me=!no_command
+@fo me=@edit Skill Chargen Commands/*=#CGFUN,[num(Chargen Info Functions)]
+@fo me=@edit Skill Chargen Commands/*=#SKILLDB,[num(Skill Data)]
+@fo me=@edit Skill Chargen Commands/*=#SKILLFUNC,[num(Skill Functions)]
+
+
+@dig/teleport Chargen=Chargen;CG,Back;B
+@set here = SAFE
+@set here = FLOATING
+@describe here=The next few rooms will guide you through the process of creating your character.  Each room will give you instructions about what to set.  Before starting, you should have a good idea of the character you wish to create.  You can always go back to a previous room if you need to change something (without losing your other stats).  If you have any questions, ask on the Newbie channel by typing [ansi(hg,+n <message>)].
+
+
+@dig/teleport Physical Profile=Next;N,Back;B
+@set here = SAFE
+@set here = FLOATING
+@DESCRIBE here=In this room, you set up your character's physical profile: height, weight, etc.  You can use whatever units of measure you want, but include them in the setting.  For example, you could set your weight to 160lbs or 40kg.  Use your character's natural hair/eye color for these commands.  You can adjust for dye, disguises, etc. in your description.%R%R%T[ansi(h,+height <height>)]%R%T[ansi(h,+weight <weight>)]%R%T[ansi(h,+skin <complexion>)]%R%T[ansi(h,+hair <hair color>)]%R%T[ansi(h,+eyes <eye color>)]%R%T[ansi(h,+hand <left, right, or ambidextrous>)]%R%T[ansi(h,@sex me=<male or female>)]%R%T[ansi(h,@desc me=<your description>)] (also see +help +desc)
+
+@dig/teleport Demographics=Next;N,Back;B
+@DESCRIBE here=In this room, you will set up some basic info about your character's background - what colony he's from, how old he is, etc.  In addition, this is where you choose whether to be civilian or military, and what your character's position (aka job) is.  This is all subject to approval - you can make yourself an Admiral in chargen, but you won't be approved!%R%RCheck out the recruiting BBS (+bbread) for posts about what positions are open.  If you want to be something that isn't posted, we recommend that you contact staff first.%R%R%T[ansi(h,+fullname <full name>)]%R%T[ansi(h,+age <age>)]%R%R%T[ansi(h,+faction <faction>)] (See +factions) %R%T[ansi(h,+position <position>)] (See +positions)%R%T[ansi(h,+org <organization)] (see +orgs)
+
+@dig/teleport Skills=Next;N,Back;B
+@set here = SAFE
+@set here = FLOATING
+@DESCRIBE here=In this room, you will set up your character's skills and attributes.  The system will automatically assign you certain skill packages based on your faction/job/organization.  You can change these, but be prepared to have a good justification in your background if you're missing important skills.%R%R[ansi(hB,Important Help Files:)]%R%T[ansi(hc,+help traits)] - Views help file on the skills, attributes & ratings%R%T[ansi(hy,+help packages)] - Views help file on the skill packages.%R%T[ansi(hg,+help skills)] - General info on the skill system.%R%R[ansi(hB,Commands:)]%R%T[ansi(h,+start)] - Set up your traits and points. %R[space(18)][ansi(hR,WARNING:)] [ansi(hr,This will reset any existing skills/attributes.)]%R%R%T[ansi(h,+raise <attribute or skill>)] - Raise by 1 level.%R%T[ansi(h,+lower <attribute or skill>)] - Lower by 1 level.%R%R%T[ansi(h,+points)] - Shows how many points you have left to spend.%R%T%T%B%BNote: Each rating costs 1 point.%R%T[ansi(h,+sheet)] - Views your character sheet.
+
+@dig/teleport Background=Next;N,Back;B
+@set here = SAFE
+@set here = FLOATING
+@DESCRIBE here=This is the room where you set up your character's backstory, or background.  Make sure that your background matches your character's skills and other information.%R%RYour background is just another MUSH attribute on yourself, like your description. You can set it by typing [ansi(hg,&bg me=<your background text>)]. You can use the built-in MUSH editing commands (@edit, @dec, etc.) to edit it.%R%RIf your background is particularly long, you can split it into multiple attributes, like:%R%T[ansi(h,&BG1 me=This is the first part of my bg.)]%R%T[ansi(h,&BG2 me=This is the second part of my bg.)]%R%Tetc.%R%RThe [ansi(hg,+bg)] command will let you view your background.
+
+@dig/teleport Approval=Next;N,Back;B
+@set here = SAFE
+@set here = FLOATING
+@DESCRIBE here=If you're finished with everything, type [ansi(hg,+bg/submit)] to submit your character for approval.  While you're waiting to be approved, you can hang out in the OOC Center.  Just go through the OOC exit.  If there are any problems with your character, you will be able to re-enter chargen later to fix them.%R%RIf you realize you forgot something, you can use [ansi(h,+bg/unsubmit)] to withdraw your application and go back to make changes.
+
+@open Done;D
+
+back
+back
+back
+back
+back
+back
+
+@power Chargen=See_All
+@lock/Basic Chargen=ISOK/1
+&CHARGEN_OPEN Chargen=1
+@FAILURE Chargen=switch(v(chargen_open),0,Chargen isn't open yet.,Only new players may enter chargen.)
+&ISOK Chargen=or(isstaff(%#),and(orflags(%#,?),not(haspower(%#,guest)),v(chargen_open)))
+
+chargen
+next
+
+@parent Next=[num(Chargen Exit Parent)]
+@power Next = See_All
+&OTHER_CHECKS Next=1
+&REQUIRED_ATTRS Next=height weight skin hair eyes hand sex describe
+drop Profile Commands
+
+next
+
+@parent Next=[num(Chargen Exit Parent)]
+@power Next = See_All
+&OTHER_CHECKS Next=1
+&OTHER_ERRORS Next=
+&REQUIRED_ATTRS Next=faction org position birthdate fullname
+drop Demographic Commands
+
+next
+
+@parent Next=[num(Chargen Exit Parent)]
+@power Next = See_All
+&FUN_CHECK_LEVELS Next=localize([setq(1,0)][setq(2,0)][setq(3,0)][iter(xget(%0,%1),switch(after(##,:),1,setq(1,inc(%q1)),2,setq(2,inc(%q2)),3,setq(3,inc(%q3)),>3,setq(3,inc(%q3))),,)][not(or(gt(add(%q1,%q2,%q3),xget(#SKILLDB,MAX_%1_ABOVE_0)),gt(add(%q2,%q3),xget(#SKILLDB,MAX_%1_ABOVE_1)),gt(%q3,xget(#SKILLDB,MAX_%1_ABOVE_2))))])
+&OTHER_CHECKS Next=[and(u(FUN_CHECK_LEVELS,%#,skills),u(FUN_CHECK_LEVELS,%#,attributes))][switch(1,gt(xget(%0,skill_points),0),pemit(%0,ansi(hm,You didn't spend all of your skill points.)))][switch(1,gt(xget(%0,attr_points),0),pemit(%0,ansi(hm,You didn't spend all of your attribute points.)))]
+&OTHER_ERRORS Next=[switch(u(FUN_CHECK_LEVELS,%#,skills),0,- You may only have [xget(#SKILLDB,MAX_SKILLS_ABOVE_2)] skill above Great\, [xget(#SKILLDB,MAX_SKILLS_ABOVE_1)] above Good and [xget(#SKILLDB,MAX_SKILLS_ABOVE_0)] above Fair.)][switch(u(FUN_CHECK_LEVELS,%#,attributes),0,%R- You may only have [xget(#SKILLDB,MAX_ATTRIBUTES_ABOVE_2)] attribute above Great\, [xget(#SKILLDB,MAX_ATTRIBUTES_ABOVE_1)] above Good and [xget(#SKILLDB,MAX_ATTRIBUTES_ABOVE_0)] above Fair.)]
+&REQUIRED_ATTRS Next=attributes skills
+
+drop Skill Chargen Commands
+
+next
+
+@parent Next=[num(Chargen Exit Parent)]
+@power Next = See_All
+&OTHER_CHECKS Next=or(hasattr(%0,bg),hasattr(%0,bg1))
+&OTHER_ERRORS Next=- You must set your background to proceed.
+
+next
+
+@parent Done=[num(Chargen Exit Parent)]
+@power Done= See_All
+&OTHER_CHECKS Done=or(t(xget(%0,approval_job)),not(hasflag(%0,unregistered)))
+&OTHER_ERRORS Done=- You must submit your character for approval first.
+
+@link done=#0
+
+@@ This has to be done last because otherwise all the previous exits would be locked!
+@lock/Basic Chargen Exit Parent=ISDONE/1
+@lset Chargen Exit Parent/Basic=!no_inherit
+
+@pemit/silent %#=[ansi(hr,Setting up attributes...)]%R
+
+think setup_attr(h,approval_job,0)
+think setup_attr(h,attributes,)
+think setup_attr(h,attr_points,0)
+think setup_attr(h,birthdate,)
+think setup_attr(h,eyes,)
+think setup_attr(h,hair,)
+think setup_attr(h,hand,)
+think setup_attr(h,height,)
+think setup_attr(h,weight,)
+think setup_attr(h,skin,)
+think setup_attr(h,eyes,)
+think setup_attr(h,date,\[time()\])
+think setup_attr(h,skills,)
+think setup_attr(h,skill_points,0)
+think setup_attr(h,xp,0)
+think setup_attr(h,position,)
+think setup_attr(h,faction,)
+think setup_attr(h,org,)
+think setup_attr(h,has_been_trained,0)
+think setup_attr(h,has_lowered,0)
+think setup_attr(h,has_trained,0)
+think setup_attr(h,has_practiced,0)
+think setup_attr(h,xpspent,)
+
+
+@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R
+
+@wait 4=@fo me=@edit FUDGE Skill System/*=#SKILLFUNC,[num(Skill Functions)]
+@wait 4=@fo me=@edit FUDGE Skill System/*=#SKILLDB,[num(Skill Data)]
+@wait 4=@fo me=@edit FUDGE Skill System/*=#CGFUN,[num(Chargen Info Functions)]
+@wait 4=@fo me=@edit FUDGE Skill System/*=#SKILLPACKDB,[num(Chargen Skill Packages)]
+
+@wait 4=@fo me=@edit FUDGE Skill Functions/*=#SKILLFUNC,[num(Skill Functions)]
+@wait 4=@fo me=@edit FUDGE Skill Functions/*=#SKILLDB,[num(Skill Data)]
+@wait 4=@fo me=@edit FUDGE Skill Functions/*=#CGFUN,[num(Chargen Info Functions)]
+@wait 4=@fo me=@edit FUDGE Skill Functions/*=#SKILLPACKDB,[num(Chargen Skill Packages)]
+
+@wait 4=@fo me=@edit FUDGE Skill Data/*=#SKILLFUNC,[num(Skill Functions)]
+@wait 4=@fo me=@edit FUDGE Skill Data/*=#SKILLDB,[num(Skill Data)]
+@wait 4=@fo me=@edit FUDGE Skill Data/*=#CGFUN,[num(Chargen Info Functions)]
+@wait 4=@fo me=@edit FUDGE Skill Data/*=#SKILLPACKDB,[num(Chargen Skill Packages)]
+
+@wait 4=@fo me=@edit Chargen Info Functions/*=#SKILLFUNC,[num(Skill Functions)]
+@wait 4=@fo me=@edit Chargen Info Functions/*=#SKILLDB,[num(Skill Data)]
+@wait 4=@fo me=@edit Chargen Info Functions/*=#CGFUN,[num(Chargen Info Functions)]
+@wait 4=@fo me=@edit Chargen Info Functions/*=#SKILLPACKDB,[num(Chargen Skill Packages)]
+
+@wait 4=@fo me=@edit Chargen Info Commands/*=#SKILLFUNC,[num(Skill Functions)]
+@wait 4=@fo me=@edit Chargen Info Commands/*=#SKILLDB,[num(Skill Data)]
+@wait 4=@fo me=@edit Chargen Info Commands/*=#CGFUN,[num(Chargen Info Functions)]
+@wait 4=@fo me=@edit Chargen Info Commands/*=#SKILLPACKDB,[num(Chargen Skill Packages)]
+
+
+@wait 4=@fo me=@edit XP System/*=#SKILLFUNC,[num(Skill Functions)]
+@wait 4=@fo me=@edit XP System/*=#SKILLDB,[num(Skill Data)]
+@wait 4=@fo me=@edit XP System/*=#CGFUN,[num(Chargen Info Functions)]
+@wait 4=@fo me=@edit XP System/*=#SKILLPACKDB,[num(Chargen Skill Packages)]
+@wait 4=@fo me=@edit XP System/*=#XPDATA,[num(XP Data)]
+
+@wait 4=@fo me=@edit XP System/*=#XPSYS,[num(XP System)]
+
+
+@wait 4=@tel [loc(lsearch(all,name,Skill Chargen Commands))]
+@wait 5=@fo me=@edit next/*=#SKILLDB,[lsearch(all,name,FUDGE Skill Data)]
+
+@wait 5=@pemit/silent %#=[ansi(hr,Copying help files...)]%R
+@wait 5=@fo me=+copyhelp [num(Skill Functions)]
+@wait 5=@fo me=+copyhelp [num(XP System)]
+@wait 5=@tr Chargen Info Functions/startup
+@wait 5=@tr FUDGE Skill Functions/startup
+
+@wait 7=@pemit/silent %#=[ansi(hr,Moving objects to their appropriate places...)]%R
+
+@wait 7=@tel Skill Functions=FUDGE Skill System
+@wait 7=@tel Skill Data=FUDGE Skill System
+@wait 7=@tel XP Data=XP System
+@wait 7=@tel Chargen Skill Packages=FUDGE Skill System
+@wait 7=@tel Chargen Info Functions=FUDGE Skill System
+@wait 7=@tel Chargen Exit Parent=FUDGE SKill System
+@wait 7=@tel FUDGE Skill System=#2
+@wait 7=@tel Chargen Info Commands=#2
+@wait 7=@tel XP System=#2
+
+@wait 8=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
+@wait 8=@pemit/silent %#=%R%T[ansi(hg,You'll want to link the final chargen exit to the proper destination.  See +shelp skills for configuration info.%R%RCopy the cron jobs from the XP System to the Cron object.)]%R
+
+@wait 8=@set me=!quiet
+
