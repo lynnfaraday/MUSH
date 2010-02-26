@@ -11,13 +11,12 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(ROOM_EXIT_PARENT,Exit Parent,0,0,5.0,Exit parent.)
-think install_create(ROOM_PARENT,Room Parent,1,0,5.0,Room parent.)
-think install_create(ROOM_TPROOM_PARENT,TP Room Parent,1,0,5.0,Tinyplot Room parent.)
-think install_create(ROOM_TPROOM_FOYER,TP Room Foyer,0,0,5.0,Foyer room for the TP room area.)
-
-
-think install_create(PLACES_PARENT,Max's Table Code Parent,0,0,5.0,Places parent.)
+think install_create(ROOM_HOLDER,Room Parent Holder,0,1,5.0,Container for the room parent objects.)
+think install_create(ROOM_EXIT_PARENT,Exit Parent,0,0,5.0,Exit parent.,ROOM_HOLDER)
+think install_create(ROOM_PARENT,Room Parent,1,0,5.0,Room parent.,ROOM_HOLDER)
+think install_create(ROOM_TPROOM_PARENT,TP Room Parent,1,0,5.0,Tinyplot Room parent.,ROOM_HOLDER)
+think install_create(ROOM_TPROOM_FOYER,TP Room Foyer,0,0,5.0,Foyer room for the TP room area.,ROOM_HOLDER)
+think install_create(PLACES_PARENT,Max's Table Code Parent,0,0,5.0,Places parent.,ROOM_HOLDER)
 
 @set Exit Parent = LINK_OK
 @STARTUP Exit Parent=@set me=!NO_COMMAND
@@ -25,7 +24,6 @@ think install_create(PLACES_PARENT,Max's Table Code Parent,0,0,5.0,Places parent
 @ODROP Exit Parent=arrives from the [name(home(me))].
 @OSUCCESS Exit Parent=leaves, heading towards the [name(loc(me))] \[[name(me)]\].
 @SUCCESS Exit Parent=You head towards [ansi(hc,[name([loc(me)])])]
-
 
 @set Max's Table Code Parent = VISUAL
 &ATPLACE Max's Table Code Parent=[extract(get(%0/PLACENUMS), %1, 1, |)]
@@ -70,7 +68,6 @@ think install_create(PLACES_PARENT,Max's Table Code Parent,0,0,5.0,Places parent
 @adisconnect Max's Table Code Parent=think u(fun_cleanup)
 
 
-
 &CMD-+LHELP Room Parent=$+lhelp*:think switch(words([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)]),0,pemit(%#,ansi(c,There are no local help files here.)),switch(%0,,pemit(%#,[line()]%rLocal Help Topics::%r%r[setq(0,iter([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)],after(##,_)))][table([sort(%q0)],15,78,,)]%r%rType [ansi(hb,+lhelp <topic>)] for more information about a given topic.%r[line()]),pemit(%#,[line()]%rLocal Help Topic : [ansi(hr,[ucstr(%0)])]%r%r[u(help_[trim(%0)])]%r[line()])))
 @CONFORMAT Room Parent=[switch(u(me/whichplace,me,%#),>0,%R%R[u(getinfo,me,[u(me/whichplace,me,%#)],name)]:%B[u(getinfo,me,[u(me/whichplace,me,%#)],desc)]%R)][ansi(c,repeat(-,78))]%R[ansi(c,Contents:)][space(5)][wrap(iter(revwords(sort(u(visible_contents),a,|),|),[switch(mod(#@,2),1,[ansi(h,##)]%B,##%B)],|),61,61,%R[space(14)])]%R
 @DESCRIBE Room Parent=This is a temporary description.
@@ -85,7 +82,6 @@ think install_create(PLACES_PARENT,Max's Table Code Parent,0,0,5.0,Places parent
 &SORT_REGULAR_EXITS Room Parent=comp(name(%0),name(%1))
 @STARTUP Room Parent=@set me=!no_command
 &VISIBLE_CONTENTS Room Parent=[iter(lcon(me),[switch(1,and(hastype(##,thing),not(hasflag(##,dark))),[name(##)]|)][switch(1,hastype(##,player),switch(1,hidden(##),,not(match(lwho(),##)),,[name(##)]|))])]
-
 
 @set TP Room Parent = VISUAL
 &CMD-DESC-CREATE TP Room Parent=$desc/create *=*:think switch(1,hasattr(me,tpdesc_[edit(%0,%b,-)]),pemit(%#,ansi(hr,There is already a desc with that name.)),t(match(%1,*\[*)),pemit(%#,ansi(hr,Sorry - your request could not be completed.  Do not use MUSH function calls in your descriptions.  Contact staff to request a special exception.)),pemit(%#,ansi(hc,You create a desc entited "[edit(%0,%b,-)]".))[set(#TPROOM,tpdesc_[edit(%0,%b,-)]:%1)])
@@ -109,11 +105,6 @@ think install_create(PLACES_PARENT,Max's Table Code Parent,0,0,5.0,Places parent
 &TPDESC_DEFAULT TP Room Parent=The walls of the room shimmer.  They are shapeless, malleable, almost waiting to be given form.  With a little imagination, the room can become anything, from an abandoned mining tunnel to an ornate ballroom.%R%RThis is a [ansi(hg,TinyPlot Room)] which you can use to simulate any room not actually coded on the MUSH.  The room's commands allow you to change the description to suit your needs, even storing multiple descs if you so desire.  You can also lock the room for privacy, and request that it be linked to the IC world for special TPs.
 &cmd-+lhelp TP Room Parent=$+lhelp*:think switch(words([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)]),0,pemit(%#,ansi(c,There are no local help files here.)),switch(%0,,pemit(%#,[line()]%rLocal Help Topics::%r%r[setq(0,iter([lattr(me/help_*)]%B[lattr([parent(me)]/help_*)],after(##,_)))][table([sort(%q0)],15,78,,)]%r%rType [ansi(hb,+lhelp <topic>)] for more information about a given topic.%r[line()]),pemit(%#,[line()]%rLocal Help Topic : [ansi(hr,[ucstr(%0)])]%r%r[u(help_[trim(%0)])]%r[line()])))
 
-
-&fun_avail_rooms TP Room Foyer=[center([ansi(h,Room Availability)],78)][iter(sort_names(v(room_exits)),[switch(mod(#@,3),1,%R%T)][padstr([last(name(##))]: [switch(1,xget(##,islocked),ansi(hr,Locked),t(lvplayers(loc(##))),[ansi(hr,Occupied)],t(lplayers(loc(##))),[ansi(hy,Available*)],[ansi(hg,Available)])],18)])]
-&ROOM_EXITS TP Room Foyer=
-
-
 &SHELP_TP_ROOMS TP Room Parent=To set up a Tinyplot room, dig a room as normal and parent it to #TPROOM.  Then go to the room and examine [ansi(h,+lhelp setup)] for more setup info.%R%RYou may wish to parent the TP room parent object to your global room parent.
 &SHELP_ROOM_PARENTS TP Room Parent=Room parent: #ROOMDB%RExit parent: #EXITDB%R%RAlso remember to set the AREA attribute on the rooms for the zone/area.%R%RThe room parent will display the exits as <first part of exit name> Destination.  So for example: <F> Forward.
 &HELP_TP_ROOMS TP Room Parent=There will be times when a plot requires rooms that don't already exist on %rthe MUSH. The MUSH has a few rooms in the OOC area set aside for use in such situations. These TP Rooms have a command to change their description so that you can make them into an evil mastermind's hideout, a seedy Waycross nightclub, or an ornate ballroom... whatever you need for your plot. They can even be locked, for private scenes.%R%RWith advanced notice, the staff can link TP rooms to regular rooms in the MUSH so players have easy access to them. However, even without notice you can always go to the OOC area and roleplay in one of the TP Rooms.
@@ -121,6 +112,10 @@ think install_create(PLACES_PARENT,Max's Table Code Parent,0,0,5.0,Places parent
 &SHELP_PLACES TP Room Parent=All rooms come equipped with the potential for 'places'.  All you have to do is set them up.  See also:%R%T+shelp places_config - Setting up places%R%T+shelp places_options - More about place options
 &MORE_SHELP_PLACES_CONFIG TP Room Parent=%rPLACES configuration:%r%b%bConfigure <num> places%r%b%bUnconfigure places%r%r%b%bNotes: A null fixed message means vacancies can be moved freely to and from the place. % This does not make sense for things like couches and rugs. % Set it to something like "That makes no sense." if you are using such a place.%r%b%b(O)Join and (O)depart messages take like this: %%%%N. All Join and Depart messages are appended with the place name.%r%rUnlike older versions of the places system, this one cleans up without needing an object listening in the room.%r%rFunctions:%r%b%bWHICHPLACE(<loc num>,<dbnum>) gives the number of a place where <dbnum> is.%r%b%bATPLACE(<loc num>,<place num>) gives you a list of things at a place.%r%b%bPLACEINFO(<loc num>,<place num>,<option>) gives the value of <option> at place.%r%r
 &MORE_SHELP_PLACES_OPTIONS TP Room Parent=%b%bUpdate <Place #>/<Option>=<Configuration Text>%r%r%b%bOption Description%t<Option>%tDefault Configuration Text%r%b%b------------------%t--------%t--------------------------%r%b%bPlace Name%t%tNAME%t%tTable x%r%b%bMaximum # of places%tMAXPLACES%tRandom%r%b%bCurrent # of places%tCURPLACES%tRandom (1 >= # >= MAXPLACES)%r%b%bFixed fail message%tFIXED%t%t<NULL>%r%b%bFull fail message%tFULL%t%tThat table has no more room.%r%b%bJoin message%t%tJOIN%t%tYou sit down at <place>.%r%b%bOjoin message%t%tOJOIN%t%tsits down at <place>.%r%b%bDepart message%tDEPART%t%tYou stand and leave <place>.%r%b%bOdepart message%tODEPART%t%tstands and leaves <place>.%r%b%bSay prefix%t%tPREFIX%t%tAt your table%r%B%BLocal Description%B%B%B%B%BDESC[space(12)]Table x is a nondescript table%R[space(40)]with room for MAXPLACES seats.
+
+
+&fun_avail_rooms TP Room Foyer=[center([ansi(h,Room Availability)],78)][iter(sort_names(v(room_exits)),[switch(mod(#@,3),1,%R%T)][padstr([last(name(##))]: [switch(1,xget(##,islocked),ansi(hr,Locked),t(lvplayers(loc(##))),[ansi(hr,Occupied)],t(lplayers(loc(##))),[ansi(hy,Available*)],[ansi(hg,Available)])],18)])]
+&ROOM_EXITS TP Room Foyer=
 
 
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R

@@ -22,15 +22,25 @@ think [setq(0,#-1)][squish(iter([lcon(%l)] [lcon(%#)],switch(name(##),Install Ma
 
 &CMD-+install-updategroup Install Manager=$+install/updategroup *:@switch [setq(0,u(fun_get_group_attrs,%0))][words(%q0)]=0,@pemit %#=[ansi(hr,Can't find a system group named %0.  Make sure it's been installed properly.)],@dolist %q0={@fo %#=+install/update [after(##,_)]}
 
-&CMD-+install-finalize Install Manager=$+install/finalize *:think [setq(0,u(fun_get_dbref,%0))];@tr %q0/startup;think pemit(%#,[u(fun_INSTALL_CRON,%q0)]%R[u(fun_INSTALL_HELP,%q0)]);@fo %#=+install/attr %q0;@switch extract(%0,2,1,_)=CMD,@tel %q0=v(MASTER_ROOM),@tel %q0=#INSTALL_STORAGE;@pemit %#=ansi(hc,%0 installed.)
+&CMD-+install-finalize Install Manager=$+install/finalize *:think [setq(0,u(fun_get_dbref,%0))];@tr %q0/startup;think pemit(%#,[u(fun_INSTALL_CRON,%q0)]%R[u(fun_INSTALL_HELP,%q0)]);@fo %#=+install/attr %q0;@tel %q0=u(fun_get_destination,%0);@pemit %#=ansi(hc,%0 installed.)
 
 &CMD-+INSTALL_ATTR Install Manager=$+install/attr *:@dolist lattr(%0/?ATTR_*)=think pemit(%#,setup_attr(mid(##,0,1),after(##,_),xget(%0,##)))
 
 &CMD-+UNINSTALL Install Manager=$+uninstall *:@pemit %#=[setq(0,u(fun_get_group_attrs,%0))]switch(0,words(%q0),ansi(hr,I cannot find a group named %0.),ansi(hg,Are you sure you really want to uninstall the %0 system?  Type +uninstall/confirm to confirm.)[set(%#,uninstall:[trim(%0)])])
 
-&CMD-+UNINSTALL-CONFIRM Install Manager=$+uninstall/confirm:@switch 0[setq(0,u(fun_get_group_attrs,xget(%#,uninstall)))]=t(xget(%#,uninstall)),@pemit %#=ansi(hr,You are not uninstalling anything.),{@pemit %#=ansi(hc,You uninstall the [xget(%#,uninstall)] system.)[wipe(%#/uninstall)];@dolist %q0={think setq(1,u(fun_get_dbref,after(##,_)));@wipe #INSTALL_DB/##;@set %q1=!safe;@nuke %q1;think pemit(%#,UNINSTALL_HELP(%q1))}}
+&CMD-+UNINSTALL-CONFIRM Install Manager=$+uninstall/confirm:@switch 0[setq(0,u(fun_get_group_attrs,xget(%#,uninstall)))]=t(xget(%#,uninstall)),@pemit %#=ansi(hr,You are not uninstalling anything.),{@pemit %#=ansi(hc,You uninstall the [xget(%#,uninstall)] system.  Before reinstalling - you need to run the @dbck command to clean up purged objects.)[wipe(%#/uninstall)];@dolist %q0={think setq(1,u(fun_get_dbref,after(##,_)));@wipe #INSTALL_DB/##;@set %q1=!safe;@nuke %q1;think pemit(%#,UNINSTALL_HELP(%q1))}}
 
+@@ --------------------------
+@@  FUN_GET_DESTINATION
+@@  Figure out where the object should be placed when it's created.
+@@  Normally command objects go in the master room and other objects go into the install storage object
+@@  but you can override this per object by setting the INSTALL_DESTINATION attribute to be the *ALIAS*
+@@  of another known system object.  For instance, set the INSTALL_DESTINATION to HELP_CMD to place it
+@@  into the help commands object.
+@@  %0 = Object alias
+@@ --------------------------
 
+&FUN_GET_DESTINATION Install Manager=localize([setq(0,u(fun_get_dbref,%0))]switch(1,hasattr(%q0,install_destination),u(fun_get_dbref,xget(%q0,install_destination)),match(extract(%0,2,1,_),CMD),v(MASTER_ROOM),#INSTALL_STORAGE)
 
 @@ --------------------------
 @@  FUN_GET_GROUP_ATTRS
@@ -48,8 +58,9 @@ think [setq(0,#-1)][squish(iter([lcon(%l)] [lcon(%#)],switch(name(##),Install Ma
 @@  %3 = No Command Flag (0 or 1)
 @@  %4 = Version
 @@  %5 = Description
+@@  %6 = Install Destination (may be blank)
 @@ --------------------------
-&FUN_INSTALL_CREATE Install Manager=pemit(%#,[switch(0,isstaff(%#),ansi(hr,This function is restricted.),u(fun_is_registered,%0),[setq(0,create(%1))][u(fun_register,%0,%q0)][tel(%q0,%#)][ansi(hc,Created object %0 with DB# %q0.)],[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(hc,Found object %0.)][switch(strmatch(name(%q0),%1),0,ansi(hR,Object names do not match!  Install will fail!  Rename the old object to %1 and try again.))])][set(%q0,SAFE)][switch(%2,1,set(%q0,wizard))][switch(%3,0,set(%q0,!NO_COMMAND),set(%q0,NO_COMMAND))][set(%q0,version:%4)][set(%q0,describe:%5%R\[u(credits)\])][set(%q0,credits:[v(credits)])])
+&FUN_INSTALL_CREATE Install Manager=pemit(%#,[switch(0,isstaff(%#),ansi(hr,This function is restricted.),u(fun_is_registered,%0),[setq(0,create(%1))][u(fun_register,%0,%q0)][tel(%q0,%#)][ansi(hc,Created object %0 with DB# %q0.)],[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(hc,Found object %0.)][switch(strmatch(name(%q0),%1),0,ansi(hR,Object names do not match!  Install will fail!  Rename the old object to %1 and try again.))])][set(%q0,SAFE)][switch(%2,1,set(%q0,wizard))][switch(%3,0,[set(%q0,!NO_COMMAND)][set(%q0,startup:@set me=!no_command)],set(%q0,NO_COMMAND))][set(%q0,version:%4)][set(%q0,describe:%5%R\[u(credits)\])][switch(%6,,,set(%q0,install_destination:%6))][set(%q0,credits:[v(credits)])])
 
 &CREDITS Install Manager=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 &MASTER_ROOM install manager=#2
