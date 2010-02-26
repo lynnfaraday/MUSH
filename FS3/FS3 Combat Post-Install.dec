@@ -7,34 +7,10 @@
 
 @pemit/silent %#=%R%R[ansi(hg,Setting up database numbers.)]
 
-@fo me=+install FS3_COMBATHELP=[num(FS3Combat Help)]
-@fo me=+install FS3_PREFS=[num(FS3Combat Preferences)]
-@fo me=+install FS3_VEHDB=[num(FS3Combat Vehicle DB)]
-@fo me=+install FS3_NPCDB=[num(FS3Combat NPC DB)]
-@fo me=+install FS3_INSTANCE=[num(FS3Combat Instance Parent)]
-@fo me=+install FS3_EQUIPDB=[num(FS3Combat Equipment Stats)]
-@fo me=+install FS3_DMGDB=[num(FS3Combat Damage Database)]
-@fo me=+install FS3_HITLOC=[num(FS3Combat Hit Locations)]
++install/updategroup FS3COMBAT
 
-@fo me=+install FS3_VEHCMD=[num(FS3Combat Vehicle Commands)]
-@fo me=+install FS3_EQUIPCMD=[num(FS3Combat Equipment Commands)]
-@fo me=+install FS3_NPCCMD=[num(FS3Combat NPC Commands)]
-@fo me=+install FS3_DMGCMD=[num(FS3Combat Damage Commands)]
-@fo me=+install FS3_ACTCMD=[num(FS3Combat Action Commands)]
+@wait 5=+jobs/create CODE=FS3 Combat Config/Configure FS3Combat.  See guide here: http://wordsmyth.org/aresmush/index.php?title=FS3_Configuration
 
-@wait 5=@pemit/silent %#=%R%R[ansi(hg,Moving objects.)]
+@wait 10=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
 
-@wait 5=@tel FS3Combat Action Commands=#2
-@wait 5=@tel FS3Combat Damage Commands=#2
-@wait 5=@tel FS3Combat Equipment Commands=#2
-@wait 5=@tel FS3Combat Vehicle Commands=#2
-@wait 5=@tel FS3Combat NPC Commands=#2
-
-@wait 5=@fo me=+copyhelp [num(FS3Combat Help)]
-
-think setup_attr(h,combat)
-
-
-@wait 5=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]
-
-@wait 5=@set me=!quiet
+@wait 10=@set me=!quiet

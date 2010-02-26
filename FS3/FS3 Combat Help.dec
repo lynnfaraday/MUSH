@@ -8,8 +8,7 @@
 @set me=quiet
 @pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Help module.)]
 
-@describe FS3Combat Help=See the FS3Combat Action Commands object for important copyright/license information.
-
+think install_create(FS3COMBAT_HELP,FS3Combat Help,0,1,5.0,FS3Combat Help.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
 &MORE_HELP_+GEAR FS3Combat Help=[ansi(hb,This help file is a quick reference for the FS3 Combat System. %RFor more details, see [u(more_help_fs3combat_url)])]%R%R[ansi(h,Gear Commands)]%R%b +gear/weapons - Lists weapon stats%r%b%b+gear/armor - Lists armor stats%r%b%b+gear/vehicles - Lists vehicle stats
 
@@ -34,8 +33,6 @@
 &MORE_HELP_+treat FS3Combat Help=[ansi(hb,This help file is a quick reference for the FS3 Combat System. %RFor more details, see [u(more_help_fs3combat_url)])]%R%R[ansi(h,+treat <name>)] - Treats recent wounds.%R%RUse +damage <name> to see a list of wounds and whether any can be treated.%R%RTreating is a quick, emergency action such as first aid (for people) or jury-rigging (for vehicles).  You may only use +treat within a few minutes after the injury.  
 
 &MORE_HELP_+heal FS3Combat Help=[ansi(hb,This help file is a quick reference for the FS3 Combat System. %RFor more details, see [u(more_help_fs3combat_url)])]%R%R[ansi(h,+heal <name>)] - Heals wounds.%R[ansi(h,+stopheal <name>)] - Stops healing someone.%R[ansi(h,+healing)] - Lists who you're healing.%R%R+heal is for long-term treatment or repairs.  You only need to use the command once, and you will be marked as caring for that person/vehicle until they are fully healed or until you stop healing them.   +heal may not be used in combat.   You may only have one "patient" for every 2 levels of healing skill.  In other words, an expert doctor (12) could be caring for 6 patients simultaneously.  Multiple docs/mechanics can treat a single patient/vehicle.%R%RIf you fail you may cause them to heal even slower, so consider carefully before using it if your Medicine score is low.
-
-&MORE_HELP_+repair FS3Combat Help=This command is obsolete.  See +help +heal instead.
 
 @wait 5=@set me=!quiet
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]
