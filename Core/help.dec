@@ -28,7 +28,7 @@ think install_create(HELP_DB,+help Database,0,0,5.0,Stores +help files.)
 
 &FUN_FIND_ALL_HELP +help Commands=[lattr(%0/HELP_*)]%B[lattr(%0/MORE_HELP_*)]%B[lattr(%0/SHELP_*)]%B[lattr(%0/MORE_SHELP_*)]
 
-&FUN_INSTALL_HELP +help Commands=localize([setq(0,u(FUN_FIND_ALL_HELP,%0))][switch(0,isstaff(%#),ansi(hr,This command is for staff only.),not(match(%0,#HELP_DB)),ansi(c,Setting up help files on the help object is redundant!),words(%q0),ansi(c,No help files found on object %0 \([name(%0)]\).),ansi(c,Copied help files from object %0 \([name(%0)]\).[iter(%q0,set(#HELP_DB,##:[xget(%0,##))])
+&FUN_INSTALL_HELP +help Commands=localize([setq(0,u(FUN_FIND_ALL_HELP,%0))][switch(0,isstaff(%#),ansi(hr,This command is for staff only.),not(match(%0,#HELP_DB)),ansi(c,Setting up help files on the help object is redundant!),words(%q0),ansi(c,No help files found on object %0 \([name(%0)]\).),ansi(c,Copied help files from object %0 \([name(%0)]\).)[iter(%q0,set(#HELP_DB,##:[xget(%0,##)]))])])
 
 &FUN_UNINSTALL_HELP +help Commands=localize([setq(0,u(fun_find_all_help,%0))][switch(0,isstaff(%#),ansi(hr,This command is for staff only.),not(match(%0,#HELP_DB)),ansi(c,Setting up help files on the help object is redundant!),words(%q0),ansi(c,No help files found on object %0 \([name(%0)]\).),ansi(c,Removing help files from object %0 \([name(%0)]\).)[iter(%q0,wipe(#HELP_DB/##))])])
 

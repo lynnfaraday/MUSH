@@ -16,24 +16,24 @@ think install_create(ALTS_DB,Alts DB,0,1,5.0,Alt database.)
 
 
 &HELP_+ALTS Alts System=The +alts command lets you record who your alternate characters are.  Alts must be registered so that staff knows who's playing who.  Alt information may only be seen by staff.  If you want people to know your alts, put it in +finger in the PUBLICALTS attribute.%R%R[ansi(h,+alts/register <character>)] - Registers a character as your alt.%R[ansi(h,+alts/unregister <character>)] - Use if a character is no longer your alt.%R%TUsually you'd only use this if your char was @nuked or something.%R%R[ansi(h,+alts/mail)] - Shows if your alts have unread messages.
-&SHELP_+ALTS Alts System=Use the +alts command to view a character's alts.%R%R[ansi(h,+alts <character>)] - Lists alts.%R[ansi(h,+alts/add <main>=<alt>)] - Adds an alt.%R[ansi(h,+alts/remove <main>=<alt>)] - Removes an alt.%r%rSet the NOTIFY_STAFF attribute to 1 to submit a job every time someone registers or unregisters an alt.%R%RIf using FaraMail, set the MAILSYS attribute on #ALTDB to faramail (the default is builtin for @mail)
+&SHELP_+ALTS Alts System=Use the +alts command to view a character's alts.%R%R[ansi(h,+alts <character>)] - Lists alts.%R[ansi(h,+alts/add <main>=<alt>)] - Adds an alt.%R[ansi(h,+alts/remove <main>=<alt>)] - Removes an alt.%r%rSet the NOTIFY_STAFF attribute to 1 to submit a job every time someone registers or unregisters an alt.%R%RIf using FaraMail, set the MAILSYS attribute on #ALTS_DB to faramail (the default is builtin for @mail)
 &CMD-+ALTS Alts System=$+alts:@pemit %#=ansi(hc,Your alts:  [remove(u(fun_find_alts,%N),%N)])
 &CMD-+ALTS-ADD Alts System=$+alts/add *=*:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(pmatch(%0)),ansi(hr,%0 is not a valid player!),t(pmatch(%1)),ansi(hr,%1 is not a valid player!),not(u(fun_is_alt,%0,%1)),ansi(hr,%0 is already %1's alt.),ansi(hg,You add %0 as an alt of %1.)[u(fun_register,%0,%1)])
 &CMD-+ALTS-MAIL Alts System=$+alts/mail:think pemit(%#,[line()]%R[ansi(h,Alt Mail Report)][iter(u(fun_find_alts,%N),%R[ljust(##,15)][u(fun_unread_mail,pmatch(##))] unread messages)]%R[line()])
-&CMD-+ALTS-REGISTER Alts System=$+alts/register *:@pemit %#=switch(0,t(pmatch(%0)),ansi(hr,%0 is not a valid player.),not(u(fun_is_alt,%0,%N)),ansi(hr,%0 is already your alt.),ansi(hg,You register %0 as your alt.)[u(fun_register,%N,%0)][switch(xget(#ALTDB,notify_staff),1,create_job(REQ,Alts - %N,%N has registered [name(pmatch(%0))] as %p alt.%R%ROther alts:%R[iter(u(fun_find_alts,%N),%R##: [xget(pmatch(##),position)])],%#))])
+&CMD-+ALTS-REGISTER Alts System=$+alts/register *:@pemit %#=switch(0,t(pmatch(%0)),ansi(hr,%0 is not a valid player.),not(u(fun_is_alt,%0,%N)),ansi(hr,%0 is already your alt.),ansi(hg,You register %0 as your alt.)[u(fun_register,%N,%0)][switch(xget(#ALTS_DB,notify_staff),1,create_job(REQ,Alts - %N,%N has registered [name(pmatch(%0))] as %p alt.%R%ROther alts:%R[iter(u(fun_find_alts,%N),%R##: [xget(pmatch(##),position)])],%#))])
 &CMD-+ALTS-REMOVE Alts System=$+alts/remove *=*:@pemit %#=switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(pmatch(%0)),ansi(hr,%0 is not a valid player!),u(fun_is_alt,%0,%1),ansi(hr,%1 is not an alt of %0.),ansi(hg,You remove %1 as an alt of %0.)[u(fun_unregister,%0,%1)])
 &CMD-+ALTS-STAFF Alts System=$+alts *:think switch(0,isstaff(%#),pemit(%#,ansi(hr,This command is for staff only.)),t(pmatch(%0)),pemit(%#,ansi(hr,That is not a valid player!)),pemit(%#,ansi(hc,Alts for [capstr(%0)]: [remove(u(fun_find_alts,%0),name(pmatch(%0)))])))
-&CMD-+ALTS-UNREGISTER Alts System=$+alts/unregister *:@pemit %#=switch(0,u(fun_is_alt,%0,%N),ansi(hr,%0 is not your alt.),ansi(hg,You unregister %0 as your alt.)[u(fun_unregister,%N,%0)][switch(xget(#ALTDB,notify_staff),1,create_job(REQ,Alts - %N,%N has unregistered [name(pmatch(%0))] as %p alt.,%#))])
-&FUN_ADD_ALT Alts System=append(#ALTDB,%0,[name(pmatch(%1))])
-&FUN_ADD_MAIN Alts System=[set(#ALTDB,ALTS_[xget(#ALTDB,alt_ID)]:[name(pmatch(%0))])][set(#ALTDB,ALT_ID:[inc(xget(#ALTDB,alt_id))])]
+&CMD-+ALTS-UNREGISTER Alts System=$+alts/unregister *:@pemit %#=switch(0,u(fun_is_alt,%0,%N),ansi(hr,%0 is not your alt.),ansi(hg,You unregister %0 as your alt.)[u(fun_unregister,%N,%0)][switch(xget(#ALTS_DB,notify_staff),1,create_job(REQ,Alts - %N,%N has unregistered [name(pmatch(%0))] as %p alt.,%#))])
+&FUN_ADD_ALT Alts System=append(#ALTS_DB,%0,[name(pmatch(%1))])
+&FUN_ADD_MAIN Alts System=[set(#ALTS_DB,ALTS_[xget(#ALTS_DB,alt_ID)]:[name(pmatch(%0))])][set(#ALTS_DB,ALT_ID:[inc(xget(#ALTS_DB,alt_id))])]
 &FUN_ALT_MATCH Alts System=or(match(%0,%1),match(%0,name(pmatch(%1))))
-&FUN_FIND_ALTS Alts System=xget(#ALTDB,u(fun_find_main,%0))
-&FUN_FIND_MAIN Alts System=squish(iter(lattr(#ALTDB/ALTS_*),switch(1,t(u(fun_alt_match,xget(#ALTDB,##),%0)),##)))
+&FUN_FIND_ALTS Alts System=xget(#ALTS_DB,u(fun_find_main,%0))
+&FUN_FIND_MAIN Alts System=squish(iter(lattr(#ALTS_DB/ALTS_*),switch(1,t(u(fun_alt_match,xget(#ALTS_DB,##),%0)),##)))
 &FUN_IS_ALT Alts System=localize([setq(0,u(fun_find_main,%0))][setq(1,u(fun_find_main,%1))][and(t(%q0),t(%q1),match(%q0,%q1))])
-&FUN_MERGE_ALTS Alts System=[set(#ALTDB,%0:[setunion([xget(#ALTDB,%0)] [xget(#ALTDB,%1)],)])][wipe(#ALTDB/%q1)]
+&FUN_MERGE_ALTS Alts System=[set(#ALTS_DB,%0:[setunion([xget(#ALTS_DB,%0)] [xget(#ALTS_DB,%1)],)])][wipe(#ALTS_DB/%q1)]
 &FUN_REGISTER Alts System=localize([setq(0,u(fun_find_main,%0))][setq(1,u(fun_find_main,%1))][switch(1,and(%q0,%q1),u(fun_merge_alts,%q0,%q1),t(%q0),u(fun_add_alt,%q0,%1),t(%q1),u(fun_add_alt,%q1,%0),[u(fun_add_main,%0)][setq(0,u(fun_find_main,%0))][u(fun_add_alt,%q0,%1)])])
-&FUN_UNREAD_MAIL Alts System=switch(xget(#ALTDB,MAILSYS),builtin,extract(mail(%0),2,1),faramail,unread_mail(%0),ERROR)
-&FUN_UNREGISTER Alts System=localize([setq(0,u(fun_find_main,%0))][setq(1,pmatch(%1))][switch(1,t(%q0),set(#ALTDB,%q0:[remove(xget(#ALTDB,%q0),switch(t(%q1),1,name(%q1),%1))]))])
+&FUN_UNREAD_MAIL Alts System=switch(xget(#ALTS_DB,MAILSYS),builtin,extract(mail(%0),2,1),faramail,unread_mail(%0),ERROR)
+&FUN_UNREGISTER Alts System=localize([setq(0,u(fun_find_main,%0))][setq(1,pmatch(%1))][switch(1,t(%q0),set(#ALTS_DB,%q0:[remove(xget(#ALTS_DB,%q0),switch(t(%q1),1,name(%q1),%1))]))])
 &HATTR_ALTS Alts System=
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
