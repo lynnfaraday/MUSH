@@ -11,7 +11,7 @@
 think install_create(FS3_STORAGE,FS3 Object Storage,0,1,5.0,Stores FS3 objects.  See the FS3Combat Action Commands object for important copyright/license information.)
 think install_create(FS3COMBAT_CMD_ACTIONS,FS3Combat Action Commands,1,0,5.0,These are the commands for the FS3 skills system.)
 
-think install_create(FS3_PREFS,FS3Combat Preferences,0,1,5.0,FS3Combat Preferences.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,5.0,FS3Combat Preferences.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
 
 @startup FS3Combat Action Commands=@set me=!no_command

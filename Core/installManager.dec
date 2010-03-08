@@ -22,13 +22,15 @@ think [setq(0,#-1)][squish(iter([lcon(%l)] [lcon(%#)],switch(name(##),Install Ma
 
 &CMD-+install-updategroup Install Manager=$+install/updategroup *:@switch [setq(0,u(fun_get_group_attrs,%0))][words(%q0)]=0,@pemit %#=[ansi(hr,Can't find a system group named %0.  Make sure it's been installed properly.)],@dolist %q0={@fo %#=+install/update [after(##,_)]}
 
-&CMD-+install-finalize Install Manager=$+install/finalize *:think [setq(0,u(fun_get_dbref,%0))];@tr %q0/startup;think pemit(%#,[u(fun_INSTALL_CRON,%q0)]%R[u(fun_INSTALL_HELP,%q0)]);@fo %#=+install/attr %q0;@tel %q0=u(fun_get_destination,%0);@pemit %#=ansi(hc,%0 installed.)
+&CMD-+install-finalize Install Manager=$+install/finalize *:think [setq(0,u(fun_get_dbref,%0))];@tr %q0/startup;think pemit(%#,[u(fun_INSTALL_CRON,%q0)]%R[u(fun_INSTALL_HELP,%q0)]);@fo %#=+install/attr %q0;@fo %#={@tel %q0=[u(fun_get_destination,%0)]};@pemit %#=ansi(hc,%0 installed.)
 
 &CMD-+INSTALL_ATTR Install Manager=$+install/attr *:@dolist lattr(%0/?ATTR_*)=think pemit(%#,setup_attr(mid(##,0,1),after(##,_),xget(%0,##)))
 
 &CMD-+UNINSTALL Install Manager=$+uninstall *:@pemit %#=[setq(0,u(fun_get_group_attrs,%0))]switch(0,words(%q0),ansi(hr,I cannot find a group named %0.),ansi(hg,Are you sure you really want to uninstall the %0 system?  Type +uninstall/confirm to confirm.)[set(%#,uninstall:[trim(%0)])])
 
-&CMD-+UNINSTALL-CONFIRM Install Manager=$+uninstall/confirm:@switch 0[setq(0,u(fun_get_group_attrs,xget(%#,uninstall)))]=t(xget(%#,uninstall)),@pemit %#=ansi(hr,You are not uninstalling anything.),{@pemit %#=ansi(hc,You uninstall the [xget(%#,uninstall)] system.  Before reinstalling - you need to run the @dbck command to clean up purged objects.)[wipe(%#/uninstall)];@dolist %q0={think setq(1,u(fun_get_dbref,after(##,_)));@wipe #INSTALL_DB/##;@set %q1=!safe;@nuke %q1;think pemit(%#,UNINSTALL_HELP(%q1))}}
+&CMD-+UNINSTALL-CONFIRM Install Manager=$+uninstall/confirm:@switch 0[setq(0,u(fun_get_group_attrs,xget(%#,uninstall)))]=t(xget(%#,uninstall)),@pemit %#=ansi(hr,You are not uninstalling anything.),{@pemit %#=ansi(hc,You uninstall the [xget(%#,uninstall)] system.  Before reinstalling - you need to run the @dbck command to clean up purged objects.)[wipe(%#/uninstall)];@dolist %q0={think setq(1,u(fun_get_dbref,after(##,_)));@wipe #INSTALL_DB/##;@tr %q1/tr-uninstall;@set %q1=!safe;@nuke %q1;think pemit(%#,UNINSTALL_HELP(%q1))}}
+
+&CMD-+INSTALL-FIND-AND-REGISTER Install Manager=$+install/findreg *=*:@pemit %#=[setq(0,search(all,name,%0))][switch(%q0,,ansi(hr,Cannot find object %0.  Perhaps it's been renamed or was never installed.),ansi(hg,Object %0 found and registered as %1.)[u(fun_register,%1,%0)])]
 
 @@ --------------------------
 @@  FUN_GET_DESTINATION
@@ -40,7 +42,7 @@ think [setq(0,#-1)][squish(iter([lcon(%l)] [lcon(%#)],switch(name(##),Install Ma
 @@  %0 = Object alias
 @@ --------------------------
 
-&FUN_GET_DESTINATION Install Manager=localize([setq(0,u(fun_get_dbref,%0))]switch(1,hasattr(%q0,install_destination),u(fun_get_dbref,xget(%q0,install_destination)),match(extract(%0,2,1,_),CMD),v(MASTER_ROOM),#INSTALL_STORAGE)
+&FUN_GET_DESTINATION Install Manager=localize([setq(0,u(fun_get_dbref,%0))][setq(1,xget(%q0,install_destination))]switch(1,hasattr(%q0,install_destination),switch(%q1,CREATOR,%#,MASTER_ROOM,v(MASTER_ROOM),#*,%q1,u(fun_get_dbref,%q1)),match(extract(%0,2,1,_),CMD),v(MASTER_ROOM),#INSTALL_STORAGE)
 
 @@ --------------------------
 @@  FUN_GET_GROUP_ATTRS
@@ -64,6 +66,7 @@ think [setq(0,#-1)][squish(iter([lcon(%l)] [lcon(%#)],switch(name(##),Install Ma
 
 &CREDITS Install Manager=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 &MASTER_ROOM install manager=#2
+&INSTALL_DESTINATION install manager=CREATOR
 
 @@ --------------------------
 @@  FUN_INSTALL_ATTRS
@@ -132,7 +135,10 @@ think [setq(0,#-1)][squish(iter([lcon(%l)] [lcon(%#)],switch(name(##),Install Ma
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 @fo me=@edit Install Manager/*=#INSTALL_DB,[num(Install DB)]
 @fo me=@edit Install Manager/*=#INSTALL_STORAGE,[num(Install Object Storage)]
-@wait 2=@tel Install DB=Install Object Storage
+@wait 2=@fo me=+install/register INSTALL_DB=[num(Install DB)]
+@wait 2=@fo me=+install/register INSTALL_MGR=[num(Install Manager)]
+@wait 2=@fo me=+install/register INSTALL_STORAGE=[num(Install Object Storage)]
+@wait 5=@tel Install DB=Install Object Storage
 @tr Install Manager/Startup
 
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R

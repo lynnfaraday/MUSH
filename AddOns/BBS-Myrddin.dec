@@ -57,6 +57,8 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 @set bbpocket=INHERIT
 @set bbpocket=SAFE
 
+&TR-UNINSTALL BBS - Myrddin's Global BBS={@dolist remove(lcon(me),#BBS_POCKET)=@set ##=!safe;@nuke ##}
+
 @switch strlen(repeat(.,7998))=7998,&BUFFER_SIZE bbpocket=8000,&BUFFER_SIZE bbpocket=4000
 
 @lock BBS - Myrddin's Global BBS=me

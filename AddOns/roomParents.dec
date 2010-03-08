@@ -16,7 +16,7 @@ think install_create(ROOM_EXIT_PARENT,Exit Parent,0,0,5.0,Exit parent.,ROOM_HOLD
 think install_create(ROOM_PARENT,Room Parent,1,0,5.0,Room parent.,ROOM_HOLDER)
 think install_create(ROOM_TPROOM_PARENT,TP Room Parent,1,0,5.0,Tinyplot Room parent.,ROOM_HOLDER)
 think install_create(ROOM_TPROOM_FOYER,TP Room Foyer,0,0,5.0,Foyer room for the TP room area.,ROOM_HOLDER)
-think install_create(PLACES_PARENT,Max's Table Code Parent,0,0,5.0,Places parent.,ROOM_HOLDER)
+think install_create(ROOM_PLACES_PARENT,Max's Table Code Parent,0,0,5.0,Places parent.,ROOM_HOLDER)
 
 @set Exit Parent = LINK_OK
 @STARTUP Exit Parent=@set me=!NO_COMMAND
