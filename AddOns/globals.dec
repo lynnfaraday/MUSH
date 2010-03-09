@@ -72,15 +72,15 @@ think install_create(GLOBALS_DB,Misc Globals Data,0,1,5.0,Data storage for the m
 &HATTR_ICLOC Misc Globals Functions=\[xget([num(Misc Globals Data)],IC_STARTING_LOC)\]
 &HATTR_STATUS Misc Globals Functions=NEW
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@    *****       DATA SECTION           *****
 @@    *****   CHECK BEFORE UPGRADING     *****
 @@    *****   REMOVE OF MODIFY AS NEEDED *****
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 &FUN_WHO Misc Globals Functions=[ansi(u(#GLOBALS_DB/who_color),line_no_color())]%R[ansi([u(#GLOBALS_DB/who_color)],==-)]%B[center(u(#GLOBALS_DB/MUSH_NAME),71)][ansi([u(#GLOBALS_DB/who_color)],-==)]%R[ansi([u(#GLOBALS_DB/who_color)],==-)][repeat(-,72)][ansi([u(#GLOBALS_DB/who_color)],-==)][iter(sortby(fun_sortwho,switch(isstaff(%0),1,lwho(),mwho())),%r[ansi([u(#GLOBALS_DB/who_color)],==-)]%B[switch(1,match(loc(##),xget(#GLOBALS_DB,IDLE_LOUNGE)),[ansi(hx,AFK)]%B%B,isstaff(##),[ansi(hb,STF)]%B%B,match(parent(loc(##)),xget(#GLOBALS_DB,TP_ROOM_PARENT)),[ansi(hm,IC)]%B%B%B,match(xget(##,status),NEW),[ansi(hg,NEW)]%B%B,match(xget(##,status),IC),switch(xget(##,rpsearch),1,[ansi(hR,IC)]%B%B%B,[ansi(hr,IC)]%B%B%B),[ansi(h,OOC)]%B%B)]%B%B[padstr(name(##),20)]%b[padstr(switch(%0,where,switch(hasflag(##,unfindable),1,UNFINDABLE,[name(loc(##))] [switch(xget(loc(##),area),,,- [xget(loc(##),area)])]),[switch(xget(##,rank),,,[xget(##,rank)] --%B)][xget(##,position)]),37)]%b[padstr(first(timestring(idlesecs(##))),4)]%B[ansi([u(#GLOBALS_DB/who_color)],-==)])]%r[ansi([u(#GLOBALS_DB/who_color)],==-)][repeat(-,72)][ansi([u(#GLOBALS_DB/who_color)],-==)]%R[ansi([u(#GLOBALS_DB/who_color)],==-)][ljust(ansi(m,%B[switch(isstaff(%0),1,words(lwho()),words(mwho()))] Online),24)][center(ansi(r,[fold(fun_who_rpok,mwho(),0)] IC),24)][rjust(ansi(g,[xget(#GLOBALS_DB,who_record)] Record%B),24)][ansi([u(#GLOBALS_DB/who_color)],-==)]%R[ansi(u(#GLOBALS_DB/who_color),line_no_color())]
@@ -94,13 +94,13 @@ think install_create(GLOBALS_DB,Misc Globals Data,0,1,5.0,Data storage for the m
 &WHO_RECORD Misc Globals Data=1
 &WHO_COLOR Misc Globals Data=rand_color()
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@    *****       END DATA SECTION      *****
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
