@@ -79,6 +79,10 @@ think install_create(CENSUS_DB,Census DB,1,1,5.0,Census system data.)
 &HATTR_FACTION Census DB=
 &HATTR_ORG Census DB=
 
+@wait 5=+jobs/create CODE=Factions/Create factions info.  See +shelp +census.
+@wait 5=+jobs/create CODE=Orgs/Create orgs info.  See +shelp +census.
+@wait 5=+jobs/create CODE=Positions/Create positions info.  See +shelp +census.
+
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -95,11 +99,6 @@ think install_create(CENSUS_DB,Census DB,1,1,5.0,Census system data.)
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
 @wait 5=@set me=!quiet
-
-
-@wait 5=+jobs/create CODE=Factions/Create factions info.  See +shelp +census.
-@wait 5=+jobs/create CODE=Orgs/Create orgs info.  See +shelp +census.
-@wait 5=+jobs/create CODE=Positions/Create positions info.  See +shelp +census.
 
 @wait 6=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 

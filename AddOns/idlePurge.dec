@@ -61,6 +61,10 @@ think install_create(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
 &MAILING_LIST_OBJECT Idle Purger=#-1
 &PLAYER_PURGE_ACTIONS Idle Purger=@tr me/TR_CLEAR_MAIL=%0;@tr me/TR_REMOVE_ALT=%0;@fo %1=@nuke %0
 
+@wait 5=+jobs/create CODE=Idle Purge Protection/Add builders and other potentially-idle staff characters to the protected list so they don't get nuked by the idle purger.  See +shelp +idle.
+@wait 5=+jobs/create CODE=Idle Purge Mailing List/Configure the mailing list object on the idle purger so deleted characters get removed from mailing lists.  See +shelp +idle.
+@wait 5=+jobs/create CODE=Idle Purge Actions/Set up any additional actions to take upon purging a character, such as room or object cleanup.  See +shelp +idle.
+
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -78,6 +82,3 @@ think install_create(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
 
 @wait 5=@set me=!quiet
 
-@wait 5=+jobs/create CODE=Idle Purge Protection/Add builders and other potentially-idle staff characters to the protected list so they don't get nuked by the idle purger.  See +shelp +idle.
-@wait 5=+jobs/create CODE=Idle Purge Mailing List/Configure the mailing list object on the idle purger so deleted characters get removed from mailing lists.  See +shelp +idle.
-@wait 5=+jobs/create CODE=Idle Purge Actions/Set up any additional actions to take upon purging a character, such as room or object cleanup.  See +shelp +idle.

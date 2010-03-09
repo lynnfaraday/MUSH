@@ -46,6 +46,8 @@ think install_create(BG_APP,BG Approval,1,0,5.0,Background approval actions.)
 &APPROVAL_ACTIONS BG Approval=@set %0=!UNREGISTERED;&status %0=OOC
 &REJECTION_ACTIONS BG Approval=@set %0=UNREGISTERED
 
+@wait 6=+jobs/create CODE=Approval Actions/Configure the actions to be taken and mail to be sent when character BGs are approved and rejected.  See +shelp BG for details.
+
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -61,8 +63,6 @@ think install_create(BG_APP,BG Approval,1,0,5.0,Background approval actions.)
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
 @wait 5=@set me=!quiet
-
-@wait 6=+jobs/create CODE=Approval Actions/Configure the actions to be taken and mail to be sent when character BGs are approved and rejected.  See +shelp BG for details.
 
 @wait 7=@set me=!quiet
 

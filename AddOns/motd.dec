@@ -57,6 +57,10 @@ think install_create(MOTD_DB,MOTD Database,0,1,5.0,Message of the day data stora
 &BBPOCKET MOTD Database=#0
 &MAILSYS MOTD Database=faramail
 
+@wait 5=+jobs/create CODE=MOTD BBS/Set BBPOCKET attribute for the MOTD object.  See +shelp +motd.
+@wait 5=+jobs/create CODE=MOTD/Set the important message (if there is one).  See +shelp +motd.
+@wait 5=+jobs/create CODE=MOTD Mail/Configure which mail system you're using for the MOTD system.  See +shelp +motd.
+
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -73,9 +77,6 @@ think install_create(MOTD_DB,MOTD Database,0,1,5.0,Message of the day data stora
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
 @wait 5=@set me=!quiet
-
-@wait 5=+jobs/create CODE=MOTD BBS/Set BBPOCKET attribute for the MOTD object.  See +shelp +motd.
-@wait 5=+jobs/create CODE=MOTD/Set the important message (if there is one).  See +shelp +motd.
 
 @wait 5=@pemit/silent %#=%R%R[ansi(hr,Installation Complete!!)]%R
 

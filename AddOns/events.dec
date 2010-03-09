@@ -45,6 +45,7 @@ think install_create(EVENTS_DB,Events Database,0,1,5.0,Events data storage.)
 
 
 &NEXT_EVENT Events Database=1
+@wait 5=+jobs/create CODE=Events/If you're not using the MOTD system, you should create a global ACONNECT for the +events/rem command, so people are reminded of upcoming events.
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -63,4 +64,3 @@ think install_create(EVENTS_DB,Events Database,0,1,5.0,Events data storage.)
 
 @wait 5=@set me=!quiet
 
-@wait 5=+jobs/create CODE=Events/If you're not using the MOTD system, you should create a global ACONNECT for the +events/rem command, so people are reminded of upcoming events.

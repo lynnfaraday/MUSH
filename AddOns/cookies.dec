@@ -78,6 +78,12 @@ think install_create(COOKIE_DB,Cookie DB,0,1,5.0,Cookie database storage.)
 &COOKIE_LEVEL_06 Cookie DB=Palladium|500|hg
 &LUCK_INFO Cookie DB=Pester your staff to fill in what you can use luck points on.
 
+
+@wait 7=+job/create CODE=Cookie Cron/Copy the +cookie CRON job over to the MUSHCron system, or otherwise configure it to run weekly.
+@wait 7=+job/create CODE=Cookie Levels/Customize the cookie levels if desired.  See +shelp +cookie.
+@wait 7=+job/create CODE=Set up info on what luck points can be used on.  See +shelp +cookie.
+
+
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -93,8 +99,3 @@ think install_create(COOKIE_DB,Cookie DB,0,1,5.0,Cookie database storage.)
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
 @wait 5=@set me=!quiet
-
-@wait 7=+job/create CODE=Cookie Cron/Copy the +cookie CRON job over to the MUSHCron system, or otherwise configure it to run weekly.
-@wait 7=+job/create CODE=Cookie Levels/Customize the cookie levels if desired.  See +shelp +cookie.
-@wait 7=+job/create CODE=Set up info on what luck points can be used on.  See +shelp +cookie.
-

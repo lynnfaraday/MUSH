@@ -93,6 +93,7 @@ think install_create(GLOBALS_DB,Misc Globals Data,0,1,5.0,Data storage for the m
 &MUSH_NAME Misc Globals Data=[ansi(h,MY MUSH)]
 &WHO_RECORD Misc Globals Data=1
 &WHO_COLOR Misc Globals Data=rand_color()
+@wait 6=+jobs/create CODE=Globals/Set up the room DB#'s and other info for the globals.  See +shelp globals
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -111,4 +112,3 @@ think install_create(GLOBALS_DB,Misc Globals Data,0,1,5.0,Data storage for the m
 
 @wait 5=@set me=!quiet
 
-@wait 6=+jobs/create CODE=Globals/Set up the room DB#'s and other info for the globals.  See +shelp globals

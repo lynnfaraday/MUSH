@@ -275,6 +275,10 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,1,0,5.0,Chargen exit pa
 &MIN_QUIRKS FS3 Skill Data=1
 &MIN_BGSKILLS FS3 Skill Data=2
 
+@wait 5=+jobs/create CODE=FS3 Skills Config/Configure FS3Skills.  See guide here: http://wordsmyth.org/aresmush/index.php?title=FS3_Configuration
+@wait 5=+jobs/create CODE=FS3 Chargen Objects/After the chargen rooms are built, place the chargen objects (Demographics and Abilities) into their appropriate rooms in Chargen.
+
+
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -288,9 +292,6 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,1,0,5.0,Chargen exit pa
 
 @wait 2=+install/updategroup FS3SKILLS
 
-
-@wait 5=+jobs/create CODE=FS3 Skills Config/Configure FS3Skills.  See guide here: http://wordsmyth.org/aresmush/index.php?title=FS3_Configuration
-@wait 5=+jobs/create CODE=FS3 Chargen Objects/After the chargen rooms are built, place the chargen objects (Demographics and Abilities) into their appropriate rooms in Chargen.
 
 @wait 5=@set me=!quiet
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,FS3 Skills module installed.  Please install the Chargen Rooms as well.)]

@@ -85,6 +85,9 @@ think install_create(WEATHER_FALL,Fall,0,1,5.0,Weather descs.,WEATHER_HOLDER)
 &TYPE-RAINING Spring=raining raining raining overcast overcast overcast stormy stormy fair fair
 &TYPE-STORMY Spring=stormy stormy stormy raining raining raining clear overcast drizzling fair
 
+@wait 5=+jobs/create CODE=Weather/Customize weather system.  See +shelp weather.
+
+
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -101,7 +104,6 @@ think install_create(WEATHER_FALL,Fall,0,1,5.0,Weather descs.,WEATHER_HOLDER)
 
 @wait 5=@set me=!quiet
 
-@wait 5=+jobs/create CODE=Weather/Customize weather system.  See +shelp weather.
 
 @wait 6=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 

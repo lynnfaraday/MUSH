@@ -18,7 +18,6 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 @lock bbpocket=me
 &BBTIME bbpocket=[extract(time(), 2, 2)] [last(time())]
 &GET_GROUP bbpocket=switch(isnum(%0),1,extract(v(groups),%0,1),locate(#BBS_POCKET,%0,ni))
-&NXT_MESS bbpocket=1
 &VALID_GROUPS bbpocket=iter(v(groups),switch(and(u(##/can%1,%0),not(member(get(%0/bb_omit),##))),1,##))
 &ISGROUPREAD bbpocket=switch(setdiff(%1,get(%0/bb_read)),,,U)
 &UNREADNUMS bbpocket=sort(iter(setdiff(get(%1/mess_lst),get(%0/bb_read)),member(get(%1/mess_lst),##)))
@@ -27,7 +26,7 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 &FN_MAPLIST_2 bbpocket=switch(strmatch(%0,*-*),1,u(fn_lnum,before(%0,-),after(%0,-)),%0)
 &FN_UNREAD_LIST bbpocket=edit(sort(iter(%0,member(%1,##))),%b,\,%b)
 &FN_LNUM bbpocket=iter(lnum(add(sub(%1,%0),1)),add(##,%0))
-&FUN_FIND_ALTS bbpocket=u(#1/fun_find_alts,%0)
+
 
 @switch lnum(1,2)=1 2,{@pemit/silent %#=BBS INSTALLER> Your lnum() accepts two arguments. Good.; &FN_MAPLIST_2 bbpocket; &FN_LNUM bbpocket},{@pemit/silent %#=BBS INSTALLER> Hmmm. Your lnum() is archaic... I'll have to use my own.; @mvattr bbpocket=FN_MAPLIST_2,FN_MAPLIST}
 
@@ -40,7 +39,6 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 &FN_INC_NEXT_MESS bbpocket=u(fn_b10-to-b36,add(u(fn_b36-to-b10,%0),1))
 &VALID_CONFIGS bbpocket=anonymous timeout
 &VALID_GLOBAL_CONFIGS bbpocket=timeout autotimeout
-&CONFIG_TIMEOUT bbpocket=2592000
 &TR_TIMEOUT bbpocket=@dolist v(groups)={@trigger me/tr_timeout_group=##}
 &TR_TIMEOUT_GROUP bbpocket=@dolist get(%0/mess_lst)={@switch and(extract(get(%0/hdr_##),5,1,|),gt(secs(),extract(get(%0/hdr_##),5,1,|)))=1,{&hdr_## %0; &bdy_## %0; &mess_lst %0=[remove(get(%0/mess_lst),##)]; &master_lst #BBS_POCKET=[remove(get(#BBS_POCKET/master_lst),##)]}}
 &DO_TIMEOUTS bbpocket=@trigger me/tr_timeout; @wait 86400={@trigger me/do_timeouts}
@@ -52,7 +50,6 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 &TR_POST_NOTIFY bbpocket=@switch hasflag(%0,DARK)=0,{@pemit/list iter(remove(lwho(),%0),switch(or(member([get(##/bb_omit)] [get(##/bb_silent)],%1),not(u(%1/canread,##))),0,##))=(New BB message ([member(v(groups),%1)]/%2) posted to '[name(%1)]' by [ifelse(hasattr(%1,anonymous),get(%1/anonymous),name(%0))]: %3)}
 &FN_TIMEOUT_CLOSE bbpocket=switch(%0:[lte(sub(%0,secs()),259200)],0:*,0,*:1,1,0)
 &FN_HASCONFIG bbpocket=or(hasattr(%0,anonymous),neq(get(%0/config_timeout),get(#BBS_POCKET/config_timeout)))
-&VERSION bbpocket=4.0.6.0
 @set bbpocket=!HALT
 @set bbpocket=INHERIT
 @set bbpocket=SAFE
@@ -172,6 +169,32 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 &HATTR_BB_READ bbpocket=
 &HATTR_BB_OMIT bbpocket=
 
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+&FUN_FIND_ALTS bbpocket=u(#1/fun_find_alts,%0)
+&NXT_MESS bbpocket=1
+&CONFIG_TIMEOUT bbpocket=2592000
+@fo %#=+jobs/create CODE=BBS Config/Create and lock a staff jobs BBS.
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
 @wait 2=+install/updategroup BBS
@@ -182,7 +205,6 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 
 @switch/first %#:[first(version())]=#1:Tiny*,{@attribute/access bb_read=hidden wizard; @attribute/access bb_omit=hidden wizard},#1:Penn*,{@set bboard=WIZARD},*:Tiny*,{@pemit/silent me=Reminder! Make sure #1 executes the following:%r%b%b@attribute/access bb_read=hidden wizard%r%b%b@attribute/access bb_omit=hidden wizard%r%b%b@attribute/access bb_silent=hidden wizard},{@pemit/silent me=Reminder! Make sure #1 sets the BBS WIZARD}
 
-@fo %#=+jobs/create CODE=BBS Config/Create and lock a staff jobs BBS.
 
 
 
