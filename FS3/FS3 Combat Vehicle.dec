@@ -29,45 +29,45 @@ think install_create(FS3COMBAT_DB_VEH,FS3Combat Vehicle DB,0,1,5.0,FS3Combat Veh
 &CMD-+VEHICLE-PURGETEMP FS3Combat Vehicle Commands=$+vehicle/purgetemp:@pemit %#=ansi(hg,You purge all temporary Vehicles.)[iter(lattr(#FS3COMBAT_DB_VEH/vehicle_*),[setq(0,after(##,_))]switch(vehiclestat(%q0,temp),1,fun_delete_vehicle,%q0)))]
 
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_MOD_VEHICLESTAT
 @@  Modifies a vehicle statistic.
 @@  %0 = vehicle name
 @@  %1 = The stat to set, from vehicleSTATS.
 @@  %2 = The new value.
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_MOD_VEHICLESTAT FS3Combat vehicle Commands=set(#FS3COMBAT_DB_VEH,vehicle_[unprettify(%0)]:[replace(xget(#FS3COMBAT_DB_VEH,vehicle_[unprettify(%0)]),match(v(vehicleSTATS),%1),%2,|)])
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_VEHICLESTAT
 @@  Gets a Vehicle stat.
 @@  %0 = Name
 @@  %1 = Stat to get
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_VEHICLESTAT FS3Combat vehicle Commands=extract(xget(#FS3COMBAT_DB_VEH,vehicle_[unprettify(%0)]),match(v(vehiclestats),%1),1,|)
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_ISVEHICLE
 @@  Tells if a name is a vehicle.
 @@  %0 = Name
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_ISVEHICLE FS3Combat vehicle Commands=hasattr(#FS3COMBAT_DB_VEH,vehicle_[unprettify(%0)])
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ FUN_RANDOM_VEHICLE
 @@ Makes up a random vehicle of the specified type.  Theoretically if the vehicle already exists
 @@ this will overwrite it, but a) that shouldn't happen often, and b) even if it did, it would
 @@ just end up inheriting the existing vehicle's damage.
 @@ %0 = Type
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_RANDOM_VEHICLE FS3Combat Vehicle Commands=localize([setq(0,[unprettify(%0)])][setq(1,[rjust(rand(99),2,0)][ljust(mod(secs(),99),2,0)][extract(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,mod(secs(),26),1)])][set(#FS3COMBAT_DB_VEH,vehicle_%q0-%q1:%q0||1)]%q0-%q1)
 
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DELETE_VEHICLE
 @@  Deletes a Vehicle. 
 @@  %0 = Name
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_DELETE_VEHICLE FS3Combat Vehicle Commands=switch(0,isvehicle(%0),0|There is no Vehicle by that name.,wipe(#FS3COMBAT_DB_VEH/vehicle_[unprettify(%0)])[u(#FS3COMBAT_CMD_DMG/fun_clear_damage,%0)])
 
 @STARTUP FS3Combat vehicle Commands=@set me=!no_command;@fun vehiclestat=me,FUN_VEHICLESTAT;@fun isvehicle=me,fun_isvehicle

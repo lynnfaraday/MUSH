@@ -37,51 +37,51 @@ think install_create(FS3COMBAT_DB_NPC,FS3Combat NPC DB,0,1,5.0,FS3Combat NPC DB.
 @@ @@@@@@@@@@@@@@@@@
 &FUN_CONTROLS_NPC FS3Combat NPC Commands=or(strmatch(npcstat(unprettify(%0),owner),name(%1)),isstaff(%1)
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_MOD_NPCSTAT
 @@  Modifies a NPC statistic.
 @@  %0 = NPC name
 @@  %1 = The stat to set, from NPCSTATS.
 @@  %2 = The new value.
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_MOD_NPCSTAT FS3Combat NPC Commands=set(#FS3COMBAT_DB_NPC,npc_[unprettify(%0)]:[replace(xget(#FS3COMBAT_DB_NPC,npc_[unprettify(%0)]),match(v(NPCSTATS),%1),%2,|)])
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_IS_VALID_SKILL
 @@  Tell is a skill # is valid.
 @@  %0 = Skill number
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_IS_VALID_SKILL FS3Combat NPC Commands=and(isnum(%0),lte(%0,12),gte(%0,1))
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_NPCSTAT
 @@  Gets a NPC stat.
 @@  %0 = NPC Name
 @@  %1 = Stat to get
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_NPCSTAT FS3Combat NPC Commands=extract(xget(#FS3COMBAT_DB_NPC,npc_[unprettify(%0)]),match(v(npcstats),%1),1,|)
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_ISNPC
 @@  Tells if someone is a NPC.
 @@  %0 = Name
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_ISNPC FS3Combat NPC Commands=hasattr(#FS3COMBAT_DB_NPC,npc_[unprettify(%0)])
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_CREATE_NPC
 @@  Creates a NPC.  
 @@  %0 = Name
 @@  %1 = Skill
 @@  %2 = Temporary flag (1=temp)
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_CREATE_NPC FS3Combat NPC Commands=switch(1,isnpc(%0),0|There is already a NPC by that name.,isplayer(%0),0|There is already a player by that name.,isvehicle(%0),0|There is already a vehicle by that name.,strmatch(%0,*|*),0|NPC names may not contain the '|' character.,not(u(fun_is_valid_skill,%1)),0|%1 is not a valid skill level.,1[set(#FS3COMBAT_DB_NPC,npc_[unprettify(%0)]:[trim(%1)]|%N||%2)])
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DELETE_NPC
 @@  Deletes a NPC.  
 @@  %0 = Name
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 &FUN_DELETE_NPC FS3Combat NPC Commands=switch(0,isnpc(%0),0|There is no NPC by that name.,wipe(#FS3COMBAT_DB_NPC/npc_[unprettify(%0)])[u(#FS3COMBAT_CMD_DMG/fun_clear_damage,%0)])
 
 @STARTUP FS3Combat NPC Commands=@set me=!no_command;@fun npcstat=me,fun_npcstat;@fun isnpc=me,fun_isnpc
