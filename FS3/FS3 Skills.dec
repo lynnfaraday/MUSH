@@ -7,7 +7,7 @@
 
 @set me=quiet
 
-@pemit/silent %#=[ansi(hr,Installing FS3 Skills module.  Please wait...)]%R
+@pemit/silent %#=[ansi(hg,Installing FS3 Skills module.  Please wait...)]%R
 
 @pemit/silent %#=%R%R[ansi(hg,Creating objects.)]
 
@@ -19,9 +19,9 @@ think install_create(FS3SKILL_FUN,FS3 Skill Functions,1,1,5.0,Stores FS3 skill f
 think install_create(FS3SKILL_DB,FS3 Skill Data,1,1,5.0,Stores FS3 skill data.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
 
 think install_create(FS3SKILL_CGINFO,Chargen Info Functions,1,1,5.0,Functions related to chargen but also useful outside of it.,FS3_STORAGE)
-think install_create(FS3SKILL_CGDEMO,Demographic Commands,1,0,5.0,Chargen Demographic Commands,FS3_STORAGE)
-think install_create(FS3SKILL_CGABILITY,FS3 Chargen Commands,1,0,5.0,FS3 Chargen Commands.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
-think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,1,0,5.0,Chargen exit parent.,FS3_STORAGE)
+think install_create(FS3SKILL_CGDEMO,Demographic Commands,1,0,5.0,Chargen Demographic Commands,CREATOR)
+think install_create(FS3SKILL_CGABILITY,FS3 Chargen Commands,1,0,5.0,FS3 Chargen Commands.  See the FS3 Skill System object for important copyright/license information.,CREATOR)
+think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit parent.,FS3_STORAGE)
 
 @pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
 
@@ -197,7 +197,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,1,0,5.0,Chargen exit pa
 @FAILURE Chargen Exit Parent=ansi(hr,You have not set everything yet.[squish(iter(v(required_attrs),switch(strlen(xget(%#,##)),0,%R- Missing ##)))]%R[u(other_errors,%#)])
 &ISDONE Chargen Exit Parent=[and(not(t(edit(iter(v(required_attrs),eq(strlen(xget(%#,##)),0)),%B,))),u(other_checks,%#))]
 @lock Chargen Exit Parent=ISDONE/1
-@lset Chargen Exit Parent=!no_inherit
+@lset Chargen Exit Parent/basic=!no_inherit
 
 @lock Demographic Commands=me
 @set Demographic Commands = DARK
@@ -290,8 +290,8 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,1,0,5.0,Chargen exit pa
 
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
-@wait 2=+install/updategroup FS3SKILLS
+@wait 2=+install/updategroup FS3SKILL
 
 
-@wait 5=@set me=!quiet
-@wait 5=@pemit/silent %#=%R%R[ansi(hg,FS3 Skills module installed.  Please install the Chargen Rooms as well.)]
+@wait 10=@set me=!quiet
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,FS3 Skills module installed.  Please install the Chargen Rooms as well.)]

@@ -7,7 +7,7 @@
 
 @set me=quiet
 
-@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Instance module.)] [ansi(hr,NOTE: This may take a minute.)]
+@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Instance module.)] [ansi(hc,NOTE: This may take a minute.)]
 
 think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Combat Instance Parent.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
@@ -608,7 +608,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @@ %3 = armor lethal. mod
 @@ --------------------------
 
-&FUN_RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,die(2,50))][setq(1,add(%q0,switch(%0,critical,30,vital,15,normal,0),%1,-%2,-%3,-[xget(#FS3_PREFS,hero_factor)]))][switch(%q0,2,L,50,M,90,S,99,C,switch(%q1,<40,L,<80,M,<105,S,C))][u(fun_combat_log,DAMAGE: hitloc=%0 wpn=%1 cov=%2 arm=%3 random=%q0 modified=%q1)])
+&FUN_RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,die(2,50))][setq(1,add(%q0,switch(%0,critical,30,vital,15,normal,0),%1,-%2,-%3,-[xget(#FS3COMBAT_PREFS,hero_factor)]))][switch(%q0,2,L,50,M,90,S,99,C,switch(%q1,<40,L,<80,M,<105,S,C))][u(fun_combat_log,DAMAGE: hitloc=%0 wpn=%1 cov=%2 arm=%3 random=%q0 modified=%q1)])
 
 @@ --------------------------
 @@ FUN_ROLL_ATTACK
@@ -967,5 +967,5 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @startup FS3Combat Instance Parent=@set me=!no_command
 
 
-@wait 5=@set me=!quiet
-@wait 5=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]
+@wait 10=@set me=!quiet
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]
