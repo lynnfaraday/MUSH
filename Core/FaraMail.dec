@@ -17,8 +17,6 @@ think install_create(MAIL_FUN,FaraMail Functions,1,1,5.0,+mail functions.)
 think install_create(MAIL_OBJECTS,FaraMail Objects,0,1,5.0,+mail object storage.)
 think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 
-@pcreate Postmaster=m41lmanx
-
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 
 
@@ -55,7 +53,8 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 
 &CMD-+MAIL-HANDLE FaraMail Commands=$+mail/handle *:think [setq(0,xget(%#,mail_object))][pemit(%#,switch(0,lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,gt(%0,0),<MAIL> That is not a valid message number.,<MAIL> You mark message %0 as handled.[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))][iter(xget(#MAIL_LIST,list_staff),u(#MAIL_FUN/fun_set_action_flag,xget(pmatch(##),mail_object),%q1,H))]))]
 
-&CMD-+MAIL-INDEX FaraMail Commands=$+mail:think pemit(%#,[setq(0,xget(%#,mail_object))][setq(2,xget(%q0,current_folder))][setq(4,xget(%q0,color))][ansi(%q4,line_no_color())]%R[center(ansi(h,Mail Messages),78)]%R[center(\(sorted by [lcstr(xget(%q0,sort_method))]\),78)]%R[iter(lattr(%q0/folder_*),%R[ansi(switch(after(##,_),%q2,hw[capstr(%q4)],h%q4),[repeat(~,10)][ljust(%B[after(##,_)]:[xget(%q0,foldername_[after(##,_)])]%B,25,~)][space(5)][setq(5,u(#MAIL_FUN/fun_total_unread_cleared,%q0,after(##,_)))][rjust([extract(%q5,2,1)] Unread\, [extract(%q5,1,1)] Total\, [extract(%q5,3,1)] Cleared,38)])][switch(eq(%q2,after(##,_)),1,[iter(u(#MAIL_FUN/fun_messages_in_folder,%q0,%q2),[setq(1,xget(%q0,itext(0)))]%R[padstr(inum(0).,3)]%B\[[u(#MAIL_FUN/fun_get_all_flags,%q1)]\]%B%B[padstr(u(#MAIL_FUN/fun_get_from_list,%q1),20)][padstr(u(#MAIL_FUN/fun_get_subject,%q1),35)]%B[u(#MAIL_FUN/fun_get_date,%q1)])]%R)])]%R[ansi(%q4,line_no_color())]
+&cmd-+mail-index FaraMail Commands=$+mail:think pemit(%#,[setq(0,xget(%#,mail_object))][setq(2,xget(%q0,current_folder))][setq(4,xget(%q0,color))][ansi(%q4,line_no_color())]%R[center(ansi(h,Mail Messages),78)]%R[center(\(sorted by [lcstr(xget(%q0,sort_method))]\),78)]%R[setq(i,iter(lattr(%q0/folder_*),FOLDER_[after(##,_)] [switch(eq(%q2,after(##,_)),1,MSGS[setq(l,u(#MAIL_FUN/fun_messages_in_folder,%q0,%q2))])]))][iter(%qi,switch(##,FOLDER_*,u(#MAIL_FUN/fun_format_folder_title,##),switch(words(%ql),<75,iter(%ql,u(#MAIL_FUN/fun_long_summary,itext(0),inum(0))),[iter(%ql,u(#MAIL_FUN/fun_short_summary,itext(0),inum(0)))]%R[ansi(hg,You have a lot messages so only the subject is displayed.%RPlease consider archiving or moving some to separate folders!)])),,)]%R[ansi(%q4,line_no_color())]
+
 
 &CMD-+MAIL-INIT FaraMail Commands=$+mail/init:@switch hasattr(%#,mail_object)=1,@pemit %#=<MAIL> Mail already initialized.,{think [setq(0,create(%N Mail))][set(%#,mail_object:%q0)][set(%q0,current_folder:0)][set(%q0,foldername_0:Inbox)][set(%q0,sort_method:date)][set(%q0,color:r)][set(%q0,sig:)][set(%q0,describe:%N Mail)][set(%q0,folder_0:)];@chown %q0=*Postmaster;@set %q0=!halt;@tel %q0=#MAIL_OBJECTS}
 &TR-UNINSTALL FaraMail Commands=@dolist lcon(#MAIL_OBJECTS)={@set ##=!safe;@nuke ##}
@@ -114,11 +113,8 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 
 @STARTUP FaraMail Commands=@set me=!no_command
 
-@set FaraMail Commands/STARTUP=no_command
-
-
-
 @startup FaraMail Functions=@fun send_mail=[num(me)],fun_send_msg;@fun unread_mail=[num(me)],fun_total_unread;@fun total_mail=[num(me)],fun_total_mail
+
 
 &FUN_EXPANDED_TO_LIST FaraMail Functions=[squish([setq(9,)][iter(%0,switch(1,t(pmatch(##)),setq(9,%q9##%B),t(match(lattr(%1/list_*),LIST_##)),setq(9,%q1[xget(%1,list_##)]%B),t(match(lattr(#MAIL_LIST/list_*),LIST_##)),setq(9,%q9[xget(#MAIL_LIST,list_##)]%B),pemit(%#,ansi(hr,WARNING!  ## is an invalid player or list, mail not deliverable to that person!))))][setunion(capstr_all(%q9),)])]
 
@@ -130,7 +126,6 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 
 &FUN_GET_ACTION_FLAG FaraMail Functions=[extract(%0,5,1,|)]
 
-@set FaraMail Functions/FUN_GET_ACTION_FLAG=no_command
 
 &FUN_GET_ACTION_FLAG_NAME FaraMail Functions=[switch(extract(%0,5,1,|),Q,[ansi(hb,Reply Requested)],H,[ansi(hg,Handled)])]
 
@@ -138,43 +133,34 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 
 &FUN_GET_DATE FaraMail Functions=[setq(9,convsecs(extract(%0,6,1,|)))][extract(%q9,3,1)]%B[extract(%q9,2,1)]%B[extract(%q9,5,1)]
 
-@set FaraMail Functions/FUN_GET_DATE=no_command
 
 &FUN_GET_FROM_LIST FaraMail Functions=[extract(%0,2,1,|)]
-
-@set FaraMail Functions/FUN_GET_FROM_LIST=no_command
 
 &FUN_GET_FULL_DATE FaraMail Functions=[convsecs(extract(%0,6,1,|))]
 
 &FUN_GET_MESSAGE FaraMail Functions=[extract(%0,9,1,|)]
 
-@set FaraMail Functions/FUN_GET_MESSAGE=no_command
-
 &FUN_GET_PRIORITY_FLAG FaraMail Functions=[extract(%0,4,1,|)]
-
-@set FaraMail Functions/FUN_GET_PRIORITY_FLAG=no_command
 
 &FUN_GET_PRIORITY_FLAG_NAME FaraMail Functions=[switch(extract(%0,4,1,|),H,[ansi(hR,High Priority)],L,[ansi(hc,Low Priority)])]
 
 &FUN_GET_STATUS_FLAG FaraMail Functions=[extract(%0,3,1,|)]
 
-@set FaraMail Functions/FUN_GET_STATUS_FLAG=no_command
-
 &FUN_GET_STATUS_FLAG_NAME FaraMail Functions=[switch(extract(%0,3,1,|),C,[ansi(hy,Cleared)],U,[ansi(hr,Unread)],X,[ansi(h,Retracted)],R,[ansi(hm,Replied)])]
 
 &FUN_GET_SUBJECT FaraMail Functions=[extract(%0,8,1,|)]
 
-@set FaraMail Functions/FUN_GET_SUBJECT=no_command
-
 &FUN_GET_THREAD FaraMail Functions=[extract(%0,7,1,|)]
-
-@set FaraMail Functions/FUN_GET_THREAD=no_command
 
 &FUN_GET_TO_LIST FaraMail Functions=[extract(%0,1,1,|)]
 
-@set FaraMail Functions/FUN_GET_TO_LIST=no_command
-
 &FUN_INIT_MAIL FaraMail Functions=[setq(9,create())][set(%0,mail_object)]
+
+&FUN_FORMAT_FOLDER_TITLE FaraMail Functions=%R[ansi(switch(after(%0,_),%q2,hw[capstr(%q4)],h%q4),[repeat(~,10)][ljust(%B[after(%0,_)]:[xget(%q0,foldername_[after(%0,_)])]%B,25,~)][space(5)][setq(5,u(#MAIL_FUN/fun_total_unread_cleared,%q0,after(%0,_)))][rjust([extract(%q5,2,1)] Unread\, [extract(%q5,1,1)] Total\, [extract(%q5,3,1)] Cleared,38)])]
+
+&FUN_LONG_SUMMARY FaraMail Functions=[setq(1,xget(%q0,%0))]%R[padstr(%1.,3)]%B\[[u(#MAIL_FUN/fun_get_all_flags,%q1)]\]%B%B[padstr(u(#MAIL_FUN/fun_get_from_list,%q1),20)][padstr(u(#MAIL_FUN/fun_get_subject,%q1),35)]%B[u(#MAIL_FUN/fun_get_date,%q1)]
+
+&FUN_SHORT_SUMMARY FaraMail Functions=[setq(1,xget(%q0,%0))]%R[ljust(%1.,3)]%B[u(#MAIL_FUN/fun_get_subject,%q1)]
 
 &FUN_MESSAGES_IN_FOLDER FaraMail Functions=[setq(m,%0)][sortkey(key_[xget(%0,sort_method)],xget(%0,folder_%1))]
 
@@ -232,8 +218,6 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 &SHELP_+LIST FaraMail Functions=These commands can be used to manage the +mail Mailing Lists:%R%R[ansi(h,+list/add <player>=<list>)] - Adds someone to a list.%R[ansi(h,+list/remove <player>=<list>)] - Removes someone from a list.%R[ansi(h,+list/comment <player>/<list>=<comment>)] - Sets a player's list comment.%R%R[ansi(h,+list/new <list>=<restricted? yes or no>/<list comment>)] - Creates a new mailing list.%R[ansi(h,+list/delete <list>)] - Deletes a mailing list.%R%RIf you need to do other stuff, like moving a list from restricted to public, or changing its title, submit a code +job.
 &SHELP_+MAIL FaraMail Functions=There are two functions you may want to incorporate into your other systems:%R%R[ansi(h,send_mail\(<sender db#>, <to list>, <thread*>, <subject>, <message>\))]%R%TThread should be #-1 unless replying to another message.%R%R[ansi(h,unread_mail\(<db#>\))] - Lists a player's total unread mail.%R%R[ansi(h,total_mail\(<db#>\))] - Lists a player's TOTAL mail.
 
-&NEXT_MESSAGE FaraMail Functions=1
-
 &FUN_SHOW_LIST_SUMMARY FaraMail Functions=%R[padstr(capstr(lcstr(after(%0,_))),20)][switch(t(match(lattr(%1/list_*),%0)),1,Private List,u(#MAIL_LIST/comment_[after(%0,_)]))]
 &FUN_SORT_LIST FaraMail Functions=localize(comp(%0,%1))
 
@@ -247,6 +231,10 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@pcreate Postmaster=m41lmanx
+
+&NEXT_MESSAGE FaraMail Functions=1
 
 &RESTRICTED FaraMail Lists=
 &LIST_STAFF FaraMail Lists=
