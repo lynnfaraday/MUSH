@@ -7,9 +7,9 @@
 
 @set me=quiet
 
-@pemit/silent %#=[ansi(hr,Beginning Weather System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+@pemit/silent %#=[ansi(hg,Beginning Weather System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
 
-@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
 think install_create(WEATHER_CMD,Weather Generator,1,0,5.0,Weather Generator.)
@@ -26,14 +26,19 @@ think install_create(WEATHER_FALL,Fall,0,1,5.0,Weather descs.,WEATHER_HOLDER)
 &CMD-+WEATHER-SET Weather Generator=$+weather/set * and *:think [pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),ansi(hg,You set the weather to %0 and %1.)[set(me,override:1)][set(me,type:[lcstr(trim(%1))])][set(me,temp:[lcstr(trim(%0))])]))]
 &FUN_COMPUTE_TIME Weather Generator=switch(first(extract(ictime(),4,1),:),<5,night,<11,morning,<18,day,<21,evening,night)
 &FUN_DETERMINE_SEASON Weather Generator=switch(extract(time(),2,1),Jan,winter,Feb,winter,Mar,switch(extract(time(),3,1),>20,spring,winter),Apr,spring,May,spring,Jun,switch(extract(time(),3,1),>20,summer,spring),Jul,summer,Aug,summer,Sep,switch(extract(time(),3,1),>20,fall,summer),Oct,fall,Nov,fall,Dec,switch(extract(time(),3,1),>20,winter,fall))
-&FUN_RANDOM_TEMP Weather Generator=[lcstr(first(shuffle(xget(v(season),temp))))]
-&FUN_RANDOM_TYPE Weather Generator=[lcstr(after(first(shuffle(lattr([v(season)]/type*))),-))]
+
+&FUN_FIND_SEASON Weather Generator=iter(lcon(#WEATHER_HOLDER),switch(name(##),%0,##),,)
+
+&FUN_RANDOM_TEMP Weather Generator=[lcstr(first(shuffle(xget([u(fun_find_season,v(season))],temp))))]
+&FUN_RANDOM_TYPE Weather Generator=[lcstr(after(first(shuffle(lattr([u(fun_find_season,v(season))]/type*))),-))]
 &FUN_WEATHER Weather Generator=It is a [v(season)] [v(time)].  The weather is [v(temp)] and [v(type)].
 &OVERRIDE Weather Generator=0
 &SHELP_WEATHER Weather Generator=Weather is updated every half hour.  If you want it to show up in the room descriptions, add a call to weather() in your room parent to get the current weather.  This assumes the entire game has the same weather.  Multiple weather zones are not permitted in this version of the system.%R%RIf your months/seasons/times are the same as RL (Northern Hemisphere) then the system requires no special setup. If you're using a custom IC time system, you'll need to tweak some of the settings as described in the support article on the wiki (http://code.google.com/p/faramushcode/wiki/WeatherSystem)%R%RYou can temporarily override the weather if you need to for a special plot or something.  The weather will stay at what you set until you clear the override.%R%R[ansi(h,+weather/set <temperature> and <weather>)] - Overrides the weather.%R%TExample: +weather/set cold and raining%R%R[ansi(h,+weather/clear)] - Clears the weather override.
 @STARTUP Weather Generator=@set me=!no_command;@tr me/tr-changeweather;@fun weather=me/fun_weather
-&TR-CHANGEWEATHER Weather Generator=think [set(me,season:[u(fun_determine_season)])][set(me,time:[u(fun_compute_time)])][switch(v(override),0,[set(me,type:[u(fun_random_type)])][set(me,temp:[u(fun_random_temp)])])][iter(lwho(),switch(xget(%l,show_weather),1,pemit(##,[ansi(hb,<WEATHER>)] [u(FUN_WEATHER)])))];@wait v(UPDATE_WEATHER_SECS)=@tr me/tr-changeweather
 
+&TR-CHANGEWEATHER Weather Generator=think [u(fun_change_weather)];@wait v(UPDATE_WEATHER_SECS)=@tr me/tr-changeweather
+
+&FUN_CHANGE_WEATHER Weather Generator=[set(me,season:[u(fun_determine_season)])][set(me,time:[u(fun_compute_time)])][switch(v(override),0,[set(me,type:[u(fun_random_type)])][set(me,temp:[u(fun_random_temp)])])][iter(lwho(),switch(xget(%l,show_weather),1,pemit(##,[ansi(hb,<WEATHER>)] [u(FUN_WEATHER)])))]
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -99,8 +104,6 @@ think install_create(WEATHER_FALL,Fall,0,1,5.0,Weather descs.,WEATHER_HOLDER)
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
 @wait 2=+install/updategroup WEATHER
-
-@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
 @wait 5=@set me=!quiet
 

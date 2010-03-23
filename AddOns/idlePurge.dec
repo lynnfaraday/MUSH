@@ -8,7 +8,7 @@
 
 @set me=quiet
 
-@pemit/silent %#=[ansi(hr,Beginning Idle Purger Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+@pemit/silent %#=[ansi(hg,Beginning Idle Purger Installation.  Please wait until you see the 'Installation Complete' message...)]%R
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 

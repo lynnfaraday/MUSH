@@ -7,9 +7,9 @@
 
 @set me=quiet
 
-@pemit/silent %#=[ansi(hr,Beginning Autospacer Installation.  Please wait until the Installation Complete message appears...)]%R
+@pemit/silent %#=[ansi(hg,Beginning Autospacer Installation.  Please wait until the Installation Complete message appears...)]%R
 
-@pemit/silent %#=[ansi(hr,Creating Objects...)]%R
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
 think install_create(AUTOSPACE_CMD,Pose Autospacer,1,0,5.0,Automatically puts blank lines between poses.)

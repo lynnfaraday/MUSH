@@ -28,7 +28,7 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 &FN_LNUM bbpocket=iter(lnum(add(sub(%1,%0),1)),add(##,%0))
 
 
-@switch lnum(1,2)=1 2,{@pemit/silent %#=BBS INSTALLER> Your lnum() accepts two arguments. Good.; &FN_MAPLIST_2 bbpocket; &FN_LNUM bbpocket},{@pemit/silent %#=BBS INSTALLER> Hmmm. Your lnum() is archaic... I'll have to use my own.; @mvattr bbpocket=FN_MAPLIST_2,FN_MAPLIST}
+@switch lnum(1,2)=1 2,{&FN_MAPLIST_2 bbpocket; &FN_LNUM bbpocket},{@mvattr bbpocket=FN_MAPLIST_2,FN_MAPLIST}
 
 &ADDEM bbpocket=add(%0,%1)
 &B36_DIGITS bbpocket=0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
@@ -134,9 +134,9 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 &FN_GREP bbpocket=iter(lattr(%0/%1),switch(strmatch(get(%0/##),*%2*),1,##))
 
 @@ WEB OFF
-@switch ifelse(1,1,0)=1,{@pemit/silent %#=BBS INSTALLER> You have a working ifelse(). Good.; &FN_IFELSE bbpocket;},{@pemit/silent %#=BBS INSTALLER> You don't have an ifelse() func. That's ok, I'll make my own.%r[space(15)]IMPORTANT: #1 Needs to execute the following command AND put%r[space(15)]it in its @startup:%r[space(15)]@function/priv ifelse=<dbref of bbpocket>/fn_ifelse}
-@switch setr(0,1)=1,{@pemit/silent %#=BBS INSTALLER> You have a working setr(). Good.; &FN_SETR bbpocket;},{@pemit/silent %#=BBS INSTALLER> You don't have an setr() func. That's ok, I'll make my own.%r[space(15)]IMPORTANT: #1 Needs to execute the following command AND put%r[space(15)]it in its @startup:%r[space(15)]@function/priv setr=<dbref of bbpocket>/fn_setr}
-@switch [first(grep(me,*,a))]=#-1,{@pemit/silent %#=BBS INSTALLER> You don't have grep()... that's ok, I'll make my own.; @mvattr BBS - Myrddin's Global BBS=CMD_+BBSEARCH_NOGREP,CMD_+BBSEARCH},{&FN_GREP bbpocket; &CMD_+BBSEARCH_NOGREP BBS - Myrddin's Global BBS}
+@switch ifelse(1,1,0)=1,{&FN_IFELSE bbpocket;},{@pemit/silent %#=BBS INSTALLER> You don't have an ifelse() func. That's ok, I'll make my own.%r[space(15)]IMPORTANT: #1 Needs to execute the following command AND put%r[space(15)]it in its @startup:%r[space(15)]@function/priv ifelse=<dbref of bbpocket>/fn_ifelse}
+@switch setr(0,1)=1,{&FN_SETR bbpocket;},{@pemit/silent %#=BBS INSTALLER> You don't have an setr() func. That's ok, I'll make my own.%r[space(15)]IMPORTANT: #1 Needs to execute the following command AND put%r[space(15)]it in its @startup:%r[space(15)]@function/priv setr=<dbref of bbpocket>/fn_setr}
+@switch [first(grep(me,*,a))]=#-1,{@mvattr BBS - Myrddin's Global BBS=CMD_+BBSEARCH_NOGREP,CMD_+BBSEARCH},{&FN_GREP bbpocket; &CMD_+BBSEARCH_NOGREP BBS - Myrddin's Global BBS}
 @@ WEB ON
 
 
@@ -197,11 +197,11 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
-@wait 2=+install/updategroup BBS
+@wait 20=+install/updategroup BBS
 
-@wait 5=@pemit/silent me=%rBulletin Board construction complete.  Enjoy!%r[repeat(=,78)]
+@wait 20=@pemit/silent me=%rBulletin Board construction complete.  Enjoy!%r[repeat(=,78)]
 
-@wait 5=@set me=!quiet
+@wait 20=@set me=!quiet
 
 @switch/first %#:[first(version())]=#1:Tiny*,{@attribute/access bb_read=hidden wizard; @attribute/access bb_omit=hidden wizard},#1:Penn*,{@set bboard=WIZARD},*:Tiny*,{@pemit/silent me=Reminder! Make sure #1 executes the following:%r%b%b@attribute/access bb_read=hidden wizard%r%b%b@attribute/access bb_omit=hidden wizard%r%b%b@attribute/access bb_silent=hidden wizard},{@pemit/silent me=Reminder! Make sure #1 sets the BBS WIZARD}
 

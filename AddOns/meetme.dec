@@ -7,7 +7,7 @@
 
 @set me=quiet
 
-@pemit/silent %#=[ansi(hr,Beginning Meetme Installation.  Please wait until the Installation Complete message appears...)]%R
+@pemit/silent %#=[ansi(hg,Beginning Meetme Installation.  Please wait until the Installation Complete message appears...)]%R
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 

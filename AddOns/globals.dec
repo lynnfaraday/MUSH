@@ -7,7 +7,7 @@
 
 @set me=QUIET
 
-@pemit/silent %#=[ansi(hr,Beginning Globals System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+@pemit/silent %#=[ansi(hg,Beginning Globals System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
