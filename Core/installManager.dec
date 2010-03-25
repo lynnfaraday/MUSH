@@ -33,7 +33,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @set Install Manager = SAFE
 @set Install Manager = !NO_COMMAND
 
-@STARTUP Install Manager={@set me=!no_command;@fun INSTALL_CREATE=me,FUN_INSTALL_CREATE;@fun INSTALL_ALIASDB=me,FUN_GET_DBREF;@fun INSTALL_PATCH=me,FUN_INSTALL_PATCH}
+@STARTUP Install Manager=@set me=!no_command;@function INSTALL_CREATE=[num(me)],FUN_INSTALL_CREATE;@function INSTALL_ALIASDB=[num(me)],FUN_GET_DBREF;@function INSTALL_PATCH=[num(me)],FUN_INSTALL_PATCH
 
 
 &CMD-+install-update Install Manager=$+install/update *:@switch/first [setq(0,u(fun_get_dbref,%0))]0=[u(fun_is_registered,%0)],@pemit %#=ansi(hr,I can't find a object named %0.),{@pemit %#=ansi(c,Updating database references on object %0.);think switch(u(fun_is_installed_properly,%0),0,pemit(%#,ansi(hr,It appears object %q0 \([name(%q0)]\) may not be properly installed.  Please double-check.)));@dolist [lattr(#INSTALL_DB/obj_*)] ALLDONE=@switch ##=ALLDONE,{@fo %#=+install/finalize %0},{think u(FUN_UPDATE,%q0,#[after(##,_)],xget(#INSTALL_DB,##))}}
@@ -91,7 +91,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @@  Same basic function as install_create but only works for objects that are already installed.
 @@  Same params as FUN_INSTALL_CREATE
 @@ --------------------------
-&FUN_INSTALL_PATCH Install Manager=localize(pemit(%#,[switch(0,orflags(%#,W),ansi(hr,This function is restricted.),[setq(0,u(fun_check_config))][not(t(%q0))],ansi(hr,Installation failed!  Your MUSH is not properly configured.[iter(rest(revwords(%q0,|),|),%R- ##,|)]),u(fun_is_registered,%0),ansi(hR,WARNING!  You're attempting to patch object %0 but it was never installed.  The object has been created\, but if there's any data in the 'DATA_SECTION' of the installer file it was not installed.  Check the full install file - not the patch one - to be sure.)[u(fun_create_and_setup_object,%0,%1,%2,%3,%4,%5,%6)],[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(c,Found object %0.  Updating.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)])]))
+&FUN_INSTALL_PATCH Install Manager=localize(pemit(%#,[switch(0,orflags(%#,W),ansi(hr,This function is restricted.),[setq(0,u(fun_check_config))][not(t(%q0))],ansi(hr,Installation failed!  Your MUSH is not properly configured.[iter(rest(revwords(%q0,|),|),%R- ##,|)]),u(fun_is_registered,%0),ansi(hR,WARNING!  You're attempting to patch object %0 but it was never installed.  Data on the object has not been set up.  You probably want to run the full installer.)[u(fun_create_and_setup_object,%0,%1,%2,%3,%4,%5,%6)],[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(c,Found object %0.  Updating.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)])]))
 
 
 @@ --------------------------

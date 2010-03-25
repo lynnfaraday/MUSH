@@ -41,6 +41,7 @@ think install_create(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
 
 &TR_CLEAR_MAIL Idle Purger=@dolist lattr([v(mailing_list_object)]/list_*)={think set([v(mailing_list_object)],##:[remove(xget([v(mailing_list_object)],##),name(%0))])};@fo %1=@nuke [xget(%0,mail_object)]
 &TR_REMOVE_ALT Idle Purger=@fo %0=+alts/unregister [name(%0)]
+&ISSTAFF Idle Purger=isstaff(%#)
 
 
 
@@ -57,7 +58,6 @@ think install_create(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
 &LIST_PURGE_ACTIONS Idle Purger=+bbpost Announcements/Idle Purge=The following characters have been idle-nuked for inactivity.%R[iter(%0,%R[name(##)])]
 &IDLEPROTECT Idle Purger=#1
 &IDLETIME Idle Purger=5184000
-&ISSTAFF Idle Purger=isstaff(%#)
 &MAILING_LIST_OBJECT Idle Purger=#-1
 &PLAYER_PURGE_ACTIONS Idle Purger=@tr me/TR_CLEAR_MAIL=%0;@tr me/TR_REMOVE_ALT=%0;@fo %1=@nuke %0
 
