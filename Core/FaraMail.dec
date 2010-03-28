@@ -116,7 +116,7 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 @startup FaraMail Functions=@fun send_mail=[num(me)],fun_send_msg;@fun unread_mail=[num(me)],fun_total_unread;@fun total_mail=[num(me)],fun_total_mail
 
 
-&FUN_EXPANDED_TO_LIST FaraMail Functions=[squish([setq(9,)][iter(%0,switch(1,t(pmatch(##)),setq(9,%q9##%B),t(match(lattr(%1/list_*),LIST_##)),setq(9,%q1[xget(%1,list_##)]%B),t(match(lattr(#MAIL_LIST/list_*),LIST_##)),setq(9,%q9[xget(#MAIL_LIST,list_##)]%B),pemit(%#,ansi(hr,WARNING!  ## is an invalid player or list, mail not deliverable to that person!))))][setunion(capstr_all(%q9),)])]
+&FUN_EXPANDED_TO_LIST FaraMail Functions=[squish([setq(9,)][iter(%0,switch(1,match(##,friends),friends(%#),t(pmatch(##)),setq(9,%q9##%B),t(match(lattr(%1/list_*),LIST_##)),setq(9,%q1[xget(%1,list_##)]%B),t(match(lattr(#MAIL_LIST/list_*),LIST_##)),setq(9,%q9[xget(#MAIL_LIST,list_##)]%B),pemit(%#,ansi(hr,WARNING!  ## is an invalid player or list, mail not deliverable to that person!))))][setunion(capstr_all(%q9),)])]
 
 &FUN_FORMAT_COMPOSITION FaraMail Functions=[ansi(xget(%0,color),line_no_color())]%R[ansi(h,To:)]%B%B%B%B%B%B[xget(%0,mailto)]%R[ansi(h,From:)]%B%B%B [first(name(%0))]%R[ansi(h,Date:)] %B%B%B[time()]%R[ansi(h,Flags:)]%B%B %R[ansi(h,Subject:)] [xget(%0,mailsub)]%R[repeat(-,78)]%R[replace_cr(xget(%0,mailbody))]%R[ansi(xget(%0,color),line_no_color())]
 
@@ -240,7 +240,7 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 &LIST_STAFF FaraMail Lists=
 &COMMENT_STAFF FaraMail Lists=Staff members.
 
-
++list/new Staff=no/Staff Members
 
 +jobs/create CODE=Mailing Lists/Set up +mail lists.  See +shelp +list
 +jobs/create CODE=Mail Setup/Add @fo \%0=+mail/init to the ADDITIONAL_SETUP attr on the Player Setup Data Object.  (Or if you're not using my Player Setup object, make sure that command gets executed when a new player is created.)
