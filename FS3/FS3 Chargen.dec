@@ -100,7 +100,7 @@ N
 
 @DESCRIBE here=If you're finished with everything, type [ansi(hg,+bg/submit)] to submit your character for approval.  While you're waiting to be approved, you can hang out in the OOC Center.  Just go through the OOC exit.  If there are any problems with your character, you will be able to re-enter chargen later to fix them.%R%RIf you realize you forgot something, you can use [ansi(h,+bg/unsubmit)] to withdraw your application and go back to make changes.
 
-@open Done;D;N;next
+@open Done;D;N;next=#0
 @parent D=[install_aliasdb(FS3SKILL_CGEXIT)]
 @lock D=ISDONE/1
 @power Done = See_All
@@ -114,7 +114,6 @@ N
 
 
 +jobs/create BUILD=Chargen OOC Exit/Link the 'done' exit from chargen to the appropriate room in the OOC area.
-+jobs/create BUILD=Chargen Exit Parents/@parent all of the chargen exits to the Chargen Exit Parent object (which you should find in the Install Manager's object storage.)
 
 @wait 5=@set me=!quiet
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,FS3 Chargen rooms installed.)]

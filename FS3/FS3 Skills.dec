@@ -293,4 +293,4 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit pa
 
 
 @wait 10=@set me=!quiet
-@wait 10=@pemit/silent %#=%R%R[ansi(hg,FS3 Skills module installed.  Please install the Chargen Rooms as well.)]
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]
