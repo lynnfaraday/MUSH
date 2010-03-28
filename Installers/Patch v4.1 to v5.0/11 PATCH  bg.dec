@@ -1,0 +1,48 @@
+@@ Faraday's Background System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Background System Installation.  Please wait until the Installation Complete message appears...)]%R
+
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_patch(BG_CMD,BG System,1,0,5.0,Background system.)
+think install_patch(BG_APP,BG Approval,1,0,5.0,Background approval actions.)
+
+&CMD-+BG BG System=$+bg:think pemit(%#,[line_with_text(Background System)]%r[ansi(h,Background Sections Available:)]%r[iter(u(FUN_BG_SECTIONS,%#),%r[padstr(#@.,5)][padstr(##,10)][switch(1,hasflag(%#/##,wiz),APPROVED,atrlock(%#/##),SUBMITTED BUT NOT APPROVED,UNSUBMITTED)])]%r%r[ansi(h,Type +bg <#> to view a section of your bg.)]%r[line()])
+&CMD-+BG-APPROVE BG System=$+bg/approve *:@switch [setq(0,pmatch(%0))][setq(1,find_job(xget(%q0,APPROVAL_JOB)))][setq(2,xget(%q0,APPROVAL_JOB))]0=orflags(%#,WrJ),@pemit %#=This command is restricted to admin.,t(%q0),@pemit %#=There is no such player.,{@pemit %#=You approve %0's background.[iter(u(FUN_BG_SECTIONS,%q0),set(%q0/##,wiz))][set(%q0,approval_job:)];@switch words(%q1)=0,@pemit %#=ansi(hr,Can't find app job for %0.),@tr #BG_APP/APPROVAL_ACTIONS=%q0;@fo %#=+jobs/close %q2=[u(#BG_APP/APPROVAL_MSG,%q0)]}
+&CMD-+BG-REJECT BG System=$+bg/reject *=*:@switch [setq(0,pmatch(%0))][setq(1,find_job(xget(%q0,APPROVAL_JOB)))][setq(2,xget(%q0,APPROVAL_JOB))]0=orflags(%#,WrJ),@pemit %#=This command is restricted to admin.,t(%q0),@pemit %#=There is no such player.,{@pemit %#=You reject %0's background.[iter(u(FUN_BG_SECTIONS,%q0),[set(%q0/##,!wiz)][atrlock(%q0/##,off)])][set(%q0,approval_job:)];@tr #BG_APP/REJECTION_ACTIONS=%q0;@switch words(%q1)=0,@pemit %#=ansi(hr,Can't find app job for %0.),@fo %#=+jobs/close %q2=[u(#BG_APP/REJECTION_MSG,edit(%1,\;,\\\;),%q0)]}
+&CMD-+BG-DETAIL BG System=$+bg *:think switch(1,isplayer(%0),,match(%0,*/*),,[setq(0,switch(isnum(%0),0,,extract(u(FUN_BG_SECTIONS,%#),trim(%0),1)))][pemit(%#,switch(%q0,,ansi(hr,You don't have that many pages in your bg.),[line_with_text(Background System)]%r[ansi(h,%q0)] -- [switch(1,hasflag(%#/%q0,wiz),APPROVED,atrlock(%#/%q0),SUBMITTED BUT NOT APPROVED,UNSUBMITTED)]%r%r[u(%#/%q0)]%r[line()]))])
+&CMD-+BG-REVIEW BG System=$+bg *:think switch(0,isplayer(%0),,not(match(%0,*/*)),,orflags(%#,WrJ),pemit(%#,This command is restricted to staff.),[setq(0,pmatch(%0))]t(%q0),pemit(%#,That is not a valid player.),pemit(%#,[line_with_text(Background System)]%r[ansi(h,Background Sections Available for %0:)]%r[iter(u(FUN_BG_SECTIONS,%q0),%r[padstr(#@.,5)][padstr(##,10)][switch(1,hasflag(%q0/##,wiz),APPROVED,atrlock(%q0/##),SUBMITTED BUT NOT APPROVED,UNSUBMITTED)])]%r%r[ansi(h,Type +bg <player>/<#> to view a section of the BG.)]%r[line()]))
+&CMD-+BG-REVIEW-DETAIL BG System=$+bg */*:think switch(0,orflags(%#,WrJ),pemit(%#,This command is restricted to staff.),[setq(0,pmatch(%0))]t(%q0),pemit(%#,That is not a valid player.),pemit(%#,[setq(1,extract(u(FUN_BG_SECTIONS,%q0),[trim(%1)],1))][line_with_text(Background System)]%r%0 [ansi(h,%q1)] -- [switch(hasflag(%q0/%q1,wizard),1,[ansi(g,Approved)],[ansi(r,Not Approved)])]%r%r[u(%q0/%q1)]%r[line()])
+&CMD-+BGSUBMIT BG System=$+bg/submit:think [setq(0,squish(iter(u(FUN_BG_SECTIONS,%#),switch(hasflag(%#/##,wizard),0,##))))][switch(0,words(%q0),pemit(%#,ansi(hr,You do not have any unapproved portions or your bg.)),not(t(xget(%#,approval_job))),pemit(%#,ansi(hr,You have already submitted your background.)),pemit(%#,ansi(hc,You submit unapproved parts of your bg (%q0) for review.))[iter(%q0,[atrlock(%#/##,on)])][create_job(APP,APP - %N,%N has submitted %p bg.,%#)][set(%#,APPROVAL_JOB:%qj)])];@switch %qj=>0,+mail %N=Background Submission/You have submitted your character for approval.  Please allow at least 48 hours for a staffer to review your background.  You can check on the status of your approval with the +request command (see +help +request).
+&CMD-+BGUNSUBMIT BG System=$+bg/unsubmit:think [setq(0,xget(%#,approval_job))][iter(u(FUN_BG_SECTIONS,%#),switch(hasflag(%#/##,wiz),1,pemit(%#,ansi(hm,## cannot be unsubmitted.)),[atrlock(%#/##,off)][set(%#,approval_job:)][pemit(%#,ansi(hc,## unsubmitted.  You may now edit that page again.  When you are finished, resubmit your bg using the +bg/submit command.))]))];+jobs/close %q0=%N has UNsubmitted %p bg.
+&FUN_BG_SECTIONS BG System=sortby(sortby_bgs,remove(lattr(%0/bg*),BGSKILLS))
+&HELP_+BG BG System=%RThe Background system allows you to write your character's history.  You background is just another MUSH attribute on yourself, like your description.  You can set it by typing [ansi(h,&bg me=<your background text>)].  You can use the built-in MUSH editing commands (@edit, @dec, etc.) to edit it.%R%RIf your background is particularly long, you can split it into multiple attributes, like:%R[ansi(h,&BG1 me=This is the first part of my bg.)]%R[ansi(h,&BG2 me=This is the second part of my bg.)]%Retc.%R%RYou can review the various pieces of your background.  [ansi(h,+bg)] will show you a list of all the pieces, and [ansi(h,+bg <#>)] will read one of the pieces.%R%ROnce you've finished writing your background, use the [ansi(h,+bg/submit)] command to submit it for staff review.  You will not be able to edit your BG attributes once you do this.  If you find you need to make corrections to your BG after submitting it, use [ansi(h,+bg/unsubmit)] to un-submit it.  This will allow you to edit the attributes, but the staff won't review your BG until you submit it again.
+&SHELP_+BG BG System=Staff members can view pieces of a player's BG.  Use [ansi(h,+bg <player>)] to list a player's BG segments, and [ansi(h,+bg <player>/<#>)] to read a segment.  You can approve a player's BG using the [ansi(h,+bg/approve <player>)] command and their UNREGISTERED flag will be cleared.  You can also reject a player using [ansi(h,+bg/reject <player>)].  Both approval and rejection will automatically close the player's app submission if using the jobs system.%R%RYou can edit the approval and rejection messages on the BG Approval object, and also set up additional actions to take when a player is rejected or approved.  Look at the object (#BG_APP) for details.
+&SORTBY_BGS BG System=sub(after(%0,BG),after(%1,BG))
+&HATTR_APPROVAL_JOB BG System=
+
+@startup BG Approval=@set me=!NO_COMMAND
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup BG
+
+
+
+

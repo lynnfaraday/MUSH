@@ -1,0 +1,64 @@
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+
+@set me=quiet
+@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Equipment module.)]
+
+think install_patch(FS3COMBAT_CMD_EQUIP,FS3Combat Equipment Commands,1,0,5.0,FS3 Equipment Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
+think install_patch(FS3COMBAT_DB_EQUIP,FS3Combat Equipment Stats,0,1,5.0,FS3Combat Equipment Stats. See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+
+
+@@ -------------------------------------
+@@  EQUIPMENT COMMANDS
+
+
+&ARMORSTATS FS3Combat Equipment Commands=desc hitloc protection class
+&WEAPONSTATS FS3Combat Equipment Commands=desc atkskill defskill lethality pen wpntype class auto ammo recoil range blast dmgtype accuracy shrapnel reloadable
+&VEHICLESTATS FS3Combat Equipment Commands=desc pilotskill toughness armor hitloc weapons dodge
+
+&CMD-+GEAR FS3Combat Equipment Commands=$+gear:@pemit %#=[line()]%R[ansi(h,Gear Commands)]%R+gear/weapons%R+gear/armor%R+gear/vehicles%R+gear/cover%R[line()]
+&CMD-+GEAR-ARMOR-DETAIL FS3Combat Equipment Commands=$+gear/armor *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(armor(),%q0),ansi(hr,That is not a valid armor type.),[line()]%R[ansi(h,[prettify(%0)] Armor Data)]%R%R[ansi(h,Class:)] [armorstat(%q0,class)] %R[ansi(h,Protection:)] [armorstat(%q0,protection)] %R%R[ansi(h,Covered Locations:)] [armorstat(%q0,hitloc)]%R%R[ansi(h,Description:)]%R[armorstat(%q0,desc)]%R[line()])
+&CMD-+GEAR-ARMOR FS3Combat Equipment Commands=$+gear/armor:@pemit %#=[line()]%R[ansi(h,Armor[space(15)]Class[space(8)]Protection)][iter(sortkey(KEY_ARMOR_SORT,armor()),%R[padstr(prettify(lcstr(##)),20)][ljust(armorstat(##,class),15)][armorstat(##,protection)])]%R%RSee [ansi(h,+gear/armor <type>)] for details.%R[line()]
+&KEY_ARMOR_SORT FS3Combat Equipment Commands=armorstat(%0,class)
+&FUN_ARMOR FS3Combat Equipment Commands=edit(lattr(#FS3COMBAT_DB_EQUIP/armor_*),ARMOR_,)
+&FUN_ARMORSTAT FS3Combat Equipment Commands=extract(xget(#FS3COMBAT_DB_EQUIP,armor_[unprettify(%0)]),match(v(armorstats),%1),1,|)
+
+&CMD-+WEAPONS-REM FS3Combat Equipment Commands=$+weapons:@pemit %#=ansi(hb,Use +gear/weapons.)
+&CMD-+ARMOR-REM FS3Combat Equipment Commands=$+armor:@pemit %#=ansi(hb,Use +gear/armor.)
+
+&CMD-+GEAR-WEAPON-DETAIL FS3Combat Equipment Commands=$+gear/weapon *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(weapons(),%q0),ansi(hr,That is not a valid weapon.),[line()]%R[ansi(h,[prettify(%0)] Weapon Data)]%R%R[ansi(h,Attack Skill:)] [weaponstat(%q0,atkskill)]%R[ansi(h,Defense Skill:)] [weaponstat(%q0,defskill)] %R[ansi(h,Accuracy Modifier:)] [weaponstat(%q0,accuracy)]%R[ansi(h,Lethality Modifier:)] [weaponstat(%q0,lethality)] %R[ansi(h,Penetration:)] [weaponstat(%q0,pen)] %R[ansi(h,Weapon Type:)] [weaponstat(%q0,wpntype)] %R[ansi(h,Damage Type:)] [weaponstat(%q0,dmgtype)] %R[ansi(h,Class:)] [switch(weaponstat(%q0,class),Personal,Anti-Personnel,Anti-Vehicle)] %R[ansi(h,Autofire?:)] [switch(weaponstat(%q0,auto),1,yes%R[ansi(h,Recoil Modifier:)] [weaponstat(%q0,recoil)],no)] %R[ansi(h,Ammo Clip:)] [switch(weaponstat(%q0,reloadable),0,n/a,weaponstat(%q0,ammo))] %R[ansi(h,Range:)] [weaponstat(%q0,range)]m[switch(weaponstat(%q0,wpntype),explosive,%R[ansi(h,Blast Radius:)] [weaponstat(%q0,blast)]m%r[ansi(h,Shrapnel:)] [switch(weaponstat(%q0,shrapnel),1,Yes,No)])]%R%R[ansi(h,Description:)]%R[weaponstat(%q0,desc)]%R[line()])
+&CMD-+GEAR-WEAPON FS3Combat Equipment Commands=$+gear/weapons:@pemit %#=[line()]%R[ansi(h,Weapon[space(15)]Type[space(20)]FullAuto?%B%BClip[space(4)]Pen[space(2)]Range)]%R[ansi(u,Anti-Personnel Weapons)][iter(sortby(fun_sort_weapons,u(fun_filter_wpn_class,Personal)),%R[u(fun_wpn_detail,##)])]%R[ansi(u,Anti-Vehicle Weapons)][iter(sortby(fun_sort_weapons,u(fun_filter_wpn_class,Vehicle)),%R[u(fun_wpn_detail,##)])]%R%RSee [ansi(h,+gear/weapon <type>)] for details.%R[line()]
+&FUN_SORT_WEAPONS FS3Combat Equipment Commands=switch(comp(weaponstat(%0,wpntype),weaponstat(%1,wpntype)),0,comp(%0,%1),comp(weaponstat(%0, wpntype),weaponstat(%1, wpntype)))
+&FUN_WPN_DETAIL FS3Combat Equipment Commands=[padstr(prettify(lcstr(%0)),20)] [ljust([weaponstat(%0,wpntype)]/[weaponstat(%0,dmgtype)],25)]  [switch(weaponstat(%0,auto),1,yes,no%B)][space(7)][ljust(switch(weaponstat(%0,ammo),0,--,weaponstat(%0,ammo)),8)][ljust(weaponstat(%0,pen),5)][weaponstat(%0,range)]m
+&FUN_WEAPONS FS3Combat Equipment Commands=edit(lattr(#FS3COMBAT_DB_EQUIP/weapon_*),WEAPON_,)
+&FUN_WEAPONSTAT FS3Combat Equipment Commands=extract(xget(#FS3COMBAT_DB_EQUIP,weapon_[unprettify(%0)]),match(v(weaponstats),%1),1,|)
+&FUN_FILTER_WPN_CLASS FS3Combat Equipment Commands=squish(iter(weapons(),switch(strmatch(weaponstat(##,class),%0),1,##)))
+
+&CMD-+GEAR-VEHICLE-DETAIL FS3Combat Equipment Commands=$+gear/vehicle *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(vehicletypes(),%q0),ansi(hr,That is not a valid vehicle type.),[line()]%R[ansi(h,[prettify(%0)] Vehicle Data)]%R%R[ansi(h,Piloting Skill:)] [vehtypestat(%q0,pilotskill)]%R[ansi(h,Toughness:)] [vehtypestat(%q0,toughness)] %R[ansi(h,Armor Type:)] [vehtypestat(%q0,armor)]%R[ansi(h,Possible Armarment:)] [vehtypestat(%q0,weapons)]%R[ansi(h,Hit Location Chart:)] [vehtypestat(%q0,hitloc)]%R[ansi(h,Dodge Bonus:)] [vehtypestat(%q0,dodge)]%R%R[ansi(h,Description:)]%R[vehtypestat(%q0,desc)]%R[line()])
+&CMD-+GEAR-VEHICLE FS3Combat Equipment Commands=$+gear/vehicles:@pemit %#=[line()]%R[ansi(h,Vehicle[space(13)]Piloting[space(10)]Weapons)][iter(vehicletypes(),%R[padstr(prettify(lcstr(##)),20)][ljust(vehtypestat(##,pilotskill),18)][vehtypestat(##,weapons)])]%R%RSee [ansi(h,+gear/vehicle <type>)] for details.%R[line()]
+&FUN_VEHICLETYPES FS3Combat Equipment Commands=edit(lattr(#FS3COMBAT_DB_EQUIP/vehicle_*),VEHICLE_,)
+&FUN_VEHTYPESTAT FS3Combat Equipment Commands=extract(xget(#FS3COMBAT_DB_EQUIP,vehicle_[unprettify(%0)]),match(v(vehiclestats),%1),1,|)
+
+&CMD-+GEAR-COVER FS3Combat Equipment Commands=$+gear/cover:@pemit %#=[line()]%R[ansi(h,Cover[space(15)]Protection)][iter(sortkey(key_cover_sort,lattr(#FS3COMBAT_DB_EQUIP/cover_*)),%R[padstr(prettify(after(lcstr(##),_)),23)][xget(#FS3COMBAT_DB_EQUIP,##)])]%R%R[ansi(hg,Note:)] These are just sample numbers and are not meant to be all-inclusive.%R[line()]
+&KEY_COVER_SORT FS3Combat Equipment Commands=xget(#FS3COMBAT_DB_EQUIP,%0)
+
+
+@STARTUP FS3Combat Equipment Commands=@set me=!no_command;@fun weaponstat=me,fun_weaponstat;@fun weapons=me,fun_weapons;@fun armor=me,fun_armor;@fun armorstat=me,fun_armorstat;@fun vehicletypes=me,fun_vehicletypes;@fun vehtypestat=me,fun_vehtypestat
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]

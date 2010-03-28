@@ -1,0 +1,44 @@
+@@ Faraday's Map System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Map System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_patch(MAP_CMD,Map Commands,1,0,5.0,Map commands.)
+think install_patch(MAP_DB,Map DB,0,1,5.0,Map data storage.)
+
+
+&CMD-+MAP Map Commands=$+map:think pemit(%#,[line_with_text(xget(%l,area))]%r[u(#MAP_DB/map_[xget(%l,area)])][switch(hasattr(#MAP_DB,legend_[xget(%l,area)]),1,%r%rType [ansi(h,+map/legend)] for a legend to the numbers or abbreviations on the map.)]%r[line()])
+&CMD-+MAP-AREA Map Commands=$+map *:think switch(0,hasattr(#MAP_DB,map_[trim(%0)]),pemit(%#,ansi(hr,That is not a valid area. Use one of these instead: [iter(sort(lattr(#MAP_DB/map_*)),after(##,_))])),pemit(%#,[line_with_text([capstr(%0)])]%r[u(#MAP_DB/map_[trim(%0)])][switch(hasattr(#MAP_DB,legend_[trim(%0)]),1,%r%rType [ansi(h,+map/legend %0)] for a legend to the numbers or abbreviations on the map.)]%r[line()]))
+&CMD-+MAP-AREA-LEGEND Map Commands=$+map/legend *:think switch(0,hasattr(#MAP_DB,legend_[trim(%0)]),pemit(%#,ansi(hr,That is not a valid area.  Use one of these instead: [iter(sort(lattr(#MAP_DB/legend_*)),after(##,_))])),pemit(%#,[line()]%r[ansi(h,Map Legend For [capstr(%0)])]%R%R[u(#MAP_DB/legend_[trim(%0)])]%r[line()])
+&CMD-+MAP-AREAS Map Commands=$+map/areas:think pemit(%#,[line()]%R[ansi(hg,Areas covered by +map include:)]%r[iter(sort(lattr(#MAP_DB/map_*)),after(##,_))]%R%RType [ansi(g,+map <area>)] for a map of a particular area.%R[line()])
+&CMD-+MAP-legend Map Commands=$+map/legend:think pemit(%#,[switch(hasattr(#MAP_DB,legend_[xget(%l,area)]),0,[ansi(hr,There is no map legend for this area.)],[line()]%R[ansi(h,Map Legend For [xget(%l,area)])]%R%R[u(#MAP_DB/legend_[xget(%l,area)])]%R[line()])])
+&HELP_+MAP Map Commands=The +map system helps you find your way around the MUSH.%R%R[ansi(h,+map)] - Views a map for your current area.%R[ansi(h,+map/legend)] - Views a legend for your current area's map, if there is one.%R[ansi(h,+map/areas)] - Views a list of other areas that have +maps.%R[ansi(h,+map <area>)] - Views another area's map.%R[ansi(h,+map/legend <area>)] - Views another area's legend.
+&SHELP_+MAP Map Commands=Maps are stored on object #MAP_DB in attributes named MAP_AREA and LEGEND_AREA.  A legend is not required.  You only need to use it if you want supplemental information to appear.  The system expects the area to match an AREA attribute on the room.%R%RFor instance, if you have an area named "Downtown", you would mark all the rooms in that area with &AREA here=Downtown, and then you'd have a MAP_DOWNTOWN and LEGEND_DOWNTOWN (optional) attribute on the map DB with the map and legend for the downtown area.
+@STARTUP Map Commands=@set me=!no_command
+
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup MAP
+
+
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+

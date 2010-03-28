@@ -1,0 +1,134 @@
+@@ Faraday's FUDGE System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+
+@@ !!!!!!!!!!!!!!!!!!!! IMPORTANT NOTE !!!!!!!!!!!!!!!!!!!!!!
+@@ Unlike the other systems, this one does not automatically do upgrades since all it does is create rooms.
+
+
+
+@@ ========================
+@@ BEGIN OUTSIDE CG ROOM
+@@ ========================
+
+@dig Chargen=CG;Chargen,B;Back
+
+
+@power Chargen=See_All
+@lock/Basic Chargen=ISOK/1
+&CHARGEN_OPEN Chargen=1
+@FAILURE Chargen=switch(v(chargen_open),0,Chargen isn't open yet.,Only new players may enter chargen.)
+&ISOK Chargen=or(isstaff(%#),and(orflags(%#,?),not(haspower(%#,guest)),v(chargen_open)))
+
+Chargen
+
+@@ ========================
+@@ IN CHARGEN ROOM
+@@ ========================
+
+@set here = SAFE
+@set here = FLOATING
+@describe here=The next few rooms will guide you through the process of creating your character.  Each room will give you instructions about what to set.  Before starting, you should have a good idea of the character you wish to create.  You can always go back to a previous room if you need to change something (without losing your other stats).  If you have any questions, ask on the Newbie channel by typing [ansi(hg,+n <message>)].%R%RIf this is an alt character, be sure to register them by using the [ansi(hc,+alts)] command.
+
+@dig Physical Profile=N;Next,B;Back
+
+N
+
+@@ ========================
+@@ IN PROFILE ROOM
+@@ ========================
+
+@set here = SAFE
+@set here = FLOATING
+@DESCRIBE here=In this room, you set up your character's physical profile: height, weight, etc.  You can use whatever units of measure you want, but include them in the setting.  For example, you could set your weight to 160lbs or 40kg.  Use your character's natural hair/eye color for these commands.  You can adjust for dye, disguises, etc. in your description.%R%R%T[ansi(h,+height <height>)]%R%T[ansi(h,+weight <weight>)]%R%T[ansi(h,+skin <complexion>)]%R%T[ansi(h,+hair <hair color>)]%R%T[ansi(h,+eyes <eye color>)]%R%T[ansi(h,+hand <left, right, or ambidextrous>)]%R%T[ansi(h,@sex me=<male or female>)]%R%T[ansi(h,@desc me=<your description>)] (also see +help +desc)%R%RIf you have an actor in mind for your character, you can set them using the [ansi(hc,+actors)] command.
+
+@dig Demographics=N;Next,B;Back
+
+@parent N=[install_aliasdb(FUDGE_CGEXIT)]
+@lock N=ISDONE/1
+@power Next = See_All
+&OTHER_CHECKS Next=1
+&REQUIRED_ATTRS Next=height weight skin hair eyes hand sex describe
+
+@tel loc(N)
+
+@@ ========================
+@@ IN DEMOGRAPHICS ROOM
+@@ ========================
+
+@set here = SAFE
+@set here = FLOATING
+
+@DESCRIBE here=In this room, you will set up some basic info about your character's background - what colony he's from, how old he is, etc.  In addition, this is where you choose whether to be civilian or military, and what your character's position (aka job) is.  This is all subject to approval - you can make yourself an Admiral in chargen, but you won't be approved!%R%RCheck out the recruiting BBS (+bbread) for posts about what positions are open.  If you want to be something that isn't posted, we recommend that you contact staff first.%R%R%T[ansi(h,+fullname <full name>)]%R%T[ansi(h,+age <age>)]%R%R%T[ansi(h,+faction <faction>)] (See +factions) %R%T[ansi(h,+position <position>)] (See +positions)%R%T[ansi(h,+org <organization)] (see +orgs)
+
+@dig Skills=N;Next,B;Back
+
+@parent N=[install_aliasdb(FUDGE_CGEXIT)]
+@lock N=ISDONE/1
+@power Next = See_All
+&OTHER_CHECKS Next=1
+&OTHER_ERRORS Next=
+&REQUIRED_ATTRS Next=faction org position birthdate fullname
+
+@tel loc(N)
+
+@@ ========================
+@@ IN SKILLS ROOM
+@@ ========================
+
+@set here = SAFE
+@set here = FLOATING
+@DESCRIBE here=In this room, you will set up your character's skills and attributes.  The system will automatically assign you certain skill packages based on your faction/job/organization.  You can change these, but be prepared to have a good justification in your background if you're missing important skills.%R%R[ansi(hB,Important Help Files:)]%R%T[ansi(hc,+help traits)] - Views help file on the skills, attributes & ratings%R%T[ansi(hy,+help packages)] - Views help file on the skill packages.%R%T[ansi(hg,+help skills)] - General info on the skill system.%R%R[ansi(hB,Commands:)]%R%T[ansi(h,+start)] - Set up your traits and points. %R[space(18)][ansi(hR,WARNING:)] [ansi(hr,This will reset any existing skills/attributes.)]%R%R%T[ansi(h,+raise <attribute or skill>)] - Raise by 1 level.%R%T[ansi(h,+lower <attribute or skill>)] - Lower by 1 level.%R%R%T[ansi(h,+points)] - Shows how many points you have left to spend.%R%T%T%B%BNote: Each rating costs 1 point.%R%T[ansi(h,+sheet)] - Views your character sheet.
+
+@dig Background=N;Next,B;Back
+
+@parent N=[install_aliasdb(FUDGE_CGEXIT)]
+@lock N=ISDONE/1
+@power Next = See_All
+&OTHER_CHECKS Next=strmatch(xget(%0,cg_errors),1*)
+&OTHER_ERRORS Next=after(xget(%0,cg_errors),|)
+
+&REQUIRED_ATTRS Next=attributes skills
+
+@tel loc(N)
+
+@@ ========================
+@@ IN BG ROOM
+@@ ========================
+
+@set here = SAFE
+@set here = FLOATING
+@DESCRIBE here=This is the room where you set up your character's backstory, or background.  Make sure that your background matches your character's skills and other information.%R%RYour background is just another MUSH attribute on yourself, like your description. You can set it by typing [ansi(hg,&bg me=<your background text>)]. You can use the built-in MUSH editing commands (@edit, @dec, etc.) to edit it.%R%RIf your background is particularly long, you can split it into multiple attributes, like:%R%T[ansi(h,&BG1 me=This is the first part of my bg.)]%R%T[ansi(h,&BG2 me=This is the second part of my bg.)]%R%Tetc.%R%RThe [ansi(hg,+bg)] command will let you view your background.
+
+@dig Approval=N;Next,B;Back
+
+@parent N=[install_aliasdb(FUDGE_CGEXIT)]
+@lock N=ISDONE/1
+@power Next = See_All
+&OTHER_CHECKS Next=or(hasattr(%0,bg),hasattr(%0,bg1))
+&OTHER_ERRORS Next=- You must set your background to proceed.
+
+@tel loc(N)
+
+@@ ========================
+@@ IN APPROVAL ROOM
+@@ ========================
+
+@set here = SAFE
+@set here = FLOATING
+@DESCRIBE here=If you're finished with everything, type [ansi(hg,+bg/submit)] to submit your character for approval.  While you're waiting to be approved, you can hang out in the OOC Center.  Just go through the OOC exit.  If there are any problems with your character, you will be able to re-enter chargen later to fix them.%R%RIf you realize you forgot something, you can use [ansi(h,+bg/unsubmit)] to withdraw your application and go back to make changes.
+
+@open D;Done;N;Next=#0
+
+@parent D=[install_aliasdb(FUDGE_CGEXIT)]
+@lock D=ISDONE/1
+@power Done=See_All
+&OTHER_CHECKS Done=or(t(xget(%0,approval_job)),not(hasflag(%0,unregistered)))
+&OTHER_ERRORS Done=- You must submit your character for approval first.
+
+
++jobs/create BUILD=Chargen OOC Exit/Link the 'done' exit from chargen to the appropriate room in the OOC area.
