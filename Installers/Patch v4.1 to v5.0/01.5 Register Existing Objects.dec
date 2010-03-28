@@ -1,0 +1,128 @@
+@@ Faraday's Help System
+@@ Author:  Linda O'Meara
+@@ Website: http://code.google.com/p/faramushcode/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@@ This is a pre-patch script that will modify some existing objects
+@@ so that they will play nice with the new install manager.
+
+@name [search(all,name,BBS - Myrddin)]=BBS - Myrddin's Global BBS
+@name [search(all,name,CRON - Myrddin)]=CRON - Myrddin's mushcron
+@name [search(all,name,Misc Functions)]=Misc Globals Functions
+@name [search(all,name,Misc Data)]=Misc Globals Data
+@name [search(all,name,Jobs Data)]=Jobs Database
+
+@switch [setq(0,search(all,name,Actor Functions))]1=t(%q0),{think ansi(hr,Nuking old Actor Functions object \(%q0\) which is no longer needed.);@set %q0=!safe;@nuke %q0}
+
+think [setq(0,search(all,name,MUSH Postmaster))][setq(1,search(all,name,Mail Functions))][setq(2,search(all,name,Mail Lists))][switch(%q0,#-1,,ansi(hr,You have the old MUSH Postmaster installed \(objects %q0\, %q1\, %q2\).  The Postmaster is no longer supported and has been replaced by FaraMAIL.  If you're installing the new FaraMAIL system, you'll need to get rid of those old objects.))]
+
+@switch [install_aliasdb(GLOBFUN_DB)]=#-1,@create Global Utility Function Data
+@switch [install_aliasdb(ROOM_TPROOM_FOYER)]=#-1,@create TP Room Foyer
+@switch [install_aliasdb(WEATHER_HOLDER)]=#-1,@create Weather Seasons
+
+
++install/findreg +finger Commands=FINGER_CMD
++install/findreg +finger Database=FINGER_DB
++install/findreg +finger Functions=FINGER_FUN
++install/findreg +help Commands=HELP_CMD
++install/findreg +help Database=HELP_DB
++install/findreg +news Commands=NEWS_CMD
++install/findreg +news DB=NEWS_DB
++install/findreg Actor Commands=ACTORS_CMD
++install/findreg Actor DB=ACTORS_DB
++install/findreg Alts DB=ALTS_DB
++install/findreg Alts Commands=ALTS_CMD
++install/findreg BBS - Myrddin's Global BBS=BBS_CMD
++install/findreg BG Approval=BG_APP
++install/findreg BG System=BG_CMD
++install/findreg CRON - Myrddin's mushcron=CRON_OBJ
++install/findreg Census Commands=CENSUS_CMD
++install/findreg Census DB=CENSUS_DB
++install/findreg Cookie DB=COOKIE_DB
++install/findreg Cookie System=COOKIE_CMD
++install/findreg Events Database=EVENTS_DB
++install/findreg Events System=EVENTS_CMD
++install/findreg Exit Parent=ROOM_EXIT_PARENT
++install/findreg FS3 Chargen Commands=FS3SKILL_CGABILITY
++install/findreg FS3 Skill Data=FS3SKILL_DB
++install/findreg FS3 Skill Functions=FS3SKILL_FUN
++install/findreg FS3 Skill Help=FS3SKILL_HELP
++install/findreg FS3 Skill System=FS3SKILL_CMD
++install/findreg FS3Combat Action Commands=FS3COMBAT_CMD_ACTIONS
++install/findreg FS3Combat Damage Commands=FS3COMBAT_CMD_DMG
++install/findreg FS3Combat Damage Database=FS3COMBAT_DB_DMG
++install/findreg FS3Combat Equipment Commands=FS3COMBAT_CMD_EQUIP
++install/findreg FS3Combat Equipment Stats=FS3COMBAT_DB_EQUIP
++install/findreg FS3Combat Help=FS3COMBAT_HELP
++install/findreg FS3Combat Hit Locations=FS3COMBAT_HITLOC
++install/findreg FS3Combat Instance Parent=FS3COMBAT_INSTANCE
++install/findreg FS3Combat NPC Commands=FS3COMBAT_CMD_NPC
++install/findreg FS3Combat NPC DB=FS3COMBAT_DB_NPC
++install/findreg FS3Combat Preferences=FS3COMBAT_PREFS
++install/findreg FS3Combat Vehicle Commands=FS3COMBAT_CMD_VEH
++install/findreg FS3Combat Vehicle DB=FS3COMBAT_DB_VEH
++install/findreg FaraMail Commands=MAIL_CMD
++install/findreg FaraMail Functions=MAIL_FUN
++install/findreg FaraMail Lists=MAIL_LIST
++install/findreg FaraMail Objects=MAIL_OBJECTS
++install/findreg Friends System=FRIENDS_CMD
++install/findreg Global Utility Function Data=GLOBFUN_DB
++install/findreg Global Utility Functions=GLOBFUN_FUN
++install/findreg Idle Purger=IDLE_CMD
++install/findreg Jobs Database=JOBS_DB
++install/findreg Jobs Functions=JOBS_FUN
++install/findreg Jobs System=JOBS_CMD
++install/findreg MOTD Database=MOTD_DB
++install/findreg MOTD System=MOTD_CMD
++install/findreg Map Commands=MAP_CMD
++install/findreg Map DB=MAP_DB
++install/findreg Max's Table Code Parent=ROOM_PLACES_PARENT
++install/findreg Meetme System=MEETME_CMD
++install/findreg Misc Globals Data=GLOBALS_DB
++install/findreg Misc Globals Functions=GLOBALS_FUN
++install/findreg Misc Globals=GLOBALS_CMD
++install/findreg Multi-Descer=DESC_CMD
++install/findreg Player Setup Data=SETUP_DB
++install/findreg Player Setup Object=SETUP_CMD
++install/findreg Pose Autospacer=AUTOSPACE_CMD
++install/findreg Pre-Made Descs=DESC_DB
++install/findreg Request System=JOBS_CMD_REQUEST
++install/findreg Room Parent Holder=ROOM_HOLDER
++install/findreg Room Parent=ROOM_PARENT
++install/findreg Staff Commands=STAFF_CMD
++install/findreg TP Room Parent=ROOM_TPROOM_PARENT
++install/findreg TP Room Foyer=ROOM_TPROOM_FOYER
++install/findreg Weather Generator=WEATHER_CMD
++install/findreg Weather Seasons=WEATHER_HOLDER
++install/findreg Spring=WEATHER_SPRING
++install/findreg Summer=WEATHER_SUMMER
++install/findreg Fall=WEATHER_FALL
++install/findreg Winter=WEATHER_WINTER
++install/findreg bbpocket=BBS_POCKET
+
++install/findreg FUDGE Skill System=FUDGE_CMD
++install/findreg FUDGE Skill Functions=FUDGE_FUN
++install/findreg FUDGE Skill Data=FUDGE_DB
++install/findreg Chargen Skill Packages=FUDGE_PACKAGES
++install/findreg Chargen Info Commands=FUDGE_CMD_CGINFO
++install/findreg XP System=FUDGE_CMD_XP
++install/findreg XP Data=FUDGE_XP_DB
++install/findreg Profile Commands=FUDGE_PROFILE
++install/findreg Skill Chargen Commands=FUDGE_CHARGEN
+
+@@ Name conflict between these guys with FUDGE/FS3 so only register based on the system that's installed.
+@switch 1=t(install_aliasdb(FS3SKILL_CMD)),+install/findreg Chargen Info Functions=FS3SKILL_CGINFO
+@switch 1=t(install_aliasdb(FS3SKILL_CMD)),+install/findreg Demographic Commands=FS3SKILL_CGDEMO
+@switch 1=t(install_aliasdb(FS3SKILL_CMD)),+install/findreg Chargen Exit Parent=FS3SKILL_CGEXIT
+
+@switch install_aliasdb(FS3SKILL_CMD)=#-1,+install/findreg Demographic Commands=FUDGE_DEMO
+@switch install_aliasdb(FS3SKILL_CMD)=#-1,+install/findreg Chargen Info Functions=FUDGE_CGINFO_FUN
+@switch install_aliasdb(FS3SKILL_CMD)=#-1,+install/findreg Chargen Exit Parent=FUDGE_CGEXIT
+
+think [setq(0,install_aliasdb(MOTD_DB))][switch(hasattr(%q0,MAILSYS),0,set(%q0,mailsys:faramail))]
+
+think ansi(hr,If you have the FUDGE system installed and want to install FS3 instead - you'll need to +uninstall FUDGE and then manually nuke the chargen rooms.)
+
+
