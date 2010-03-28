@@ -3,6 +3,7 @@ use File::Find;
 use Cwd;
 use File::stat;
 use Time::localtime;
+use strict;
 
 if (@ARGV != 2)
 {
@@ -13,12 +14,10 @@ my $oldVersion = @ARGV[0];
 my $version = @ARGV[1];
 my $patch = 0;
 my $fileIndex = 0;
-open(OUTFILE, ">FaraMUSH v$version.dec")  or die "Can't open install file.";
 processAllFiles();
-close(OUTFILE);
 
 $patch = 1;
-open(OUTFILE, ">FaraMUSH PATCH v$oldVersion to v$version.dec")  or die "Can't open install file.";
+$fileIndex = 0;
 processAllFiles();
 
 close(OUTFILE);
@@ -34,27 +33,25 @@ else
 print OUTFILE "\@pemit %#=ansi(hc,Installing all Faraday systems.)";
 }
 
-appendFile("Core/installManager.dec");
-appendFile("Core/help.dec");
-appendFile("Core/functions.dec");
-appendFile("Core/playerSetup.dec");
-appendFile("Core/jobs.dec");
-appendFile("Core/faramail.dec");
+processFile("Core/installManager.dec");
+processFile("Core/help.dec");
+processFile("Core/functions.dec");
+processFile("Core/playerSetup.dec");
+processFile("Core/jobs.dec");
+processFile("Core/faramail.dec");
 
 find(\&forEachFile, cwd . "/Addons/");
 find(\&forEachFile, cwd . "/FUDGE/");
 find(\&forEachFile, cwd . "/FS3/");
 
-appendFile("FS3/FS3 Combat Post-Install.dec");
+processFile("FS3/FS3 Combat Post-Install.dec");
 
 }
 
 sub forEachFile{
     my $fileName = $File::Find::name;
    
-    if ($fileName !~ /\.dec/) 
-        { return; }
-    if ($fileName =~ /\.svn/) 
+    if ($fileName !~ /\.dec$/) 
         { return; }
     if (($fileName =~ /FS3 Chargen/) && $patch)
         { return; }
@@ -63,24 +60,46 @@ sub forEachFile{
     if ($fileName =~ /FS3 Combat Post-Install/) 
         { return; }
     
-    appendFile($fileName);    
+    processFile($fileName);    
 }
 
-sub appendFile{
+sub processFile{
 
 my $fileName = shift;
 print "Parsing $fileName\n";
 
-open(INFILE, "$fileName") or die "Can't open $fileName";
-@contents = <INFILE>;
-print OUTFILE "\n\n\n\n";
-($shortName) = ($fileName =~ /\/([^\/]+$)/);
+$fileIndex++;
 
-print OUTFILE "@@ ================= SYSTEM: $shortName ==========================";
-print OUTFILE "\n\n";
+open(INFILE, "$fileName") or die "Can't open $fileName";
+my @contents = <INFILE>;
+close(INFILE);
+
+my ($shortName) = ($fileName =~ /\/([^\/]+$)/);
+
+my $outFileName;
+
+if ($patch)
+{
+  $outFileName = "Installers/Patch/$fileIndex PATCH $shortName";
+  $outFileName =~ s/\.dec/ v$oldVersion to v$version\.dec/;
+}
+else
+{
+  $outFileName = "Installers/FreshInstall/$fileIndex $shortName";
+  $outFileName =~ s/\.dec/ v$version\.dec/;
+}
+
+my $cwd = cwd;
+if ($cwd !~ /trunk$/)
+   {
+   $outFileName = "../$outFileName";
+   }
+
+open(OUTFILE, ">$outFileName") or die "Can't open $outFileName $!";
 
 my $inDataArea = 0;
 my @output;
+my $line;
 
 while ($line = shift(@contents))
 {
@@ -120,21 +139,7 @@ while ($line = shift(@contents))
 
 print OUTFILE @output;
 
-if ($patch)
-{
-  my $patchFileName = "Patches/" . $shortName;
-  my $cwd = cwd;
-  if ($cwd !~ /trunk$/)
-     {
-     $patchFileName = "../$patchFileName";
-     }
-  $patchFileName =~ s/\.dec/ v$oldVersion to v$version\.patch/;
-  open(PATCHFILE, ">$patchFileName") or die "Can't open patch file. $!";
-  print PATCHFILE @output;
-  close(PATCHFILE);
-}
-
-close(INFILE);
+close(OUTFILE);
 }
 
 
