@@ -19,7 +19,7 @@ think install_create(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
 &CMD-+IDLE-ADD Idle Purger=$+idle/add *: think [setq(0,[pmatch(%0)])][pemit(%#,switch(t(%q0),0,ansi(hr,That is not a valid player.),[name(%q0)] has been added to the idle queue.[set(me,idlequeue:[v(idlequeue)]%B%q0)]))]
 &CMD-+IDLE-CONFIG-IDLETIME Idle Purger=$+idle/config idletime=*:think [switch([isnum(%0)],0,[pemit(%#,You must enter a -number- of days.)],[set(me,idletime:[mul(86400,%0)])][pemit(%#,You set the idle-timeout for player characters to be [ansi(hy,%0)] days)])]
 &CMD-+IDLE-NUMS Idle Purger=$+idle/nums:think [pemit(%#,[get(me/idlequeue)])]
-&CMD-+IDLE-PLIST Idle Purger=$+idle/plist:[iter([get(me/idleprotect)],[pemit(%#,[ljust(##,7)] - [name(##)])])]
+&CMD-+IDLE-PLIST Idle Purger=$+idle/plist:[line()]%R[ansi(h,Protected Players)]%R[iter([get(me/idleprotect)],[pemit(%#,[ljust(##,7)] - [name(##)])])][line()]
 &CMD-+IDLE-PROTECT Idle Purger=$+idle/protect *:think [setq(0,[pmatch(%0)])][switch([strmatch(%0,[name(%q0)])],0,[pemit(%#,That is not a valid player)],[set(me,idleprotect:[get(me/idleprotect)]%q0%b)][pemit(%#,You have added [name(%q0)] to the protected list.  Please run +idle/start again to ensure they don't get @nuked)])]
 &CMD-+IDLE-PURGE Idle Purger=$+idle/purge:@tr me/LIST_PURGE_ACTIONS=[v(idlequeue)];@dolist [get(me/idlequeue)]={@set ##=!safe;@force %#=+purge [name(##)]};@wipe me/idlequeue
 &CMD-+IDLE-QUEUE Idle Purger=$+idle/queue:think pemit(%#,DB#[space(6)]Name[space(18)]Approved?%B%BLast On[space(15)]Vacation%R[line()][iter([get(me/idlequeue)],[setq(0,hasflag(##,unregistered))]%R[ljust(##,7)] - [ljust([ansi(switch(%q0,0,h,hx),name(##))],20)] - [switch(%q0,0,YES,%B%B%B)]%B%B - [left(xget(##,last)],20)] - [get(##/vacation)])])
@@ -41,6 +41,7 @@ think install_create(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
 
 &TR_CLEAR_MAIL Idle Purger=@dolist lattr([v(mailing_list_object)]/list_*)={think set([v(mailing_list_object)],##:[remove(xget([v(mailing_list_object)],##),name(%0))])};@fo %1=@nuke [xget(%0,mail_object)]
 &TR_REMOVE_ALT Idle Purger=@fo %0=+alts/unregister [name(%0)]
+&TR_REMOVE_FRIENDS Idle Purger=@dolist real_players()=think set(##,list_friends:[remove(xget(##,list_friends),[name(%0)])])
 &ISSTAFF Idle Purger=isstaff(%#)
 
 
@@ -59,7 +60,7 @@ think install_create(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
 &IDLEPROTECT Idle Purger=#1
 &IDLETIME Idle Purger=5184000
 &MAILING_LIST_OBJECT Idle Purger=#-1
-&PLAYER_PURGE_ACTIONS Idle Purger=@tr me/TR_CLEAR_MAIL=%0;@tr me/TR_REMOVE_ALT=%0;@fo %1=@nuke %0
+&PLAYER_PURGE_ACTIONS Idle Purger=@tr me/TR_CLEAR_MAIL=%0;@tr me/TR_REMOVE_ALT=%0;@tr me/TR_REMOVE_FRIENDS=%0;@fo %1=@nuke %0
 
 @wait 5=+jobs/create CODE=Idle Purge Protection/Add builders and other potentially-idle staff characters to the protected list so they don't get nuked by the idle purger.  See +shelp +idle.
 @wait 5=+jobs/create CODE=Idle Purge Mailing List/Configure the mailing list object on the idle purger so deleted characters get removed from mailing lists.  See +shelp +idle.
