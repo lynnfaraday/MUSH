@@ -124,7 +124,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @@   %qz = temp vehicle register
 @@ --------------------------
 
-&FUN_REMOVE FS3Combat Instance Parent=[localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))][u(#FS3COMBAT_CMD_DMG/fun_clear_mock,%0)][switch([setq(z,u(fun_combatstat,%0,vehicle))]t(%qz),1,[set(me,vehicle_%qz:[remove(v(vehicle_%qz),unprettify(lcstr(%0)))])][switch(words(v(vehicle_%qz)),0,[wipe(me/vehicle_%qz)][u(#FS3COMBAT_CMD_DMG/fun_clear_mock,%qz)][switch(vehiclestat(%qz,temp),1,u(#FS3COMBAT_CMD_VEH/fun_delete_vehicle,%qz))])])][switch(1,isplayer(%0),wipe([pmatch(%0)]/combat),switch(npcstat(%0,temp),1,u(#FS3COMBAT_CMD_NPC/fun_delete_npc,%0)))][wipe(me/stat_[unprettify(%0)]`**)][wipe(me/stat_[unprettify(%0)])][u(fun_untarget,%0)][u(fun_combat_log,Removing %0 - vehicle %qz=[vehiclestat(%qz,temp)] [u(fun_vehicle_combat_num,%qz)].)])]
+&FUN_REMOVE FS3Combat Instance Parent=[localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))][u(#FS3COMBAT_CMD_DMG/fun_clear_mock,%0)][switch([setq(z,u(fun_combatstat,%0,vehicle))]t(%qz),1,[set(me,vehicle_%qz:[remove(lcstr(v(vehicle_%qz)),lcstr(unprettify(%0)))])][switch(words(v(vehicle_%qz)),0,[wipe(me/vehicle_%qz)][u(#FS3COMBAT_CMD_DMG/fun_clear_mock,%qz)][switch(vehiclestat(%qz,temp),1,u(#FS3COMBAT_CMD_VEH/fun_delete_vehicle,%qz))])])][switch(1,isplayer(%0),wipe([pmatch(%0)]/combat),switch(npcstat(%0,temp),1,u(#FS3COMBAT_CMD_NPC/fun_delete_npc,%0)))][wipe(me/stat_[unprettify(%0)]`**)][wipe(me/stat_[unprettify(%0)])][u(fun_untarget,%0)][u(fun_combat_log,Removing %0 - vehicle %qz=[vehiclestat(%qz,temp)] [u(fun_vehicle_combat_num,%qz)].)])]
 
 
 @@ ==================================================================================================
@@ -743,7 +743,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @@ %0 = penetration
 @@ %1 = protection
 @@ --------------------------
-&FUN_STOP_CHANCE FS3Combat Instance Parent=localize([setq(0,add(mul(sub(ceil(mul(fdiv(%1,%0),2)),1),25),10))][switch(1,eq(%0,0),100,eq(%1,0),0,lte(%q0,0),0,%q0)])
+&FUN_STOP_CHANCE FS3Combat Instance Parent=localize([setq(0,add(mul(sub(round(mul(fdiv(%1,%0),2),1),1),25),10))][switch(1,eq(%0,0),100,eq(%1,0),0,lte(%q0,0),0,%q0)])
 
 @@ --------------------------
 @@ FUN_DO_CREW_DAMAGE
@@ -968,4 +968,4 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 
 
 @wait 10=@set me=!quiet
-@wait 10=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]

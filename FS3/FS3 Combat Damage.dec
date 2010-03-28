@@ -509,4 +509,4 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,5.0,FS3Comba
 &CRON_JOB_DAILYHEAL FS3Combat Damage Commands=@tr #FS3COMBAT_CMD_DMG/tr_daily_healing
 
 @wait 10=@set me=!quiet
-@wait 10=@pemit/silent %#=%R%R[ansi(hg,Module installed.  Continue installing the other modules one by one.  When finished, run the post-install script.)]
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]
