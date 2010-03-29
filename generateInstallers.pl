@@ -33,12 +33,12 @@ else
 print OUTFILE "\@pemit %#=ansi(hc,Installing all Faraday systems.)";
 }
 
-processFile("Core/installManager.dec");
-processFile("Core/help.dec");
-processFile("Core/functions.dec");
-processFile("Core/playerSetup.dec");
-processFile("Core/jobs.dec");
-processFile("Core/faramail.dec");
+processFile("Core/installManager.dec", "-CORE-");
+processFile("Core/help.dec", "-CORE-");
+processFile("Core/functions.dec", "-CORE-");
+processFile("Core/playerSetup.dec", "-CORE-");
+processFile("Core/jobs.dec", "-CORE-");
+processFile("Core/faramail.dec", "-CORE-");
 
 find(\&forEachFile, cwd . "/Addons/");
 find(\&forEachFile, cwd . "/FUDGE/");
@@ -46,6 +46,11 @@ find(\&forEachFile, cwd . "/FS3/");
 
 processFile("FS3/FS3 Combat Post-Install.dec");
 
+if (!$patch)
+   {
+   processFile("FS3/FS3 Chargen.dec");
+   processFile("FUDGE/FUDGE Chargen.dec");
+   }
 }
 
 sub forEachFile{
@@ -53,9 +58,9 @@ sub forEachFile{
    
     if ($fileName !~ /\.dec$/) 
         { return; }
-    if (($fileName =~ /FS3 Chargen/) && $patch)
+    if ($fileName =~ /FS3 Chargen/) 
         { return; }
-    if (($fileName =~ /FUDGE Chargen/) && $patch)
+    if ($fileName =~ /FUDGE Chargen/) 
         { return; }
     if ($fileName =~ /FS3 Combat Post-Install/) 
         { return; }
@@ -65,7 +70,7 @@ sub forEachFile{
 
 sub processFile{
 
-my $fileName = shift;
+my ($fileName, $prefix) = @_;
 print "Parsing $fileName\n";
 
 $fileIndex++;
@@ -77,16 +82,15 @@ close(INFILE);
 my ($shortName) = ($fileName =~ /\/([^\/]+$)/);
 
 my $outFileName;
+my $indexString = sprintf("%0*d", 2, $fileIndex);
 
 if ($patch)
 {
-  $outFileName = "Installers/Patch/$fileIndex PATCH $shortName";
-  $outFileName =~ s/\.dec/ v$oldVersion to v$version\.dec/;
+  $outFileName = "Installers/Patch v$oldVersion to v$version/$indexString PATCH $prefix $shortName";
 }
 else
 {
-  $outFileName = "Installers/FreshInstall/$fileIndex $shortName";
-  $outFileName =~ s/\.dec/ v$version\.dec/;
+  $outFileName = "Installers/v$version/$indexString $prefix $shortName";
 }
 
 my $cwd = cwd;
