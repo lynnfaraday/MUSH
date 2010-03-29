@@ -140,7 +140,7 @@ think install_create(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 @@ WEB ON
 
 
-@switch version()=TinyMUSH *version 3.*,{@set BBS - Myrddin's Global BBS=COMMANDS; @set BBS - Myrddin's Global BBS=STOP},TinyMUSH version 2.2.*,{@set BBS - Myrddin's Global BBS=COMMANDS; @set BBS - Myrddin's Global BBS=STOP},PennMUSH*,{@edit BBS - Myrddin's Global BBS/CMD_+BBNEWGROUP=inherit,wizard; @set bbpocket=!INHERIT; @set bbpocket=WIZARD; @set BBS - Myrddin's Global BBS=!INHERIT; @set BBS - Myrddin's Global BBS=WIZARD; @set BBS - Myrddin's Global BBS=!NO_COMMAND; @power bbpocket=see_all; @edit BBS - Myrddin's Global BBS/CMD_+NEWGROUP={&CANREAD},{@set \%q0=NO_WARN; &CANREAD}}
+@switch version()=TinyMUSH *version 3.*,{@set BBS - Myrddin's Global BBS=COMMANDS; @set BBS - Myrddin's Global BBS=STOP},TinyMUSH version 2.2.*,{@set BBS - Myrddin's Global BBS=COMMANDS; @set BBS - Myrddin's Global BBS=STOP},PennMUSH*,{@edit BBS - Myrddin's Global BBS/CMD_+BBNEWGROUP=inherit,wizard; @set bbpocket=!INHERIT; @set bbpocket=WIZARD; @set BBS - Myrddin's Global BBS=!INHERIT; @set BBS - Myrddin's Global BBS=WIZARD; @set BBS - Myrddin's Global BBS=!NO_COMMAND; @power bbpocket=see_all; @edit BBS - Myrddin's Global BBS/CMD_+BBNEWGROUP={&CANREAD},{@set %q0=NO_WARN; &CANREAD}}
 
 @@
 @@ The following insure that @attribute/access works
