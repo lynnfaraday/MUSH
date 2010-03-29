@@ -242,6 +242,7 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 
 +list/new Staff=no/Staff Members
 
++jobs/create CODE=Postmaster/Change postmaster password.
 +jobs/create CODE=Mailing Lists/Set up +mail lists.  See +shelp +list
 +jobs/create CODE=Mail Setup/Add @fo \%0=+mail/init to the ADDITIONAL_SETUP attr on the Player Setup Data Object.  (Or if you're not using my Player Setup object, make sure that command gets executed when a new player is created.)
 +jobs/create CODE=Disable @mail/Disable @mail in the server-side config.
