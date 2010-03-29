@@ -45,7 +45,7 @@ think install_create(MAP_DB,Map DB,0,1,5.0,Map data storage.)
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
-@wait 7=+jobs/create CODE/Maps=Create maps for +map.  See +shelp +map
+@wait 7=+jobs/create CODE=Maps/Create maps for +map.  See +shelp +map
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
