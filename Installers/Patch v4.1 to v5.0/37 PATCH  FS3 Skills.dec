@@ -237,4 +237,5 @@ think install_patch(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit par
 @wait 2=+install/updategroup FS3SKILL
 
 
+@wait 10=@set me=!quiet
 @wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]

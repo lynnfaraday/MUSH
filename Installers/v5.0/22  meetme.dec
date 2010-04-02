@@ -27,4 +27,6 @@ think install_create(MEETME_CMD,Meetme System,1,0,5.0,Meetme System.)
 
 @wait 2=+install/updategroup MEETME
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 5=@set me=!quiet

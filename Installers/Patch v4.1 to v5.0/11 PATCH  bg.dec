@@ -43,6 +43,9 @@ think install_patch(BG_APP,BG Approval,1,0,5.0,Background approval actions.)
 
 @wait 2=+install/updategroup BG
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 5=@set me=!quiet
 
+@wait 7=@set me=!quiet
 

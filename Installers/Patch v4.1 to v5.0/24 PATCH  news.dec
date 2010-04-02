@@ -46,5 +46,7 @@ think install_patch(NEWS_DB,+news DB,0,1,5.0,Data storage for news system.)
 
 @wait 2=+install/updategroup NEWS
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 5=@set me=!quiet
 

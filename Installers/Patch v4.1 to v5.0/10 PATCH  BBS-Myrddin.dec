@@ -140,7 +140,7 @@ think install_patch(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 @@ WEB ON
 
 
-@switch version()=TinyMUSH *version 3.*,{@set BBS - Myrddin's Global BBS=COMMANDS; @set BBS - Myrddin's Global BBS=STOP},TinyMUSH version 2.2.*,{@set BBS - Myrddin's Global BBS=COMMANDS; @set BBS - Myrddin's Global BBS=STOP},PennMUSH*,{@edit BBS - Myrddin's Global BBS/CMD_+BBNEWGROUP=inherit,wizard; @set bbpocket=!INHERIT; @set bbpocket=WIZARD; @set BBS - Myrddin's Global BBS=!INHERIT; @set BBS - Myrddin's Global BBS=WIZARD; @set BBS - Myrddin's Global BBS=!NO_COMMAND; @power bbpocket=see_all; @edit BBS - Myrddin's Global BBS/CMD_+NEWGROUP={&CANREAD},{@set \%q0=NO_WARN; &CANREAD}}
+@switch version()=TinyMUSH *version 3.*,{@set BBS - Myrddin's Global BBS=COMMANDS; @set BBS - Myrddin's Global BBS=STOP},TinyMUSH version 2.2.*,{@set BBS - Myrddin's Global BBS=COMMANDS; @set BBS - Myrddin's Global BBS=STOP},PennMUSH*,{@edit BBS - Myrddin's Global BBS/CMD_+BBNEWGROUP=inherit,wizard; @set bbpocket=!INHERIT; @set bbpocket=WIZARD; @set BBS - Myrddin's Global BBS=!INHERIT; @set BBS - Myrddin's Global BBS=WIZARD; @set BBS - Myrddin's Global BBS=!NO_COMMAND; @power bbpocket=see_all; @edit BBS - Myrddin's Global BBS/CMD_+BBNEWGROUP={&CANREAD},{@set %q0=NO_WARN; &CANREAD}}
 
 @@
 @@ The following insure that @attribute/access works
@@ -185,6 +185,7 @@ think install_patch(BBS_POCKET,bbpocket,0,0,5.0,BBS Storage.,BBS_CMD)
 
 @wait 20=@pemit/silent me=%rBulletin Board construction complete.  Enjoy!%r[repeat(=,78)]
 
+@wait 20=@set me=!quiet
 
 @switch/first %#:[first(version())]=#1:Tiny*,{@attribute/access bb_read=hidden wizard; @attribute/access bb_omit=hidden wizard},%#:Penn*,,*:Tiny*,{@pemit/silent me=Reminder! Make sure #1 executes the following:%r%b%b@attribute/access bb_read=hidden wizard%r%b%b@attribute/access bb_omit=hidden wizard%r%b%b@attribute/access bb_silent=hidden wizard},{@pemit/silent me=Reminder! Make sure #1 sets the BBS WIZARD}
 

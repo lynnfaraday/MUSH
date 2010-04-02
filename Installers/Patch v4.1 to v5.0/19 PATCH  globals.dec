@@ -85,5 +85,7 @@ think install_patch(GLOBALS_DB,Misc Globals Data,0,1,5.0,Data storage for the mi
 
 @wait 2=+install/updategroup GLOBALS
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 5=@set me=!quiet
 

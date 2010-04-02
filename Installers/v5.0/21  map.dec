@@ -29,7 +29,9 @@ think install_create(MAP_DB,Map DB,0,1,5.0,Map data storage.)
 
 @wait 2=+install/updategroup MAP
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 5=@set me=!quiet
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

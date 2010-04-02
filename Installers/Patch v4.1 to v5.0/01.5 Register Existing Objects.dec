@@ -13,10 +13,11 @@
 @name [search(all,name,Misc Functions)]=Misc Globals Functions
 @name [search(all,name,Misc Data)]=Misc Globals Data
 @name [search(all,name,Jobs Data)]=Jobs Database
+@name [search(all,name,Alts System)]=Alts Commands
 
 @switch [setq(0,search(all,name,Actor Functions))]1=t(%q0),{think ansi(hr,Nuking old Actor Functions object \(%q0\) which is no longer needed.);@set %q0=!safe;@nuke %q0}
 
-think [setq(0,search(all,name,MUSH Postmaster))][setq(1,search(all,name,Mail Functions))][setq(2,search(all,name,Mail Lists))][switch(%q0,#-1,,ansi(hr,You have the old MUSH Postmaster installed \(objects %q0\, %q1\, %q2\).  The Postmaster is no longer supported and has been replaced by FaraMAIL.  If you're installing the new FaraMAIL system, you'll need to get rid of those old objects.))]
+think [setq(0,search(all,name,MUSH Postmaster))][setq(1,search(all,name,Mail Functions))][setq(2,search(all,name,Mail Lists))][switch(%q0,#-1,,,,ansi(hr,You have the old MUSH Postmaster installed \(objects %q0\, %q1\, %q2\).  The Postmaster is no longer supported and has been replaced by FaraMAIL.  If you're installing the new FaraMAIL system, you'll need to get rid of those old objects.))]
 
 @switch [install_aliasdb(GLOBFUN_DB)]=#-1,@create Global Utility Function Data
 @switch [install_aliasdb(ROOM_TPROOM_FOYER)]=#-1,@create TP Room Foyer
@@ -113,16 +114,16 @@ think [setq(0,search(all,name,MUSH Postmaster))][setq(1,search(all,name,Mail Fun
 +install/findreg Skill Chargen Commands=FUDGE_CHARGEN
 
 @@ Name conflict between these guys with FUDGE/FS3 so only register based on the system that's installed.
-@switch 1=t(install_aliasdb(FS3SKILL_CMD)),+install/findreg Chargen Info Functions=FS3SKILL_CGINFO
-@switch 1=t(install_aliasdb(FS3SKILL_CMD)),+install/findreg Demographic Commands=FS3SKILL_CGDEMO
-@switch 1=t(install_aliasdb(FS3SKILL_CMD)),+install/findreg Chargen Exit Parent=FS3SKILL_CGEXIT
+@wait 15=@switch 1=t(install_aliasdb(FS3SKILL_CMD)),+install/findreg Chargen Info Functions=FS3SKILL_CGINFO
+@wait 15=@switch 1=t(install_aliasdb(FS3SKILL_CMD)),+install/findreg Demographic Commands=FS3SKILL_CGDEMO
+@wait 15=@switch 1=t(install_aliasdb(FS3SKILL_CMD)),+install/findreg Chargen Exit Parent=FS3SKILL_CGEXIT
 
-@switch install_aliasdb(FS3SKILL_CMD)=#-1,+install/findreg Demographic Commands=FUDGE_DEMO
-@switch install_aliasdb(FS3SKILL_CMD)=#-1,+install/findreg Chargen Info Functions=FUDGE_CGINFO_FUN
-@switch install_aliasdb(FS3SKILL_CMD)=#-1,+install/findreg Chargen Exit Parent=FUDGE_CGEXIT
+@wait 15=@switch install_aliasdb(FS3SKILL_CMD)=#-1,+install/findreg Demographic Commands=FUDGE_DEMO
+@wait 15=@switch install_aliasdb(FS3SKILL_CMD)=#-1,+install/findreg Chargen Info Functions=FUDGE_CGINFO_FUN
+@wait 15=@switch install_aliasdb(FS3SKILL_CMD)=#-1,+install/findreg Chargen Exit Parent=FUDGE_CGEXIT
 
-think [setq(0,install_aliasdb(MOTD_DB))][switch(hasattr(%q0,MAILSYS),0,set(%q0,mailsys:faramail))]
+@wait 15=think [setq(0,install_aliasdb(MOTD_DB))][switch(hasattr(%q0,MAILSYS),0,set(%q0,mailsys:faramail))]
 
-think ansi(hr,If you have the FUDGE system installed and want to install FS3 instead - you'll need to +uninstall FUDGE and then manually nuke the chargen rooms.)
+@wait 15=think switch(install_aliasdb(FUDGE_CMD),#-1,,ansi(hr,If you have the FUDGE system installed and want to install FS3 instead - you'll need to +uninstall FUDGE and then manually nuke the chargen rooms.))
 
-
+@wait 15=@dolist ROOM_HOLDER ROOM_EXIT_PARENT ROOM_PARENT ROOM_TPROOM_PARENT ROOM_TPROOM_FOYER ROOM_PLACES_PARENT={@set [install_aliasdb(##)]=!safe;@wipe [install_aliasdb(##)]/HELP_*}

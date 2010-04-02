@@ -47,5 +47,7 @@ think install_patch(DESC_DB,Pre-Made Descs,0,1,5.0,Multi-Desc Storage.)
 
 @wait 2=+install/updategroup DESC
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 5=@set me=!quiet
 

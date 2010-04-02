@@ -50,7 +50,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 
 &CMD-+INSTALL-FIND-AND-REGISTER Install Manager=$+install/findreg *=*:@pemit %#=[setq(0,lsearch(all,eobjects,\[strmatch(name(##),%0)\]))][switch(words(%q0),>1,[ansi(hR,More than one object found with name %0.  Picking the first one.)][setq(0,first(%q0))])][switch(%q0,,ansi(hr,Cannot find object %0.  Perhaps it's been renamed or was never installed.),ansi(c,Object %0 found and registered as %1.)[u(fun_register,%1,%q0)])]
 
-&CMD-+INSTALL-DIR Install Manager=$+install/dir:@pemit %#=[line()]%R[ansi(h,Installed Systems)]%R[iter(lattr(#INSTALL_DB/OBJ_*),setq(0,%q0 [extract(##,2,1,_)]),,)][table(iter(setunion(%q0,),[capstr(lcstr(##))]),20,78)]%R%R[ansi(h,Use +install/dir <name> for more info about a system.)][line()]
+&CMD-+INSTALL-DIR Install Manager=$+install/dir:@pemit %#=[line()]%R[ansi(h,Installed Systems)]%R[iter(lattr(#INSTALL_DB/OBJ_*),setq(0,%q0 [extract(##,2,1,_)]),,)][table(iter(setunion(%q0,),[capstr(lcstr(##))]..v[xget(install_aliasdb(after(first(lattr(#INSTALL_DB/OBJ_##*)),_)),version)]),20,78)]%R%R[ansi(h,Use +install/dir <name> for more info about a system.)]%R[line()]
 
 &CMD-+INSTALL-DIR-SYSTEM Install Manager=$+install/dir *:@pemit %#=[setq(0,lattr(#INSTALL_DB/OBJ_[trim(%0)]_*))][switch(words(%q0),0,ansi(hr,Can't find a system named %0.),[line()]%R[ansi(h,[capstr(lcstr(%0))] System Information)]%R%R[ansi(c,Object[space(19)]DB#[space(7)]Version)][iter(sort(%q0),%R[setq(1,install_aliasdb(after(##,_)))][padstr(after(##,_),25)][ljust(%q1,10)][xget(%q1,version)])]%R[line()])]
 
@@ -207,4 +207,6 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @wait 5=@fo me=+install/findreg Install Object Storage=INSTALL_STORAGE
 @wait 5=@tel Install DB=Install Object Storage
 
+@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R
 
+@wait 9=@set me=!quiet

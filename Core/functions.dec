@@ -115,7 +115,7 @@ think install_create(GLOBFUN_DB,Global Utility Function Data,1,1,5.0,Customizabl
 
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
-@wait 2={think [setq(0,install_aliasdb(GLOBFUN_FUN))][setq(1,install_aliasdb(GLOBFUN_DB))][iter(FUN_ICTIME FUN_ISSTAFF FUN_LINE FUN_LINE2 FUN_LINE_NO_COLOR FUN_LINE_WITH_TEXT,switch(1,hasattr(%q0,##),[set(%q1,##:[xget(%q0,##)])][wipe(%q0/##)]))]
+@wait 2={think [setq(0,install_aliasdb(GLOBFUN_FUN))][setq(1,install_aliasdb(GLOBFUN_DB))][iter(FUN_ICTIME FUN_ISSTAFF FUN_LINE FUN_LINE2 FUN_LINE_NO_COLOR FUN_LINE_WITH_TEXT NON_PLAYERS,switch(1,hasattr(%q0,##),[set(%q1,##:[xget(%q0,##)])][wipe(%q0/##)]))]
 
 @wait 5=+install/updategroup GLOBFUN
 

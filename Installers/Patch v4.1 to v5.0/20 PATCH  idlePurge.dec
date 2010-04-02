@@ -59,5 +59,7 @@ think install_patch(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
 
 @wait 2=+install/updategroup IDLE
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R
 
+@wait 5=@set me=!quiet
 

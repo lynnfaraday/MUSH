@@ -41,5 +41,7 @@ think install_create(STAFF_CMD,Staff Commands,1,0,5.0,Staff-only commands.)
 
 @wait 2=+install/updategroup STAFF
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 5=@set me=!quiet
 

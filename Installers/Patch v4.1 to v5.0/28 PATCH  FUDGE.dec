@@ -233,5 +233,7 @@ think install_patch(FUDGE_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit parent
 
 @wait 2=+install/updategroup FUDGE
 
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R
 
+@wait 10=@set me=!quiet
 

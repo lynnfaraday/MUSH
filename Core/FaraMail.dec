@@ -263,9 +263,9 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 @wait 2=+install/updategroup MAIL
 
 @wait 9=@pemit/silent %#=[ansi(hg,Initializing Mail...)]%R
-@wait 9=@dolist [remove(lsearch(all,type,player),#1)]=@fo ##=+mail/init
 
 @wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
 @wait 10=@set me=!quiet
 
+@wait 20=@dolist [remove(lsearch(all,type,player),#1)]=@fo ##=+mail/init

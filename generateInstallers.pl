@@ -116,15 +116,7 @@ while ($line = shift(@contents))
    $inDataArea = 1;
    }
   
- if ($line =~ /Installation Complete!/)
-   {
-   # Skip all lines saying the install is complete.
-   }
- elsif ($line =~ /\@set me=!QUIET/i)
-   {
-   # skip all the !quiet lines when doing the mass update.
-   }
- elsif ($inDataArea && $patch)
+ if ($inDataArea && $patch)
    {
    # skip this line for patches because it contains DATA 
    }

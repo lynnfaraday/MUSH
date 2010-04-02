@@ -45,5 +45,7 @@ think install_patch(EVENTS_DB,Events Database,0,1,5.0,Events data storage.)
 
 @wait 2=+install/updategroup EVENTS
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 5=@set me=!quiet
 

@@ -38,6 +38,8 @@ think install_patch(HELP_DB,+help Database,0,0,5.0,Stores +help files.)
 
 @wait 2=+install/updategroup HELP
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R
 
+@wait 5=@set me=!quiet
 
 

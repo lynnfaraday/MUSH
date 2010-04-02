@@ -51,7 +51,9 @@ think install_patch(ALTS_DB,Alts DB,0,1,5.0,Alt database.)
 
 @wait 2=+install/updategroup ALTS
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 5=@set me=!quiet
 
 
 

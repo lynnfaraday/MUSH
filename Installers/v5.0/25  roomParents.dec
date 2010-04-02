@@ -121,7 +121,9 @@ think install_create(ROOM_PLACES_PARENT,Max's Table Code Parent,0,0,5.0,Places p
 
 @wait 10=+install/updategroup ROOM
 
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 10=@set me=!quiet
 
 
 

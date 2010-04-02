@@ -52,7 +52,11 @@ think install_patch(CENSUS_DB,Census DB,1,1,5.0,Census system data.)
 
 @wait 2=+install/updategroup CENSUS
 
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 5=@set me=!quiet
 
+@wait 6=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 8=@set me=!quiet
 

@@ -19,4 +19,6 @@
 
 
 
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
+@wait 10=@set me=!quiet
