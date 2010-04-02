@@ -72,4 +72,5 @@ think install_create(FS3COMBAT_DB_VEH,FS3Combat Vehicle DB,0,1,5.0,FS3Combat Veh
 
 @STARTUP FS3Combat vehicle Commands=@set me=!no_command;@fun vehiclestat=me,FUN_VEHICLESTAT;@fun isvehicle=me,fun_isvehicle
 
+@wait 10=@set me=!quiet
 @wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]

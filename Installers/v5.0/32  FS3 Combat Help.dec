@@ -34,4 +34,5 @@ think install_create(FS3COMBAT_HELP,FS3Combat Help,0,1,5.0,FS3Combat Help.  See 
 
 &MORE_HELP_+heal FS3Combat Help=[ansi(hb,This help file is a quick reference for the FS3 Combat System. %RFor more details, see [u(more_help_fs3combat_url)])]%R%R[ansi(h,+heal <name>)] - Heals wounds.%R[ansi(h,+stopheal <name>)] - Stops healing someone.%R[ansi(h,+healing)] - Lists who you're healing.%R%R+heal is for long-term treatment or repairs.  You only need to use the command once, and you will be marked as caring for that person/vehicle until they are fully healed or until you stop healing them.   +heal may not be used in combat.   You may only have one "patient" for every 2 levels of healing skill.  In other words, an expert doctor (12) could be caring for 6 patients simultaneously.  Multiple docs/mechanics can treat a single patient/vehicle.%R%RIf you fail you may cause them to heal even slower, so consider carefully before using it if your Medicine score is low.
 
+@wait 10=@set me=!quiet
 @wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]

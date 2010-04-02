@@ -115,4 +115,5 @@ N
 
 +jobs/create BUILD=Chargen OOC Exit/Link the 'done' exit from chargen to the appropriate room in the OOC area.
 
+@wait 5=@set me=!quiet
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,FS3 Chargen rooms installed.)]

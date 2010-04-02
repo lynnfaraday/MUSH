@@ -86,4 +86,5 @@ think install_create(FS3COMBAT_DB_NPC,FS3Combat NPC DB,0,1,5.0,FS3Combat NPC DB.
 
 @STARTUP FS3Combat NPC Commands=@set me=!no_command;@fun npcstat=me,fun_npcstat;@fun isnpc=me,fun_isnpc
 
+@wait 10=@set me=!quiet
 @wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]
