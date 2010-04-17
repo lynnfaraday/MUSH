@@ -8,12 +8,14 @@
 @@ This is a pre-patch script that will modify some existing objects
 @@ so that they will play nice with the new install manager.
 
-@name [search(all,name,BBS - Myrddin)]=BBS - Myrddin's Global BBS
-@name [search(all,name,CRON - Myrddin)]=CRON - Myrddin's mushcron
-@name [search(all,name,Misc Functions)]=Misc Globals Functions
-@name [search(all,name,Misc Data)]=Misc Globals Data
-@name [search(all,name,Jobs Data)]=Jobs Database
-@name [search(all,name,Alts System)]=Alts Commands
+think [ansi(hc,Renaming objects.  Ignore any 'nothing found' messages.  They're ok.)]
+
+@switch [setq(0,search(all,name,BBS - Myrddin))][t(%q0)]=1,@name %q0=BBS - Myrddin's Global BBS
+@switch [setq(0,search(all,name,CRON - Myrddin))][t(%q0)]=1,@name %q0=CRON - Myrddin's mushcron
+@switch [setq(0,search(all,name,Misc Functions))][t(%q0)]=1,@name %q0=Misc Globals Functions
+@switch [setq(0,search(all,name,Misc Data))][t(%q0)]=1,@name %q0=Misc Globals Data
+@switch [setq(0,search(all,name,Jobs Data))][t(%q0)]=1,@name %q0=Jobs Database
+@switch [setq(0,search(all,name,Alts System))][t(%q0)]=1,@name %q0=Alts Commands
 
 @switch [setq(0,search(all,name,Actor Functions))]1=t(%q0),{think ansi(hr,Nuking old Actor Functions object \(%q0\) which is no longer needed.);@set %q0=!safe;@nuke %q0}
 
