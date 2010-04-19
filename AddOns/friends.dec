@@ -25,7 +25,7 @@ think install_create(FRIENDS_CMD,Friends System,1,0,5.0,Friends tracker.)
 &FUN_FRIENDS Friends System=xget(%0,list_friends)
 
 &HELP_+FRIENDS Friends System=The +friends command lets you keep track of your friends.  It will tell you when they log in and out, and you can see a list of their locations and last connection times.%R%R[ansi(h,+friend/add <player>)] - Add a friend.%R[ansi(h,+friend/remove <player>)] - Remove a friend.%R[ansi(h,+friends)] - Show a list of your friends.%R%RYou can also use the +mail system to send a mail to all your friends.  Just use [ansi(h,+mail friends=<subject>/<message>)].
-@STARTUP Friends System=@set me=!no_command;@fun FRIENDS=me,FUN_FRIENDS
+@STARTUP Friends System=@set me=!no_command;@fun FRIENDS=me,FUN_FRIENDS,1,1,admin
 
 
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R

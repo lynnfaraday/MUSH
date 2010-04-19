@@ -43,7 +43,7 @@ think install_create(FUDGE_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit paren
 &CMD-+SKILLCENSUS-GENERAL FUDGE Skill System=$+skillcensus *:think switch(%0,*=*,,pemit(%#,switch(0,or(isstaff(%#),xget(#FUDGE_DB,PLAYER_VISIBLE_SHEETS)),ansi(hr,That command is restricted to staff.),u(#FUDGE_FUN/fun_is_valid_skill,%0),ansi(hr,That is not a valid skill.),not(match(%0,*=*)),,[line()]%RCharacters with [capstr(%0)]%R[iter(u(#FUDGE_FUN/fun_skill_census,%0,Poor),%R[padstr(name(after(##,:)),15)][u(#FUDGE_FUN/fun_level_name,before(##,:))])]%R[line()])))
 
 
-@STARTUP FUDGE Skill Functions=@fun TRAIT_NUM=[num(me)],FUN_GET_TRAIT_LVL_NUM;@fun TRAIT_NAME=[num(me)],FUN_GET_TRAIT_LVL_NAME;@fun ROLL_TRAIT=[num(me)],FUN_GET_ROLLED_DEGREE;@FUN ROLL_PLAYER_TRAIT=[num(me)],FUN_ROLL_PLAYER_TRAIT;@fun LEVEL_NUM=[num(me)],FUN_LEVEL_NUM;@fun LEVEL_NAME=[num(me)],FUN_LEVEL_NAME;@fun PRETTY_LEVEL_NUM=[num(me)],FUN_PRINT_NUM
+@STARTUP FUDGE Skill Functions=@fun TRAIT_NUM=[num(me)],FUN_GET_TRAIT_LVL_NUM,2,2,admin;@fun TRAIT_NAME=[num(me)],FUN_GET_TRAIT_LVL_NAME,2,2,admin;@fun ROLL_TRAIT=[num(me)],FUN_GET_ROLLED_DEGREE;@FUN ROLL_PLAYER_TRAIT=[num(me)],FUN_ROLL_PLAYER_TRAIT;@fun LEVEL_NUM=[num(me)],FUN_LEVEL_NUM;@fun LEVEL_NAME=[num(me)],FUN_LEVEL_NAME;@fun PRETTY_LEVEL_NUM=[num(me)],FUN_PRINT_NUM
 &FUN_ATTR_LIST FUDGE Skill Functions=iter(lattr(#FUDGE_DB/ATTR_DESC_*),capstr_all(lcstr(after(after(##,_),_)),_))
 &FUN_SKILLS_LIST FUDGE Skill Functions=iter(lattr(#FUDGE_DB/SKILL_DESC_*),capstr_all(lcstr(after(after(##,_),_)),_))
 &FUN_NOTIFY_ROLL_RESULTS FUDGE Skill Functions=[remit(%0,%1)][cemit(SkillRolls,<[ansi(hc,SkillRolls)]> %1

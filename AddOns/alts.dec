@@ -36,7 +36,7 @@ think install_create(ALTS_DB,Alts DB,0,1,5.0,Alt database.)
 &FUN_UNREGISTER Alts Commands=localize([setq(0,u(fun_find_main,%0))][setq(1,pmatch(%1))][switch(1,t(%q0),set(#ALTS_DB,%q0:[remove(xget(#ALTS_DB,%q0),switch(t(%q1),1,name(%q1),%1))]))])
 &HATTR_ALTS Alts Commands=
 &FUN_ALTS Alts Commands=remove(u(FUN_FIND_ALTS,name(pmatch(%0))),name(pmatch(%0)))
-@startup Alts Commands=@set me=!NO_COMMAND;@fun alts=me,FUN_ALTS
+@startup Alts Commands=@set me=!NO_COMMAND;@fun alts=me,FUN_ALTS,1,1,admin
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
