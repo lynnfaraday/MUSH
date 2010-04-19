@@ -76,7 +76,7 @@ think install_create(COOKIE_DB,Cookie DB,0,1,5.0,Cookie database storage.)
 &COOKIE_LEVEL_04 Cookie DB=Gold|100|hy
 &COOKIE_LEVEL_05 Cookie DB=Platinum|200|hb
 &COOKIE_LEVEL_06 Cookie DB=Palladium|500|hg
-&LUCK_INFO Cookie DB=Pester your staff to fill in what you can use luck points on.
+&LUCK_INFO Cookie DB=Pester your staff to fill in what you can use luck points on.  If you are using the FS3 combat system, luck points are built in automatically.  See +help +combat.
 
 
 @wait 7=+job/create CODE=Cookie Cron/Copy the +cookie CRON job over to the MUSHCron system, or otherwise configure it to run weekly.

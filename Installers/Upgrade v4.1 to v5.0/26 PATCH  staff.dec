@@ -37,6 +37,23 @@ think install_patch(STAFF_CMD,Staff Commands,1,0,5.0,Staff-only commands.)
 &cmd-+send Staff Commands=$+send *=*:think [setq(0,lsearch(all,type,room))][setq(1,0)][squish(iter(%q0,switch(and(strmatch(name(##),*%1*),not(%q1)),1,[setq(1,##)])))][switch(%q1,0,pemit(%#,ansi(hr,That is not a valid location.)),iter(%0,[setq(2,pmatch(##))][pemit(%#,[switch(0,t(%q2),ansi(hr,That is not a valid player.),match(xget(%q2,STATUS),IC),ansi(hr,## is not IC.),[ansi(hg,You send [name(%q2)] to [name(%q1)].)][remit(loc(%q2),[ansi(hy,<OOC> %N whisks [name(%q2)] away.)])][tel(%q2,%q1)])]))]
 &SHELP_+SEND Staff Commands=The +send command is a people-mover for teleporting a bunch of folks to a specific room.  Like +hop, it will attempt to find the first matching room name for what you give it.  If your MUSH has too many rooms, you may need to increase your function invocation limit to make the command work.%R%R+send <list of players>=<room name>
 
+
+&CMD-+chown Staff Commands=$+chown *=*:think setq(0,hasflag(%0,wizard));@fo %#=@chown %0=%1;@fo %#=@set %0=!halt;@switch %q0=1,{@fo switch(%1,me,%#,pmatch(%1))=@set %0=wiz};@fo %#=@tr %0/startup
+
+&CMD-+MASSCHOWN me=$+masschown *=*:@fo %#={@dolist %0=+chown ##=%1}
+&SHELP_+CHOWN Staff Commands=+chown is a softcoded version of @chown that will change the owner, carry over the wizard flag (normally it's reset when you @chown a wizard object), set the object !halt (normally it's halted after you @chown it) and re-trigger its @startup.%R%R[ansi(h,+chown <object db#>=<new owner>)]%R[ansi(h,+masschown <list of Db#s>=<new owner>)] - Does a +chown on many objects
+
+
+&CMD-NUKE-OVERRIDE Staff Commands=$+nuke/o *:@set %0=!safe;@fo %#=@nuke %0
+&SHELP_+NUKE Staff Commands=Shortcut for setting an object !safe and then nuking it.%R%R[ansi(h,+nuke/o <db#>)]
+
+&cmd-+grep Staff Commands=$+grep *:@pemit %#=iter(lsearch(all,type,object),switch(words(grep(##,*,%0)),>0,%R##: [grep(##,*,%0)]))
+&SHELP_+GREP Staff Commands=Searches for a string on all objects in the database.  Warning: Computationally expensive.  Use with discretion.%R%R[ansi(h,+grep <string to search>)]
+
+
+
+
+
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
 @wait 2=+install/updategroup STAFF

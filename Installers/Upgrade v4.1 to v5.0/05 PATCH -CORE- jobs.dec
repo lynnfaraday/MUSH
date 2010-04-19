@@ -55,7 +55,7 @@ think install_patch(JOBS_CMD_REQUEST,Request System,1,0,5.0,Player request syste
 &cmd-+jobs-viewmany Jobs System=$+jobs *-*:@switch/first 0=[isnum(%0)],@pemit %#=ansi(hr,%0 is not a number.),[isnum(%1)],@pemit %#=ansi(hr,%1 is not a number.),{@dolist [lnum(%0,%1)]=think [setq(0,u(#JOBS_FUN/fun_find_job,##))][setq(7,before(%q0,:))][setq(8,after(%q0,:))][setq(9,xget(%q7,%q8))][pemit(%#,switch(%q0,,ansi(hr,That is not a valid job.),[line_with_text(Job ##)]%R[u(#JOBS_FUN/fun_display_job_long,%q7,%q8,%q9)][set(%q7,%q8:[u(#JOBS_FUN/fun_update_activity,%q9,%#)])]%R[line()]))]}
 
 &ISSTAFF Jobs System=isstaff(%#)
-@STARTUP Jobs System=@set me=!no_command;@function create_job=#JOBS_FUN/fun_create_job;@function find_job=#JOBS_FUN/fun_find_job
+@STARTUP Jobs System=@set me=!no_command;@function create_job=#JOBS_FUN,fun_create_job,4,4,admin;@function find_job=#JOBS_FUN,fun_find_job,1,1,admin
 
 &FUN_CREATE_JOB Jobs Functions=[setq(j,xget(#JOBS_DB,next_job))][set([xget(#JOBS_DB,cat_[trim(%0)])],job_%qj:%1|[secs()]|[name(%3)]||[add(secs(),xget(#JOBS_DB,DUEDATE_SECS))]|NEW|M|[escape_cr(%2)]||[secs()]||)][set(#JOBS_DB,next_job:[inc(%qj)])][iter(lwho(),switch(isstaff(##),1,pemit(##,ansi(hg,New Job Submitted \(#%qj\): %1))))]
 &FUN_DISPLAY_HEADER Jobs Functions=[ansi(hu,[ljust(#,6)][ljust(Cat,6)][ljust(Title,21)][ljust(Submitter,14)][ljust(Handler,14)][ljust(Due,11)]Status)]

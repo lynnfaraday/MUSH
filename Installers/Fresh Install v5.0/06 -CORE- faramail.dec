@@ -113,7 +113,7 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 
 @STARTUP FaraMail Commands=@set me=!no_command
 
-@startup FaraMail Functions=@fun send_mail=[num(me)],fun_send_msg;@fun unread_mail=[num(me)],fun_total_unread;@fun total_mail=[num(me)],fun_total_mail
+@startup FaraMail Functions=@fun send_mail=[num(me)],fun_send_msg,5,5,admin;@fun unread_mail=[num(me)],fun_total_unread,1,1,admin;@fun total_mail=[num(me)],fun_total_mail,1,1,admin
 
 
 &FUN_EXPANDED_TO_LIST FaraMail Functions=[squish([setq(9,)][iter(%0,switch(1,match(##,friends),friends(%#),t(pmatch(##)),setq(9,%q9##%B),t(match(lattr(%1/list_*),LIST_##)),setq(9,%q1[xget(%1,list_##)]%B),t(match(lattr(#MAIL_LIST/list_*),LIST_##)),setq(9,%q9[xget(#MAIL_LIST,list_##)]%B),pemit(%#,ansi(hr,WARNING!  ## is an invalid player or list, mail not deliverable to that person!))))][setunion(capstr_all(%q9),)])]

@@ -33,7 +33,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @set Install Manager = SAFE
 @set Install Manager = !NO_COMMAND
 
-@STARTUP Install Manager=@set me=!no_command;@function INSTALL_CREATE=[num(me)],FUN_INSTALL_CREATE;@function INSTALL_ALIASDB=[num(me)],FUN_GET_DBREF;@function INSTALL_PATCH=[num(me)],FUN_INSTALL_PATCH
+@STARTUP Install Manager=@set me=!no_command;@function INSTALL_CREATE=[num(me)],FUN_INSTALL_CREATE,6,7,admin;@function INSTALL_ALIASDB=[num(me)],FUN_GET_DBREF;@function INSTALL_PATCH=[num(me)],FUN_INSTALL_PATCH,6,7,admin
 
 
 &CMD-+install-update Install Manager=$+install/update *:@switch/first [setq(0,u(fun_get_dbref,%0))]0=[u(fun_is_registered,%0)],@pemit %#=ansi(hr,I can't find a object named %0.),{@pemit %#=ansi(c,Updating database references on object %0.);think switch(u(fun_is_installed_properly,%0),0,pemit(%#,ansi(hr,It appears object %q0 \([name(%q0)]\) may not be properly installed.  Please double-check.)));@dolist [lattr(#INSTALL_DB/obj_*)] ALLDONE=@switch ##=ALLDONE,{@fo %#=+install/finalize %0},{think u(FUN_UPDATE,%q0,#[after(##,_)],xget(#INSTALL_DB,##))}}
