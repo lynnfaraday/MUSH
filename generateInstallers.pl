@@ -39,6 +39,8 @@ processFile("Core/functions.dec", "-CORE-");
 processFile("Core/playerSetup.dec", "-CORE-");
 processFile("Core/jobs.dec", "-CORE-");
 processFile("Core/faramail.dec", "-CORE-");
+processFile("Core/BBS-Myrddin.dec", "-CORE-");
+processFile("Core/CRON-Myrddin.dec", "-CORE-");
 
 find(\&forEachFile, cwd . "/Addons/");
 find(\&forEachFile, cwd . "/FUDGE/");
@@ -86,11 +88,11 @@ my $indexString = sprintf("%0*d", 2, $fileIndex);
 
 if ($patch)
 {
-  $outFileName = "Installers/Patch v$oldVersion to v$version/$indexString PATCH $prefix $shortName";
+  $outFileName = "Installers/Upgrade v$oldVersion to v$version/$indexString PATCH $prefix $shortName";
 }
 else
 {
-  $outFileName = "Installers/v$version/$indexString $prefix $shortName";
+  $outFileName = "Installers/Fresh Install v$version/$indexString $prefix $shortName";
 }
 
 my $cwd = cwd;

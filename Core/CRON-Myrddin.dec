@@ -21,9 +21,6 @@ think install_create(CRON_OBJ,CRON - Myrddin's mushcron,1,0,5.0,Cron object.)
 @DESCRIBE CRON - Myrddin's mushcron=[repeat(=,78)]%r%b[iter(lattr(me/cron_time_*),[ljust(rest(rest(##,_),_),25)][v(##)]%r)][repeat(-,78)]%rPattern of CRON_TIME_* attributes:%r%t<month>|<date>|<day of week>|<hour>|<minute>|<args>%r(ex. Mar||Sun|04|54| would trigger a cron job at 4:54am every sunday in the month of march)%r[repeat(=,78)]%R[u(credits)]
 &REM_ORDER CRON - Myrddin's mushcron=month|date|day of week|hour|minute|args
 @STARTUP CRON - Myrddin's mushcron=@trigger me/cron
-&cmd-+cron Myrddin's mushcron=$+cron:@pemit %#=[line()]%R[ansi(h,Cron Jobs)]%R[iter(lattr(me/cron_time_*),%R[padstr(after(after(##,_),_),15)][iter(month date dayOfWeek hour min args,[ansi(c,itext(0))]: [setq(0,extract(v(##),inum(0),1,|))][switch(%q0,,n/a,%q0)])])]%R[line()]
-
-&INSTALL_DESTINATION Myrddin's mushcron=MASTER_ROOM
 
 &SHELP_CRON CRON=You can create 'jobs' on the Cron system to have things run periodically.  The cron job object is #CRON_OBJ.  Each job needs two attributes, a CRON_TIME_<name> attribute to tell it when to run, and a CRON_JOB_<name> attribute to tell it what to do.%R%RPattern of CRON_TIME_* attributes:%r%t<month>|<date>|<day of week>|<hour>|<minute>|<args>%r(ex. Mar||Sun|04|54| would trigger a cron job at 4:54am every sunday in the month of march)
 

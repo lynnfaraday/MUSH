@@ -1,18 +1,89 @@
-In Development
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Functions: Added prettify and unprettify
-Systems now create +jobs for to-do items when installed
-+census:  +faction/+org/+position command details now work properly when in chargen
-+cookie: Removed mention of mail command.
-+jobs:  +jobs/new, +jobs/catchup
-FS3!
-FARAMAIL!
-+bg: Changed name of BG submission job to include player name.
-+events:  Events on the same day now sort in a non-random order.
+================================================================
+----------------------------------------------------------------================================================================
+Version 5.0 (4/19/2010)
+================================================================
+----------------------------------------------------------------================================================================
+Tested on:  Pennmush 1.8.3 patchlevel 13
+
+**** BIG CHANGES ****
+
+INSTALL MANAGER
+~~~~~~~~~~~~~~~
+A brand new installation manager tracks which modules you have installed, allows you to upgrade them (fairly) seamlessly, while protecting old data.  It also lets you cleanly uninstall a system.
+
+Also, all systems now create +jobs when they're installed for things you need to remember to do, and install their own help files, player attributes and Cron jobs.
+
+FS3
+~~~~~~~~~~~~~~~
+Public release of my own original skills/chargen/combat system.
+
+Those who were beta testing this probably want to grab the new version since there were a few minor bugfixes (like Nukes bouncing off Viper armor).
+
+FARAMAIL
+~~~~~~~~~~~~~~~
+Public release of a fully featured softcoded +mail system.  
+For those who have used/seen it on my other games, this version has a few improvements, like integration with the Friends system (for +mail friends) and no longer chokes on really big folders.
+
+BBS, MUSHCron and IDLE PURGER
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+These systems are not mine, but I've created my own "branched" versions of them that integrate more seamlessly with the rest of my code (including the install manager).  The BBS and CRON systems are from Myrddin, the Idle Purger is from Shofari.  
+
+Some features I've added to the BBS:
+* +bbnew/+bbnext for scrolling through new messages
+* +bbreply for replying to BBS posts.
+* +bbarchive for arching old posts off-game 
+* BBS posts read on one alt will be marked read on others automatically.
+
++ALTS
+~~~~~~~~~~~
+Ground-up redesign to fix various bugs around registering/unregistering alts.  Changed default mail sys to faramail.  Added staff-only alts() function.
+
+**** LITTLE CHANGES ****
+
++ACTOR
+~~~~~~~~~~~
+Added +actor/clear and actor() fun
+
++BG
+~~~~~~~~~~~
+Added name of player to BG submission job.
+
++CENSUS
+~~~~~~~~~~~
++faction/+org/+position command details now work properly when in chargen.  They also now display names without _'s.
+
++EVENTS
+~~~~~~~~~~~
+Events on the same day now sort in a non-random order.
+
+GLOBAN FUNS
+~~~~~~~~~~~
+Added prettify and unprettify functions for handling underscores and spaces when going from player-friendly views to MUSH-attribute-views.
+
++JOBS
+~~~~~~~~~~~
+Added +jobs/new, +jobs/catchup for reading new jobs. 
+Changed high priority highlight color.
+
++MOTD
+~~~~~~~~~~~
+Removed the Tip of the Day to reduce spam.  Also I didn't feel like updating the tips for all the new systems :)
+
+ROOM PARENTS
+~~~~~~~~~~~~~
+Local help files are now named LHELP_<topic> not HELP_<topic> to avoid confusion with the global help files.
+
+STAFF COMMANDS
+~~~~~~~~~~~~~~~
+Added a couple new staff commands: +nuke, +grep and +chown.
 
 
+
+================================================================
+----------------------------------------------------------------================================================================
 Version 4.1 (6/13/08)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+================================================================
+----------------------------------------------------------------================================================================
 Jobs
 ~~~~~~~~~~~
 Fixed installer, which was not setting the wiz flag on the function object.
@@ -23,8 +94,13 @@ Fixed reference to level - should have been AREA.
 Fixed exit format to space correctly for 4-letter exit names.
 
 
+
+================================================================
+----------------------------------------------------------------
+================================================================
 Version 4.0 (03/17/08)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+================================================================
+----------------------------------------------------------------================================================================
 
 **** NEW SYSTEMS ****
 
@@ -107,7 +183,21 @@ MOTD and +desc
 Really minor helpfile changes.
 
 
-Version 3.0 (4/9/07)~~~~~~~~~~~~~~~~~~~~~~~~~~~~Although some of the systems are very similar to Version 1.0, this was effectively a ground-up redo of everything. The systems integrate together now, and there are a lot more systems available.Tested On: PennMUSH 1.8.2.p3Version 2.0 (n/a)~~~~~~~~~~~~~~~~~~~~~~~~~~~~I skipped version 2.0 because some of the individual systems were labeled with versions ranging from 1.0 to 2.0.
+
+================================================================
+----------------------------------------------------------------================================================================
+Version 3.0 (4/9/07)================================================================
+----------------------------------------------------------------================================================================Although some of the systems are very similar to Version 1.0, this was effectively a ground-up redo of everything. The systems integrate together now, and there are a lot more systems available.Tested On: PennMUSH 1.8.2.p3
+
+
+================================================================
+----------------------------------------------------------------================================================================Version 2.0 (n/a)================================================================
+----------------------------------------------------------------================================================================I skipped version 2.0 because some of the individual systems were labeled with versions ranging from 1.0 to 2.0.
 
 
-Version 1.0 (2004-2005)~~~~~~~~~~~~~~~~~~~~~~~~~~~~The systems were previously archived on my homepage in some disarray. Version 1.0 is simply a collection of all the systems that were posted there. The individual systems their own version numbers, and there isn't much integration between them. This archive exists mostly for historical purposes.Tested On: PennMUSH 1.7.4p15
+
+
+================================================================
+----------------------------------------------------------------================================================================
+Version 1.0 (2004-2005)================================================================
+----------------------------------------------------------------================================================================The systems were previously archived on my homepage in some disarray. Version 1.0 is simply a collection of all the systems that were posted there. The individual systems their own version numbers, and there isn't much integration between them. This archive exists mostly for historical purposes.Tested On: PennMUSH 1.7.4p15
