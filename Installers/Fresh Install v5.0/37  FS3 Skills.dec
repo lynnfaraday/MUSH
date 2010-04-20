@@ -50,7 +50,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit pa
 &CREDITS FS3 Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
 
-@startup FS3 Skill Functions=@function ability_level=me/fun_ability_level,2,2,admin;@function roll_ability=me/fun_roll_ability;@function opposed_result=me/fun_get_opposed_result;@function pretty_opposed_result=me/fun_pretty_opposed_result
+@startup FS3 Skill Functions=@function ability_level=me,fun_ability_level,2,2,admin;@function roll_ability=me/fun_roll_ability;@function opposed_result=me/fun_get_opposed_result;@function pretty_opposed_result=me/fun_pretty_opposed_result
 &REM_ABILITY_LEVEL FS3 Skill Functions=%0 = player, %1=ability.  returns level, default 5
 &FUN_ABILITY_LEVEL FS3 Skill Functions=localize([switch(1,isnum(%1),%1,not(pmatch(%0)),5,[setq(0,0)][setq(1,unprettify(%1))][iter(attributes actionskills langskills bgskills,switch(t(grab(xget(%0,##),%q1:*)),1,setq(0,after(grab(xget(%0,##),%q1:*),:))),,)]%q0)])
 
