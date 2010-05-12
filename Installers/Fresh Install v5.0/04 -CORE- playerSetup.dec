@@ -12,8 +12,8 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think install_create(SETUP_CMD,Player Setup Object,1,0,5.0,Sets up attributes on new players.)
-think install_create(SETUP_DB,Player Setup Data,1,1,5.0,Stores player setup data.)
+think install_create(SETUP_CMD,Player Setup Object,1,0,5.0.1,Sets up attributes on new players.)
+think install_create(SETUP_DB,Player Setup Data,1,1,5.0.1,Stores player setup data.)
 
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
@@ -43,7 +43,7 @@ think install_create(SETUP_DB,Player Setup Data,1,1,5.0,Stores player setup data
 &VATTR_ADESCRIBE Player Setup Data=think <OOC> \%N looked at you.
 &HATTR_CREATE_DATE Player Setup Data=[time()]
 &HATTR_STATUS Player Setup Data=NEW
-&ADDITIONAL_SETUP Player Setup Data=@fo %0=@chan/on newbie;@fo %0=@chan/on public;@dolist lwho()=@pemit ##=[ansi(hg,<Newbie>)] [name(%0)] has just created a character!  Welcome to [mudname()]!;@set %0=unregistered;@fo %0=@lock me=me
+&ADDITIONAL_SETUP Player Setup Data=@fo %0=@chan/on newbie;@fo %0=@chan/on public;@dolist lwho()=@pemit ##=[ansi(hg,<Newbie>)] [name(%0)] has just created a character!  Welcome to [mudname()]!;@set %0=unregistered;@fo %0=@lock me=me;@fo %0=+mail/init
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
