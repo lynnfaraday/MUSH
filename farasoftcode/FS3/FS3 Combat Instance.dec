@@ -736,6 +736,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @@ --------------------------
 
 &FUN_PROTECT_MOD FS3Combat Instance Parent=localize([setq(0,u(FUN_STOP_CHANCE,%0,%1))][setq(2,rand(0,100))][setq(3,switch(1,eq(%q0,0),0,gt(%q0,100),100,lte(%q2,%q0),100,rand(0,%q0)))]%q3[u(fun_combat_log,PROTECT: pen=%0 prot=%1 stopchance=%q0 rand=%q2 final=%q3)])
+                                           
 @@ --------------------------
 @@ FUN_STOP_CHANCE
 @@ Determines the chance of armor stopping a weapon.  Complex formula
