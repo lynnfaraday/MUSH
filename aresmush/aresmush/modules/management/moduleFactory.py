@@ -8,18 +8,20 @@ from aresmush.modules.core import game
 from aresmush.modules.core import movement
 from aresmush.modules.management.aresModule import AresModule
 
-def CreateMovementModule():
-    return movement.Movement()
-
-def CreateDescriptionsModule():
-    return descriptions.Descriptions()
-
-def CreateGameModule():
-    return game.Game()
-
-def AllModules():
-    allModules = []
-    allModules.append(AresModule(movement, None, CreateMovementModule))
-    allModules.append(AresModule(game, None, CreateGameModule))
-    allModules.append(AresModule(descriptions, None, CreateDescriptionsModule))
-    return allModules
+class ModuleFactory:
+    
+    def CreateMovementModule(self):
+        return movement.Movement()
+    
+    def CreateDescriptionsModule(self):
+        return descriptions.Descriptions()
+    
+    def CreateGameModule(self):
+        return game.Game()
+    
+    def AllModules(self):
+        allModules = []
+        allModules.append(AresModule(movement, None, CreateMovementModule))
+        allModules.append(AresModule(game, None, CreateGameModule))
+        allModules.append(AresModule(descriptions, None, CreateDescriptionsModule))
+        return allModules

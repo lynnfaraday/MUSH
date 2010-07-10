@@ -6,6 +6,7 @@
 class BaseModule():
     def __init__(self):
         print "Loading module %s" % self.Name
+        self.Init()
 
     # Empty in base class.  Derived classes may implement additional init options.
     def Init(self):

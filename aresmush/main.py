@@ -40,7 +40,8 @@ if __name__ == "__main__":
 
    logging.info("System starting up.")
 
-   moduleManager.RootModuleManager = moduleManager.ModuleManager()
+   factory = ModuleFactory()
+   moduleManager.RootModuleManager = moduleManager.ModuleManager(factory)
    commandDispatcher.RootCommandDispatcher = commandDispatcher.CommandDispatcher()
 
    HOST, PORT = "localhost", 9999

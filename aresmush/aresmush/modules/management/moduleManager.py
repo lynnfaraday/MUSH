@@ -8,8 +8,9 @@ import logging
 from aresmush.modules.management import moduleFactory
 
 class ModuleManager:
-    def __init__(self):
+    def __init__(self, factory):
         self.Modules = dict()
+        self.Factory = factory
         self.LoadModules()
 
     def IsInstalled(self, name):
@@ -27,7 +28,7 @@ class ModuleManager:
         
     def LoadModules(self):
         logging.info("Loading all modules.")
-        allModules = moduleFactory.AllModules()
+        allModules = self.Factory.AllModules()
         for module in allModules:
             self.LoadModule(module)
             
