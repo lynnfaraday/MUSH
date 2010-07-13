@@ -3,14 +3,16 @@
 # -- See http://www.wordsmyth.org/aresmush for documentation and license info.
 # -----------------------------------------------------------------------------
 
+import locale
 import logging
 import logging.handlers
 import SocketServer
 
 from aresmush.engine.comm import server
+from aresmush.engine.comm import connection
 from aresmush.engine.commands import commandDispatcher
 from aresmush.modules.management import moduleManager
-
+from aresmush.modules.management import moduleFactory
 
 def SetupLogging():
     LOG_FILENAME = 'log.txt'
@@ -18,7 +20,7 @@ def SetupLogging():
     rootLogger = logging.getLogger('')
     rootLogger.setLevel(logging.DEBUG)
        
-    formatter = logging.Formatter("%(asctime)s %(levelname)-8s %(filename)s %(funcName)s | %(message)s")
+    formatter = logging.Formatter("%(asctime)s %(levelname)-8s %(filename)-25s %(funcName)-20s | %(message)s ")
     
     # Add a handler to the logger to print to a file.
     fileHandler = logging.handlers.RotatingFileHandler(
@@ -39,15 +41,19 @@ if __name__ == "__main__":
    SetupLogging()
 
    logging.info("System starting up.")
+   
+   factory = moduleFactory.ModuleFactory()
+   moduleManager.rootModuleManager = moduleManager.ModuleManager(factory)
+   commandDispatcher.rootCommandDispatcher = commandDispatcher.CommandDispatcher()
 
-   factory = ModuleFactory()
-   moduleManager.RootModuleManager = moduleManager.ModuleManager(factory)
-   commandDispatcher.RootCommandDispatcher = commandDispatcher.CommandDispatcher()
+   HOST, PORT = "localhost", 7207
 
-   HOST, PORT = "localhost", 9999
-
-   logging.debug("Server starting up.")
+   logging.info("Server starting up.")
 
    #server host is a tuple ('host', port)
-   server = server.ExitingTCPServer((HOST, PORT), server.RequestHandler)
+   # allow_reuse_address lets you immediately restart after shutting down the server
+   # Otherwise you'll have to wait till the OS's TCP stack releases the connection,
+   # which could take an unpredictably long time.
+   SocketServer.ThreadingTCPServer.allow_reuse_address = True
+   server = server.AresServer((HOST, PORT), connection.Connection)
    server.serve_forever()
