@@ -4,12 +4,22 @@
 # -----------------------------------------------------------------------------
 
 class AresModule:
+    
+    # Reference to the Python module that contains the code for this Ares module.
+    moduleRef = None
+    
+    # Currently-instantiated instance of this module
+    currentInstance = None
+    
+    # Method used to generate a new instance of this module
+    factoryMethod = None
+    
     def __init__(self, moduleRef, currentInstance, factoryMethod):
-        self.ModuleRef = moduleRef
-        self.CurrentInstance = currentInstance
-        self.FactoryMethod = factoryMethod
+        self.moduleRef = moduleRef
+        self.currentInstance = currentInstance
+        self.factoryMethod = factoryMethod
     
     def name(self):
-        if (self.CurrentInstance == None):
+        if (self.currentInstance == None):
             return ""
-        return self.CurrentInstance.Name
+        return self.currentInstance.name

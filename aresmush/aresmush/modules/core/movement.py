@@ -7,10 +7,10 @@ from aresmush.modules.management.baseModule import BaseModule
 
 class Movement(BaseModule):
 
-    Name = "Movement"
+    name = "Movement"
     
-    def ProcessCommand(self, requestHandler, command):
-        if (command.Name == "@move"):
+    def processCommand(self, requestHandler, command):
+        if (command.name == "@move"):
            requestHandler.send("Handle move2")
            return True
         return False

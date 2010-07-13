@@ -7,14 +7,14 @@ from aresmush.modules.management.baseModule import BaseModule
 
 class Foo(BaseModule):
  
-    Name = "Foo"  
-    LoadCount = 0
+    name = "Foo"  
+    loadCount = 0
     
-    def Init(self):
-        self.LoadCount = self.LoadCount + 1
+    def init(self):
+        self.loadCount = self.loadCount + 1
         
-    def ProcessCommand(self, requestHandler, command):
-        if (command.Name == "@foo"):
+    def processCommand(self, requestHandler, command):
+        if (command.name == "@foo"):
            return True
         return False
     
@@ -22,13 +22,13 @@ class Foo(BaseModule):
    
 class Bar(BaseModule):
  
-    Name = "Bar"  
-    LoadCount = 0
+    name = "Bar"  
+    loadCount = 0
     
-    def Init(self):
-        self.LoadCount = self.LoadCount + 1
+    def init(self):
+        self.loadCount = self.loadCount + 1
         
-    def ProcessCommand(self, requestHandler, command):
-        if (command.Name == "@bar"):
+    def processCommand(self, requestHandler, command):
+        if (command.name == "@bar"):
            return True
         return False

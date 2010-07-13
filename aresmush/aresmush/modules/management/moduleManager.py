@@ -8,43 +8,46 @@ import logging
 from aresmush.modules.management import moduleFactory
 
 class ModuleManager:
+    modules = None
+    factory = None
+    
     def __init__(self, factory):
-        self.Modules = dict()
-        self.Factory = factory
-        self.LoadModules()
+        self.modules = dict()
+        self.factory = factory
+        self.loadModules()
 
-    def IsInstalled(self, name):
-        return self.Modules.has_key(name)
+    def isInstalled(self, name):
+        return self.modules.has_key(name)
         
-    def CurrentInstance(self, name):
-        if (self.IsInstalled(name) == False):
+    def currentInstance(self, name):
+        if (self.isInstalled(name) == False):
             return None
-        return self.Modules[name].CurrentInstance
+        return self.modules[name].currentInstance
         
-    def LoadModule(self, module):
-        module.CurrentInstance = module.FactoryMethod()
+    def loadModule(self, module):
+        module.currentInstance = module.factoryMethod()
         logging.debug("Loading %s module." % module.name())
-        self.Modules[module.name()] = module
+        self.modules[module.name()] = module
         
-    def LoadModules(self):
+    def loadModules(self):
         logging.info("Loading all modules.")
-        allModules = self.Factory.AllModules()
+        allModules = self.factory.allModules()
         for module in allModules:
-            self.LoadModule(module)
+            self.loadModule(module)
             
-    def ReloadAll(self):
+    def reloadAll(self):
         logging.info("Reloading all modules.")
         
-        for key, module in self.Modules.iteritems():
-            reload(module.ModuleRef)
-        self.LoadModules()
+        for key, module in self.modules.iteritems():
+            reload(module.moduleRef)
+        self.loadModules()
       
-    def Reload(self, name):
-        if (self.IsInstalled(name) == False):
+    def reload(self, name):
+        if (self.isInstalled(name) == False):
             logging.info("Attempted to reload invalid module %s" % name)
             return
-        module = self.Modules[name]
-        reload(module.ModuleRef)
-        self.LoadModule(module)
+        module = self.modules[name]
+        reload(module.moduleRef)
+        self.loadModule(module)
         
 

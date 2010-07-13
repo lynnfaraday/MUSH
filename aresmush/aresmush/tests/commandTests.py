@@ -13,50 +13,50 @@ class CommandTests(unittest.TestCase):
         self.command = Command('')
         
     def test_can_crack_command_only(self):
-        self.command.Crack("test")
-        self.assertEqual(self.command.Name, "test")
-        self.assertEqual(self.command.Args, "")
-        self.assertEqual(self.command.Switch, "")
+        self.command.crack("test")
+        self.assertEqual(self.command.name, "test")
+        self.assertEqual(self.command.args, "")
+        self.assertEqual(self.command.switch, "")
 
     def test_can_crack_command_and_switch(self):
-        self.command.Crack("test/switch")
-        self.assertEqual(self.command.Name, "test")
-        self.assertEqual(self.command.Args, "")
-        self.assertEqual(self.command.Switch, "switch")
+        self.command.crack("test/switch")
+        self.assertEqual(self.command.name, "test")
+        self.assertEqual(self.command.args, "")
+        self.assertEqual(self.command.switch, "switch")
 
     def test_can_crack_command_and_args(self):
-        self.command.Crack("test args")
-        self.assertEqual(self.command.Name, "test")
-        self.assertEqual(self.command.Args, "args")
-        self.assertEqual(self.command.Switch, "")
+        self.command.crack("test args")
+        self.assertEqual(self.command.name, "test")
+        self.assertEqual(self.command.args, "args")
+        self.assertEqual(self.command.switch, "")
 
     def test_can_crack_command_switch_and_args(self):
-        self.command.Crack("test/switch args")
-        self.assertEqual(self.command.Name, "test")
-        self.assertEqual(self.command.Args, "args")
-        self.assertEqual(self.command.Switch, "switch")
+        self.command.crack("test/switch args")
+        self.assertEqual(self.command.name, "test")
+        self.assertEqual(self.command.args, "args")
+        self.assertEqual(self.command.switch, "switch")
 
     def test_can_crack_empty_command(self):
-        self.command.Crack("")
-        self.assertEqual(self.command.Name, "")
-        self.assertEqual(self.command.Args, "")
-        self.assertEqual(self.command.Switch, "")
+        self.command.crack("")
+        self.assertEqual(self.command.name, "")
+        self.assertEqual(self.command.args, "")
+        self.assertEqual(self.command.switch, "")
 
     def test_can_crack_command_with_switch_and_spaces_and_slashes_in_arg(self):
-        self.command.Crack("test/switch arg/arg space")
-        self.assertEqual(self.command.Name, "test")
-        self.assertEqual(self.command.Args, "arg/arg space")
-        self.assertEqual(self.command.Switch, "switch")
+        self.command.crack("test/switch arg/arg space")
+        self.assertEqual(self.command.name, "test")
+        self.assertEqual(self.command.args, "arg/arg space")
+        self.assertEqual(self.command.switch, "switch")
 
     def test_can_crack_command_with_spaces_and_slashes_in_arg(self):
-        self.command.Crack("test arg/arg space")
-        self.assertEqual(self.command.Name, "test")
-        self.assertEqual(self.command.Args, "arg/arg space")
-        self.assertEqual(self.command.Switch, "")
+        self.command.crack("test arg/arg space")
+        self.assertEqual(self.command.name, "test")
+        self.assertEqual(self.command.args, "arg/arg space")
+        self.assertEqual(self.command.switch, "")
         
     def test_can_crack_command_with_newline(self):
-        self.command.Crack("test/switch args\n")
-        self.assertEqual(self.command.Name, "test")
-        self.assertEqual(self.command.Args, "args")
-        self.assertEqual(self.command.Switch, "switch")
+        self.command.crack("test/switch args\n")
+        self.assertEqual(self.command.name, "test")
+        self.assertEqual(self.command.args, "args")
+        self.assertEqual(self.command.switch, "switch")
 

@@ -5,14 +5,18 @@
 
 class Command:
 
+    name = ""
+    args = ""
+    switch = ""
+    
     def __init__(self, commandString):
         self.data = []
-        self.Name = ""
-        self.Args = ""
-        self.Switch = ""
-        self.Crack(commandString)
+        self.name = ""
+        self.args = ""
+        self.switch = ""
+        self.crack(commandString)
     
-    def Crack(self, commandString):
+    def crack(self, commandString):
         # TODO: I'm sure there's a way to make this into a more elegant regex!
         
         # Get rid of leading and trailing whitespace.
@@ -23,18 +27,18 @@ class Command:
         numSplits = len(splitOnSpace)
         
         if (numSplits < 2):
-           self.Name = splitOnSpace[0]
-           self.Args = ""
+           self.name = splitOnSpace[0]
+           self.args = ""
         else:
-           self.Name = splitOnSpace[0]
-           self.Args = splitOnSpace[1]
+           self.name = splitOnSpace[0]
+           self.args = splitOnSpace[1]
         
-        splitOnSlash = self.Name.split("/", 1)
+        splitOnSlash = self.name.split("/", 1)
         numSplits = len(splitOnSlash)
         
         if (numSplits < 2):
-           self.Name = splitOnSlash[0]
-           self.Switch = ""
+           self.name = splitOnSlash[0]
+           self.switch = ""
         else:
-           self.Name = splitOnSlash[0]
-           self.Switch = splitOnSlash[1]
+           self.name = splitOnSlash[0]
+           self.switch = splitOnSlash[1]

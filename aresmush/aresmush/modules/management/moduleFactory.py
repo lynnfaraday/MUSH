@@ -10,18 +10,18 @@ from aresmush.modules.management.aresModule import AresModule
 
 class ModuleFactory:
     
-    def CreateMovementModule(self):
+    def createMovementModule(self):
         return movement.Movement()
     
-    def CreateDescriptionsModule(self):
+    def createDescriptionsModule(self):
         return descriptions.Descriptions()
     
-    def CreateGameModule(self):
+    def createGameModule(self):
         return game.Game()
     
-    def AllModules(self):
-        allModules = []
-        allModules.append(AresModule(movement, None, CreateMovementModule))
-        allModules.append(AresModule(game, None, CreateGameModule))
-        allModules.append(AresModule(descriptions, None, CreateDescriptionsModule))
-        return allModules
+    def allModules(self):
+        all = []
+        all.append(AresModule(movement, None, self.createMovementModule))
+        all.append(AresModule(game, None, self.createGameModule))
+        all.append(AresModule(descriptions, None, self.createDescriptionsModule))
+        return all

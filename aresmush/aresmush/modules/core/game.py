@@ -10,34 +10,32 @@ import aresmush.modules.management.moduleManager
 
 
 class Game(BaseModule):
-    Name = "Game"
+    name = "Game"
 
-    def ProcessCommand(self, requestHandler, command):
+    def processCommand(self, requestHandler, command):
         # No idea why the import from won't work for this guy.
-        rootModule = aresmush.modules.management.moduleManager.RootModuleManager
+        rootModule = aresmush.modules.management.moduleManager.rootModuleManager
         
-        if (command.Name == "@shutdown"):
+        if (command.name == "@shutdown"):
             requestHandler.send("Handle shutdown")
-            self.Shutdown()
+            self.shutdown()
             return True
-        elif (command.Name == "@reload"):
-            if (command.Switch == "all"):
-                rootModule.ReloadAll()
+        elif (command.name == "@reload"):
+            if (command.switch == "all"):
+                rootModule.reloadAll()
                 return True
-            moduleName = command.Args
+            moduleName = command.args
             if (moduleName == ""):
-                # TODO: Error msg
-                print "No module specified."
+                requestHandler.send("No module specified.")
                 return True
-            if (rootModule.IsInstalled(moduleName) == False):
-                # TODO: Error msg
-                print "Not installed"
+            if (rootModule.isInstalled(moduleName) == False):
+                requestHandler.send("That module is not installed.")
                 return True
-            rootModule.Reload(moduleName)
+            rootModule.reload(moduleName)
         
         return False
 
-    def SetLogLevel(self, level):
+    def setLogLevel(self, level):
         logging.info("Setting log level to %s", level)
         
         if (level == 'info'):
@@ -50,7 +48,7 @@ class Game(BaseModule):
             # TODO: error handling
             pass
     
-    def Shutdown(self):
+    def shutdown(self):
          logging.info("Received shutdown command.")
          sys.exit()
 

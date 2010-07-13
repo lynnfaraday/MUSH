@@ -11,67 +11,67 @@ from aresmush.tests import testModules
 from aresmush.tests.testModules import Foo
 from aresmush.tests.testModules import Bar
 
-class TestFactory:
+class TestModuleFactory:
     
-    def CreateFooModule(self):
+    def createFooModule(self):
         return Foo()
         
-    def CreateBarModule(self):
+    def createBarModule(self):
         return Bar()
     
-    def AllModules(self):
+    def allModules(self):
         allModules = []
-        allModules.append(AresModule(testModules, None, self.CreateFooModule))
-        allModules.append(AresModule(testModules, None, self.CreateBarModule))
+        allModules.append(AresModule(testModules, None, self.createFooModule))
+        allModules.append(AresModule(testModules, None, self.createBarModule))
         return allModules
     
 class ModuleManagerTests(unittest.TestCase):
     
     def setUp(self):
-        factory = TestFactory()
+        factory = TestModuleFactory()
         self.manager = ModuleManager(factory)
         
     def test_manager_reports_foo_installed(self):
-        self.assertTrue(self.manager.IsInstalled("Foo"))
+        self.assertTrue(self.manager.isInstalled("Foo"))
     
     def test_manager_reports_bar_installed(self):
-        self.assertTrue(self.manager.IsInstalled("Bar"))
+        self.assertTrue(self.manager.isInstalled("Bar"))
     
     def test_manager_reports_baz_not_installed(self):
-        self.assertFalse(self.manager.IsInstalled("Baz"))
+        self.assertFalse(self.manager.isInstalled("Baz"))
     
     def test_manager_can_load_foo(self):
-        foo = self.manager.CurrentInstance("Foo")
-        self.assertEqual(1, foo.LoadCount)
+        foo = self.manager.currentInstance("Foo")
+        self.assertEqual(1, foo.loadCount)
         
     def test_manager_can_reload_foo(self):
-        foo = self.manager.CurrentInstance("Foo")
-        foo.LoadCount = 27
-        self.manager.Reload("Foo")
+        foo = self.manager.currentInstance("Foo")
+        foo.loadCount = 27
+        self.manager.reload("Foo")
         
-        foo = self.manager.CurrentInstance("Foo")
-        self.assertEqual(1, foo.LoadCount)
+        foo = self.manager.currentInstance("Foo")
+        self.assertEqual(1, foo.loadCount)
 
     def test_reloading_foo_does_not_affet_bar(self):
-        bar = self.manager.CurrentInstance("Bar")
-        bar.LoadCount = 27
-        self.manager.Reload("Foo")
+        bar = self.manager.currentInstance("Bar")
+        bar.loadCount = 27
+        self.manager.reload("Foo")
         
-        bar = self.manager.CurrentInstance("Bar")
-        self.assertEqual(27, bar.LoadCount)        
+        bar = self.manager.currentInstance("Bar")
+        self.assertEqual(27, bar.loadCount)        
     
     def test_reloading_all_affects_both(self):
-        foo = self.manager.CurrentInstance("Foo")
-        bar = self.manager.CurrentInstance("Bar")
-        foo.LoadCount = 27
-        bar.LoadCount = 28
-        self.manager.ReloadAll()
+        foo = self.manager.currentInstance("Foo")
+        bar = self.manager.currentInstance("Bar")
+        foo.loadCount = 27
+        bar.loadCount = 28
+        self.manager.reloadAll()
         
-        foo = self.manager.CurrentInstance("Foo")
-        self.assertEqual(1, foo.LoadCount)
+        foo = self.manager.currentInstance("Foo")
+        self.assertEqual(1, foo.loadCount)
     
-        bar = self.manager.CurrentInstance("Bar")
-        self.assertEqual(1, bar.LoadCount)        
+        bar = self.manager.currentInstance("Bar")
+        self.assertEqual(1, bar.loadCount)        
     
         
 

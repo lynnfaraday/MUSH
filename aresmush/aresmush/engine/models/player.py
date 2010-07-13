@@ -5,5 +5,7 @@
 
 class Player:
 
-    def __init__(self, Name=None, Alias=None):
+    name = ""
+    alias = ""
+    def __init__(self, name="", alias=""):
         self.data = []
