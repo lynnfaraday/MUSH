@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------------
 # -- AresMUSH.  Copyright 2010 by Linda Naughton ("Faraday")
 # -- See http://www.wordsmyth.org/aresmush for documentation and license info.
@@ -59,4 +61,11 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(self.command.name, "test")
         self.assertEqual(self.command.args, "args")
         self.assertEqual(self.command.switch, "switch")
+    
+    def test_can_crack_command_with_unicode_chars(self):
+        cmd = u"say Très bien"
+        self.command.crack(cmd)
+        self.assertEqual(self.command.name, "say")
+        self.assertEqual(self.command.args, u"Très bien")
+        
 

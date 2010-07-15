@@ -18,7 +18,7 @@ class Command:
     
     def crack(self, commandString):
         # TODO: I'm sure there's a way to make this into a more elegant regex!
-        
+                
         # Get rid of leading and trailing whitespace.
         commandString = commandString.strip()
         

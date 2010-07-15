@@ -32,7 +32,14 @@ class Game(BaseModule):
                 requestHandler.send("That module is not installed.")
                 return True
             rootModule.reload(moduleName)
-        
+        elif (command.name == "@logout"):
+            requestHandler.disconnect = True
+            
+        # TODO: Doesn't belong here
+        elif (command.name == "@who"):
+            requestHandler.send("WHO: %(len)d", { len : len(requestHandler.server.connections) })
+            for connection in requestHandler.server.connections:
+                requestHandler.send(connection.client_address)
         return False
 
     def setLogLevel(self, level):

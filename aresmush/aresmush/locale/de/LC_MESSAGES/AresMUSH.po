@@ -22,12 +22,12 @@ msgid "\r\n"
 msgstr ""
 
 #: engine/comm/connection.py:30
-msgid "Welcome to AresMUSH\n"
-msgstr ""
+msgid "Welcome to AresMUSH"
+msgstr "Welcome BÄär"
 
 #: engine/comm/connection.py:39
 msgid "Goodbye!  Please come back soon."
-msgstr ""
+msgstr "Auf wiedersehen"
 
 #: engine/commands/commandDispatcher.py:31
 #, python-format
@@ -36,7 +36,7 @@ msgstr ""
 
 #: modules/core/descriptions.py:14
 msgid "Handle desc"
-msgstr ""
+msgstr "German @desc"
 
 #: modules/core/game.py:20
 msgid "Handle shutdown"

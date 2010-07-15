@@ -18,7 +18,6 @@ class CommandDispatcher:
     # a separate loop for dispatching
     def dispatchCommand(self, requestHandler, commandString):
         try:
-            print "GOT"
             logging.debug("Got command %s from %s" % (commandString, requestHandler.client_address))
             
             cmd = command.Command(commandString)
@@ -29,13 +28,15 @@ class CommandDispatcher:
                if (handled):
                    break
             
-            requestHandler.send("Got command ~%s~%s~%s\n" % (cmd.name, cmd.switch, cmd.args))
+            cmdText = "%s~%s~%s" % (cmd.name, cmd.switch, cmd.args)
+            requestHandler.send("Got command. %(command)s", { 'command' : cmdText })
         except SystemExit:
            logging.info("Got system exit request.  Goodbye!")
            raise
         
         except BaseException as detail:
            logging.error("Ooops!  Something went awry with your command: %s" % detail)
+           raise
         else:
            return "Processed command %s" % command
        
