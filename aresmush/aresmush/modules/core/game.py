@@ -13,55 +13,52 @@ from aresmush.engine.models.player import Player
 class Game(BaseModule):
     name = "Game"
 
-    def processCommand(self, connection, command):
+    def command_shutdown(self, connection, command):
+        connection.send("You have initiated a game shutdown.")
+        logging.info("Received shutdown command.")
+        sys.exit()
+        return True
+    
+    def command_reload(self, connection, command):
         # No idea why the import from won't work for this guy.
         rootModule = aresmush.modules.management.moduleManager.rootModuleManager
-        
-        if (command.name == "@shutdown"):
-            connection.send("Handle shutdown")
-            self.shutdown()
+        if (command.switch == "all"):
+            rootModule.reloadAll()
             return True
-        elif (command.name == "@reload"):
-            if (command.switch == "all"):
-                rootModule.reloadAll()
-                return True
-            moduleName = command.args
-            if (moduleName == ""):
-                connection.send("No module specified.")
-                return True
-            if (rootModule.isInstalled(moduleName) == False):
-                connection.send("That module is not installed.")
-                return True
-            rootModule.reload(moduleName)
-        elif (command.name == "QUIT"):
-            connection.disconnect = True
-            return True        
-        return False
-
-    def processAnonCommand(self, connection, command):
-        if (command.name == "connect"):
-            connection.player = Player(command.args)
+        moduleName = command.args
+        if (moduleName == ""):
+            connection.send("No module specified.")
             return True
-        elif (command.name == "QUIT"):
-            connection.disconnect = True
-            return True        
-        return False
-                
-    def setLogLevel(self, level):
-        logging.info("Setting log level to %s", level)
-        
-        if (level == 'info'):
-            rootLogger = logging.getLogger('')
-            rootLogger.setLevel(logging.INFO)
-        elif (level == 'debug'):
-            rootLogger = logging.getLogger('')
-            rootLogger.setLevel(logging.DEBUG)
-        else:
-            # TODO: error handling
-            pass
+        if (rootModule.isInstalled(moduleName) == False):
+            connection.send("That module is not installed.")
+            return True
+        rootModule.reload(moduleName)
     
-    def shutdown(self):
-         logging.info("Received shutdown command.")
-         sys.exit()
+    def command_quit(self, connection, command):
+        connection.disconnect = True
+        return True
+    
+    def command_log(self, connection, command):
+        if (command.args == 'info'):
+            level = logging.INFO
+        elif (command.args == 'debug'):
+            level = logging.DEBUG
+        else:
+            connection.send("'%(level)s' is not a valid logging level.  Use 'info' or 'debug'.", {"level" : command.args})
+            return True
+        
+        rootLogger = logging.getLogger('')
+        rootLogger.setLevel(level)
+        connection.send("You set the log level to '%(level)s'", str(level))
+        logging.info("Setting log level to %s", str(level))
+            
+    def anoncommand_quit(self, connection, command):
+        connection.disconnect = True
+        return True
+        
+    def anoncommand_connect(self, connection, command):
+        connection.player = Player(command.args)
+        connection.send("Welcome, %(name)s", { 'name' : connection.player.name })
+        return True
 
             

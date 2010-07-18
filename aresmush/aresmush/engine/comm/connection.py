@@ -22,7 +22,6 @@ class Connection(SocketServer.BaseRequestHandler):
     player = None
     
     def send(self, message, args = []):
-        print "Sending %s" % message
         translatedMsg = self._(message) % args
         # Note: Can't send raw unicode to the request, have to encode to a byte stream.
         self.request.send(translatedMsg.encode("utf8"))
@@ -34,8 +33,8 @@ class Connection(SocketServer.BaseRequestHandler):
         localePath = os.path.realpath(os.path.dirname(sys.argv[0]))
         localePath += '/aresmush/locale'
         
-        print localePath
-        self.translator = gettext.translation('AresMUSH', localePath, languages=languageList)
+        self.translator = gettext.translation('AresMUSH', localePath, languages=languageList, fallback=True)
+        print "FOO"
         self._ = self.translator.ugettext
         self.langCode = languageList[0]
 
@@ -45,7 +44,6 @@ class Connection(SocketServer.BaseRequestHandler):
         # TODO: Get server language preference
         #self.setupLocale(["de_DE"])
         self.setupLocale(["en_US"])
-        
         self.send("Welcome to AresMUSH")
         
 

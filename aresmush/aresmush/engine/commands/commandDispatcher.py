@@ -22,19 +22,18 @@ class CommandDispatcher:
             logging.debug("Got command %s from %s" % (commandString, str(connection.client_address)))
             
             cmd = command.Command(commandString)
+            anyHandled = False
                         
             for key, module in moduleManager.rootModuleManager.modules.iteritems():
-            	# Only one module is allowed to handle a command so end once we found one.
 				# Call either the anon command or regular version depending on whether the
 				# person is logged in.
                 if (connection.player == None):
-                    handled = module.currentInstance.processAnonCommand(connection, cmd)
+                    handled = module.currentInstance.handleAnonCommand(connection, cmd)
                 else:
-                    handled = module.currentInstance.processCommand(connection, cmd)
-               	if (handled):
-                   	break
+                    handled = module.currentInstance.handleCommand(connection, cmd)
+                anyHandled = anyHandled or handled
             
-            if (handled == False):
+            if (anyHandled == False):
                 connection.send("%s %s" % ( connection._("<GAME>"), 
                      connection._("I don't recognize that command.") ))
         except SystemExit:

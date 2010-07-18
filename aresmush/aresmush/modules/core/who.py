@@ -9,20 +9,14 @@ class Who(BaseModule):
 
     name = "Who"
     
-    def processCommand(self, connection, command):
-        print "WHO"
-        if (command.name == "WHO"):
-            self.handleWho(connection, command)
-            return True
-        return False
-
-    def processAnonCommand(self, connection, command):
-            print "WHO"
-            if (command.name == "WHO"):
-                self.handleWho(connection, command)
-                return True
-            return False
+    def anonCommand_who(self, connection, command):
+        self.handleWho(connection, command)
+        return True
     
+    def command_who(self, connection, command):
+        self.handleWho(connection, command)
+        return True
+        
     def handleWho(self, connection, command):
         connection.send("WHO: %(len)d players connected", { "len" : self.numPlayersConnected(connection.server) })
         for connection in connection.server.connections:

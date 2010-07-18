@@ -9,8 +9,9 @@ class Movement(BaseModule):
 
     name = "Movement"
     
-    def processCommand(self, connection, command):
+    # Override default handling because we'll have to do special stuff for exit names.
+    def handleCommand(self, connection, command):
         if (command.name == "@move"):
-           connection.send("Handle move2")
+           connection.send("You moved.")
            return True
         return False
