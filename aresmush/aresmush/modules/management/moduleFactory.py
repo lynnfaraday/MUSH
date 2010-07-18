@@ -6,6 +6,7 @@
 from aresmush.modules.core import descriptions
 from aresmush.modules.core import game
 from aresmush.modules.core import movement
+from aresmush.modules.core import who
 from aresmush.modules.management.aresModule import AresModule
 
 class ModuleFactory:
@@ -19,9 +20,13 @@ class ModuleFactory:
     def createGameModule(self):
         return game.Game()
     
+    def createWhoModule(self):
+        return who.Who()
+		
     def allModules(self):
         all = []
         all.append(AresModule(movement, None, self.createMovementModule))
         all.append(AresModule(game, None, self.createGameModule))
         all.append(AresModule(descriptions, None, self.createDescriptionsModule))
+        all.append(AresModule(who, None, self.createWhoModule))
         return all

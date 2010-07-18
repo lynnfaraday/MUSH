@@ -17,6 +17,9 @@ class BaseModule():
         pass
     
     # Derived classes should override.  Returns true if handled, false if not.
-    def processCommand(self, requestHandler, command):
+    def processCommand(self, connection, command):
         return False
+
+    def processAnonCommand(self, connection, command):
+	        return False
     
