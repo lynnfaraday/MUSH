@@ -9,9 +9,9 @@ class Descriptions(BaseModule):
  
     name = "Descriptions"  
   
-    def processCommand(self, requestHandler, command):
+    def processCommand(self, connection, command):
         if (command.name == "@desc"):
-           requestHandler.send("Handle desc")
+           connection.send("Handle desc")
            return True
         return False
 

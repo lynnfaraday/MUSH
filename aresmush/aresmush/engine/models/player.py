@@ -8,4 +8,5 @@ class Player:
     name = ""
     alias = ""
     def __init__(self, name="", alias=""):
-        self.data = []
+        self.name = name
+        self.alias = alias

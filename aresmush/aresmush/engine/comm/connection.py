@@ -19,8 +19,10 @@ class Connection(SocketServer.BaseRequestHandler):
     translator = None
     langCode = "en_US"
     disconnect = False
+    player = None
     
     def send(self, message, args = []):
+        print "Sending %s" % message
         translatedMsg = self._(message) % args
         # Note: Can't send raw unicode to the request, have to encode to a byte stream.
         self.request.send(translatedMsg.encode("utf8"))
@@ -41,7 +43,8 @@ class Connection(SocketServer.BaseRequestHandler):
         logging.info("Connection received from %s" % str(self.client_address))
         
         # TODO: Get server language preference
-        self.setupLocale(["de_DE"])
+        #self.setupLocale(["de_DE"])
+        self.setupLocale(["en_US"])
         
         self.send("Welcome to AresMUSH")
         

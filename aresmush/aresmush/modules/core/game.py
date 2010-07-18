@@ -7,17 +7,18 @@ import logging
 import sys
 from aresmush.modules.management.baseModule import BaseModule
 import aresmush.modules.management.moduleManager
+from aresmush.engine.models.player import Player
 
 
 class Game(BaseModule):
     name = "Game"
 
-    def processCommand(self, requestHandler, command):
+    def processCommand(self, connection, command):
         # No idea why the import from won't work for this guy.
         rootModule = aresmush.modules.management.moduleManager.rootModuleManager
         
         if (command.name == "@shutdown"):
-            requestHandler.send("Handle shutdown")
+            connection.send("Handle shutdown")
             self.shutdown()
             return True
         elif (command.name == "@reload"):
@@ -26,22 +27,26 @@ class Game(BaseModule):
                 return True
             moduleName = command.args
             if (moduleName == ""):
-                requestHandler.send("No module specified.")
+                connection.send("No module specified.")
                 return True
             if (rootModule.isInstalled(moduleName) == False):
-                requestHandler.send("That module is not installed.")
+                connection.send("That module is not installed.")
                 return True
             rootModule.reload(moduleName)
-        elif (command.name == "@logout"):
-            requestHandler.disconnect = True
-            
-        # TODO: Doesn't belong here
-        elif (command.name == "@who"):
-            requestHandler.send("WHO: %(len)d", { len : len(requestHandler.server.connections) })
-            for connection in requestHandler.server.connections:
-                requestHandler.send(connection.client_address)
+        elif (command.name == "QUIT"):
+            connection.disconnect = True
+            return True        
         return False
 
+    def processAnonCommand(self, connection, command):
+        if (command.name == "connect"):
+            connection.player = Player(command.args)
+            return True
+        elif (command.name == "QUIT"):
+            connection.disconnect = True
+            return True        
+        return False
+                
     def setLogLevel(self, level):
         logging.info("Setting log level to %s", level)
         

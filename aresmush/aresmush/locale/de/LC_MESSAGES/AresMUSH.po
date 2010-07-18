@@ -23,7 +23,7 @@ msgstr ""
 
 #: engine/comm/connection.py:30
 msgid "Welcome to AresMUSH"
-msgstr "Welcome BÄär"
+msgstr "Welcome to AresMUSH"
 
 #: engine/comm/connection.py:39
 msgid "Goodbye!  Please come back soon."

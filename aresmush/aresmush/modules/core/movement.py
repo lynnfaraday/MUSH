@@ -9,8 +9,8 @@ class Movement(BaseModule):
 
     name = "Movement"
     
-    def processCommand(self, requestHandler, command):
+    def processCommand(self, connection, command):
         if (command.name == "@move"):
-           requestHandler.send("Handle move2")
+           connection.send("Handle move2")
            return True
         return False

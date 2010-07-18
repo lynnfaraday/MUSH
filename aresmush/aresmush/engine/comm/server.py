@@ -22,12 +22,4 @@ class AresServer(ThreadingTCPServer):
             logging.info("Shutting down server.")
             self.shutdown()
         except BaseException:
-            traceback.print_exception
-
-#    def process_request(self, request, client_address):
-#        self.connections.append(request)
-#        ThreadingTCPServer.process_request(self, request, client_address)
-        
-#    def close_request(self, request):
-#        self.connections.remove(request)
-#        ThreadingTCPServer.close_request(self, request)
+            traceback.print_exc
