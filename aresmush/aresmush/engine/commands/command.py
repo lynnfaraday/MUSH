@@ -2,60 +2,64 @@
 # -- AresMUSH.  Copyright 2010 by Linda Naughton ("Faraday")
 # -- See http://www.wordsmyth.org/aresmush for documentation and license info.
 # -----------------------------------------------------------------------------
+# DESCRIPTION:
+# Represents a player-executed command.  The commands are in the form
+#    [<prefix>]<name>[/<switch>][ <args>]
+#    i.e.  foo, +foo/all, +foo Whee!
+# The format of <args> will vary by command, so there's a separate method that
+# will 'crack' the args into a dictionary given a regex.
+# -----------------------------------------------------------------------------
 
+import re
 class Command:
 
     prefix = ""
     name = ""
-    args = ""
     switch = ""
+    args = ""
+    connection = None
 
     def __init__(self, commandString):
-        self.name = ""
-        self.args = ""
-        self.prefix = ""
-        self.switch = ""
+        self.empty()
         self.crack(commandString)
 
+    def empty(self):
+        self.prefix = ""
+        self.name = ""
+        self.switch = ""
+        self.args = ""
+        
     def crack(self, commandString):
-        # TODO: I'm sure there's a way to make this into a more elegant regex!
-
         # Get rid of leading and trailing whitespace.
         commandString = commandString.strip()
 
-        # Parses in the form command/switch args, where both /switch and args are optional.
-        splitOnSpace = commandString.split(" ", 1)
-        numSplits = len(splitOnSpace)
+        # Here's the master regex that does all the work.
+        #  prefix = a single non-word character (optional)
+        #  name = one-or-more non-whitespace chars (required)
+        #  switch = optional '/' followed by optional non-whitespace chars
+        #  args = anything else (optional)
+        match = re.match("(?P<prefix>[^\w]?)(?P<name>[^\s/]+)(?P<switch>/?[\S]*)(?P<args>.*)", commandString)
 
-        if (numSplits < 2):
-            self.name = splitOnSpace[0]
-            self.args = ""
-        else:
-            self.name = splitOnSpace[0]
-            self.args = splitOnSpace[1]
+        # If we failed to find a command at all, empty out everything
+        if (match == None):
+            self.empty()
+            return
+                    
+        # Convert name and switch to lowercase for easier matching later.
+        self.prefix = match.group('prefix')
+        self.name = match.group('name').lower()
+        self.switch = match.group('switch').lower()
+        self.args = match.group('args')
+        
+        # Get rid of the "/" on switch
+        self.switch = self.switch.replace("/", "")
 
-        splitOnSlash = self.name.split("/", 1)
-        numSplits = len(splitOnSlash)
-
-        if (numSplits < 2):
-            self.name = splitOnSlash[0]
-            self.switch = ""
-        else:
-            self.name = splitOnSlash[0]
-            self.switch = splitOnSlash[1]
-
-        # Lower and trim the command name and switch.  Prefix is a special char and args we only trim
-        self.name = self.name.lower()
+        # Strip leading/trailing spaces from the resulting fields (except prefix, which is a single special char)
         self.name = self.name.strip()
-        self.switch = self.switch.lower()
         self.switch = self.switch.strip()
         self.args = self.args.strip()
-
-        # If the command name starts with a non-alpha char, that must be a prefix (@/+/./= are common)
-        strlen = len(self.name)
-        if (strlen > 0):
-            prefix = self.name[0]
-            if (prefix.isalpha() == False):
-                self.prefix = prefix
-                self.name = self.name[1:strlen]
-
+    
+    # Converts 'args' from a simple string into a dictionary based on the regex string provided (assuming it has group names)
+    def crackArgs(self, argRegex):
+        match = re.match(argRegex, self.args)
+        self.args = match.groupdict()

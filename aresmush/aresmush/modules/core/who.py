@@ -9,18 +9,19 @@ class Who(BaseModule):
 
     name = "Who"
     
-    def anonCommand_who(self, connection, command):
-        self.handleWho(connection, command)
+    def anonCommand_who(self, command):
+        self.handleWho(command)
         return True
     
-    def command_who(self, connection, command):
-        self.handleWho(connection, command)
+    def command_who(self, command):
+        self.handleWho(command)
         return True
         
-    def handleWho(self, connection, command):
-        connection.send("WHO: %(len)d players connected", { "len" : self.numPlayersConnected(connection.server) })
-        for connection in connection.server.connections:
-            connection.send(self.getWhoString(connection))
+    def handleWho(self, command):
+        numPlayers = self.numPlayersConnected(command.connection.server)
+        connection.send("WHO: %(len)d players connected", { "len" : numPlayers })
+        for connection in command.connection.server.connections:
+            connection.send(self.getWhoString(command.connection))
     
     def numPlayersConnected(self, server):
         conns = server.connections

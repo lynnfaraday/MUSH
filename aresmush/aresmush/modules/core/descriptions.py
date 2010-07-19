@@ -9,8 +9,8 @@ class Descriptions(BaseModule):
  
     name = "Descriptions"  
   
-    def command_desc(self, connection, command):
-        connection.send("This would be a desc.")
+    def command_desc(self, command):
+        command.connection.send("This would be a desc.")
         return True
 
  

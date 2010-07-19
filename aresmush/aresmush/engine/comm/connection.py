@@ -2,6 +2,11 @@
 # -- AresMUSH.  Copyright 2010 by Linda Naughton ("Faraday")
 # -- See http://www.wordsmyth.org/aresmush for documentation and license info.
 # -----------------------------------------------------------------------------
+# DESCRIPTION:
+# This class implements the connection to the player's client.  It inherits
+# from BaseRequestHandler and extends it to implement per-client locale
+# support and registration with the server (so it'll know who's connected).
+# -----------------------------------------------------------------------------
 
 import gettext
 import logging
@@ -34,7 +39,6 @@ class Connection(SocketServer.BaseRequestHandler):
         localePath += '/aresmush/locale'
         
         self.translator = gettext.translation('AresMUSH', localePath, languages=languageList, fallback=True)
-        print "FOO"
         self._ = self.translator.ugettext
         self.langCode = languageList[0]
 
@@ -57,7 +61,7 @@ class Connection(SocketServer.BaseRequestHandler):
                 # so we can handle unicode input.  Have to encode it as such before
                 # passing it off to the parsers.
                 cmd = unicode(data, 'utf8')
-                commandDispatcher.rootCommandDispatcher.dispatchCommand(self, cmd)
+                commandDispatcher.rootCommandDispatcher.processCommand(self, cmd)
         finally:
             self.server.connections.remove(self)
         

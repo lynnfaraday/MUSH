@@ -12,16 +12,16 @@ from aresmush.engine.commands.command import Command
 class MockModule(BaseModule):
     wasCalled = ""
     
-    def command_foo(self, connection, command):
+    def command_foo(self, command):
         self.wasCalled = "foo"
         return True
-    def command_noprefix_bar(self, connection, command):
+    def command_noprefix_bar(self, command):
         self.wasCalled = "bar"
         return True
-    def command_plus_baz(self, connection, command):
+    def command_plus_baz(self, command):
         self.wasCalled = "baz"
         return True
-    def anoncommand_whee(self, connection, command):
+    def anoncommand_whee(self, command):
         self.wasCalled = "whee"
         return True
     
@@ -32,13 +32,13 @@ class BaseModuleTests(unittest.TestCase):
 
     def verifyAnonCommandVals(self, commandString, expectWasCalled, expectedReturn):
         command = Command(commandString)
-        returnVal = self.mod.handleAnonCommand(None, command)
+        returnVal = self.mod.handleAnonCommand(command)
         self.assertEqual(expectWasCalled, self.mod.wasCalled)
         self.assertEqual(expectedReturn, returnVal)
     
     def verifyCommandVals(self, commandString, expectWasCalled, expectedReturn):
         command = Command(commandString)
-        returnVal = self.mod.handleCommand(None, command)
+        returnVal = self.mod.handleCommand(command)
         self.assertEqual(expectWasCalled, self.mod.wasCalled)
         self.assertEqual(expectedReturn, returnVal)
         

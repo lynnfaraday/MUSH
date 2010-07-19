@@ -19,11 +19,14 @@ class BaseModule():
     prefixMap = {'+': 'plus', 
                  '@': 'at', 
                  '' : "noprefix",
-                 '.': "dot",
+                 '.': "period",
                  ',': "comma",
                  '_': "under",
                  '=': "equals",
-                 '-': "dash"
+                 '-': "dash",
+                 ';': "semi",
+                 ':': "colon",
+                 '"': "quote"
                 }
         
     
@@ -36,17 +39,17 @@ class BaseModule():
     #       handle only "@foo".  If you want more advanced handling, you'll need to
     #       override handleCommand yourself.
     # Returns true if handled, false if not.
-    def handleCommand(self, connection, command):
+    def handleCommand(self, command):
         handler = self.getHandler(command, "command")
         if (handler == None):
             return False
-        return handler(connection, command)
+        return handler(command)
 
-    def handleAnonCommand(self, connection, command):
+    def handleAnonCommand(self, command):
         handler = self.getHandler(command, "anoncommand")
         if (handler == None):
             return False
-        return handler(connection, command)
+        return handler(command)
     
     def getHandler(self, command, methodPrefix):
         # Check the generic case first.

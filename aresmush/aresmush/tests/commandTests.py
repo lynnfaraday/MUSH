@@ -102,3 +102,17 @@ class CommandTests(unittest.TestCase):
         self.assertEqual(self.command.name, "test")
         self.assertEqual(self.command.switch, "switch")
         self.assertEqual(self.command.args, "arg1    arg2")
+    
+    def test_can_crack_args(self):
+        self.command.crack("+test to=subject/body")
+        self.command.crackArgs("(?P<to>[^=]+)=(?P<subject>[^/]+)/(?P<body>.+)")
+        self.assertEqual("to", self.command.args['to'])
+        self.assertEqual("subject", self.command.args['subject'])
+        self.assertEqual("body", self.command.args['body'])
+        
+    def test_can_crack_args_with_optional_args(self):
+        self.command.crack("+test to=body")
+        self.command.crackArgs("(?P<to>[^=]+)=(?P<subject>[^/]/)?(?P<body>.+)")
+        self.assertEqual("to", self.command.args['to'])
+        self.assertEqual(None, self.command.args['subject'])
+        self.assertEqual("body", self.command.args['body'])

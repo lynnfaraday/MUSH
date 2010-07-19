@@ -13,7 +13,7 @@ class Foo(BaseModule):
     def init(self):
         self.loadCount = self.loadCount + 1
         
-    def processCommand(self, connection, command):
+    def handleCommand(self, connection, command):
         if (command.name == "@foo"):
            return True
         return False
@@ -28,7 +28,7 @@ class Bar(BaseModule):
     def init(self):
         self.loadCount = self.loadCount + 1
         
-    def processCommand(self, connection, command):
+    def handleCommand(self, connection, command):
         if (command.name == "@bar"):
            return True
         return False
