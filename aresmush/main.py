@@ -10,7 +10,7 @@ import SocketServer
 
 from aresmush.engine.comm import server
 from aresmush.engine.comm import connection
-from aresmush.engine.commands import commandDispatcher
+from aresmush.engine.events import dispatcher
 from aresmush.modules.management import moduleManager
 from aresmush.modules.management import moduleFactory
 
@@ -44,7 +44,7 @@ if __name__ == "__main__":
    
    factory = moduleFactory.ModuleFactory()
    moduleManager.rootModuleManager = moduleManager.ModuleManager(factory)
-   commandDispatcher.rootCommandDispatcher = commandDispatcher.CommandDispatcher()
+   dispatcher.rootDispatcher = dispatcher.Dispatcher()
 
    HOST, PORT = "localhost", 7207
 
@@ -55,5 +55,8 @@ if __name__ == "__main__":
    # Otherwise you'll have to wait till the OS's TCP stack releases the connection,
    # which could take an unpredictably long time.
    SocketServer.ThreadingTCPServer.allow_reuse_address = True
+   # Daemon Threads makes the individual connection threads into 'daemons' which means
+   # they won't hold up the application from exiting.
+   server.daemon_threads = True
    server = server.AresServer((HOST, PORT), connection.Connection)
    server.serve_forever()
