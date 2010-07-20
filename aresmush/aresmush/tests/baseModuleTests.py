@@ -7,7 +7,7 @@ import unittest
 import re
 
 from aresmush.modules.management.baseModule import BaseModule
-from aresmush.engine.commands.command import Command
+from aresmush.engine.events.command import Command
 
 class MockModule(BaseModule):
     wasCalled = ""

@@ -11,11 +11,12 @@
 import gettext
 import logging
 import os
+import select
 import SocketServer
 import sys
 import traceback
 
-from aresmush.engine.commands import commandDispatcher
+from aresmush.engine.events import dispatcher
 
 
 # Serves requests from a client connection.
@@ -44,7 +45,7 @@ class Connection(SocketServer.BaseRequestHandler):
 
     def setup(self):
         logging.info("Connection received from %s" % str(self.client_address))
-        
+                
         # TODO: Get server language preference
         #self.setupLocale(["de_DE"])
         self.setupLocale(["en_US"])
@@ -52,16 +53,17 @@ class Connection(SocketServer.BaseRequestHandler):
         
 
     def handle(self):
+        self.server.connections.append(self)
         try:
-            self.server.connections.append(self)
             while self.disconnect == False:
-                data = self.request.recv(1024)
-                
-                # Note: data comes in as a string, but we're treating it as UTF8
-                # so we can handle unicode input.  Have to encode it as such before
-                # passing it off to the parsers.
-                cmd = unicode(data, 'utf8')
-                commandDispatcher.rootCommandDispatcher.processCommand(self, cmd)
+                ready = select.select([self.request], [], [], 1)
+                if ready[0]:
+                    data = self.request.recv(1024)
+                    # Note: data comes in as a string, but we're treating it as UTF8
+                    # so we can handle unicode input.  Have to encode it as such before
+                    # passing it off to the parsers.
+                    cmd = unicode(data, 'utf8')
+                    dispatcher.rootDispatcher.processCommand(self, cmd)
         finally:
             self.server.connections.remove(self)
         

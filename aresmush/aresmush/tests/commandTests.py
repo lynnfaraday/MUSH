@@ -7,7 +7,7 @@
 
 import unittest
 
-from aresmush.engine.commands.command import Command
+from aresmush.engine.events.command import Command
 
 class CommandTests(unittest.TestCase):
 
