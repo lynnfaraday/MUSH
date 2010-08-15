@@ -33,12 +33,26 @@ namespace App_Code
         }
 
         public string UserDir { get { return Path.Combine(_dataDir, Username); } }
+        private const string EmailFileName = "email.txt";
 
         public List<FileInfo> GetFiles()
         {
             var files = Directory.GetFiles(UserDir);
-            var fileInfoList = files.Select(f => new FileInfo(f)).ToList();
-            return fileInfoList;
+
+            // Be sure to omit the email file.
+            return (from file in files
+                    where file != EmailFileName
+                    select new FileInfo(file)).ToList();
+        }
+
+        public string Email
+        {
+            get
+            {
+                StreamReader reader = new StreamReader(Path.Combine(UserDir, EmailFileName));
+                var email = reader.ReadLine();
+                return email;
+            }
         }
     }
 }

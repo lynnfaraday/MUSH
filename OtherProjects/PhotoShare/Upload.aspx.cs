@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using System.Web.UI.WebControls;
 using App_Code;
 
@@ -79,10 +80,36 @@ public partial class Upload : BasePage
             WebUser user = new WebUser(username, DataDir);
             string filename = Path.Combine(user.UserDir, FileUploader.FileName);
             FileUploader.SaveAs(filename);
+            SendEmail(user, FileUploader.FileName);
         }
 
         FileMessage.Text = "File shared!";
+    }
 
+    private void SendEmail(WebUser user, string fileName)
+    {
+        string body = String.Format("{0} has shared some photos with you.  The file is {1}." +
+                                      " Visit http://martiandreams.com/photos to get them.",
+                                      CurrentUser.Username, fileName);
+
+        var message = new MailMessage("donotreply@martiandreams.com", user.Email)
+        {
+            Subject = "You've Got Photos", 
+            Body = body, 
+            IsBodyHtml = false
+        };
+
+        // This will try to send the notification message using the webconfig mail settings.
+        try
+        {
+            var smtp = new SmtpClient();
+            smtp.Send(message);
+        }
+        catch (Exception)
+        {
+            ErrorMessage.Text = "There was a problem sending the notification email." +
+                                " You may want to send one yourself.";
+        }
     }
 
     bool IsValidFileType(string filename)
