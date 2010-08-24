@@ -12,15 +12,15 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(IDLE_CMD,Idle Purger,1,0,5.0,Idle purger.)
+think install_create(IDLE_CMD,Idle Purger,1,0,5.0.3,Idle purger.)
 
 @lock/Use Idle Purger=ISSTAFF/1
 &CMD-+IDLE-CONFIG Idle Purger=$+idle/config:think pemit(%#,[line()]%R[ansi(h,Idle Purger Configuration Options)]%R%R[ansi(hg,IDLETIME:)] [div(v(idletime),86400)] days%R[line()])]
-&CMD-+IDLE-ADD Idle Purger=$+idle/add *: think [setq(0,[pmatch(%0)])][pemit(%#,switch(t(%q0),0,ansi(hr,That is not a valid player.),[name(%q0)] has been added to the idle queue.[set(me,idlequeue:[v(idlequeue)]%B%q0)]))]
+&CMD-+IDLE-ADD Idle Purger=$+idle/add *: think [setq(0,[pmatch(%0)])][pemit(%#,switch(t(%q0),0,ansi(hr,That is not a valid player.),[name(%q0)] has been added to the idle queue.[append(num(me),idlequeue,%q0)]))]
 &CMD-+IDLE-CONFIG-IDLETIME Idle Purger=$+idle/config idletime=*:think [switch([isnum(%0)],0,[pemit(%#,You must enter a -number- of days.)],[set(me,idletime:[mul(86400,%0)])][pemit(%#,You set the idle-timeout for player characters to be [ansi(hy,%0)] days)])]
 &CMD-+IDLE-NUMS Idle Purger=$+idle/nums:think [pemit(%#,[get(me/idlequeue)])]
 &CMD-+IDLE-PLIST Idle Purger=$+idle/plist:[line()]%R[ansi(h,Protected Players)]%R[iter([get(me/idleprotect)],[pemit(%#,[ljust(##,7)] - [name(##)])])][line()]
-&CMD-+IDLE-PROTECT Idle Purger=$+idle/protect *:think [setq(0,[pmatch(%0)])][switch([strmatch(%0,[name(%q0)])],0,[pemit(%#,That is not a valid player)],[set(me,idleprotect:[get(me/idleprotect)]%q0%b)][pemit(%#,You have added [name(%q0)] to the protected list.  Please run +idle/start again to ensure they don't get @nuked)])]
+&CMD-+IDLE-PROTECT Idle Purger=$+idle/protect *:think [setq(0,[pmatch(%0)])][switch([strmatch(%0,[name(%q0)])],0,[pemit(%#,That is not a valid player)],[append(num(me),idleprotect,%q0)][pemit(%#,You have added [name(%q0)] to the protected list.  Please run +idle/start again to ensure they don't get @nuked)])]
 &CMD-+IDLE-PURGE Idle Purger=$+idle/purge:@tr me/LIST_PURGE_ACTIONS=[v(idlequeue)];@dolist [get(me/idlequeue)]={@set ##=!safe;@force %#=+purge [name(##)]};@wipe me/idlequeue
 &CMD-+IDLE-QUEUE Idle Purger=$+idle/queue:think pemit(%#,DB#[space(6)]Name[space(18)]Approved?%B%BLast On[space(15)]Vacation%R[line()][iter([get(me/idlequeue)],[setq(0,hasflag(##,unregistered))]%R[ljust(##,7)] - [ljust([ansi(switch(%q0,0,h,hx),name(##))],20)] - [switch(%q0,0,YES,%B%B%B)]%B%B - [left(xget(##,last)],20)] - [get(##/vacation)])])
 &CMD-+IDLE-REMOVE Idle Purger=$+idle/remove *: think [setq(0,[pmatch(%0)])][set(me,idletemp:[get(me/idlequeue)])][wipe(me/idlequeue)][switch([strmatch(%0,[name(%q0)])],0,[pemit(%#,That is not a valid player.)],[iter([get(me/idletemp)],[switch([strmatch(%q0,##)],0,[set(me,idlequeue:[get(me/idlequeue)]##%b)],)])][pemit(%#,[name(%q0)] has been removed from the idle queue)],)]
