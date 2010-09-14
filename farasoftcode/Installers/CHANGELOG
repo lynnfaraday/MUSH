@@ -1,6 +1,13 @@
 ================================================================
 ----------------------------------------------------------------
 
+NOT YET RELEASED
+FS3: Decided that language skills were too expensive, so I changed the definition of the ratings and capped them at lvl 9.  
+Disclaimer:  New system for requiring a terms of service agreement.
+Globals:  Bug in attribute setup for ICLOC
+DBS: Created a ready-to-go database with all the systems installed and mostly configured (other than the custom configurations).
+
+
 Patch 5.0.3
 
 Idle Purger - Fixed a problem with the idle protect command where it wasn't adding new names properly to the end of the list.

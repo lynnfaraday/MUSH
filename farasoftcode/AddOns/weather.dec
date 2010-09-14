@@ -1,6 +1,6 @@
 @@ Faraday's Weather System
 @@ Author:  Linda O'Meara
-@@ Website: http://code.google.com/p/faramushcode/
+@@ Website: http://www.wordsmyth.org/aresmush/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -33,7 +33,7 @@ think install_create(WEATHER_FALL,Fall,0,1,5.0,Weather descs.,WEATHER_HOLDER)
 &FUN_RANDOM_TYPE Weather Generator=[lcstr(after(first(shuffle(lattr([u(fun_find_season,v(season))]/type*))),-))]
 &FUN_WEATHER Weather Generator=It is a [v(season)] [v(time)].  The weather is [v(temp)] and [v(type)].
 &OVERRIDE Weather Generator=0
-&SHELP_WEATHER Weather Generator=Weather is updated every half hour.  If you want it to show up in the room descriptions, add a call to weather() in your room parent to get the current weather.  This assumes the entire game has the same weather.  Multiple weather zones are not permitted in this version of the system.%R%RIf your months/seasons/times are the same as RL (Northern Hemisphere) then the system requires no special setup. If you're using a custom IC time system, you'll need to tweak some of the settings as described in the support article on the wiki (http://code.google.com/p/faramushcode/wiki/WeatherSystem)%R%RYou can temporarily override the weather if you need to for a special plot or something.  The weather will stay at what you set until you clear the override.%R%R[ansi(h,+weather/set <temperature> and <weather>)] - Overrides the weather.%R%TExample: +weather/set cold and raining%R%R[ansi(h,+weather/clear)] - Clears the weather override.
+&SHELP_WEATHER Weather Generator=Weather is updated every half hour.  If you want it to show up in the room descriptions, add a call to weather() in your room parent to get the current weather.  This assumes the entire game has the same weather.  Multiple weather zones are not permitted in this version of the system.%R%RIf your months/seasons/times are the same as RL (Northern Hemisphere) then the system requires no special setup. If you're using a custom IC time system, you'll need to tweak some of the settings as described in the support article on the wiki (http://www.wordsmyth.org/aresmush/index.php?title=Weather)%R%RYou can temporarily override the weather if you need to for a special plot or something.  The weather will stay at what you set until you clear the override.%R%R[ansi(h,+weather/set <temperature> and <weather>)] - Overrides the weather.%R%TExample: +weather/set cold and raining%R%R[ansi(h,+weather/clear)] - Clears the weather override.
 @STARTUP Weather Generator=@set me=!no_command;@tr me/tr-changeweather;@fun weather=me/fun_weather
 
 &TR-CHANGEWEATHER Weather Generator=think [u(fun_change_weather)];@wait v(UPDATE_WEATHER_SECS)=@tr me/tr-changeweather
