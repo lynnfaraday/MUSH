@@ -69,7 +69,7 @@ think install_create(GLOBALS_DB,Misc Globals Data,0,1,5.0,Data storage for the m
 &FUN_SORT_AGE Misc Globals Functions=switch(1,eq(convtime(ctime(%0)),convtime(ctime(%1))),0,gt(convtime(ctime(%0)),convtime(ctime(%1))),1,-1)
 &FUN_DETAIL Misc Globals Functions=[switch(words(lattr(%0/detail_*)),>0,%r[padstr([switch(hastype(%0,room),1,Here,name(%0))],20)]%b%b[iter(lattr(%0/detail_*),after(##,_))])]
 
-&HATTR_ICLOC Misc Globals Functions=\[xget([num(Misc Globals Data)],IC_STARTING_LOC)\]
+&HATTR_ICLOC Misc Globals Functions=[xget([num(Misc Globals Data)],IC_STARTING_LOC)]
 &HATTR_STATUS Misc Globals Functions=NEW
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
