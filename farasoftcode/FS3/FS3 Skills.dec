@@ -126,6 +126,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit pa
 &HATTR_QUIRKS FS3 Skill Functions=
 &HATTR_RULING_ATTR FS3 Skill Functions=
 &HATTR_CG_ERRORS FS3 Skill Functions=
+&HATTR_BONUS_POINTS FS3 Skill Functions=0
 
 &HELP_+ROLL FS3 Skill Help=This game uses the [ansi(hg,FS3 Skills System)] by Faraday.%R%R[ansi(h,+roll <ability\[/attr\]\[+mod\]>)] - Simple ability roll.%R[ansi(h,+roll/casual <ability\[/attr\]\[+mod\]>)] - Casual roll, for UN-stressful situations.%R[ansi(h,+roll <charA>=<ability\[/attr\]\[+mod\]> vs <charB>=<ability\[/attr\]\[+mod\]>)]%R%TMakes an opposed roll.%R%R[ansi(g,Ability)] may be a skill name or number.%R[ansi(g,Attr)] is optional, to use a different ruling attribute than the default.%R[ansi(g,Mod)] is also optional, to apply a + or - percentage modifier to the roll.%R%RFor more information, see also: [ansi(h,+help FS3)]
 &HELP_+SHEET FS3 Skill Help=This game uses the [ansi(hg,FS3 Skills System)] by Faraday.%R%R[ansi(h,+sheet)] - View your character sheet.%R[ansi(h,+sheet<#>)] - View additional pages of your +sheet, if available.  (e.g. +sheet2)%R%R[ansi(h,+sheet <character>)] - Views someone else's sheet.%R[ansi(h,+sheet<#> <character>)] - Views additional pages of someone's sheet, if available.%R%RSome games may restrict viewing other characters' sheets to staff only.  Either way, this information should not be used ICly.%R%RFor more information, see also: [ansi(h,+help FS3)].
@@ -155,7 +156,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit pa
 &CMD-+QUIRK-DELETE FS3 Chargen Commands=$+quirk/delete *:think [setq(0,xget(%#,quirks))]pemit(%#,switch(0,u(#FS3SKILL_FUN/fun_has_quirk,%#,%0),ansi(hr,You don't have that quirk.),ansi(hg,You remove the %0 quirk.)[set(%#,quirks:[setdiff(find_and_replace(%q0,squish(%0),,|),,|)])][setq(z,u(fun_check_errors,%#))]))
 &FUN_SET FS3 Chargen Commands=localize([setq(0,u(#FS3SKILL_FUN/fun_set_ability,%#,%0,%1,%2))][switch(%q0,1,[ansi(hg,You [switch(%2,>0,raise,lower)] the [prettify(%1)] ability by [abs(%2)] points.  It is now [ability_level(%#,%1)].)]%R[u(fun_display_points,%#)],ansi(hr,after(%q0,|)))])
 @STARTUP FS3 Chargen Commands=@set me=!no_command
-&FUN_AVAILABLE_POINTS FS3 Chargen Commands=xget(#FS3SKILL_DB,starting_points)
+&FUN_AVAILABLE_POINTS FS3 Chargen Commands=add(xget(#FS3SKILL_DB,starting_points),xget(%0,bonus_points))
 
 &CHECK_1 FS3 Chargen Commands=gte(u(fun_points_left,%0),0)
 &ERROR_1 FS3 Chargen Commands=You have spent too many points.
@@ -189,7 +190,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit pa
 
 &FUN_CHECK_ERRORS FS3 Chargen Commands=localize([setq(0,1)][setq(1,)][iter(lattr(me/check_*),switch(u(check_#@,%0),0,[setq(0,0)][setq(1,%q1%R[u(error_#@)])]),,)][set(%0,cg_errors:[squish(%q0|%q1)])][squish(%q0|%q1)])
 
-&FUN_DISPLAY_POINTS FS3 Chargen Commands=localize([setq(0,u(fun_points_left,%0))][setq(1,u(FUN_CHECK_ERRORS,%0))][line()]%RYou have spent [ansi(h,u(fun_spent_points,%0))] of your [ansi(h,u(fun_available_points,%0))] available points.%R[switch(%q0,<0,ansi(hr,[abs(%q0)] points overspent.),ansi(hg,%q0 points remaining.))][switch(%q1,0*,%R%R[ansi(hr,ERRORS:%R)][after(%q1,|)])]%R[line()])
+&FUN_DISPLAY_POINTS FS3 Chargen Commands=localize([setq(0,u(fun_points_left,%0))][setq(1,u(FUN_CHECK_ERRORS,%0))][setq(2,xget(#FS3SKILL_DB,max_bonus_points_request))][line()]%RYou have spent [ansi(h,u(fun_spent_points,%0))] of your [ansi(h,u(fun_available_points,%0))] available points.%R[switch(%q0,<0,ansi(hr,[abs(%q0)] points overspent.),ansi(hg,%q0 points remaining.))][switch(1,and(lte(%q0,5),gt(%q2,0)),ansi(c,%RYou can +request up to %q2 extra points. Just explain why you need them.))][switch(%q1,0*,%R%R[ansi(hr,ERRORS:%R)][after(%q1,|)])]%R[line()])
 
 &FUN_POINTS_LEFT FS3 Chargen Commands=sub(u(fun_available_points,%0),u(fun_spent_points,%0))
 &FUN_SPENT_ON FS3 Chargen Commands=localize([setq(0,0)][iter(xget(%0,%1),setq(0,add(%q0,after(itext(0),:))),,)]%q0)
@@ -268,7 +269,9 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit pa
 &RULING_ATTR FS3 Skill Data=Alertness:Reactive Demolitions:Technical Drive:Reactive ECM:Technical Firearms:Reactive First_Aid:Technical Gunnery:Technical Medicine:Academic Melee:Athletic Piloting:Reactive Repair:Technical Stealth:Athletic
 &RULING_ATTR_BG FS3 Skill Data=Academic
 
-&FUN_DISPLAY_SHEET_PAGE0 FS3 Skill Data=[line()]%R[center([name(%0)]'s Sheet,78)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_ATTRS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_ACTSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_BGSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_LANGSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_QUIRKS,%0)]%R%R[ljust([ansi(hc,Experience Points:)] [xget(%0,XP)],38)][ansi(hc,Luck Points:)] [xget(%0,LUCK_POINTS)]%R[line()]
+&MAX_BONUS_POINTS_REQUEST Skill Data=0
+
+&FUN_DISPLAY_SHEET_PAGE0 FS3 Skill Data=[line()]%R[center([xget(%0,fullname)] \([name(%0)]\),78)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_ATTRS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_ACTSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_BGSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_LANGSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_QUIRKS,%0)]%R%R[ljust([ansi(hc,Experience Points:)] [xget(%0,XP)],38)][ansi(hc,Luck Points:)] [xget(%0,LUCK_POINTS)]%R[line()]
 
 &MAX_HIGH_ABILITIES FS3 Skill Data=5
 &MAX_POINTS_ACTION FS3 Skill Data=32
