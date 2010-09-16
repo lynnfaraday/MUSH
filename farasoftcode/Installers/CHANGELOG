@@ -3,10 +3,12 @@
 
 NOT YET RELEASED
 FS3: Decided that language skills were too expensive, so I changed the definition of the ratings and capped them at lvl 9.  
+Added the concept of bonus points to chargen and fixed a typo in the demographics instructions.
 Disclaimer:  New system for requiring a terms of service agreement.
 Globals:  Bug in attribute setup for ICLOC
 DBS: Created a ready-to-go database with all the systems installed and mostly configured (other than the custom configurations).
-
+Rooms and Help: +lhelp totally didn't work when you used the ancestor_room setting in the MUSH config.
+Install: Wipe out help and commands before upgrading
 
 Patch 5.0.3
 
@@ -24,6 +26,7 @@ Player Setup - Initializes FaraMail properly on new players.
 Version 5.0 (4/19/2010)
 ================================================================
 ----------------------------------------------------------------================================================================
+
 Tested on:  Pennmush 1.8.3 patchlevel 13
 
 **** BIG CHANGES ****
@@ -105,6 +108,7 @@ Added a couple new staff commands: +nuke, +grep and +chown.
 Version 4.1 (6/13/08)
 ================================================================
 ----------------------------------------------------------------================================================================
+
 Jobs
 ~~~~~~~~~~~
 Fixed installer, which was not setting the wiz flag on the function object.
@@ -122,6 +126,7 @@ Fixed exit format to space correctly for 4-letter exit names.
 Version 4.0 (03/17/08)
 ================================================================
 ----------------------------------------------------------------================================================================
+
 
 **** NEW SYSTEMS ****
 
@@ -161,6 +166,7 @@ Fixed +summon so it would actually summon people.
 Cookies
 -------
 Fixed bug with cookie bbpost.  It would often have a phantom person listed as #1.
+
 
 Player Setup
 ------------
@@ -207,18 +213,32 @@ Really minor helpfile changes.
 
 ================================================================
 ----------------------------------------------------------------================================================================
-Version 3.0 (4/9/07)================================================================
-----------------------------------------------------------------================================================================Although some of the systems are very similar to Version 1.0, this was effectively a ground-up redo of everything. The systems integrate together now, and there are a lot more systems available.Tested On: PennMUSH 1.8.2.p3
-
-
+Version 3.0 (4/9/07)
 ================================================================
-----------------------------------------------------------------================================================================Version 2.0 (n/a)================================================================
-----------------------------------------------------------------================================================================I skipped version 2.0 because some of the individual systems were labeled with versions ranging from 1.0 to 2.0.
+----------------------------------------------------------------================================================================
+Although some of the systems are very similar to Version 1.0, this was effectively a ground-up redo of everything. The systems integrate together now, and there are a lot more systems available.
+
+Tested On: PennMUSH 1.8.2.p3
 
 
 
 
 ================================================================
 ----------------------------------------------------------------================================================================
-Version 1.0 (2004-2005)================================================================
-----------------------------------------------------------------================================================================The systems were previously archived on my homepage in some disarray. Version 1.0 is simply a collection of all the systems that were posted there. The individual systems their own version numbers, and there isn't much integration between them. This archive exists mostly for historical purposes.Tested On: PennMUSH 1.7.4p15
+Version 2.0 (n/a)
+================================================================
+----------------------------------------------------------------================================================================
+I skipped version 2.0 because some of the individual systems were labeled with versions ranging from 1.0 to 2.0.
+
+
+
+
+
+================================================================
+----------------------------------------------------------------================================================================
+Version 1.0 (2004-2005)
+================================================================
+----------------------------------------------------------------================================================================
+The systems were previously archived on my homepage in some disarray. Version 1.0 is simply a collection of all the systems that were posted there. The individual systems their own version numbers, and there isn't much integration between them. This archive exists mostly for historical purposes.
+
+Tested On: PennMUSH 1.7.4p15

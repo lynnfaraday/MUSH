@@ -102,11 +102,18 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 &FUN_CREATE_AND_SETUP_OBJECT Install Manager=[setq(0,create(%1))][u(fun_register,%0,%q0)][tel(%q0,%#)][ansi(hc,Created object %0 with DB# %q0.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)]
 
 @@ --------------------------
+@@  FUN_WIPE_COMMANDS
+@@  Wipes out commands and help files from objects when upgrading.
+@@     %0 = Object
+@@ --------------------------
+&FUN_WIPE_COMMANDS Install Manager=[iter(lattr(%0/cmd-*),wipe(%0/##))][iter(lattr(%0/help_*),wipe(%0/##))]
+
+@@ --------------------------
 @@  FUN_SETUP_OBJECT
 @@  Sets up basic object attrs 
 @@  Same params as FUN_INSTALL_CREATE.  Relies on %q0 to be set by caller, so DO NOT LOCALIZE
 @@ --------------------------
-&FUN_SETUP_OBJECT Install Manager=switch(strmatch(name(%q0),%1),0,ansi(hR,Object names do not match!  Install will fail!  Rename the old object to %1 and try again.),[set(%q0,SAFE)][switch(%2,1,set(%q0,wizard))][switch(%3,0,[set(%q0,!NO_COMMAND)][set(%q0,startup:@set me=!no_command)],set(%q0,NO_COMMAND))][set(%q0,version:%4)][set(%q0,describe:%5%R\[u(credits)\])][switch(%6,,,set(%q0,install_destination:%6))][set(%q0,credits:[v(credits)])]%R[u(fun_uninstall_cron,%q0)]%R[u(fun_uninstall_help,%q0)])
+&FUN_SETUP_OBJECT Install Manager=switch(strmatch(name(%q0),%1),0,ansi(hR,Object names do not match!  Install will fail!  Rename the old object to %1 and try again.),[u(fun_wipe_commands,%q0)][set(%q0,SAFE)][switch(%2,1,set(%q0,wizard))][switch(%3,0,[set(%q0,!NO_COMMAND)][set(%q0,startup:@set me=!no_command)],set(%q0,NO_COMMAND))][set(%q0,version:%4)][set(%q0,describe:%5%R\[u(credits)\])][switch(%6,,,set(%q0,install_destination:%6))][set(%q0,credits:[v(credits)])]%R[u(fun_uninstall_cron,%q0)]%R[u(fun_uninstall_help,%q0)])
 
 @@ --------------------------
 @@  FUN_CHECK_CONFIG
