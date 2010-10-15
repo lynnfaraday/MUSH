@@ -94,7 +94,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit pa
 &FUN_PRETTY_OPPOSED_RESULT FS3 Skill Functions=switch(%2,AB,[ansi(hc,%0 wins big.)],AL,[ansi(c,%0 wins.)],BB,[ansi(hm,%1 wins big.)],BL,[ansi(m,%1 wins.)],D,[ansi(hy,DRAW)],F,[ansi(hr,Both Fail.)])
 
 &REM_ROLL_DICE FS3 Skill Functions=%0 = modifier
-&FUN_ROLL_DICE FS3 Skill Functions=localize([setq(0,sub(die(2,51),1))][setq(1,switch(%q0,1,1,add(%q0,%0)))][max(min(%q1,100),1)])
+&FUN_ROLL_DICE FS3 Skill Functions=localize([setq(0,die(1,100))][setq(1,switch(%q0,1,1,add(%q0,%0)))][max(min(%q1,100),1)])
 
 &FUN_HAS_QUIRK FS3 Skill Functions=localize([setq(0,xget(%0,quirks))][t(match(ucstr(%q0),ucstr(squish(%1)),|))])
 
@@ -104,19 +104,19 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit pa
 
 &FUN_HIGH_ABILITIES FS3 Skill Fun=localize([setq(0,0)][iter(attributes actionskills langskills bgskills,iter(xget(%0,##),switch(gte(after(itext(0),:),[xget(#FS3SKILL_DB,HIGH_ABILITY_LEVEL)]),1,setq(0,inc(%q0))),,),,)]%q0)
 
-&ROLLRESULTS_0 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2
-&ROLLRESULTS_1 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3
-&ROLLRESULTS_10 FS3 Skill Functions=-1 0 0 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-&ROLLRESULTS_11 FS3 Skill Functions=-1 0 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-&ROLLRESULTS_12 FS3 Skill Functions=0 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-&ROLLRESULTS_2 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3
-&ROLLRESULTS_3 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3
-&ROLLRESULTS_4 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3
-&ROLLRESULTS_5 FS3 Skill Functions=-2 -2 -2 -2 -2 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3
-&ROLLRESULTS_6 FS3 Skill Functions=-2 -2 -2 -2 -2 -1 -1 -1 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3
-&ROLLRESULTS_7 FS3 Skill Functions=-2 -2 -1 -1 -1 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-&ROLLRESULTS_8 FS3 Skill Functions=-2 -2 -1 -1 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
-&ROLLRESULTS_9 FS3 Skill Functions=-2 -1 -1 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+&ROLLRESULTS_0 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2
+&ROLLRESULTS_1 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2
+&ROLLRESULTS_10 FS3 Skill Functions=-2 -1 0 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+&ROLLRESULTS_11 FS3 Skill Functions=-1 0 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+&ROLLRESULTS_12 FS3 Skill Functions=0 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+&ROLLRESULTS_2 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3
+&ROLLRESULTS_3 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3
+&ROLLRESULTS_4 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+&ROLLRESULTS_5 FS3 Skill Functions=-2 -2 -2 -2 -2 -2 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+&ROLLRESULTS_6 FS3 Skill Functions=-2 -2 -2 -2 -1 -1 -1 -1 -1 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+&ROLLRESULTS_7 FS3 Skill Functions=-2 -2 -1 -1 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+&ROLLRESULTS_8 FS3 Skill Functions=-2 -1 -1 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
+&ROLLRESULTS_9 FS3 Skill Functions=-2 -1 -1 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3
 
 &HATTR_XP FS3 Skill Functions=0
 &HATTR_ACTIONSKILLS FS3 Skill Functions=
@@ -271,7 +271,8 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit pa
 
 &MAX_BONUS_POINTS_REQUEST Skill Data=0
 
-&FUN_DISPLAY_SHEET_PAGE0 FS3 Skill Data=[line()]%R[center([xget(%0,fullname)] \([name(%0)]\),78)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_ATTRS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_ACTSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_BGSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_LANGSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_QUIRKS,%0)]%R%R[ljust([ansi(hc,Experience Points:)] [xget(%0,XP)],38)][ansi(hc,Luck Points:)] [xget(%0,LUCK_POINTS)]%R[line()]
+&FUN_DISPLAY_SHEET_PAGE0 FS3 Skill Data=[line()]%R[center([xget(%0,fullname)] \([name(%0)]\),78)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_ATTRS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_ACTSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_BGSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_LANGSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_QUIRKS,%0)]%R%R[ljust([ansi(hc,Experience Points:)] [xget(%0,XP)],38)][ansi(hc,Luck Points:)] [xget(%0,LUCK_POINTS)]%R[line_with_text(More on +sheet2)]
+&fun_display_sheet_page2 FS3 Skill Data=[line()]%R[padstr(ansi(h,Full Name:),15)][xget(%0,fullname)]%R[padstr(ansi(h,Age:),15)][age(%0)] \([u(#95/fun_display_birthdate,%0)]\)%R[padstr(ansi(h,Faction:),15)][xget(%0,faction)]%R[padstr(ansi(h,Org:),15)][xget(%0,org)]%R[padstr(ansi(h,Position:),15)][xget(%0,position)]%R[padstr(ansi(h,Rank:),15)][xget(%0,rank)]%R[line2()]%R[u(%0/describe)]%R[line()]
 
 &MAX_HIGH_ABILITIES FS3 Skill Data=5
 &MAX_POINTS_ACTION FS3 Skill Data=32
