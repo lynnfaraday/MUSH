@@ -150,18 +150,19 @@ think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,5.0,FS3Combat Pre
 @@ %q3 = formatted name, taking into account pmatch issues.
 @@ %q4 = weapon name
 @@ %q5 = armor name
+@@ %q6 = hitloc type name
 @@ 
 @@ NOTE! Uses %qv for temporary vehicle results register and %qn for temp npc register
 @@ Returns message to display to enactor.
 @@ --------------------------
 
-&FUN_DO_JOIN FS3Combat Action Commands=localize([setq(0,extract(%1,2,1,/))][setq(1,extract(%1,3,1,/))][setq(2,extract(%1,1,1,/))][setq(3,switch(t(pmatch(%0)),1,name(pmatch(%0)),%0))][switch(0,u(FUN_IS_VALID_COMBAT,%q2),ansi(hr,That is not a valid combat number.),not(u(FUN_IS_IN_COMBAT,%0)),ansi(hr,%0 is already in combat.),or(match([v(types)],%q0),u(fun_is_custom_type,%q0)),ansi(hr,That is not a valid type.  Pick one of: [v(types)] [u(fun_custom_types)].),[setq(4,u(fun_default_weapon,%q0,%q1))][setq(5,)][switch(1,u(fun_is_custom_type,%q0),[setq(4,u(fun_customtype_stat,%q0,weapon))][setq(5,u(fun_customtype_stat,%q0,armor))][setq(1,u(fun_customtype_stat,%q0,vehicle))][setq(0,u(fun_customtype_stat,%q0,type))])][setq(v,u(fun_join_vehicle_stuff,%q0,%q1,%q2))][eq(%qv,1)],ansi(hr,after(%qv,|)),[setq(n,u(fun_join_npc_stuff,%0))][eq(%qn,1)],ansi(hr,after(%qn,|)),[switch(%N,%0,You join combat %q2.,You make %q3 join combat %q2.)]%R< Weapon set to: %q4[u(%q2/fun_init_combatstat,%q3,%q0,%q1,%q4)][switch(1,t(%q5),[u(%q2/fun_init_combatstat,%q3,%q0,%q1,%q4)][u(%q2/fun_mod_combatstat,%q3,armor,%q5)]%R< Armor set to: %q5)][set(pmatch(%0),combat:%q2)][u(%q2/fun_combat_msg,[prettify(%q3)] has joined the combat as a %q0[switch(t(%q1),1,%Bin [prettify(%q1)][append(%q2,vehicle_[unprettify(%q1)],unprettify(%q3))])][switch(%q0,observer,,npcmaster,,%Bon team [u(%q2/fun_combatstat,%q3,team)])].[u(fun_add_id,%q3)])])
+&FUN_DO_JOIN FS3Combat Action Commands=localize([setq(0,extract(%1,2,1,/))][setq(1,extract(%1,3,1,/))][setq(2,extract(%1,1,1,/))][setq(3,switch(t(pmatch(%0)),1,name(pmatch(%0)),%0))][switch(0,u(FUN_IS_VALID_COMBAT,%q2),ansi(hr,That is not a valid combat number.),not(u(FUN_IS_IN_COMBAT,%0)),ansi(hr,%0 is already in combat.),or(match([v(types)],%q0),u(fun_is_custom_type,%q0)),ansi(hr,That is not a valid type.  Pick one of: [v(types)] [u(fun_custom_types)].),[setq(4,u(fun_default_weapon,%q0,%q1))][setq(5,)][setq(6,soldier)][switch(1,u(fun_is_custom_type,%q0),[setq(4,u(fun_customtype_stat,%q0,weapon))][setq(5,u(fun_customtype_stat,%q0,armor))][setq(1,u(fun_customtype_stat,%q0,vehicle))][setq(6,u(fun_customtype_stat,%q0,hitloc))][setq(0,u(fun_customtype_stat,%q0,type))])][setq(v,u(fun_join_vehicle_stuff,%q0,%q1,%q2))][eq(%qv,1)],ansi(hr,after(%qv,|)),[setq(n,u(fun_join_npc_stuff,%0))][eq(%qn,1)],ansi(hr,after(%qn,|)),[switch(%N,%0,You join combat %q2.,You make %q3 join combat %q2.)]%R< Weapon set to: %q4[u(%q2/fun_init_combatstat,%q3,%q0,%q1,%q4,%q6)][switch(1,t(%q5),[u(%q2/fun_init_combatstat,%q3,%q0,%q1,%q4,%q6)][u(%q2/fun_mod_combatstat,%q3,armor,%q5)]%R< Armor set to: %q5)][set(pmatch(%0),combat:%q2)][u(%q2/fun_combat_msg,[prettify(%q3)] has joined the combat as a %q0[switch(t(%q1),1,%Bin [prettify(%q1)][append(%q2,vehicle_[unprettify(%q1)],unprettify(%q3))])][switch(%q0,observer,,npcmaster,,%Bon team [u(%q2/fun_combatstat,%q3,team)])].[u(fun_add_id,%q3)])])
 
 
 &FUN_CUSTOM_TYPES FS3Combat Action Commands=iter(lattr(#FS3COMBAT_PREFS/type_*),after(##,_))
 &FUN_IS_CUSTOM_TYPE FS3Combat Action Commands=hasattr(#FS3COMBAT_PREFS/type_[unprettify(%0)])
 &FUN_CUSTOMTYPE_STAT FS3Combat Action Commands=extract(xget(#FS3COMBAT_PREFS,type_[unprettify(%0)]),match(v(customtype_stats),%1),1,|)
-&CUSTOMTYPE_STATS FS3Combat Action Commands=type weapon armor vehicle
+&CUSTOMTYPE_STATS FS3Combat Action Commands=type weapon armor vehicle hitloc
 
 @@ --------------------------
 @@ FUN_JOIN_VEHICLE_STUFF
@@ -646,8 +647,8 @@ think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,5.0,FS3Combat Pre
 
 &HOSPITALS FS3Combat Preferences=#-1
 
-&TYPE_CENTURION FS3Combat Preferences=Soldier|LMG_Tripod|Centurion|
-&TYPE_RAIDER FS3Combat Preferences=Pilot|||Raider
+&TYPE_CENTURION FS3Combat Preferences=Soldier|LMG_Tripod|Centurion||soldier
+&TYPE_RAIDER FS3Combat Preferences=Pilot|||Raider|soldier
 
 &COMBAT_DELAY FS3Combat Preferences=3
 

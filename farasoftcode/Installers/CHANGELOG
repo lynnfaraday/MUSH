@@ -2,8 +2,25 @@
 ----------------------------------------------------------------
 
 NOT YET RELEASED
-FS3: Decided that language skills were too expensive, so I changed the definition of the ratings and capped them at lvl 9.  
-Added the concept of bonus points to chargen and fixed a typo in the demographics instructions.
+FS3: 
+- Decided that language skills were too expensive, so I changed the definition of the ratings and capped them at lvl 9.  
+- Added the concept of bonus points to chargen and fixed a typo in the demographics instructions.
+- Changed die mechanics to avoid so many draws and increase success.  
+- Added a default page 2 to +sheet.
+
+Chargen
+- Created a more flexible ranks system
+
+Combat
+- Added the ability to have custom hit location types for custom types
+- Modified default wound damage modifier for Moderate wounds
+- Stun wounds heal much faster
+- Fixed rounding bug in armor calculation
+Note to coders:  FUN_TARGET_TYPE now named FUN_HITLOC_TYPE
+
+Cookies: Put in default +luck/info
+FaraMail:  Added +mail/toss as an alias to +mail/abort
+Actor: +actor/set
 Disclaimer:  New system for requiring a terms of service agreement.
 Globals:  Bug in attribute setup for ICLOC
 DBS: Created a ready-to-go database with all the systems installed and mostly configured (other than the custom configurations).

@@ -28,8 +28,8 @@ think install_create(COOKIE_DB,Cookie DB,0,1,5.0,Cookie database storage.)
 &CMD-+LUCK-INFO Cookie System=$+luck/info:think pemit(%#,[line()]%R[ansi(h,+luck Uses)]%R%R[u(#COOKIE_DB/LUCK_INFO)]%R[line()])
 &CMD-+LUCK-SPEND Cookie System=$+luck/spend *=*:think switch(0,gte(xget(%#,luck_points),%0),pemit(%#,ansi(hr,You don't have that many luck points)),isnum(%0),pemit(%#,ansi(hr,That is not a number.)),[remit(%l,ansi(h,%N spends %0 luck points on %1.))][create_job(REQ,Luck - %N,%N has spent %0 luck points on %1,%#)][set(%#,luck_points:[sub(xget(%#,luck_points),%0)])])
 &CMD-+LUCK-SPEND2 Cookie System=$+luck/spend *:think pemit(%#,switch(%0,*=*,,ansi(hr,You forgot the reason.)))
-&CRON_JOB_COOKIEAWARD Cookie System=@tr me/tr-cookie-award
-&CRON_JOB_COOKIEREMIND Cookie System=@tr me/tr-cookie-reminder
+&CRON_JOB_COOKIEAWARD Cookie System=@tr #COOKIE_CMD/tr-cookie-award
+&CRON_JOB_COOKIEREMIND Cookie System=@tr #COOKIE_CMD/tr-cookie-reminder
 &CRON_TIME_COOKIEAWARD Cookie System=||Sun|23|59|
 &CRON_TIME_COOKIEREMIND Cookie System=|||01 03 05 07 09 11 13 15 17 19 21 23|00|
 &FUN_COOKIE_AWARD Cookie System=u(fun_format_cookie_level_name,u(fun_cookie_level,%0))
@@ -54,8 +54,8 @@ think install_create(COOKIE_DB,Cookie DB,0,1,5.0,Cookie database storage.)
 &HATTR_COOKIES_GIVEN Cookie DB=
 &HATTR_COOKIES_RECEIVED Cookie DB=
 &HATTR_COOKIE_REMIND Cookie DB=
-&HATTR_COOKIES Cookie DB=
-&HATTR_LUCK_POINTS Cookie DB=
+&HATTR_COOKIES Cookie DB=0
+&HATTR_LUCK_POINTS Cookie DB=0
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -76,10 +76,10 @@ think install_create(COOKIE_DB,Cookie DB,0,1,5.0,Cookie database storage.)
 &COOKIE_LEVEL_04 Cookie DB=Gold|100|hy
 &COOKIE_LEVEL_05 Cookie DB=Platinum|200|hb
 &COOKIE_LEVEL_06 Cookie DB=Palladium|500|hg
-&LUCK_INFO Cookie DB=Pester your staff to fill in what you can use luck points on.  If you are using the FS3 combat system, luck points are built in automatically.  See +help +combat.
+&LUCK_INFO Cookie DB=Luck points are built into the combat system.  You can use them for attack, defense, initiative, or to stay in combat after being knocked out.  See the combat tutorial for more details. (http://www.wordsmyth.org/aresmush/index.php?title=FS3_Combat#Luck)%R%RYou can also spend luck points on skill +rolls outside of combat, as shown below:%R%R- [ansi(hg,Before a roll)], spend a luck point to receive a +50 bonus or -50 penalty on a roll.%R- [ansi(hr,After a roll)], spend a luck point to get a re-roll and choose one of the two.%R- Spend a luck point to [ansi(hc,cancel luck)] spent against you.%R%RRestrictions:%R- You can only spend luck once on a given situation, so you can't take a bonus AND give someone else a re-roll.%R- Luck points are not cumulative, so even if multiple people spend luck to help/penalize someone, only one point applies.%R- You can spend luck points to help or penalize other people, but it must still benefit [ansi(h,you)] in some fashion.  As an example: you could spend a point to help Bob defuse a bomb in the room, or to penalize someone shooting at you, but you couldn't spend luck to penalize someone shooting at Bob.%R%RYou can also spend luck points in non-combat, non-roll effects in a given plot or scene.  For example: when facing trial, you might be able to spend luck points to have the prosecutor screw up the evidence or offer a plea bargain.  This is entirely at the staff's discretion, and the number of points required will vary based on the amount by which you're pushing your luck :)
 
 
-@wait 7=+job/create CODE=Cookie Cron/Copy the +cookie CRON job over to the MUSHCron system, or otherwise configure it to run weekly.
+@wait 7=+job/create CODE=Cookie BBS/Create the Cookie Notices BBS if you want weekly posts on cookie winners.
 @wait 7=+job/create CODE=Cookie Levels/Customize the cookie levels if desired.  See +shelp +cookie.
 @wait 7=+job/create CODE=Set up info on what luck points can be used on.  See +shelp +cookie.
 

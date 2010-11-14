@@ -27,6 +27,8 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,5.0,+mail mailing lists.)
 
 &CMD-+MAIL-ABORT FaraMail Commands=$+mail/abort:think [setq(0,xget(%#,mail_object))]pemit(%#,<MAIL> You abort your mail composition.[iter(mailto mailsub mailbody,wipe(%q0/##))])
 
+&CMD-+MAIL-TOSS FaraMail Commands=$+mail/toss:@fo %#=+mail/abort
+
 &CMD-+MAIL-ARCHIVE FaraMail Commands=$+mail/archive:think [setq(2,lattr([xget(%#,mail_object)]/folder_*))][setq(3,1 [iter(%q2,words(u(#MAIL_FUN/fun_messages_in_folder,xget(%#,mail_object),after(##,_))))])][pemit(%#,ansi(hg,Archiving Mail....))];@dolist %q2=@wait [add(extract(%q3,#@,1),1)]=@fo %#=+mail/archive [after(##,_)]
 
 &CMD-+MAIL-ARCHIVE-FOLDER FaraMail Commands=$+mail/archive *:@switch [setq(0,xget(%#,mail_object))]0=hasattr(%q0,folder_[trim(%0)]),@pemit %#=<MAIL> There is no such folder.,{think pemit(%#,[setq(1,u(#MAIL_FUN/fun_messages_in_folder,%q0,%0))]%R<H2>Mail Archive %0:[xget(%q0,foldername_%0)]</h2><H3>[time()]</h3>%R<UL>[iter(%q1,%R<LI><a href="#[itext(0)]">[u(#MAIL_FUN/fun_get_subject,xget(%q0,##))]</a></li>)]%R</UL>);@dolist %q1=@wait #@=think pemit(%#,<P><HR><P><a name="##"></a>%R[u(#MAIL_FUN/fun_format_msg_html,xget(%q0,##))])}

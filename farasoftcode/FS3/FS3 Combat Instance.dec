@@ -49,7 +49,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @@ %1 = stat
 @@ --------------------------
 
-&COMBATSTATS FS3Combat Instance Parent=type team vehicle weapon stance armor mod luck lastaim suppress action target actoptions hitthisturn ko subduedby subduing ammo lethal
+&COMBATSTATS FS3Combat Instance Parent=type team vehicle weapon stance armor mod luck lastaim suppress action target actoptions hitthisturn ko subduedby subduing ammo lethal hitloc
 
 &FUN_COMBATSTAT FS3Combat Instance Parent=[v(stat_[unprettify(%0)]`[unprettify(%1)]
 
@@ -71,11 +71,12 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @@ %1 = type
 @@ %2 = vehicle
 @@ %3 = weapon
+@@ %4 = hitloc
 @@ Note: 
 @@ - PCs automatically put on team 1, and NPCs on team 2.
 @@ --------------------------
 
-&FUN_INIT_COMBATSTAT  FS3Combat Instance Parent=iter(v(combatstats),u(fun_mod_combatstat,%0,##,[u(init_##,%0,%1,%2,%3)]))
+&FUN_INIT_COMBATSTAT  FS3Combat Instance Parent=iter(v(combatstats),u(fun_mod_combatstat,%0,##,[u(init_##,%0,%1,%2,%3,%4)]))
 
 &INIT_TYPE FS3Combat Instance Parent=[lcstr(trim(%1))]
 
@@ -100,6 +101,8 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 &INIT_ACTION FS3Combat Instance Parent=pass
 
 &INIT_TARGET FS3Combat Instance Parent=
+
+&INIT_HITLOC FS3Combat Instance Parent=%4
 
 &INIT_ACTOPTIONS FS3Combat Instance Parent=
 
@@ -491,7 +494,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @@ --------------------------
 
 
-&FUN_DO_HIT FS3Combat Instance Parent=[setq(s,0)][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][switch(weaponstat(%qw,wpntype),explosive,setq(h,[xget(#FS3COMBAT_HITLOC,concuss_[u(fun_target_type,%1)])]:Critical))][u(fun_combat_log,LETHAL:  weapon=[weaponstat(%qw,lethality)] special=%4 mod=[u(fun_combatstat,%0,lethal)])][setq(l,add(weaponstat(%qw,lethality),%4,u(fun_combatstat,%0,lethal)))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))]- [switch(1,match(%qh,MISS*),NEAR MISS!,gte(%qc,100),COVER stops the attack.[setq(s,1)],gte(%qr,100),ARMOR on [prettify(before(%qh,:))] stops the attack![setq(s,1)],[switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[setq(s,1)][u(fun_mod_combatstat,%qt,hitthisturn,1)][u(#FS3COMBAT_CMD_DMG/fun_do_damage,%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz)])]
+&FUN_DO_HIT FS3Combat Instance Parent=[setq(s,0)][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][switch(weaponstat(%qw,wpntype),explosive,setq(h,[xget(#FS3COMBAT_HITLOC,concuss_[u(fun_hitloc_type,%1)])]:Critical))][u(fun_combat_log,LETHAL:  weapon=[weaponstat(%qw,lethality)] special=%4 mod=[u(fun_combatstat,%0,lethal)])][setq(l,add(weaponstat(%qw,lethality),%4,u(fun_combatstat,%0,lethal)))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))]- [switch(1,match(%qh,MISS*),NEAR MISS!,gte(%qc,100),COVER stops the attack.[setq(s,1)],gte(%qr,100),ARMOR on [prettify(before(%qh,:))] stops the attack![setq(s,1)],[switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[setq(s,1)][u(fun_mod_combatstat,%qt,hitthisturn,1)][u(#FS3COMBAT_CMD_DMG/fun_do_damage,%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz)])]
 
 @@ --------------------------
 @@ FUN_AUTO_ATTACK
@@ -564,21 +567,21 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @@ Lists valid hit locations for a given target, based on type.
 @@ %0 = target name
 @@ --------------------------
-&FUN_VALID_HITLOCS FS3Combat Instance Parent=iter(xget(#FS3COMBAT_HITLOC,dmg_[u(fun_target_type,%0)]),before(##,:))
+&FUN_VALID_HITLOCS FS3Combat Instance Parent=iter(xget(#FS3COMBAT_HITLOC,dmg_[u(fun_hitloc_type,%0)]),before(##,:))
 
 @@ --------------------------
-@@ FUN_TARGET_TYPE
+@@ fun_hitloc_type
 @@ Determines a target's type.
 @@ %0 = target name
 @@ --------------------------
-&FUN_TARGET_TYPE FS3Combat Instance Parent=switch(isvehicle(%0),1,vehtypestat(vehiclestat(%0,type),hitloc),soldier)
+&FUN_HITLOC_TYPE FS3Combat Instance Parent=switch(isvehicle(%0),1,vehtypestat(vehiclestat(%0,type),hitloc),u(fun_combatstat,%0,hitloc))
 
 @@ --------------------------
 @@ FUN_HITLOC_ZONE
 @@ Gets a list of possible hit locations for a given hit location zone.
 @@ %0 = target name
 @@ --------------------------
-&FUN_HITLOC_ZONE FS3Combat Instance Parent=xget(#FS3COMBAT_HITLOC,hitloc_[u(fun_target_type,%0)]_[unprettify(%1)])
+&FUN_HITLOC_ZONE FS3Combat Instance Parent=xget(#FS3COMBAT_HITLOC,hitloc_[u(fun_hitloc_type,%0)]_[unprettify(%1)])
 
 @@ --------------------------
 @@ FUN_HITLOC_CRIT
@@ -586,16 +589,24 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @@ %0 = target name
 @@ %1 = hit loc
 @@ --------------------------
-&FUN_HITLOC_CRIT FS3Combat Instance Parent=after(grab(xget(#FS3COMBAT_HITLOC,dmg_[u(fun_target_type,%0)]),%1:*),:)
+&FUN_HITLOC_CRIT FS3Combat Instance Parent=after(grab(xget(#FS3COMBAT_HITLOC,dmg_[u(fun_hitloc_type,%0)]),%1:*),:)
 
 @@ --------------------------
 @@ FUN_RANDOM_HITLOC
-@@ Rolls a random hit location and criticality.  Returns hitloc:critical
+@@ Rolls a random hit location and criticality.
 @@ %0 = target name
-@@ %1 = delta between attack/def roll
+@@ %1 = delta between attack/def roll (+/- 5)
 @@ %2 = targeted hit location, may be blank
+@@
+@@ %q0 = die roll (1,15) - we subtract 1 when we use it to get 1-15
+@@ %q1 = the die roll modified by -1 (to get 1-15), modified by the attack/def delta, and capped between 1-15.
+@@ %q2 = targeted hit location or the target's default hit location if not a called shot
+@@ %q3 = final hit location
+@@ %q4 = Hit loc criticality
+@@
+@@ Returns hitloc:critical
 @@ --------------------------
-&FUN_RANDOM_HITLOC FS3Combat Instance Parent=localize([setq(0,die(2,8))][setq(1,min(max(add(%q0,%1,-1),1),15))][setq(2,switch(%2,,xget(#FS3COMBAT_HITLOC,default_[u(fun_target_type,%0)]),%2))][setq(3,extract(u(fun_hitloc_zone,%0,%q2),%q1,1))][setq(4,u(fun_hitloc_crit,%0,%q3))][u(fun_combat_log,HITLOC: target=%0 aim=%2 adjaim=%q2 roll=%q0 atkdef=%1 final=%q1 hitloc=%q3 crit=%q4)]%q3:%q4)
+&FUN_RANDOM_HITLOC FS3Combat Instance Parent=localize([setq(0,rand(1,15))][setq(1,min(max(add(%q0,%1),1),15))][setq(2,switch(%2,,xget(#FS3COMBAT_HITLOC,default_[u(fun_hitloc_type,%0)]),%2))][setq(3,extract(u(fun_hitloc_zone,%0,%q2),%q1,1))][setq(4,u(fun_hitloc_crit,%0,%q3))][u(fun_combat_log,HITLOC: target=%0 aim=%2 adjaim=%q2 roll=%q0 atkdef=%1 final=%q1 hitloc=%q3 crit=%q4)]%q3:%q4)
 
 
 @@ --------------------------

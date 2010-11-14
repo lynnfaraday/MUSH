@@ -369,14 +369,14 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,5.0,FS3Comba
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMGMOD_WOUND
 @@  Damage modifier for an individual wound.
-@@  Modifier is 1/2 for wounds that have been treated/healed and another 1/2 for stun.
+@@  Modifier is 1/2 for wounds that have been treated/healed.
 @@  This is cumulative.
 @@  %0 = Damage attr
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&WOUND_DMGMOD FS3Combat Damage Commands=L:5 M:10 S:50 C:80
+&WOUND_DMGMOD FS3Combat Damage Commands=L:5 M:20 S:50 C:80
 
-&FUN_DMGMOD_WOUND FS3Combat Damage Commands=localize([setq(0,after(grab(v(WOUND_DMGMOD),[u(FUN_DMGSTAT,%0,currsev)]:*),:))][switch(u(FUN_DMGSTAT,%0,healing),>0,setq(0,div(%q0,2)))][switch(u(FUN_DMGSTAT,%0,type),stun,setq(0,div(%q0,2)))]%q0)
+&FUN_DMGMOD_WOUND FS3Combat Damage Commands=localize([setq(0,after(grab(v(WOUND_DMGMOD),[u(FUN_DMGSTAT,%0,currsev)]:*),:))][switch(u(FUN_DMGSTAT,%0,healing),>0,setq(0,div(%q0,2)))]%q0)
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -444,10 +444,10 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,5.0,FS3Comba
 @@ %0 = name
 @@ %1 = severity
 @@ %2 = type (stun or physical)
-@@  Note that stun wounds heal 5x faster and vehicles heal 5x faster.
+@@  Note that stun wounds heal 10x faster and vehicles heal 5x faster.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&FUN_HEALPOINTS_SEV FS3Combat Damage Commands=div(after(grab(v(healing_points),%1:*),:),switch(1,isvehicle(%0),5,strmatch(%2,Stun),5,1))
+&FUN_HEALPOINTS_SEV FS3Combat Damage Commands=div(after(grab(v(healing_points),%1:*),:),switch(1,isvehicle(%0),5,strmatch(%2,Stun),10,1))
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
