@@ -18,14 +18,21 @@ Combat
 - Fixed rounding bug in armor calculation
 Note to coders:  FUN_TARGET_TYPE now named FUN_HITLOC_TYPE
 
+Who: New configurable who system.  
+
+**NOTE TO SELF: Make special patch file to copy over who data
+think [setq(0,install_aliasdb(GLOBALS_DB))][setq(1,install_aliasdb(WHO_DB))][switch(1,match(%q0,#-1),ansi(hc,Globals not installed.  No special action needed.),match(%q1,#-1),ansi(hc,Who system not installed.  No special action needed.),ansi(hc,Moving who config from globals to new who system.)[iter(MUSH_NAME WHO_COLOR TP_ROOM_PARENT WHO_RECORD,switch(hasattr(%q0/##),1,[set(%q1,[switch(##,WHO_COLOR,COLOR,##)]:[xget(%q0,##)])][wipe(%q0/##)]))])]
+
+
+Globals:  Bug in attribute setup for ICLOC
+Functions: Line_without_color was 1 char longer than it should be
 Cookies: Put in default +luck/info
 FaraMail:  Added +mail/toss as an alias to +mail/abort
 Actor: +actor/set
 Disclaimer:  New system for requiring a terms of service agreement.
-Globals:  Bug in attribute setup for ICLOC
 DBS: Created a ready-to-go database with all the systems installed and mostly configured (other than the custom configurations).
 Rooms and Help: +lhelp totally didn't work when you used the ancestor_room setting in the MUSH config.
-Install: Wipe out help and commands before upgrading
+Install: Wipe out help and commands and aconnect/adisconnect before upgrading
 
 Patch 5.0.3
 

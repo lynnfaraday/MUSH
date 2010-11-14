@@ -106,7 +106,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @@  Wipes out commands and help files from objects when upgrading.
 @@     %0 = Object
 @@ --------------------------
-&FUN_WIPE_COMMANDS Install Manager=[iter(lattr(%0/cmd-*),wipe(%0/##))][iter(lattr(%0/help_*),wipe(%0/##))]
+&FUN_WIPE_COMMANDS Install Manager=[iter(lattr(%0/cmd-*),wipe(%0/##))][wipe(%0/aconnect)][wipe(%0/adisconnect)][iter(lattr(%0/help_*),wipe(%0/##))]
 
 @@ --------------------------
 @@  FUN_SETUP_OBJECT

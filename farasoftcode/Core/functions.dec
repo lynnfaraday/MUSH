@@ -98,11 +98,11 @@ think install_create(GLOBFUN_DB,Global Utility Function Data,1,1,5.0,Customizabl
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 &NON_PLAYERS Global Utility Function Data=#1
-&FUN_ICTIME Global Utility Function Data =time()
-&FUN_ISSTAFF Global Utility Function Data =orflags(%0,WrJ)
-&FUN_LINE Global Utility Function Data =[ansi(rand_color(),+==~~~~~====~~~~====~~~~====~~~~=====~~~~=====~~~~====~~~~====~~~~====~~~~~==+)]
-&FUN_LINE2 Global Utility Function Data =[ansi(rand_color(),[repeat(~,78)])]
-&FUN_LINE_NO_COLOR Global Utility Function Data =+===~~~~~====~~~~====~~~~====~~~~=====~~~~=====~~~~====~~~~====~~~~====~~~~~==+
+&FUN_ICTIME Global Utility Function Data=time()
+&FUN_ISSTAFF Global Utility Function Data=orflags(%0,WrJ)
+&FUN_LINE Global Utility Function Data=[ansi(rand_color(),+==~~~~~====~~~~====~~~~====~~~~=====~~~~=====~~~~====~~~~====~~~~====~~~~~==+)]
+&FUN_LINE2 Global Utility Function Data=[ansi(rand_color(),[repeat(~,78)])]
+&FUN_LINE_NO_COLOR Global Utility Function Data=+==~~~~~====~~~~====~~~~====~~~~=====~~~~=====~~~~====~~~~====~~~~====~~~~~==+
 &FUN_LINE_WITH_TEXT Global Utility Function Data=[ansi(rand_color(),+==~~~~~====~~~~====~~~~===[padstr(%B%0%B,25,center,~)]==~~~~====~~~~====~~~~~==+)]
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
