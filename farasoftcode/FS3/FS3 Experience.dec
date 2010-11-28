@@ -1,0 +1,71 @@
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://www.wordsmyth.org/aresmush/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Installing FS3 Experience module.  Please wait...)]%R
+
+@pemit/silent %#=%R%R[ansi(hg,Creating objects.)]
+
+think install_create(FS3XP_CMD,FS3 XP Commands,1,0,6.0,FS3 XP Commands.)
+think install_create(FS3XP_DB,FS3 XP Data,0,1,6.0,FS3 XP Data.)
+
+think install_patch(FS3XP_CMD,FS3 XP Commands,1,0,6.0,FS3 XP Commands.)
+think install_patch(FS3XP_DB,FS3 XP Data,0,1,6.0,FS3 XP Data.)
+
+@pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
+
+&CMD-+XP-COST FS3 XP Commands=$+xp/cost *:think pemit(%#,[setq(0,u(fun_xp_cost,%#,%0))][switch(%q0,1|*,ansi(hg,It will cost [after(%q0,|)] XP to raise [prettify(%0)].),ansi(hr,after(%q0,|)))])
+&CMD-+XP-COSTS FS3 XP Commands=$+xp/costs:@pemit %#=[line()]%R[ansi(h,Current Level%B%B%B%BXP To Next Level)][iter(lnum(0,11),%R[ljust(##,17)][after(grab(xget(#FS3XP_DB,xp_per_level),##:*),:)])]%R%RNote:%R- Background and Language skills are 1/2 the listed cost%R- Attributes cannot be raised, only skills.%R- The max XP you can save up is [ansi(hg,xget(#FS3XP_DB,MAX_XP_HOARD))]%R- You can raise one skill every [ansi(hg,div(xget(#FS3XP_DB,TIME_BETWEEN_RAISES),3600))] hours.%R[line()]
+&CMD-+XP-RAISE FS3 XP Commands=$+xp/raise */*:think u(fun_do_raise,%0,%1)
+&CMD-+XP-RAISE-NOTYPE FS3 XP Commands=$+xp/raise *:@switch %0=*/*,,{@switch [u(#FS3SKILL_FUN/fun_ability_type,%#,%0)]=background,@pemit %#=ansi(hr,You must specify an ability type.),think u(FUN_DO_RAISE,[u(#FS3SKILL_FUN/fun_ability_type,%#,%0)],%0)}
+&CMD-+XP-AWARD FS3 XP Commands=$+xp/award *=*/*:@pemit %#=[setq(0,pmatch(%0))]switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(%q0),ansi(hr,%0 is not a valid player.),isnum(%1),ansi(hr,%1 is not a valid number of XP.),ansi(hg,You award %1 XP to %0.)[set(%q0,xp:[add(xget(%q0,xp),%1)])][create_job(RP,XP Award to [name(%q0)],%N has awarded %1 XP to [name(%q0)] for {%2}.,%#)])
+&CRON_JOB_FS3XP FS3 XP Commands=@tr #FS3XP_CMD/TR-AWARDXP
+&CRON_TIME_FS3XP FS3 XP Commands=||Sun|23|59|
+&FUN_DO_RAISE FS3 XP Commands=pemit(%#,[setq(9,ability_level(%#,%1))][setq(8,xget(%#,xp))][setq(7,sub(sub(secs(),xget(%#,last_xp_raise)),xget(#FS3XP_DB,time_between_raises)))][setq(0,u(fun_xp_cost,%#,%1,%0))][setq(1,after(%q0,|))][setq(0,before(%q0,|))][switch(0,not(match(%0,attr*)),ansi(hr,You can't raise attributes.),%q0,ansi(hr,%q1),gte(xget(%#,XP),%q1),ansi(hr,You don't have enough XP for that.  You need %q1.),gt(%q7,0),ansi(hr,You must wait another [add(div(sub(0,%q7),3600),1)] hours before raising another skill.),[setq(2,u(#FS3SKILL_FUN/fun_set_ability,%#,%0,%1,1))][setq(3,after(%q2,|))][setq(2,before(%q2,|))]%q2,ansi(hr,%q3),ansi(hg,You raise [prettify(%1)].)[set(%#,last_xp_raise:[secs()])][set(%#,xp:[sub(%q8,%q1)])][set(#FS3XP_DB,XPLOG:[xget(#FS3XP_DB,XPLOG)]|%N raised %0 skill %1 from %q9 to [inc(%q9)] at a cost of %q1 XP.  They had %q8 XP and now have [xget(%#,xp)].)])])
+&FUN_XP_COST FS3 XP Commands=localize([setq(0,switch(%2,,u(#FS3SKILL_FUN/FUN_ABILITY_TYPE,%0,%1),u(#FS3SKILL_FUN/FUN_MAP_ABILITY_ABBR,%2)))][setq(1,u(#FS3SKILL_FUN/FUN_ABILITY_LEVEL,%0,%1))][setq(2,u(fun_xp_cost_for_level,%q0,%q1))][switch(1,match(%q0,attribute),0|You cannot raise attributes.,eq(%q1,12),0|You cannot raise that any further.,1|[max(1,%q2)])])
+&FUN_XP_COST_FOR_LEVEL FS3 XP Commands=localize([setq(0,after(grab(xget(#FS3XP_DB,xp_per_level),%1:*),:))]switch(%0,action,%q0,max(div(%q0,2),1)))
+@STARTUP FS3 XP Commands=@set me=!no_command
+&TR-AWARDXP FS3 XP Commands=@dolist real_players()=think set(##,xp:[min(xget(#FS3XP_DB,MAX_XP_HOARD),add(xget(##,xp),xget(#FS3XP_DB,XP_PER_WEEK)))])
+
+&HELP_FS3_XP XP Commands=FS3 uses a very simple experience point system.  Players each receive 1 XP per week.  XP is an IC award, not an OOC one, and reflects your character's time learning/practicing/gaining experience.%R%RYou can spend XP to raise skills but not attributes.  Attributes reflect natural innate ability so you can't intentionally change them.%R%R[ansi(h,+xp/costs)] - Shows the general cost table and limits on XP spending.%R[ansi(h,+xp/cost <skill>)] - Shows the cost to learn or raise one of your skills.%R[ansi(h,+xp/raise <type>/<skill>)] - Spends XP to raise a skill.%R%TYou must specify the type (language, background) for non-action skills.  For action skills, this paramter can be omitted.
+&SHELP_FS3_XP XP Commands=[ansi(h,+xp/award <name>=<# of XP>/<reason>)]
+
+&HATTR_LAST_XP_RAISE FS3 XP Commands=
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+&MAX_XP_HOARD FS3 XP Data=16
+&TIME_BETWEEN_RAISES FS3 XP Data=259200
+&XP_PER_LEVEL FS3 XP Data=0:1 1:2 2:2 3:4 4:4 5:4 6:8 7:8 8:8 9:12 10:12 11:12
+&XP_PER_WEEK FS3 XP Data=1
+
+@wait 5=+jobs/create CODE=FS3 XP Config/Configure FS3 XP System.  See guide here: http://wordsmyth.org/aresmush/index.php?title=FS3_Configuration
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup FS3XP
+
+@wait 10=@set me=!quiet
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]
