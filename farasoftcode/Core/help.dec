@@ -9,8 +9,8 @@
 
 @pemit/silent %#=[ansi(hg,Beginning +help Installation.   Please wait until the Installation Complete message appears...)]%R
 
-think install_create(HELP_CMD,+help Commands,1,0,5.0,+help system commands.)
-think install_create(HELP_DB,+help Database,0,0,5.0,Stores +help files.)
+think install_create(HELP_CMD,+help Commands,1,0,6.0,+help system commands.)
+think install_create(HELP_DB,+help Database,0,0,6.0,Stores +help files.)
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 

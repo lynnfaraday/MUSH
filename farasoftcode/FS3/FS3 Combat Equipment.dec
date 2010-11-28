@@ -9,8 +9,8 @@
 @set me=quiet
 @pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Equipment module.)]
 
-think install_create(FS3COMBAT_CMD_EQUIP,FS3Combat Equipment Commands,1,0,5.0,FS3 Equipment Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
-think install_create(FS3COMBAT_DB_EQUIP,FS3Combat Equipment Stats,0,1,5.0,FS3Combat Equipment Stats. See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3COMBAT_CMD_EQUIP,FS3Combat Equipment Commands,1,0,6.0,FS3 Equipment Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
+think install_create(FS3COMBAT_DB_EQUIP,FS3Combat Equipment Stats,0,1,6.0,FS3Combat Equipment Stats. See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
 
 @@ -------------------------------------

@@ -9,7 +9,7 @@
 
 @pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Instance module.)] [ansi(hc,NOTE: This may take a minute.)]
 
-think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Combat Instance Parent.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Combat Instance Parent.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
 &TR-UNINSTALL FS3Combat Instance Parent=@dolist children(me)={@fo %#=+combat/stop ##}
 
@@ -336,7 +336,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,5.0,FS3Com
 @@ %q2 = weapon recoil stat
 @@ %q3 = range mod
 @@ --------------------------
-&FUN_ACTION_ATTACK FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,ammo))][setq(1,switch(grab(%2,burst),,1,min(%q0,3)))][setq(2,u(fun_weaponstat,%0,recoil))][setq(3,u(fun_range_mod,%0,after(grab(%2,range=*,\,),=)))][switch(0,t(u(fun_combatstat,%0,weapon)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no weapon!),t(u(fun_combatstat,%0,target)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no target!),not(u(fun_out_of_ammo,%0)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but is [ansi(hr,out of ammo)]!),[switch(%q1,>1,u(fun_combat_msg,[prettify(lcstr(%0))] fires a [ansi(hm,%q1 round burst)]!))][iter(lnum(1,%q1),[u(fun_do_attack,%0,switch(u(fun_is_in_vehicle,%1),1,u(fun_combatstat,%1,vehicle),%1),unprettify(after(grab(%2,called=*,\,),=)),add(%q3,-[mul(sub(#@,1),%q2)]),0)])][u(fun_suppress,%1,switch(u(fun_weaponstat,%0,wpntype),melee,0,1))][u(fun_subtract_ammo,%0,%q1)][switch(u(fun_out_of_ammo,%0),1,u(fun_combat_msg,ansi(hm,[prettify(lcstr(%0))]'s weapon clicks empty.)))])])
+&FUN_ACTION_ATTACK FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,ammo))][setq(1,switch(grab(%2,burst,\,),,1,min(%q0,3)))][setq(2,u(fun_weaponstat,%0,recoil))][setq(3,u(fun_range_mod,%0,after(grab(%2,range=*,\,),=)))][switch(0,t(u(fun_combatstat,%0,weapon)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no weapon!),t(u(fun_combatstat,%0,target)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but has no target!),not(u(fun_out_of_ammo,%0)),u(fun_combat_msg,[prettify(lcstr(%0))] tries to attack but is [ansi(hr,out of ammo)]!),[switch(%q1,>1,u(fun_combat_msg,[prettify(lcstr(%0))] fires a [ansi(hm,%q1 round burst)]!))][iter(lnum(1,%q1),[u(fun_do_attack,%0,switch(u(fun_is_in_vehicle,%1),1,u(fun_combatstat,%1,vehicle),%1),unprettify(after(grab(%2,called=*,\,),=)),add(%q3,-[mul(sub(#@,1),%q2)]),0)])][u(fun_suppress,%1,switch(u(fun_weaponstat,%0,wpntype),melee,0,1))][u(fun_subtract_ammo,%0,%q1)][switch(u(fun_out_of_ammo,%0),1,u(fun_combat_msg,ansi(hm,[prettify(lcstr(%0))]'s weapon clicks empty.)))])])
 
 @@ --------------------------
 @@ FUN_RANGE_MOD

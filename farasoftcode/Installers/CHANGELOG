@@ -1,38 +1,85 @@
 ================================================================
 ----------------------------------------------------------------
 
-NOT YET RELEASED
-FS3: 
-- Decided that language skills were too expensive, so I changed the definition of the ratings and capped them at lvl 9.  
-- Added the concept of bonus points to chargen and fixed a typo in the demographics instructions.
-- Changed die mechanics to avoid so many draws and increase success.  
-- Added a default page 2 to +sheet.
+================================================================
+Version 6.0 (11/14/2010)
+================================================================
+----------------------------------------------------------------================================================================
 
-Chargen
-- Created a more flexible ranks system
+**** BIG CHANGES ****
 
-Combat
-- Added the ability to have custom hit location types for custom types
-- Modified default wound damage modifier for Moderate wounds
-- Stun wounds heal much faster
-- Fixed rounding bug in armor calculation
-Note to coders:  FUN_TARGET_TYPE now named FUN_HITLOC_TYPE
+FS3 Skills
+~~~~~~~~~~~~~~~
+    * Changed die mechanics to avoid so many draws and increase success.
+    * Language skills were too expensive, so now they're capped at 9. If you already have a language skill higher than 9, it won't break anything, but I suggest allowing players to +request moving language points to somewhere else if they didn't need it that high.
+    * Added the concept of bonus points to chargen so you can let people request bonus points, or dole them out as needed.
+    * Added a default page 2 to +sheet showing demographics.
+    * Fixed some typos/formatting in the chargen room displays.
+    * Created a more flexible +ranks system that lets you have different rank charts for different factions. 
 
-Who: New configurable who system.  
+FS3 Combat
+~~~~~~~~~~~~~~~
+    * Allow custom types to have custom hit location charts as well.
+    * Increased default wound damage modifier for Moderate wounds.
+    * Stun wounds heal much faster but can knock you out faster.
+    * Fixed rounding bug in armor calculation.
+    * Fixed rounding bug in crew hit calculation.
+    * Note to coders: FUN_TARGET_TYPE now named FUN_HITLOC_TYPE. 
+
+FS3 Experience
+~~~~~~~~~~~~~~~
+New system to complement FS3 skills with XP.
+
+Who
+~~~~~~~~~~~~~~~
+New configurable who system.
+
+Disclaimer
+~~~~~~~~~~~~~~~
+New system for requiring a terms of service agreement.
+
+**** LITTLE CHANGES ****
+
++actors
+~~~~~~~~~~~~~~~
+Changed the name of the actor set command so people wouldn't accidentally set their actor while trying to search.
+
++cookies
+~~~~~~~~~~~~~~~
+Put in default +luck/info for FS3 users.
+
+FaraMail
+~~~~~~~~~~~~~~~
+Added +mail/toss as an alias to +mail/abort
+
+Globals
+~~~~~~~~~~~~~~~
+Bug in attribute setup for ICLOC. Removed +who/+where, which is now part of a separate system.
+
+Global Functions
+~~~~~~~~~~~~~~~
+Line_without_color was 1 char longer than it should be
+
+Install Manager
+~~~~~~~~~~~~~~~
+Wipe out help and commands and aconnect/adisconnect before upgrading
+
++help and Room Parents
+~~~~~~~~~~~~~~~
++lhelp totally didn't work when you used the ancestor_room setting in the MUSH config. It's now part of the help system. 
+
+
 
 **NOTE TO SELF: Make special patch file to copy over who data
 think [setq(0,install_aliasdb(GLOBALS_DB))][setq(1,install_aliasdb(WHO_DB))][switch(1,match(%q0,#-1),ansi(hc,Globals not installed.  No special action needed.),match(%q1,#-1),ansi(hc,Who system not installed.  No special action needed.),ansi(hc,Moving who config from globals to new who system.)[iter(MUSH_NAME WHO_COLOR TP_ROOM_PARENT WHO_RECORD,switch(hasattr(%q0/##),1,[set(%q1,[switch(##,WHO_COLOR,COLOR,##)]:[xget(%q0,##)])][wipe(%q0/##)]))])]
 
-
-Globals:  Bug in attribute setup for ICLOC
-Functions: Line_without_color was 1 char longer than it should be
-Cookies: Put in default +luck/info
-FaraMail:  Added +mail/toss as an alias to +mail/abort
-Actor: +actor/set
-Disclaimer:  New system for requiring a terms of service agreement.
 DBS: Created a ready-to-go database with all the systems installed and mostly configured (other than the custom configurations).
-Rooms and Help: +lhelp totally didn't work when you used the ancestor_room setting in the MUSH config.
-Install: Wipe out help and commands and aconnect/adisconnect before upgrading
+
+================================================================
+Version 5.0 Patches
+================================================================
+----------------------------------------------------------------================================================================
+
 
 Patch 5.0.3
 

@@ -11,9 +11,9 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(GLOBALS_CMD,Misc Globals,1,0,5.0,Miscellaneous global functions.)
-think install_create(GLOBALS_FUN,Misc Globals Functions,1,1,5.0,Functions for the misc globals.)
-think install_create(GLOBALS_DB,Misc Globals Data,0,1,5.0,Data storage for the misc globals.)
+think install_create(GLOBALS_CMD,Misc Globals,1,0,6.0,Miscellaneous global functions.)
+think install_create(GLOBALS_FUN,Misc Globals Functions,1,1,6.0,Functions for the misc globals.)
+think install_create(GLOBALS_DB,Misc Globals Data,0,1,6.0,Data storage for the misc globals.)
 
 @pemit/silent %#=[ansi(hg,Setting Up Object Attributes...)]%R
 
@@ -28,7 +28,7 @@ think install_create(GLOBALS_DB,Misc Globals Data,0,1,5.0,Data storage for the m
 &CMD-OOC Misc Globals=$ooc *:think remit(%L,[ansi(hb,<OOC>)]%B[parse_pose({%0},%N)])
 &cmd-+rpsearch Misc Globals=$+rpsearch:think pemit(%#,switch(1,xget(%#,rpsearch),ansi(hg,You take yourself off the RP Search list.)[set(%#,rpsearch:0)],ansi(hg,You put yourself on the RP Search list.)[set(%#,rpsearch:1)]))
 &CMD-+afk Misc Globals=$+afk:think switch(xget(%#,status),NEW,pemit(%#,ansi(hr,Unapproved players may not use this command.)),IC,[remit(%l,ansi(h[rand_color()],<OOC> %N steps out for a breath of fresh O2 and takes a break from RP.))][set(%#,status:OOC)][set(%#,icloc:%l)][safe_tel(%#,xget(#GLOBALS_DB,IDLE_LOUNGE))],OOC,[remit(%l,ansi(h[rand_color()],<OOC> %N steps out for a breath of fresh O2 and takes a break from RP.))][safe_tel(%#,xget(#GLOBALS_DB,IDLE_LOUNGE))])]
-&CMD-+IC Misc Globals=$+ic:think switch(xget(%#,status),NEW,pemit(%#,ansi(hr,Unapproved players may not use this command.)),IC,pemit(%#,ansi(hr,You are already IC.)),[remit(%l,ansi(h[rand_color()],<OOC> An off-stage voice hollars "Action" and %N steps to %p mark and gets ready to RP.))][remit(xget(%#,icloc),ansi(h[rand_color()],<OOC> An off-stage voice hollars "Action" and %N steps to %p mark and gets ready to RP.))][safe_tel(%#,xget(%#,icloc))][set(%#,status:IC)])]
+&CMD-+IC Misc Globals=$+ic:think switch(xget(%#,status),NEW,pemit(%#,ansi(hr,Unapproved players may not use this command.)),IC,pemit(%#,ansi(hr,You are already IC.)),[remit(%l,ansi(h[rand_color()],<OOC> An off-stage voice hollers "Action" and %N steps to %p mark and gets ready to RP.))][remit(xget(%#,icloc),ansi(h[rand_color()],<OOC> An off-stage voice hollers "Action" and %N steps to %p mark and gets ready to RP.))][safe_tel(%#,xget(%#,icloc))][set(%#,status:IC)])]
 &CMD-+OOC Misc Globals=$+ooc:think switch(xget(%#,status),NEW,pemit(%#,ansi(hr,Unapproved players may not use this command.)),IC,[remit(%l,ansi(h[rand_color()],<OOC> %N steps out for a breath of fresh O2 and takes a break from RP.))][set(%#,status:OOC)][set(%#,icloc:%l)][remit(xget(#GLOBALS_DB,OOC_CENTER),ansi(h[rand_color()],<OOC> %N steps out for a breath of fresh O2 and takes a break from RP.))][safe_tel(%#,xget(#GLOBALS_DB,OOC_CENTER))],pemit(%#,ansi(hr,You are already OOC.)))
 &CMD-+GLANCE Misc Globals=$+glance:think pemit(%#,[line()]%R[ansi(hg,Quick Glance)][iter(lvplayers(loc(%#)),%R%R[setq(1,xget(##,rank))][setq(2,xget(##,fullname))][setq(3,xget(##,callsign))][switch(words(%q1),>0,[ansi(hr,%q1)]%B)][switch(words(%q2),>0,%q2,[name(##)])][switch(words(%q3),>0,%B\("[ansi(h,%q3)]"\))]%R%B%B%B[age(##)] year old [lcstr(xget(##,sex))].  [u(##/desc_short)]%R[line()])
 &CMD-+KNOCK Misc Globals=$+knock *:think [setq(0,iter(lexits(%l),switch(strmatch(fullname(##),*%0*),1,##),,))][pemit(%#,switch(%q0,,ansi(hr,I don't see an exit with that name.),*#*#*,ansi(hr,I can't tell which exit you mean.  Be more specific.),[ansi(hg,You knock on the door to [name(%q0)].)][remit(loc(%q0),ansi(hg,Someone is knocking at the door.))]))]

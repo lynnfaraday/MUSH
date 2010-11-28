@@ -8,8 +8,8 @@
 @set me=quiet
 @pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Damage module.)] [ansi(hc,NOTE: This may take a minute.)]
 
-think install_create(FS3COMBAT_CMD_DMG,FS3Combat Damage Commands,1,0,5.0,FS3 Damage Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
-think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,5.0,FS3Combat Damage Database. See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3COMBAT_CMD_DMG,FS3Combat Damage Commands,1,0,6.0,FS3 Damage Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
+think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,6.0,FS3Combat Damage Database. See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
 @@  @@@@@@@@@@@@@@@@@@@@@@
 @@  @ DAMAGE VIEW COMMANDS

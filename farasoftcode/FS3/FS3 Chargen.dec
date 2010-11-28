@@ -45,7 +45,7 @@ N
 @@ ========================
 
 &CG here=1
-@DESCRIBE here=In this room, you will set up some basic info about your character's background - how old he is, his job, etc.  This is all subject to approval - you can make yourself an Admiral in chargen, but you won't be approved!%R%R%T[ansi(h,+fullname <full name>)]%R%T[ansi(h,+age <age>)]%R%T[ansi(h,@sex me=<male or female>)]%R%T[ansi(h,+faction <faction>)] (See +factions) %R%T[ansi(h,+position <position>)] (See +positions)%R%T[ansi(h,+org <organization>)] (see +orgs)%R%T[ansi(h,+rank <rank>)] (see +ranks - military chars only)%R%RIf you have an actor in mind for your character, you can set them using the [ansi(hc,+actors)] command.
+@DESCRIBE here=In this room, you will set up some basic info about your character's background - how old he is, his job, etc.  This is all subject to approval - you can make yourself an Admiral in chargen, but you won't be approved!%R%R[space(5)][ansi(h,+fullname <full name>)]%R[space(5)][ansi(h,+age <age>)]%R[space(5)][ansi(h,@sex me=<male or female>)]%R[space(5)][ansi(h,+faction <faction>)] (See +factions) %R[space(5)][ansi(h,+position <position>)] (See +positions)%R[space(5)][ansi(h,+org <organization>)] (see +orgs)%R[space(5)][ansi(h,+rank <rank>)] (see +ranks - military chars only)%R%RIf you have an actor in mind for your character, you can set them using the [ansi(hc,+actors)] command.
 @set here/DESCRIBE=no_command visual prefixmatch public nearby
 
 @dig Abilities=N;next,B;back
@@ -65,7 +65,7 @@ N
 @tel loc(N)
 
 &CG here=1
-@DESCRIBE here=Here you will set up your character's Abilities, including Attributes, Action Skills, Background Skills, Language Skills and Quirks.   See [ansi(hg,+help FS3_Chargen)] for help with Chargen.%R%R%T[ansi(h,+reset)] - Starts setting abilities, erasing any current ones.  [ansi(hr,*Do this first!*)]%R%T[ansi(h,+sheet)] - Views your character sheet%R%T[ansi(h,+points)] - Views your points remaining%R%T[ansi(h,+limits)] - Views limits on what you can spend.%R%R%T[ansi(h,+abilities)] - Views all abilities%R%T[ansi(h,+raise <type>/<ability>)] and [ansi(h,+lower <type>/<ability>)]%R%T[ansi(h,+ability <type>/<ability>=<level>)]%R%T- type must be one of attr, action, bg, lang%R%T- type may be omitted for action skills and attributes%R%R%T[ansi(h,+quirk/add <quirk>)] and [ansi(h,+quirk/delete <quirk>)]%R%R%TYou may also want to configure ruling attributes for your%R%Tbackground skills.  See +help +rulingattr
+@DESCRIBE here=Here you will set up your character's Abilities, including Attributes, Action Skills, Background Skills, Language Skills and Quirks.   See [ansi(hg,+help FS3_Chargen)] for help with Chargen.%R%R[space(5)][ansi(h,+reset)] - Starts setting abilities, erasing any current ones.  [ansi(hr,*Do this first!*)]%R[space(5)][ansi(h,+sheet)] - Views your character sheet%R[space(5)][ansi(h,+points)] - Views your points remaining%R[space(5)][ansi(h,+limits)] - Views limits on what you can spend.%R%R[space(5)][ansi(h,+abilities)] - Views all abilities%R[space(5)][ansi(h,+raise <type>/<ability>)] and [ansi(h,+lower <type>/<ability>)]%R[space(5)][ansi(h,+ability <type>/<ability>=<level>)]%R[space(5)]- type must be one of attr, action, bg, lang%R[space(5)]- type may be omitted for action skills and attributes%R%R[space(5)][ansi(h,+quirk/add <quirk>)] and [ansi(h,+quirk/delete <quirk>)]%R%R[space(5)]You may also want to configure ruling attributes for your%R[space(5)]background skills.  See +help +rulingattr
 
 @dig Background=N;next,B;back
 
@@ -82,7 +82,7 @@ N
 @@ ========================
 
 &CG here=1
-@DESCRIBE here=This is the room where you set up your character's backstory, or background.  Make sure that your background matches your character's skills and other information.%R%RYour background is just another MUSH attribute on yourself, like your description. You can set it by typing [ansi(hg,&bg me=<your background text>)]. You can use the built-in MUSH editing commands (@edit, @dec, etc.) to edit it.%R%RIf your background is particularly long, you can split it into multiple attributes, like:%R%T[ansi(h,&BG1 me=This is the first part of my bg.)]%R%T[ansi(h,&BG2 me=This is the second part of my bg.)]%R%Tetc.%R%RThe [ansi(h,+bg)] command will let you view your background.  Use [ansi(hg,+bg/submit)] to submit it when you've finished.
+@DESCRIBE here=This is the room where you set up your character's backstory, or background.  Make sure that your background matches your character's skills and other information.%R%RYour background is just another MUSH attribute on yourself, like your description. You can set it by typing [ansi(hg,&bg me=<your background text>)]. You can use the built-in MUSH editing commands (@edit, @dec, etc.) to edit it.%R%RIf your background is particularly long, you can split it into multiple attributes, like:%R[space(5)][ansi(h,&BG1 me=This is the first part of my bg.)]%R[space(5)][ansi(h,&BG2 me=This is the second part of my bg.)]%R[space(5)]etc.%R%RThe [ansi(h,+bg)] command will let you view your background.  Use [ansi(hg,+bg/submit)] to submit it when you've finished.
 
 @dig Approval=N;next,B;back
 

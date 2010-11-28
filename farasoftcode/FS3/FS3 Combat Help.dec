@@ -8,7 +8,7 @@
 @set me=quiet
 @pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Help module.)]
 
-think install_create(FS3COMBAT_HELP,FS3Combat Help,0,1,5.0,FS3Combat Help.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3COMBAT_HELP,FS3Combat Help,0,1,6.0,FS3Combat Help.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
 &MORE_HELP_+GEAR FS3Combat Help=[ansi(hb,This help file is a quick reference for the FS3 Combat System. %RFor more details, see [u(more_help_fs3combat_url)])]%R%R[ansi(h,Gear Commands)]%R%b +gear/weapons - Lists weapon stats%r%b%b+gear/armor - Lists armor stats%r%b%b+gear/vehicles - Lists vehicle stats
 
