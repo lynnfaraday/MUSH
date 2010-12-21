@@ -17,7 +17,7 @@
             <asp:Label ID="Label1" runat="server" CssClass="LabelTitle" Text="EMS Charts PRID #:"></asp:Label>
         </td>
         <td>
-            <asp:TextBox ID="StateNumberBox" runat="server"></asp:TextBox>
+            <asp:TextBox ID="StateNumberBox" runat="server" Text="<%# CallData.StateNumber %>"></asp:TextBox>
         </td>
         <td>
             &nbsp;
@@ -28,7 +28,8 @@
             <asp:Label ID="Label2" runat="server" CssClass="LabelTitle" Text="Dispatch Date:"></asp:Label>
         </td>
         <td>
-            <asp:Calendar ID="DispatchedCalendar" runat="server"            
+            <asp:Calendar ID="DispatchedCalendar" runat="server"      
+             SelectedDate="<%# CallData.Dispatched.Date %>"      
              OnDayRender="RenderCalendar">
             </asp:Calendar>
         </td>
@@ -41,11 +42,12 @@
             <asp:Label ID="Label3" runat="server" CssClass="LabelTitle" Text="Dispatch Time (HH:MM):"></asp:Label>
         </td>
         <td>
-            <asp:TextBox ID="DispatchTimeBox" runat="server" MaxLength="5"></asp:TextBox>
+            <asp:TextBox ID="DispatchTimeBox" runat="server" MaxLength="5" Text="<%# CallData.Dispatched.TimeOfDay.ToString() %>">
+            </asp:TextBox>
         </td>
         <td>
             <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="DispatchTimeBox">
-  Dispatch Time is required.
+            Dispatch Time is required.
             </asp:RequiredFieldValidator>
             <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="DispatchTimeBox"
                 ErrorMessage="Dispatch time should be HH:MM in military time.  For example: 18:24."
@@ -57,7 +59,7 @@
             <asp:Label ID="Label4" runat="server" CssClass="LabelTitle" Text="Location:"></asp:Label>
         </td>
         <td>
-            <asp:TextBox ID="LocationBox" runat="server"></asp:TextBox>
+            <asp:TextBox ID="LocationBox" runat="server" Text="<%# CallData.Location %>"></asp:TextBox>
         </td>
         <td>
             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="LocationBox">
@@ -94,7 +96,7 @@
             <asp:Label ID="Label6" runat="server" CssClass="LabelTitle" Text="Chief Complaint/Summary:"></asp:Label>
         </td>
         <td>
-            <asp:TextBox ID="ChiefComplaintBox" runat="server"></asp:TextBox>
+            <asp:TextBox ID="ChiefComplaintBox" runat="server" Text="<%# CallData.ChiefComplaint %>"></asp:TextBox>
         </td>
         <td>
             <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ChiefComplaintBox">
@@ -107,7 +109,7 @@
             <asp:Label ID="Label7" runat="server" CssClass="LabelTitle" Text="Age:"></asp:Label>
         </td>
         <td>
-            <asp:TextBox ID="AgeBox" runat="server"></asp:TextBox>
+            <asp:TextBox ID="AgeBox" runat="server" Text="<%# CallData.Age %>"></asp:TextBox>
             <asp:DropDownList ID="AgeUnitsSelection" runat="server">
                 <asp:ListItem Value="Years"></asp:ListItem>
                 <asp:ListItem Value="Months"></asp:ListItem>
@@ -150,19 +152,13 @@
     </tr>
     <tr>
         <td>
-            <asp:Label ID="Label10" runat="server" CssClass="LabelTitle" Text="Crew Level:"></asp:Label>
+            <asp:Label ID="Label10" runat="server" CssClass="LabelTitle" Text="ALS Crew?"></asp:Label>
         </td>
         <td>
-            <asp:DropDownList ID="CrewLevelSelection" runat="server">
-                <asp:ListItem Value="--Select One--" Selected="True"></asp:ListItem>
-                <asp:ListItem Value="ALS"></asp:ListItem>
-                <asp:ListItem Value="BLS"></asp:ListItem>
-            </asp:DropDownList>
+            <asp:CheckBox ID="ALSCrew" runat="server"  Checked="<%# CallData.ALS %>" />
         </td>
         <td>
-            <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ErrorMessage="You must select a crew level."
-                ControlToValidate="CrewLevelSelection" InitialValue="--Select One--">
-            </asp:RequiredFieldValidator>
+           &nbsp;
         </td>
     </tr>
     <tr>

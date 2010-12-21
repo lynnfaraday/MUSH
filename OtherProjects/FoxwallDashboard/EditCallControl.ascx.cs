@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Linq;
 using System.Web.UI.WebControls;
 
 namespace FoxwallDashboard
@@ -17,34 +16,35 @@ namespace FoxwallDashboard
     {
         public EditCallControl()
         {
-            // Assume it's a new call.  If editing an old one, someone will
-            // set our CallData later.
-            CallData = new Call
-            {
-                CallID = new Guid(),
-                Dispatched = DateTime.Today
-            };
-
             Load += HandlePageLoad;
+            
         }
 
-        private Call _callData;
-        public Call CallData
+        public Call CallData { get; set; }
+
+        private void Update()
         {
-            get { return _callData; }
-            set
-            {
-                _callData = value;
-               // DataBind();
-            }
+            DataBind();
+            BoroughSelection.SelectedValue = CallData.Borough;
+            DispositionSelection.SelectedValue = CallData.Disposition;
+            DispatchTimeBox.Text = CallData.Dispatched.ToString("HH:mm");
         }
 
         private void HandlePageLoad(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
             {
-               // DataBind();
+                
+                // Assume it's a new call.  If editing an old one, someone will
+                // set our CallData later.
+                CallData = new Call
+                {
+                    CallID = new Guid(),
+                    Dispatched = DateTime.Today
+                };
+                Update();
             }
+          
         }
 
         protected void SaveButtonClick(object sender, EventArgs e)
@@ -57,8 +57,9 @@ namespace FoxwallDashboard
 
             FoxwallDb db = new FoxwallDb();
 
-           // if (CallData.IsNew)
+            if (CallData.IsNew)
             {
+                CallData.CallID = Guid.NewGuid();
                 db.Calls.InsertOnSubmit(CallData);              
             }
             db.SubmitChanges();

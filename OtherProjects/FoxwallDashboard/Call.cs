@@ -39,7 +39,7 @@ namespace FoxwallDashboard
         public string Disposition { get; set; }
 
         [Column]
-        public int? StateNumber { get; set; }
+        public int StateNumber { get; set; }
 
         [Column]
 // ReSharper disable InconsistentNaming

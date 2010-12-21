@@ -18,7 +18,7 @@ namespace FoxwallDashboard
         {
             FoxwallDb db = new FoxwallDb(); 
             var call = db.Calls.Where(c => c.CallID == new Guid("8E6F6D3C-F63A-430C-9359-BD63AD1EB807")).FirstOrDefault();
-            //CallControl.CallData = call;
+            CallControl.CallData = call;
         }
     }
 
