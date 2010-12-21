@@ -20,6 +20,9 @@ namespace FoxwallDashboard
         [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Required for SQL binding.")]
         public Table<Call> Calls;
 
+        [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Required for SQL binding.")]
+        public Table<IncidentNumber> IncidentNumbers;
+
         public FoxwallDb() : base(new SqlConnection(ConnectionString))
         {
         }

@@ -18,38 +18,35 @@ namespace FoxwallDashboard
         public EditCallControl()
         {
             Load += HandlePageLoad;
-            
         }
 
-        // Have to store this in the session data so that it can be carried across page loads.
-        // (could use viewstate but then I have to make it serializable)
-        public Call CallData
+        private Guid CallID
         {
-            get { return Session["CallData"] as Call; }
-            set
-            {
-                Session["CallData"] = value;
-                UpdateFieldsFromCallData();
-            }
+            get { return (Guid)ViewState["CallID"]; }
+            set { ViewState["CallID"] = value;  }
         }
 
         // Sure would be great to do this in binding, if only I could figure out how :(
-        private void UpdateFieldsFromCallData()
+        private void UpdateFieldsFromCallData(Call call)
         {
-            StateNumberBox.Text = CallData.StateNumber;
-            DispatchedCalendar.SelectedDate = CallData.Dispatched.Date;
-            DispatchTimeBox.Text = CallData.Dispatched.ToString("HH:mm");
-            LocationBox.Text = CallData.Location;
-            BoroughSelection.SelectedValue = CallData.Borough;
-            ChiefComplaintBox.Text = CallData.ChiefComplaint;
-            AgeBox.Text = CallData.Age.ToString();
-            AgeUnitsSelection.SelectedValue = CallData.AgeUnits;
-            DispositionSelection.SelectedValue = CallData.Disposition;
-            ALSCrew.Checked = CallData.ALS;
+            StateNumberBox.Text = call.StateNumber;
+            DispatchedCalendar.SelectedDate = call.Dispatched.Date;
+            DispatchTimeBox.Text = call.Dispatched.ToString("HH:mm");
+            LocationBox.Text = call.Location;
+            BoroughSelection.SelectedValue = call.Borough;
+            ChiefComplaintBox.Text = call.ChiefComplaint;
+            AgeBox.Text = call.Age.ToString();
+            AgeUnitsSelection.SelectedValue = call.AgeUnits;
+            DispositionSelection.SelectedValue = call.Disposition;
+            ALSCrew.Checked = call.ALS;
 
-            if (CallData.IsNew)
+            if (call.IsNew)
             {
-                IncidentNumberValue.Text = "Incident # be assigned when you save the call.";
+                IncidentNumberValue.Text = "(Not Saved)";
+            }
+            else
+            {
+                IncidentNumberValue.Text = call.IncidentNumber.ToString();
             }
         }
 
@@ -72,12 +69,38 @@ namespace FoxwallDashboard
         {
             if (!Page.IsPostBack)
             {
-                // Assume it's a new call.  If editing an old one, someone will
-                // set our CallData later.
-                CallData = Call.NewCall();
-                UpdateFieldsFromCallData();
+                try
+                {
+                    Call callData;
+
+                    // If we're being asked to load an old call, try to do so.
+                    if (Request.QueryString.AllKeys.Contains("CallID"))
+                    {
+                        CallID = new Guid(Request.QueryString["CallID"]);
+                        var db = new FoxwallDb();
+                        callData = db.Calls.Where(c => c.CallID == CallID).FirstOrDefault();
+
+                        if (callData == null)
+                        {
+                            throw new ApplicationException("Could not find call with ID " + CallID + ".");
+                        }
+                    }
+
+                    // Otherwise assume it's new.
+                    else
+                    {
+                        CallID = new Guid();
+                        callData = Call.NewCall();
+                    }
+
+                    UpdateFieldsFromCallData(callData);
+                }
+                catch (Exception ex)
+                {
+                    ErrorLabel.Text = "Error loading call.  Please try again.<br>If the problem persists, contact support and " +
+                                  "mention the following message: " + ex.Message;
+                }
             }
-          
         }
 
         protected void SaveButtonClick(object sender, EventArgs e)
@@ -87,30 +110,48 @@ namespace FoxwallDashboard
                 ErrorLabel.Text = "Please correct the errors shown above and try again.";
                 return;
             }
-            
-            FoxwallDb db = new FoxwallDb();
 
-            // TODO: Try catches and sensible error handling here!
-            if (CallData.IsNew)
+            FoxwallDb db = new FoxwallDb();
+            try
             {
-                // If it's a new call, assign it a GUID and add it.
-                CallData.CallID = Guid.NewGuid();
-                // TODO: Use incident number table to assign new incident number at this point.
-                db.Calls.InsertOnSubmit(CallData);              
-            }
-            else
-            {
-                // Oddly, even though we loaded the call a minute ago we need to RE-load it so that we can update it.
-                var call = db.Calls.Where(c => c.CallID == CallData.CallID).FirstOrDefault();
-                if (call == null)
+                Call call;
+                if (CallID == new Guid())
                 {
-                    throw new ApplicationException("Wait a minute... something happened to the call I was working on.");
+                    call = SetupNewCall(db);
+                }
+                else
+                {
+                    // Oddly, even though we loaded the call a minute ago we need to RE-load it so that we can update it.
+                    // If for some reason this fails, it must mean that we need to treat it like a new call.  Could be
+                    // the first attempt to save it failed.
+                    call = db.Calls.Where(c => c.CallID == CallID).FirstOrDefault();
+                    if (call == null)
+                    {
+                        call = SetupNewCall(db);
+                    }
                 }
                 UpdateCallDataFromFields(call);
-            }
-            db.SubmitChanges();
-            IncidentNumberValue.Text = CallData.IncidentNumber.ToString();
+                call.IncidentNumber = IncidentNumber.UpdateOrAssignIncidentNumber(call);
 
+                db.SubmitChanges();
+                IncidentNumberValue.Text = call.IncidentNumber.ToString();
+            }
+            catch (Exception ex)
+            {
+                ErrorLabel.Text = "Ooops, something went wrong saving your call.  Please try again.<br>If the problem persists, contact support and " +
+                                  "mention the following message: " + ex.Message;
+            }
+        }
+
+        // When setting up a new call, we need to put all the data into it and then assign a new ID and
+        // Incident Number.  This should only be done immediately before saving, to avoid wasting the
+        // incident number.
+        private Call SetupNewCall(FoxwallDb db)
+        {
+            var call = Call.NewCall();
+            CallID = call.CallID = Guid.NewGuid();
+            db.Calls.InsertOnSubmit(call);
+            return call;
         }
 
         // Keep them from selecting dates in the future.

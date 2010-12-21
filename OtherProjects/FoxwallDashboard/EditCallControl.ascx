@@ -1,5 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EditCallControl.ascx.cs"
     Inherits="FoxwallDashboard.EditCallControl" %>
+
 <table>
     <tr>
         <td>
@@ -170,14 +171,13 @@
         &nbsp;
         </td>
         <td>
-        <asp:Label ID="ErrorLabel" runat="server"></asp:Label>
+        &nbsp;
         </td>
 
     </tr>
     <tr>
-        <td>
-        </td>
-        <td>
+        <td colspan="3">
+        <asp:Label ID="ErrorLabel" runat="server" CssClass="Error"></asp:Label>
         </td>
     </tr>
 </table>
