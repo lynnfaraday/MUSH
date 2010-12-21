@@ -17,6 +17,20 @@ namespace FoxwallDashboard
     {
         private static readonly string NewGuidString = new Guid().ToString();
 
+        public static Call NewCall()
+        {
+            return new Call
+            {
+                Age = 0,
+                AgeUnits = "years",
+                Borough = "",
+                CallID = new Guid(),
+                Dispatched = DateTime.Now,
+                StateNumber = "",
+                IncidentNumber = 0
+            };
+        }
+
         [Column(IsPrimaryKey = true)]
         public Guid CallID { get; set; }
 
@@ -30,6 +44,9 @@ namespace FoxwallDashboard
         public int Age { get; set; }
 
         [Column]
+        public string AgeUnits { get; set; }
+
+        [Column]
         public string Borough { get; set; }
 
         [Column]
@@ -39,7 +56,10 @@ namespace FoxwallDashboard
         public string Disposition { get; set; }
 
         [Column]
-        public int StateNumber { get; set; }
+        public string StateNumber { get; set; }
+
+        [Column]
+        public int IncidentNumber { get; set; }
 
         [Column]
 // ReSharper disable InconsistentNaming
