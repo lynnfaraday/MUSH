@@ -9,7 +9,12 @@
 
 namespace FoxwallDashboard
 {
-    public class IncidentNumberAssigner
+    public interface IAssignIncidentNumbers
+    {
+        int UpdateOrAssignIncidentNumber(Call call);
+    }
+
+    public class IncidentNumberAssigner : IAssignIncidentNumbers
     {
         private readonly IRepository _repo;
         static readonly object Padlock = new object();

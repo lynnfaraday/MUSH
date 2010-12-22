@@ -56,6 +56,9 @@ namespace FoxwallDashboard
             call.AgeUnits = AgeUnitsSelection.SelectedValue;
             call.Disposition = DispositionSelection.SelectedValue;
             call.ALS = ALSCrew.Checked;
+
+            int incidentNumber;
+            call.IncidentNumber = int.TryParse(IncidentNumberValue.Text, out incidentNumber) ? incidentNumber : 0;
         }
 
         private void HandlePageLoad(object sender, EventArgs e)
@@ -111,19 +114,15 @@ namespace FoxwallDashboard
 
             var repo = new Repository();
             var incidentNumberAssigner = new IncidentNumberAssigner(repo);
-
+            var saveHandler = new SaveCallHandler(repo, incidentNumberAssigner);
             try
             {
-                Call call = repo.FindCallByID(CallID);
-                if (call == null)
-                {
-                    call = Call.NewCall();
-                }
+                // Set up a temporary call containing our call data from the GUI.
+                var call = Call.NewCall();
+                call.CallID = CallID;
                 UpdateCallDataFromFields(call);
 
-                call.IncidentNumber = incidentNumberAssigner.UpdateOrAssignIncidentNumber(call);
-                call = repo.SaveCall(call);
-                
+                call = saveHandler.SaveCall(call);
                 CallID = call.CallID;
                 IncidentNumberValue.Text = call.IncidentNumber.ToString();
 

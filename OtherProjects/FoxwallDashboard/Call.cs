@@ -29,6 +29,21 @@ namespace FoxwallDashboard
             };
         }
 
+        public void UpdateFrom(Call otherCall)
+        {
+            CallID = otherCall.CallID;
+            Location = otherCall.Location;
+            Dispatched = otherCall.Dispatched;
+            Age = otherCall.Age;
+            AgeUnits = otherCall.AgeUnits;
+            Borough = otherCall.Borough;
+            ChiefComplaint = otherCall.ChiefComplaint;
+            Disposition = otherCall.Disposition;
+            StateNumber = otherCall.StateNumber;
+            IncidentNumber = otherCall.IncidentNumber;
+            ALS = otherCall.ALS;
+        }
+
         [Column(IsPrimaryKey = true)]
         public Guid CallID { get; set; }
 
