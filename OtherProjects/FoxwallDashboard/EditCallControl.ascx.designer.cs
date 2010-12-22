@@ -13,6 +13,15 @@ namespace FoxwallDashboard {
     public partial class EditCallControl {
         
         /// <summary>
+        /// ContentPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel ContentPanel;
+        
+        /// <summary>
         /// Label9 control.
         /// </summary>
         /// <remarks>
@@ -283,12 +292,12 @@ namespace FoxwallDashboard {
         protected global::System.Web.UI.WebControls.Button SaveButton;
         
         /// <summary>
-        /// ErrorLabel control.
+        /// NoticeLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label ErrorLabel;
+        protected global::System.Web.UI.WebControls.Label NoticeLabel;
     }
 }

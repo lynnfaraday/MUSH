@@ -40,14 +40,7 @@ namespace FoxwallDashboard
             DispositionSelection.SelectedValue = call.Disposition;
             ALSCrew.Checked = call.ALS;
 
-            if (call.IsNew)
-            {
-                IncidentNumberValue.Text = "(Not Saved)";
-            }
-            else
-            {
-                IncidentNumberValue.Text = call.IncidentNumber.ToString();
-            }
+            IncidentNumberValue.Text = call.IsNew ? "(Not Saved)" : call.IncidentNumber.ToString();
         }
 
         private void UpdateCallDataFromFields(Call call)
@@ -67,39 +60,44 @@ namespace FoxwallDashboard
 
         private void HandlePageLoad(object sender, EventArgs e)
         {
-            if (!Page.IsPostBack)
+            // Ignore postbacks.
+            if (Page.IsPostBack)
             {
-                try
+                return;
+            }
+
+            try
+            {
+                Call callData;
+
+                // If we're being asked to load an old call, try to do so.
+                if (Request.QueryString.AllKeys.Contains("CallID"))
                 {
-                    Call callData;
+                    CallID = new Guid(Request.QueryString["CallID"]);
+                    var repo = new Repository();
+                    callData = repo.FindCallByID(CallID);
 
-                    // If we're being asked to load an old call, try to do so.
-                    if (Request.QueryString.AllKeys.Contains("CallID"))
+                    if (callData == null)
                     {
-                        CallID = new Guid(Request.QueryString["CallID"]);
-                        var db = new FoxwallDb();
-                        callData = db.Calls.Where(c => c.CallID == CallID).FirstOrDefault();
-
-                        if (callData == null)
-                        {
-                            throw new ApplicationException("Could not find call with ID " + CallID + ".");
-                        }
+                        throw new ApplicationException("Could not find call with ID " + CallID + ".");
                     }
-
-                    // Otherwise assume it's new.
-                    else
-                    {
-                        CallID = new Guid();
-                        callData = Call.NewCall();
-                    }
-
-                    UpdateFieldsFromCallData(callData);
                 }
-                catch (Exception ex)
+
+                // Otherwise it's new.
+                else
                 {
-                    ErrorLabel.Text = "Error loading call.  Please try again.<br>If the problem persists, contact support and " +
-                                  "mention the following message: " + ex.Message;
+                    CallID = new Guid();
+                    callData = Call.NewCall();
                 }
+
+                UpdateFieldsFromCallData(callData);
+
+                HideNotice();
+            }
+            catch (Exception ex)
+            {
+                ShowNotice("Error loading call.  Please try again.<br>If the problem persists, contact support and " +
+                          "mention the following message: " + ex.Message, true);
             }
         }
 
@@ -107,51 +105,47 @@ namespace FoxwallDashboard
         {
             if (!Page.IsValid)
             {
-                ErrorLabel.Text = "Please correct the errors shown above and try again.";
+                ShowNotice("Please correct the errors shown above and try again.", false);
                 return;
             }
 
-            FoxwallDb db = new FoxwallDb();
+            var repo = new Repository();
+            var incidentNumberAssigner = new IncidentNumberAssigner(repo);
+
             try
             {
-                Call call;
-                if (CallID == new Guid())
+                Call call = repo.FindCallByID(CallID);
+                if (call == null)
                 {
-                    call = SetupNewCall(db);
-                }
-                else
-                {
-                    // Oddly, even though we loaded the call a minute ago we need to RE-load it so that we can update it.
-                    // If for some reason this fails, it must mean that we need to treat it like a new call.  Could be
-                    // the first attempt to save it failed.
-                    call = db.Calls.Where(c => c.CallID == CallID).FirstOrDefault();
-                    if (call == null)
-                    {
-                        call = SetupNewCall(db);
-                    }
+                    call = Call.NewCall();
                 }
                 UpdateCallDataFromFields(call);
-                call.IncidentNumber = IncidentNumber.UpdateOrAssignIncidentNumber(call);
 
-                db.SubmitChanges();
+                call.IncidentNumber = incidentNumberAssigner.UpdateOrAssignIncidentNumber(call);
+                call = repo.SaveCall(call);
+                
+                CallID = call.CallID;
                 IncidentNumberValue.Text = call.IncidentNumber.ToString();
+
+                ShowNotice("Call saved!", false);
             }
             catch (Exception ex)
             {
-                ErrorLabel.Text = "Ooops, something went wrong saving your call.  Please try again.<br>If the problem persists, contact support and " +
-                                  "mention the following message: " + ex.Message;
+                ShowNotice("Ooops, something went wrong saving your call.  Please try again.<br>If the problem persists, contact support and " +
+                          "mention the following message: " + ex.Message, false);
             }
         }
 
-        // When setting up a new call, we need to put all the data into it and then assign a new ID and
-        // Incident Number.  This should only be done immediately before saving, to avoid wasting the
-        // incident number.
-        private Call SetupNewCall(FoxwallDb db)
+        private void ShowNotice(string message, bool hideContent)
         {
-            var call = Call.NewCall();
-            CallID = call.CallID = Guid.NewGuid();
-            db.Calls.InsertOnSubmit(call);
-            return call;
+            NoticeLabel.Text = message;
+            ContentPanel.Visible = !hideContent;
+        }
+
+        private void HideNotice()
+        {
+            ContentPanel.Visible = true;
+            NoticeLabel.Text = string.Empty;
         }
 
         // Keep them from selecting dates in the future.

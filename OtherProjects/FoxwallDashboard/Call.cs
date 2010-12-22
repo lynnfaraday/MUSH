@@ -15,8 +15,6 @@ namespace FoxwallDashboard
     [Table(Name = "Calls")]
     public class Call
     {
-        private static readonly string NewGuidString = new Guid().ToString();
-
         public static Call NewCall()
         {
             return new Call
@@ -70,7 +68,7 @@ namespace FoxwallDashboard
         {
             get
             {
-                return CallID.ToString() == NewGuidString;
+                return CallID == new Guid();
             }
         }
     }

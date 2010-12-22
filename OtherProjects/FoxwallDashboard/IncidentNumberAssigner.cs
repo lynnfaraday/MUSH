@@ -1,36 +1,31 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IncidentNumber.cs" company="Wordsmyth Games">
+// <copyright file="IncidentNumberAssigner.cs" company="Wordsmyth Games">
 //   Copyright (C) 2010 by Linda Naughton
 // </copyright>
 // <summary>
-//   Defines the IncidentNumber type.
+//   Defines the IncidentNumberAssigner type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Data.Linq.Mapping;
-using System.Linq;
-
 namespace FoxwallDashboard
 {
-    [Table(Name = "IncidentNumbers")]
-    public class IncidentNumber
+    public class IncidentNumberAssigner
     {
-        [Column(IsPrimaryKey = true)]
-        public int Year { get; set; }
-
-        [Column]
-        public int LastIncident { get; set; }
-
+        private readonly IRepository _repo;
         static readonly object Padlock = new object();
+
+        public IncidentNumberAssigner(IRepository repo)
+        {
+            _repo = repo;
+        }
 
         // This method assigns an incident number.  Assignment is permanent, so once the incident number
         // is assigned that number will never be used again.
-        public static int UpdateOrAssignIncidentNumber(Call call)
+        public int UpdateOrAssignIncidentNumber(Call call)
         {
             var year = call.Dispatched.Year;
             var oldIncidentNumber = call.IncidentNumber;
-            var db = new FoxwallDb();
-            IncidentNumber yearEntry;
+            YearlyIncidentRecord record;
 
             // If the year of the call matches the year of the incident number, we're good.  Return.
             if (oldIncidentNumber.ToString().StartsWith(year.ToString()))
@@ -43,22 +38,21 @@ namespace FoxwallDashboard
             lock (Padlock)
             {
                 // See if we already have an incident record for this year.
-                yearEntry = db.IncidentNumbers.Where(i => i.Year == year).FirstOrDefault();
+
+                record = _repo.FindIncidentRecordByYear(year);
 
                 // If it doesn't exist, create it.
-                if (yearEntry == null)
+                if (record == null)
                 {
-                    // Multiplying by 10,000 will make the year something like 20110000
-                    yearEntry = new IncidentNumber {LastIncident = year * 10000, Year = year};
-                    db.IncidentNumbers.InsertOnSubmit(yearEntry);
+                    record = YearlyIncidentRecord.NewYearlyIncidentRecord(year);
                 }
 
                 // Increment the last entry.
-                yearEntry.LastIncident++;
+                record.LastIncident++;
 
-                db.SubmitChanges();
+                record = _repo.SaveIncidentRecord(record);
             }
-            return yearEntry.LastIncident;
+            return record.LastIncident;
         }
     }
 }
