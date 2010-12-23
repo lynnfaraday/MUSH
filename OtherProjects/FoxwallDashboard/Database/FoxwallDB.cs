@@ -10,8 +10,9 @@
 using System.Data.Linq;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
+using FoxwallDashboard.Models;
 
-namespace FoxwallDashboard
+namespace FoxwallDashboard.Database
 {
     public class FoxwallDb : DataContext
     {
@@ -21,7 +22,10 @@ namespace FoxwallDashboard
         public Table<Call> Calls;
 
         [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Required for SQL binding.")]
-        public Table<YearlyIncidentRecord> IncidentNumbers;
+        public Table<YearlyIncidentRecord> YearlyIncidents;
+
+        [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Required for SQL binding.")]
+        public Table<Person> People;
 
         public FoxwallDb() : base(new SqlConnection(ConnectionString))
         {

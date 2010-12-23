@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true"
     CodeBehind="Default.aspx.cs" Inherits="FoxwallDashboard.DefaultPage" %>
-<%@ Register TagPrefix="foxwall" Src="~/EditCallControl.ascx" TagName="EditCallControl" %>
+<%@ Register TagPrefix="foxwall" Src="~/EditPersonControl.ascx" TagName="EditPersonControl" %>
 
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
 </asp:Content>
@@ -8,6 +8,7 @@
     
 <asp:Button ID="LoadButton" runat="server" Text="Load" OnClick="LoadButtonClick"  CausesValidation="False" />
 
-<foxwall:EditCallControl runat="server" ID="CallControl" />   
+<foxwall:EditPersonControl runat="server" ID="PersonControl" /> 
+
     
 </asp:Content>

@@ -9,9 +9,8 @@
 
 using System;
 using System.Data.Linq.Mapping;
-using System.Linq;
 
-namespace FoxwallDashboard
+namespace FoxwallDashboard.Models
 {
     [Table(Name = "YearlyIncidents")]
     public class YearlyIncidentRecord
@@ -25,7 +24,7 @@ namespace FoxwallDashboard
         [Column]
         public int LastIncident { get; set; }
 
-        public static YearlyIncidentRecord NewYearlyIncidentRecord(int year)
+        public static YearlyIncidentRecord New(int year)
         {
             // Multiplying by 10,000 will make the year something like 20110000
             return new YearlyIncidentRecord {ID = new Guid(), LastIncident = year * 10000, Year = year};

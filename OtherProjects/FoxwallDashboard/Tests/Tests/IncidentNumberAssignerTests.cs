@@ -9,6 +9,9 @@
 
 using System;
 using FoxwallDashboard;
+using FoxwallDashboard.Database;
+using FoxwallDashboard.Handlers;
+using FoxwallDashboard.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
 using Rhino.Mocks.Interfaces;
@@ -32,7 +35,7 @@ namespace Tests
         {
             _repo = MockRepository.GenerateMock<IRepository>();
             _incidentAssigner = new IncidentNumberAssigner(_repo);
-            _call = Call.NewCall();
+            _call = Call.New();
             _call.Dispatched = new DateTime(DefaultYear, 12, 24);
         }
 
@@ -89,7 +92,7 @@ namespace Tests
             // We expect that internally the assigner will create a new incident record
             // and then update the last incident number, so we set up our expected result
             // to match.
-            var newYearRecord = YearlyIncidentRecord.NewYearlyIncidentRecord(2007);
+            var newYearRecord = YearlyIncidentRecord.New(2007);
             newYearRecord.LastIncident++;
 
             _repo.Expect(r => r.FindIncidentRecordByYear(2007)).Return(null);

@@ -9,8 +9,9 @@
 
 using System;
 using System.Linq;
+using FoxwallDashboard.Models;
 
-namespace FoxwallDashboard
+namespace FoxwallDashboard.Database
 {
     public interface IRepository
     {
@@ -19,6 +20,9 @@ namespace FoxwallDashboard
         Call SaveCall(Call call);
         YearlyIncidentRecord SaveIncidentRecord(YearlyIncidentRecord record);
         YearlyIncidentRecord FindIncidentRecordByYear(int year);
+        Person FindPersonByID(Guid id);
+        Person FindPerson(Func<Person, bool> predicate);
+        Person SavePerson(Person person);
     }
 
     public class Repository : IRepository
@@ -50,7 +54,7 @@ namespace FoxwallDashboard
 
         public YearlyIncidentRecord FindIncidentRecordByYear(int year)
         {
-            return _db.IncidentNumbers.Where(i => i.Year == year).FirstOrDefault();
+            return _db.YearlyIncidents.Where(i => i.Year == year).FirstOrDefault();
         }
 
         public YearlyIncidentRecord SaveIncidentRecord(YearlyIncidentRecord record)
@@ -58,10 +62,33 @@ namespace FoxwallDashboard
             if (record.IsNew)
             {
                 record.ID = Guid.NewGuid();
-                _db.IncidentNumbers.InsertOnSubmit(record);
+                _db.YearlyIncidents.InsertOnSubmit(record);
             }
             _db.SubmitChanges();
             return record;
         }
+        
+        public Person FindPersonByID(Guid id)
+        {
+            return FindPerson(p => p.ID == id);
+        }
+        
+        public Person FindPerson(Func<Person, bool> predicate)
+        {
+            return _db.People.Where(predicate).FirstOrDefault();
+        }
+
+        public Person SavePerson(Person person)
+        {
+            // Assign a new GUID if needed and add to the database.
+            if (person.IsNew)
+            {
+                person.ID = Guid.NewGuid();
+                _db.People.InsertOnSubmit(person);
+            }
+            _db.SubmitChanges();
+            return person;
+        }
+
     }
 }

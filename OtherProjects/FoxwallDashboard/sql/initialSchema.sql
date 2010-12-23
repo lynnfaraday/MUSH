@@ -47,7 +47,6 @@ CREATE TABLE [dbo].[YearlyIncidents](
 
 GO
 
-
 USE [test]
 GO
 
@@ -62,10 +61,10 @@ CREATE TABLE [dbo].[People](
 	[ID] [uniqueidentifier] NOT NULL,
 	[FirstName] [nvarchar](50) NULL,
 	[LastName] [nvarchar](50) NOT NULL,
-	[username] [nvarchar](50) NULL,
-	[password] [nvarchar](50) NULL,
-	[administrator] [bit] NOT NULL,
-	[active] [bit] NOT NULL
+	[Username] [nvarchar](50) NULL,
+	[Password] [nvarchar](50) NULL,
+	[Administrator] [bit] NOT NULL,
+	[Active] [bit] NOT NULL
 ) ON [PRIMARY]
 
 GO

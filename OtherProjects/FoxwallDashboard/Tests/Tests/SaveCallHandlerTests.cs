@@ -9,6 +9,9 @@
 
 using System;
 using FoxwallDashboard;
+using FoxwallDashboard.Database;
+using FoxwallDashboard.Handlers;
+using FoxwallDashboard.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
 
@@ -35,37 +38,37 @@ namespace Tests
         [TestMethod]
         public void handler_does_not_query_if_call_is_new()
         {
-            var call = Call.NewCall();
-            _saveHandler.SaveCall(call);
+            var call = Call.New();
+            _saveHandler.Save(call);
             _repo.AssertWasNotCalled(r => r.FindCallByID(new Guid()));
         }
 
         [TestMethod]
         public void handler_queries_for_existing_call()
         {
-            var call = Call.NewCall();
+            var call = Call.New();
             var guid = Guid.NewGuid();
             call.CallID = guid;
-            _saveHandler.SaveCall(call);
+            _saveHandler.Save(call);
             _repo.AssertWasCalled(r => r.FindCallByID(guid));
         }
 
         [TestMethod]
         public void handler_treats_as_new_call_if_it_cannot_find_existing_one()
         {
-            var call = Call.NewCall();
+            var call = Call.New();
             var guid = Guid.NewGuid();
             call.CallID = guid;
             _repo.Expect(r => r.FindCallByID(guid)).Return(null);
             _repo.Expect(r => r.SaveCall(Arg<Call>.Matches(c => c.CallID == new Guid()))).Return(call);
-            _saveHandler.SaveCall(call);
+            _saveHandler.Save(call);
             _repo.VerifyAllExpectations();
         }
 
         [TestMethod]
         public void handler_triggers_incident_number_assigner()
         {
-            var call = Call.NewCall();
+            var call = Call.New();
             var guid = Guid.NewGuid();
             call.CallID = guid; 
             
@@ -76,7 +79,7 @@ namespace Tests
             _repo.Expect(r => r.SaveCall(call)).Return(call);
             _incidentAssigner.Expect(a => a.UpdateOrAssignIncidentNumber(call)).Return(incidentNumber);
 
-            _saveHandler.SaveCall(call);
+            _saveHandler.Save(call);
             
             _repo.VerifyAllExpectations();
             _incidentAssigner.VerifyAllExpectations();
@@ -86,7 +89,7 @@ namespace Tests
         [TestMethod]
         public void handler_updates_fields_from_raw_call_data_for_existing_call()
         {
-            var call = Call.NewCall();
+            var call = Call.New();
             var guid = Guid.NewGuid();
             call.CallID = guid;
 
@@ -95,7 +98,7 @@ namespace Tests
             call.ChiefComplaint = "My complaint.";
             call.Disposition = "Standby";
 
-            var oldCall = Call.NewCall();
+            var oldCall = Call.New();
             oldCall.CallID = guid;
             oldCall.ALS = false;
             oldCall.ChiefComplaint = "X";
@@ -110,7 +113,7 @@ namespace Tests
                                              ))).Return(oldCall);
             _incidentAssigner.Expect(a => a.UpdateOrAssignIncidentNumber(oldCall)).Return(123);
 
-            _saveHandler.SaveCall(call);
+            _saveHandler.Save(call);
 
             _repo.VerifyAllExpectations();
             _incidentAssigner.VerifyAllExpectations();            
@@ -119,7 +122,7 @@ namespace Tests
         [TestMethod]
         public void handler_updates_fields_from_raw_call_data_for_new_call()
         {
-            var call = Call.NewCall();
+            var call = Call.New();
 
             // Not bothering to check EVERY field here, just a sampling.
             call.ALS = true;
@@ -134,7 +137,7 @@ namespace Tests
                                              ))).Return(call);
             _incidentAssigner.Expect(a => a.UpdateOrAssignIncidentNumber(Arg<Call>.Is.Anything)).Return(123);
 
-            _saveHandler.SaveCall(call);
+            _saveHandler.Save(call);
 
             _repo.VerifyAllExpectations();
             _incidentAssigner.VerifyAllExpectations();

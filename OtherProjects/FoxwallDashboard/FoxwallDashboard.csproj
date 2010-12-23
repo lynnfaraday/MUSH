@@ -56,6 +56,7 @@
     <Content Include="Account\ChangePasswordSuccess.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
+    <Content Include="EditPersonControl.ascx" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -107,6 +108,15 @@
     <Compile Include="Account\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
+    <Compile Include="EditPersonControl.ascx.cs">
+      <DependentUpon>EditPersonControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditPersonControl.ascx.designer.cs">
+      <DependentUpon>EditPersonControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Handlers\PasswordValidator.cs" />
+    <Compile Include="Handlers\SavePersonHandler.cs" />
     <Compile Include="Models\Call.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -121,6 +131,7 @@
     </Compile>
     <Compile Include="Handlers\IncidentNumberAssigner.cs" />
     <Compile Include="Handlers\SaveCallHandler.cs" />
+    <Compile Include="Models\Person.cs" />
     <Compile Include="Models\YearlyIncidentRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Database\Repository.cs" />

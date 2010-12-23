@@ -10,40 +10,11 @@
 using System;
 using System.Data.Linq.Mapping;
 
-namespace FoxwallDashboard
+namespace FoxwallDashboard.Models
 {
     [Table(Name = "Calls")]
     public class Call
     {
-        public static Call NewCall()
-        {
-            return new Call
-            {
-                Age = 0,
-                AgeUnits = "years",
-                Borough = "",
-                CallID = new Guid(),
-                Dispatched = DateTime.Now,
-                StateNumber = "",
-                IncidentNumber = 0
-            };
-        }
-
-        public void UpdateFrom(Call otherCall)
-        {
-            CallID = otherCall.CallID;
-            Location = otherCall.Location;
-            Dispatched = otherCall.Dispatched;
-            Age = otherCall.Age;
-            AgeUnits = otherCall.AgeUnits;
-            Borough = otherCall.Borough;
-            ChiefComplaint = otherCall.ChiefComplaint;
-            Disposition = otherCall.Disposition;
-            StateNumber = otherCall.StateNumber;
-            IncidentNumber = otherCall.IncidentNumber;
-            ALS = otherCall.ALS;
-        }
-
         [Column(IsPrimaryKey = true)]
         public Guid CallID { get; set; }
 
@@ -85,6 +56,33 @@ namespace FoxwallDashboard
             {
                 return CallID == new Guid();
             }
+        }
+
+        public static Call New()
+        {
+            return new Call
+            {
+                Age = 0,
+                AgeUnits = "years",
+                CallID = new Guid(),
+                Dispatched = DateTime.Now,
+                IncidentNumber = 0
+            };
+        }
+
+        public void UpdateFrom(Call otherCall)
+        {
+            CallID = otherCall.CallID;
+            Location = otherCall.Location;
+            Dispatched = otherCall.Dispatched;
+            Age = otherCall.Age;
+            AgeUnits = otherCall.AgeUnits;
+            Borough = otherCall.Borough;
+            ChiefComplaint = otherCall.ChiefComplaint;
+            Disposition = otherCall.Disposition;
+            StateNumber = otherCall.StateNumber;
+            IncidentNumber = otherCall.IncidentNumber;
+            ALS = otherCall.ALS;
         }
     }
 }

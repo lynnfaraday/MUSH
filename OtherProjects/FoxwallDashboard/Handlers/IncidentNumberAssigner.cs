@@ -7,7 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace FoxwallDashboard
+using FoxwallDashboard.Database;
+using FoxwallDashboard.Models;
+
+namespace FoxwallDashboard.Handlers
 {
     public interface IAssignIncidentNumbers
     {
@@ -49,7 +52,7 @@ namespace FoxwallDashboard
                 // If it doesn't exist, create it.
                 if (record == null)
                 {
-                    record = YearlyIncidentRecord.NewYearlyIncidentRecord(year);
+                    record = YearlyIncidentRecord.New(year);
                 }
 
                 // Increment the last entry.

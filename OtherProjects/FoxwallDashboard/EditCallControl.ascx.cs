@@ -10,6 +10,9 @@
 using System;
 using System.Linq;
 using System.Web.UI.WebControls;
+using FoxwallDashboard.Database;
+using FoxwallDashboard.Handlers;
+using FoxwallDashboard.Models;
 
 namespace FoxwallDashboard
 {
@@ -20,6 +23,8 @@ namespace FoxwallDashboard
             Load += HandlePageLoad;
         }
 
+        // This stores the call ID we're working with, whether it's a new one or came out of a query string.
+        // Needs to be in view state to survive postbacks.
         private Guid CallID
         {
             get { return (Guid)ViewState["CallID"]; }
@@ -90,7 +95,7 @@ namespace FoxwallDashboard
                 else
                 {
                     CallID = new Guid();
-                    callData = Call.NewCall();
+                    callData = Call.New();
                 }
 
                 UpdateFieldsFromCallData(callData);
@@ -118,11 +123,11 @@ namespace FoxwallDashboard
             try
             {
                 // Set up a temporary call containing our call data from the GUI.
-                var call = Call.NewCall();
+                var call = Call.New();
                 call.CallID = CallID;
                 UpdateCallDataFromFields(call);
 
-                call = saveHandler.SaveCall(call);
+                call = saveHandler.Save(call);
                 CallID = call.CallID;
                 IncidentNumberValue.Text = call.IncidentNumber.ToString();
 

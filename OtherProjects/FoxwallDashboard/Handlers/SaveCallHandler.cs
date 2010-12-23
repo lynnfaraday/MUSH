@@ -8,8 +8,10 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using FoxwallDashboard.Database;
+using FoxwallDashboard.Models;
 
-namespace FoxwallDashboard
+namespace FoxwallDashboard.Handlers
 {
     public class SaveCallHandler
     {
@@ -22,9 +24,13 @@ namespace FoxwallDashboard
             _incidentNumberAssigner = incidentNumberAssigner;
         }
 
-        public Call SaveCall(Call rawCallData)
+        public Call Save(Call rawCallData)
         {
             Call call = null;
+
+            // If updating an existing person, we have to actually query for the object /from/ the database - it's
+            // not enough just to have our own call object with the same ID because it's detached somehow from
+            // the data store.
             // Save a trip to the DB if we know the call is new and isn't in there.
             if (!rawCallData.IsNew)
             {
@@ -36,7 +42,7 @@ namespace FoxwallDashboard
             if (call == null)
             {
                 rawCallData.CallID = new Guid();
-                call = Call.NewCall();
+                call = Call.New();
             }
 
             call.UpdateFrom(rawCallData);
