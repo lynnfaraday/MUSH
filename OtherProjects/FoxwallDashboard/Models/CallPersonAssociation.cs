@@ -28,7 +28,7 @@ namespace FoxwallDashboard.Models
         {
             get
             {
-                return CallID == new Guid();
+                return ID == new Guid();
             }
         }
 

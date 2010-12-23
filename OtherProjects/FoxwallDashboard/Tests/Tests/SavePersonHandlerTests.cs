@@ -43,6 +43,7 @@ namespace Tests
             _handler.Save(person);
             
             _repo.VerifyAllExpectations();
+            _repo.AssertWasNotCalled(r => r.SavePerson(person));
         }
 
         [TestMethod]
@@ -54,7 +55,8 @@ namespace Tests
             person.ID = guid;
 
             _repo.Expect(r => r.FindPerson(Arg<Func<Person, bool>>.Is.Anything)).Return(person);
-            _repo.Expect(r => r.SavePerson(person)).Return(person);
+            ExpectPersonToBeSaved(person);
+            ExpectChangesToBeCommitted();
 
             _handler.Save(person);
 
@@ -65,7 +67,8 @@ namespace Tests
         public void handler_will_save_person_with_no_username()
         {
             var person = Person.New();
-            _repo.Expect(r => r.SavePerson(person)).Return(person);
+            ExpectPersonToBeSaved(person);
+            ExpectChangesToBeCommitted();
 
             _handler.Save(person);
             
@@ -80,12 +83,23 @@ namespace Tests
             person.Username = "test";
 
             _repo.Expect(r => r.FindPerson(Arg<Func<Person, bool>>.Is.Anything)).Return(null);
-            _repo.Expect(r => r.SavePerson(person)).Return(person);
+            ExpectPersonToBeSaved(person);
+            ExpectChangesToBeCommitted();
 
             _handler.Save(person);
 
             _repo.VerifyAllExpectations();
-        }       
+        }
+
+        private void ExpectPersonToBeSaved(Person person)
+        {
+            _repo.Expect(r => r.SavePerson(person)).Return(person);
+        }
+
+        private void ExpectChangesToBeCommitted()
+        {
+            _repo.Expect(r => r.CommitChanges());
+        }
     }
 }
 // ReSharper restore InconsistentNaming

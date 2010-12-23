@@ -26,7 +26,9 @@ namespace FoxwallDashboard.Handlers
         {
             // Make sure username does not already exist when creating a new person.
             CheckForDuplicateUsername(person);
-            return _repo.SavePerson(person);
+            person = _repo.SavePerson(person);
+            _repo.CommitChanges();
+            return person;
         }
 
         private void CheckForDuplicateUsername(Person rawPersonData)

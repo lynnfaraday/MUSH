@@ -19,19 +19,36 @@ namespace FoxwallDashboard.Database
         Call FindCallByID(Guid id);
         Call FindCall(Func<Call, bool> predicate);
         Call SaveCall(Call call);
+        
         YearlyIncidentRecord SaveIncidentRecord(YearlyIncidentRecord record);
         YearlyIncidentRecord FindIncidentRecordByYear(int year);
+        
         Person FindPersonByID(Guid id);
         Person FindPerson(Func<Person, bool> predicate);
         Person SavePerson(Person person);
 
+        CallPersonAssociation FindAssociationByID(Guid id);
+        IEnumerable<CallPersonAssociation> FindAssociationsForCall(Guid callID);
+        IEnumerable<Guid> FindPeopleForCall(Guid callID);
+        IEnumerable<Guid> FindCallsForPerson(Guid personID);
+        CallPersonAssociation SaveAssociation(CallPersonAssociation association);
+
         // Sorted by lastname.
         SortedList<string, Person> AllPeople();
+        void DeleteAssociation(CallPersonAssociation association);
+        
+        // NOTE: No changes are truly saved to the database until you commit them.
+        void CommitChanges();
     }
 
     public class Repository : IRepository
     {
         readonly FoxwallDb _db = new FoxwallDb();
+
+        public void CommitChanges()
+        {
+            _db.SubmitChanges();
+        }
 
         #region Calls
         public Call FindCallByID(Guid id)
@@ -52,8 +69,7 @@ namespace FoxwallDashboard.Database
             {
                 call.CallID = Guid.NewGuid();
                 _db.Calls.InsertOnSubmit(call);
-            }           
-            _db.SubmitChanges();
+            }                      
             return call;
         }
         #endregion
@@ -71,7 +87,6 @@ namespace FoxwallDashboard.Database
                 record.ID = Guid.NewGuid();
                 _db.YearlyIncidents.InsertOnSubmit(record);
             }
-            _db.SubmitChanges();
             return record;
         }
         #endregion
@@ -95,7 +110,6 @@ namespace FoxwallDashboard.Database
                 person.ID = Guid.NewGuid();
                 _db.People.InsertOnSubmit(person);
             }
-            _db.SubmitChanges();
             return person;
         }
 
@@ -109,6 +123,7 @@ namespace FoxwallDashboard.Database
             }
             return sort;
         }
+        
         #endregion
 
         #region Associations
@@ -118,14 +133,19 @@ namespace FoxwallDashboard.Database
             return _db.CallPersonAssociations.Where(a => a.ID == id).FirstOrDefault();
         }
 
+        public IEnumerable<CallPersonAssociation> FindAssociationsForCall(Guid callID)
+        {
+            return _db.CallPersonAssociations.Where(a => a.CallID == callID).ToList();
+        }
+
         public IEnumerable<Guid> FindPeopleForCall(Guid callID)
         {
-            return _db.CallPersonAssociations.Where(a => a.CallID == callID).Select(a => a.PersonID);
+            return FindAssociationsForCall(callID).Select(a => a.PersonID).ToList();
         }
 
         public IEnumerable<Guid> FindCallsForPerson(Guid personID)
         {
-            return _db.CallPersonAssociations.Where(a => a.PersonID == personID).Select(a => a.CallID);
+            return _db.CallPersonAssociations.Where(a => a.PersonID == personID).Select(a => a.CallID).ToList();
         }
 
         public CallPersonAssociation SaveAssociation(CallPersonAssociation association)
@@ -136,10 +156,13 @@ namespace FoxwallDashboard.Database
                 association.ID = Guid.NewGuid();
                 _db.CallPersonAssociations.InsertOnSubmit(association);
             }
-            _db.SubmitChanges();
             return association;
         }
 
+        public void DeleteAssociation(CallPersonAssociation association)
+        {
+            _db.CallPersonAssociations.DeleteOnSubmit(association);
+        }
         #endregion
 
     }

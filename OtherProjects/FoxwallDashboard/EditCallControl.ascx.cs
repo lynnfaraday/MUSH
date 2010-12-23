@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using FoxwallDashboard.Database;
@@ -144,7 +143,7 @@ namespace FoxwallDashboard
                 }
                 UpdateCallDataFromFields(call);
 
-                call = saveHandler.Save(call);
+                call = saveHandler.Save(call, peopleOnCall);
 
                 // Update our call ID and incident number, which may have been set by the save handler.
                 CallID = call.CallID;

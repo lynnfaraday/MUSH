@@ -20,15 +20,14 @@ namespace FoxwallDashboard.Handlers
     public class IncidentNumberAssigner : IAssignIncidentNumbers
     {
         private readonly IRepository _repo;
-        static readonly object Padlock = new object();
-
+       
         public IncidentNumberAssigner(IRepository repo)
         {
             _repo = repo;
         }
 
-        // This method assigns an incident number.  Assignment is permanent, so once the incident number
-        // is assigned that number will never be used again.
+        // This method assigns an incident number.  NOTE: This does NOT commit changes to the database; it is assumed
+        // that whoever's requesting the incident number assignment will do so.
         public int UpdateOrAssignIncidentNumber(Call call)
         {
             var year = call.Dispatched.Year;
@@ -42,24 +41,21 @@ namespace FoxwallDashboard.Handlers
             }
 
             // Otherwise we'll need a new one, so proceed.
-            // Lock in the unlikely event that two people try to save an incident at the same moment.
-            lock (Padlock)
+            // See if we already have an incident record for this year.
+
+            record = _repo.FindIncidentRecordByYear(year);
+
+            // If it doesn't exist, create it.
+            if (record == null)
             {
-                // See if we already have an incident record for this year.
-
-                record = _repo.FindIncidentRecordByYear(year);
-
-                // If it doesn't exist, create it.
-                if (record == null)
-                {
-                    record = YearlyIncidentRecord.New(year);
-                }
-
-                // Increment the last entry.
-                record.LastIncident++;
-
-                record = _repo.SaveIncidentRecord(record);
+                record = YearlyIncidentRecord.New(year);
             }
+
+            // Increment the last entry.
+            record.LastIncident++;
+
+            record = _repo.SaveIncidentRecord(record);
+
             return record.LastIncident;
         }
     }
