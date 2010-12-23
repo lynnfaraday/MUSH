@@ -150,7 +150,7 @@ namespace FoxwallDashboard
         // Keep them from selecting dates in the future.
         protected void RenderCalendar(object sender, DayRenderEventArgs e)
         {
-            if (e.Day.Date > DateTime.Now)
+                 if (e.Day.Date > DateTime.Now)
             {
                 e.Cell.BackColor = System.Drawing.Color.LightGray;
                 e.Day.IsSelectable = false;
