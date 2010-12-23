@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
 using FoxwallDashboard.Database;
@@ -49,10 +50,13 @@ namespace FoxwallDashboard
             
             IncidentNumberValue.Text = call.IsNew ? "(Not Saved)" : call.IncidentNumber.ToString();
 
+            var peopleOnCall = _repo.FindPeopleForCall(call.CallID);
+
             foreach (var person in _repo.AllPeople())
             {
                 var item = new ListItem {Text = person.Value.DisplayName, Value = person.Value.ID.ToString()};
                 CrewList.Items.Add(item);
+                item.Selected = peopleOnCall.Contains(person.Value.ID);
             }
         }
 
@@ -128,12 +132,21 @@ namespace FoxwallDashboard
             var saveHandler = new SaveCallHandler(repo, incidentNumberAssigner);
             try
             {
-                // Set up a temporary call containing our call data from the GUI.
-                var call = Call.New();
-                call.CallID = CallID;
+                var peopleOnCall = (from ListItem item in CrewList.Items
+                                    where item.Selected
+                                    select new Guid(item.Value)).ToList();
+
+                // Create or update our call to save.
+                var call = _repo.FindCallByID(CallID);
+                if (call == null)
+                {
+                    call = Call.New();
+                }
                 UpdateCallDataFromFields(call);
 
                 call = saveHandler.Save(call);
+
+                // Update our call ID and incident number, which may have been set by the save handler.
                 CallID = call.CallID;
                 IncidentNumberValue.Text = call.IncidentNumber.ToString();
 

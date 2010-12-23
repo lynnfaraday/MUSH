@@ -8,13 +8,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using FoxwallDashboard;
 using FoxwallDashboard.Database;
 using FoxwallDashboard.Handlers;
 using FoxwallDashboard.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Mocks;
-using Rhino.Mocks.Interfaces;
 
 // Disabling per unit test conventions.
 // ReSharper disable InconsistentNaming

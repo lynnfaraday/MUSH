@@ -22,32 +22,10 @@ namespace FoxwallDashboard.Handlers
             _repo = repo;
         }
 
-        public Person Save(Person rawPersonData)
+        public Person Save(Person person)
         {
             // Make sure username does not already exist when creating a new person.
-            CheckForDuplicateUsername(rawPersonData);
-
-            Person person = null;
-
-            // If updating an existing person, we have to actually query for the object /from/ the database - it's
-            // not enough just to have our own call object with the same ID because it's detached somehow from
-            // the data store.
-            // Save a trip to the DB if we know the call is new and isn't in there.
-            if (!rawPersonData.IsNew)
-            {
-                person = _repo.FindPersonByID(rawPersonData.ID);
-            }
-
-            // If we can't find the call, we're going to treat it like a new one even though it might have
-            // had an ID.  Could be a previous save attempt failed.
-            if (person == null)
-            {
-                rawPersonData.ID = new Guid();
-                person = Person.New();
-            }
-
-            person.UpdateFrom(rawPersonData);
-
+            CheckForDuplicateUsername(person);
             return _repo.SavePerson(person);
         }
 

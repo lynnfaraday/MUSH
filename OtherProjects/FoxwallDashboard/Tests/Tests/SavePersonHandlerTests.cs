@@ -53,9 +53,8 @@ namespace Tests
             person.Username = "test";
             person.ID = guid;
 
-            var existingUser = new Person {ID = guid, Username = "test"};
-            _repo.Expect(r => r.FindPerson(Arg<Func<Person, bool>>.Is.Anything)).Return(existingUser);
-            _repo.Expect(r => r.SavePerson(Arg<Person>.Is.Anything)).Return(person);
+            _repo.Expect(r => r.FindPerson(Arg<Func<Person, bool>>.Is.Anything)).Return(person);
+            _repo.Expect(r => r.SavePerson(person)).Return(person);
 
             _handler.Save(person);
 
@@ -66,7 +65,7 @@ namespace Tests
         public void handler_will_save_person_with_no_username()
         {
             var person = Person.New();
-            _repo.Expect(r => r.SavePerson(Arg<Person>.Is.Anything)).Return(person);
+            _repo.Expect(r => r.SavePerson(person)).Return(person);
 
             _handler.Save(person);
             
@@ -75,102 +74,18 @@ namespace Tests
         }
 
         [TestMethod]
-        public void handler_will_save_person_with_username()
+        public void handler_will_save_person_with_new_username()
         {
             var person = Person.New();
             person.Username = "test";
 
             _repo.Expect(r => r.FindPerson(Arg<Func<Person, bool>>.Is.Anything)).Return(null);
-            _repo.Expect(r => r.SavePerson(Arg<Person>.Is.Anything)).Return(person);
+            _repo.Expect(r => r.SavePerson(person)).Return(person);
 
             _handler.Save(person);
 
             _repo.VerifyAllExpectations();
-        }
-
-        [TestMethod]
-        public void handler_does_not_query_if_person_is_new()
-        {
-            var person = Person.New();
-            _handler.Save(person);
-            _repo.AssertWasNotCalled(r => r.FindPersonByID(new Guid()));
-        }
-
-        [TestMethod]
-        public void handler_queries_for_existing_person()
-        {
-            var person = Person.New();
-            var guid = Guid.NewGuid();
-            person.ID = guid;
-            _handler.Save(person);
-            _repo.AssertWasCalled(r => r.FindPersonByID(guid));
-        }
-
-        [TestMethod]
-        public void handler_treats_as_a_new_person_if_it_cannot_find_existing_one()
-        {
-            var person = Person.New();
-            var guid = Guid.NewGuid();
-            person.ID = guid;
-            _repo.Expect(r => r.FindPersonByID(guid)).Return(null);
-            _repo.Expect(r => r.SavePerson(Arg<Person>.Matches(c => c.ID == new Guid()))).Return(person);
-            _handler.Save(person);
-            _repo.VerifyAllExpectations();
-        }
-
-        [TestMethod]
-        public void handler_updates_fields_from_raw_person_data_for_existing_person()
-        {
-            var person = Person.New();
-            var guid = Guid.NewGuid();
-            person.ID = guid;
-
-            // Not bothering to check EVERY field here, just a sampling.
-            person.FirstName = "Bob";
-            person.Username = "bsmith";
-            person.Active = false;
-
-            var oldPerson = Person.New();
-            oldPerson.ID = guid;
-            oldPerson.FirstName = "Jane";
-            oldPerson.Username = "jdoe";
-            oldPerson.Active = true;
-
-            _repo.Expect(r => r.FindPersonByID(guid)).Return(oldPerson);
-            _repo.Expect(r => r.SavePerson(Arg<Person>.Matches(p =>
-                                                           p.ID == guid &&
-                                                           p.FirstName == "Bob" &&
-                                                           p.Username == "bsmith" &&
-                                                           !p.Active
-                                             ))).Return(oldPerson);
-
-            _handler.Save(person);
-
-            _repo.VerifyAllExpectations();
-            
-        }
-
-        [TestMethod]
-        public void handler_updates_fields_from_raw_person_data_for_new_person()
-        {
-            var person = Person.New();
-
-            // Not bothering to check EVERY field here, just a sampling.
-            person.FirstName = "Bob";
-            person.Username = "bsmith";
-            person.Active = false;
-
-            _repo.Expect(r => r.SavePerson(Arg<Person>.Matches(p =>
-                                                           p.FirstName == "Bob" &&
-                                                           p.Username == "bsmith" &&
-                                                           !p.Active
-                                             ))).Return(person);
-
-            _handler.Save(person);
-
-            _repo.VerifyAllExpectations();
-
-        }
+        }       
     }
 }
 // ReSharper restore InconsistentNaming

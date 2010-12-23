@@ -18,9 +18,12 @@ namespace FoxwallDashboard
 {
     public partial class EditPersonControl : System.Web.UI.UserControl
     {
+        private Repository _repo;
+
         public EditPersonControl()
         {
             Load += HandlePageLoad;
+            _repo = new Repository();
         }
 
         private Guid PersonID
@@ -78,12 +81,16 @@ namespace FoxwallDashboard
             LastNameBox.Text = person.LastName;
             IsActiveBox.Checked = person.Active;
             UsernameBox.Text = person.Username;
+            SetPasswordTextValue(person.Password);
+        }
+
+        private void SetPasswordTextValue(string password)
+        {
             // As a security feature, ASP tries to prevent you from directly setting the 'Text' property on a 
             // password box.  To set it, you have to use the 'value' attribute.  We really want to set it here,
             // because otherwise the person editing the user would have to re-enter their password every time
             // they edited them!
-            PasswordBox.Attributes.Add("value", person.Password); // TODO: Dehash
-
+            PasswordBox.Attributes.Add("value", password); // TODO: Dehash
         }
 
         private void UpdatePersonDataFromFields(Person person)
@@ -103,17 +110,22 @@ namespace FoxwallDashboard
                 return;
             }
 
-            var repo = new Repository();
-            var saveHandler = new SavePersonHandler(repo);
+            var saveHandler = new SavePersonHandler(_repo);
             try
             {
-                // Set up a temporary call containing our call data from the GUI.
-                var person = Person.New();
-                person.ID = PersonID;
+                // Create or update our person to save.
+                var person = _repo.FindPersonByID(PersonID);
+                if (person == null)
+                {
+                    person = Person.New();
+                }
                 UpdatePersonDataFromFields(person);
 
                 person = saveHandler.Save(person);
+                
+                // Update our ID now that we have one, and reset the password box because ASP irritatingly loses it.
                 PersonID = person.ID;
+                SetPasswordTextValue(person.Password);
 
                 ShowNotice("Person saved!", false);
             }

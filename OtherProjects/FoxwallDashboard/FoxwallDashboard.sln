@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests\Tests.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{96B5769B-C880-4815-B09F-1A42D8D2822C}"
 	ProjectSection(SolutionItems) = preProject
+		CodeCoverage.testsettings = CodeCoverage.testsettings
 		FoxwallDashboard.vsmdi = FoxwallDashboard.vsmdi
 		Local.testsettings = Local.testsettings
 		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings

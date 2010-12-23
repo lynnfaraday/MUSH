@@ -69,6 +69,7 @@
     <Content Include="EditCallControl.ascx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers\IncidentNumberAssigner.cs" />
     <Compile Include="Help.aspx.cs">
       <DependentUpon>Help.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -97,7 +98,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Handlers\IncidentNumberAssigner.cs" />
     <Compile Include="Handlers\SaveCallHandler.cs" />
     <Compile Include="Models\CallPersonAssociation.cs" />
     <Compile Include="Models\Person.cs" />
