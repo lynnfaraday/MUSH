@@ -10,6 +10,6 @@
     
 <h1>Recent Calls</h1>
 
-<asp:ListBox ID="CallList" runat="server"></asp:ListBox>
+<asp:Literal runat="server" ID="CallList" />
 
 </asp:Content>
