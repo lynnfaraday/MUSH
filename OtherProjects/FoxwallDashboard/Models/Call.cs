@@ -44,12 +44,7 @@ namespace FoxwallDashboard.Models
 
         [Column]
         public int IncidentNumber { get; set; }
-
-        [Column]
-// ReSharper disable InconsistentNaming
-        public bool ALS { get; set; }
-// ReSharper restore InconsistentNaming
-
+        
         public bool IsNew
         {
             get
@@ -82,7 +77,6 @@ namespace FoxwallDashboard.Models
             Disposition = otherCall.Disposition;
             StateNumber = otherCall.StateNumber;
             IncidentNumber = otherCall.IncidentNumber;
-            ALS = otherCall.ALS;
         }
     }
 }

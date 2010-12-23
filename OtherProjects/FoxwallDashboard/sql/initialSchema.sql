@@ -17,7 +17,6 @@ CREATE TABLE [dbo].[Calls](
 	[Age] [int] NULL,
 	[AgeUnits] [nvarchar](10) NULL,
 	[Disposition] [nvarchar](50) NULL,
-	[ALS] [bit] NULL,
 	[StateNumber] [nvarchar](50) NULL,
 	[IncidentNumber] [int] NULL
 ) ON [PRIMARY]

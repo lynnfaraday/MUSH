@@ -13,12 +13,12 @@ namespace FoxwallDashboard {
     public partial class DefaultPage {
         
         /// <summary>
-        /// PersonControl control.
+        /// CallControl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::FoxwallDashboard.EditPersonControl PersonControl;
+        protected global::FoxwallDashboard.EditCallControl CallControl;
     }
 }

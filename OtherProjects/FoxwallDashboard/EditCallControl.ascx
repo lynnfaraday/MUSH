@@ -26,7 +26,7 @@
             </td>
         </tr>
         <tr>
-            <td>
+            <td valign="top">
                 <asp:Label ID="Label2" runat="server" CssClass="LabelTitle" Text="Dispatch Date:"></asp:Label>
             </td>
             <td>
@@ -151,16 +151,21 @@
             </td>
         </tr>
         <tr>
-            <td>
-                <asp:Label ID="Label10" runat="server" CssClass="LabelTitle" Text="ALS Crew?"></asp:Label>
+            <td valign="top">
+                <asp:Label ID="Label11" runat="server" CssClass="LabelTitle" Text="Crew Members:"></asp:Label>
             </td>
             <td>
-                <asp:CheckBox ID="ALSCrew" runat="server" />
+               <asp:Panel ScrollBars="Auto" Height="100" runat="server" BorderColor="LightGray" BorderWidth="1" >
+                <asp:CheckBoxList ID="CrewList" runat="server" Width="200">
+                </asp:CheckBoxList>
+               </asp:Panel>
             </td>
             <td>
-                &nbsp;
+                <asp:CustomValidator runat="server" OnServerValidate="VerifyCrewPresent" 
+                ErrorMessage="You must select at least one crew member." CssClass="Error" />
             </td>
         </tr>
+
         <tr>
             <td>
                 <asp:Button ID="SaveButton" runat="server" OnClick="SaveButtonClick" Text="Save" />

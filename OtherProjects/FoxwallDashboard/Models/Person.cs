@@ -44,6 +44,11 @@ namespace FoxwallDashboard.Models
             }
         }
 
+        public string DisplayName
+        {
+            get { return LastName + ", " + FirstName; }
+        }
+
         public static Person New()
         {
             return new Person

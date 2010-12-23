@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FoxwallDashboard.Models;
 
@@ -23,6 +24,9 @@ namespace FoxwallDashboard.Database
         Person FindPersonByID(Guid id);
         Person FindPerson(Func<Person, bool> predicate);
         Person SavePerson(Person person);
+
+        // Sorted by lastname.
+        SortedList<string, Person> AllPeople();
     }
 
     public class Repository : IRepository
@@ -90,5 +94,15 @@ namespace FoxwallDashboard.Database
             return person;
         }
 
+        public SortedList<string, Person> AllPeople()
+        {
+            var sort = new SortedList<string, Person>();
+
+            foreach (var person in _db.People)
+            {
+                sort.Add(person.LastName, person);
+            }
+            return sort;
+        }
     }
 }

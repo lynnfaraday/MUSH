@@ -18,9 +18,12 @@ namespace FoxwallDashboard
 {
     public partial class EditCallControl : System.Web.UI.UserControl
     {
+        private readonly Repository _repo;
+
         public EditCallControl()
         {
             Load += HandlePageLoad;
+            _repo = new Repository();
         }
 
         // This stores the call ID we're working with, whether it's a new one or came out of a query string.
@@ -43,9 +46,14 @@ namespace FoxwallDashboard
             AgeBox.Text = call.Age.ToString();
             AgeUnitsSelection.SelectedValue = call.AgeUnits;
             DispositionSelection.SelectedValue = call.Disposition;
-            ALSCrew.Checked = call.ALS;
-
+            
             IncidentNumberValue.Text = call.IsNew ? "(Not Saved)" : call.IncidentNumber.ToString();
+
+            foreach (var person in _repo.AllPeople())
+            {
+                var item = new ListItem {Text = person.Value.DisplayName, Value = person.Value.ID.ToString()};
+                CrewList.Items.Add(item);
+            }
         }
 
         private void UpdateCallDataFromFields(Call call)
@@ -60,8 +68,7 @@ namespace FoxwallDashboard
             call.Age = int.Parse(AgeBox.Text);
             call.AgeUnits = AgeUnitsSelection.SelectedValue;
             call.Disposition = DispositionSelection.SelectedValue;
-            call.ALS = ALSCrew.Checked;
-
+            
             int incidentNumber;
             call.IncidentNumber = int.TryParse(IncidentNumberValue.Text, out incidentNumber) ? incidentNumber : 0;
         }
@@ -82,8 +89,7 @@ namespace FoxwallDashboard
                 if (Request.QueryString.AllKeys.Contains("CallID"))
                 {
                     CallID = new Guid(Request.QueryString["CallID"]);
-                    var repo = new Repository();
-                    callData = repo.FindCallByID(CallID);
+                    callData = _repo.FindCallByID(CallID);
 
                     if (callData == null)
                     {
@@ -161,6 +167,11 @@ namespace FoxwallDashboard
                 e.Day.IsSelectable = false;
                 e.Cell.ToolTip = "Cannot select days in the future.";
             }
+        }
+
+        protected void VerifyCrewPresent(object source, ServerValidateEventArgs args)
+        {
+            args.IsValid = CrewList.Items.Cast<ListItem>().Any(item => item.Selected);
         }
     }
 }
