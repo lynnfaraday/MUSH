@@ -9,14 +9,30 @@
 
 using System;
 using System.Linq;
+using FoxwallDashboard.Database;
 
 namespace FoxwallDashboard
 {
     public partial class DefaultPage : System.Web.UI.Page
     {
-        protected void LoadButtonClick(object sender, EventArgs e)
+        protected void LoginButtonClick(object sender, EventArgs e)
         {
-            Response.Redirect("~/Default.aspx?CallID=8E6F6D3C-F63A-430C-9359-BD63AD1EB807");
+            var repo = new Repository();
+            var user = repo.FindPerson(p => p.Username.ToLower() == UsernameBox.Text.ToLower());
+            
+            if (user == null)
+            {
+                NoticeLabel.Text = "User not found.";
+                return;
+            }
+
+            if (user.Password != PasswordBox.Text) // TODO - hashing
+            {
+                NoticeLabel.Text = "Invalid password.";
+                return;
+            }
+
+            Response.Redirect("~/AddCall.aspx");
         }
     }
 

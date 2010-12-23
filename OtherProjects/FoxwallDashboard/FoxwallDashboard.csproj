@@ -51,8 +51,12 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AddCall.aspx" />
+    <Content Include="CallMenu.ascx" />
     <Content Include="Help.aspx" />
     <Content Include="EditPersonControl.ascx" />
+    <Content Include="RecentCalls.aspx" />
+    <Content Include="SearchForCall.aspx" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -69,6 +73,20 @@
     <Content Include="EditCallControl.ascx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddCall.aspx.cs">
+      <DependentUpon>AddCall.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AddCall.aspx.designer.cs">
+      <DependentUpon>AddCall.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CallMenu.ascx.cs">
+      <DependentUpon>CallMenu.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CallMenu.ascx.designer.cs">
+      <DependentUpon>CallMenu.ascx</DependentUpon>
+    </Compile>
     <Compile Include="Handlers\IncidentNumberAssigner.cs" />
     <Compile Include="Help.aspx.cs">
       <DependentUpon>Help.aspx</DependentUpon>
@@ -104,6 +122,20 @@
     <Compile Include="Models\YearlyIncidentRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Database\Repository.cs" />
+    <Compile Include="RecentCalls.aspx.cs">
+      <DependentUpon>RecentCalls.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RecentCalls.aspx.designer.cs">
+      <DependentUpon>RecentCalls.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SearchForCall.aspx.cs">
+      <DependentUpon>SearchForCall.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SearchForCall.aspx.designer.cs">
+      <DependentUpon>SearchForCall.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

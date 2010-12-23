@@ -34,7 +34,7 @@ namespace FoxwallDashboard.Database
         CallPersonAssociation SaveAssociation(CallPersonAssociation association);
 
         // Sorted by lastname.
-        SortedList<string, Person> AllPeople();
+        IEnumerable<Person> AllPeople();
         void DeleteAssociation(CallPersonAssociation association);
         
         // NOTE: No changes are truly saved to the database until you commit them.
@@ -72,6 +72,12 @@ namespace FoxwallDashboard.Database
             }                      
             return call;
         }
+
+        public IEnumerable<Call> RecentCalls()
+        {
+            return _db.Calls.OrderByDescending(c => c.IncidentNumber).Take(25);
+        }
+
         #endregion
 
         #region IncidentRecords
@@ -113,15 +119,9 @@ namespace FoxwallDashboard.Database
             return person;
         }
 
-        public SortedList<string, Person> AllPeople()
+        public IEnumerable<Person> AllPeople()
         {
-            var sort = new SortedList<string, Person>();
-
-            foreach (var person in _db.People)
-            {
-                sort.Add(person.LastName, person);
-            }
-            return sort;
+            return _db.People.OrderByDescending(p => p.LastName);
         }
         
         #endregion
@@ -163,7 +163,6 @@ namespace FoxwallDashboard.Database
         {
             _db.CallPersonAssociations.DeleteOnSubmit(association);
         }
-        #endregion
-
+        #endregion       
     }
 }

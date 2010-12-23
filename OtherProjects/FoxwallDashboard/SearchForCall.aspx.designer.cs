@@ -10,16 +10,16 @@
 namespace FoxwallDashboard {
     
     
-    public partial class DefaultPage {
+    public partial class SearchForCall {
         
         /// <summary>
-        /// Panel1 control.
+        /// CallMenu control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel Panel1;
+        protected global::FoxwallDashboard.CallMenu CallMenu;
         
         /// <summary>
         /// Label1 control.
@@ -31,31 +31,31 @@ namespace FoxwallDashboard {
         protected global::System.Web.UI.WebControls.Label Label1;
         
         /// <summary>
-        /// UsernameBox control.
+        /// IncidentNumberBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox UsernameBox;
+        protected global::System.Web.UI.WebControls.TextBox IncidentNumberBox;
         
         /// <summary>
-        /// Label2 control.
+        /// CompareValidator1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label2;
+        protected global::System.Web.UI.WebControls.CompareValidator CompareValidator1;
         
         /// <summary>
-        /// PasswordBox control.
+        /// SearchButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox PasswordBox;
+        protected global::System.Web.UI.WebControls.Button SearchButton;
         
         /// <summary>
         /// NoticeLabel control.
@@ -65,14 +65,5 @@ namespace FoxwallDashboard {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label NoticeLabel;
-        
-        /// <summary>
-        /// LoginButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button LoginButton;
     }
 }

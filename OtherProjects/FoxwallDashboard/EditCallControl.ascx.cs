@@ -53,9 +53,9 @@ namespace FoxwallDashboard
 
             foreach (var person in _repo.AllPeople())
             {
-                var item = new ListItem {Text = person.Value.DisplayName, Value = person.Value.ID.ToString()};
+                var item = new ListItem {Text = person.DisplayName, Value = person.ID.ToString()};
                 CrewList.Items.Add(item);
-                item.Selected = peopleOnCall.Contains(person.Value.ID);
+                item.Selected = peopleOnCall.Contains(person.ID);
             }
         }
 
