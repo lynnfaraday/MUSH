@@ -22,7 +22,7 @@
             </td>
             <td>
                 <asp:CompareValidator ID="CompareValidator2" runat="server" ErrorMessage="State number must be a number."
-                    ControlToValidate="StateNumberBox" Operator="DataTypeCheck" Type="Integer" />
+                    ControlToValidate="StateNumberBox" Operator="DataTypeCheck" Type="Integer" CssClass="Error" />
             </td>
         </tr>
         <tr>
@@ -46,12 +46,12 @@
                 </asp:TextBox>
             </td>
             <td>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="DispatchTimeBox">
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="DispatchTimeBox" CssClass="Error">
             Dispatch Time is required.
                 </asp:RequiredFieldValidator>
                 <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server" ControlToValidate="DispatchTimeBox"
                     ErrorMessage="Dispatch time should be HH:MM in military time.  For example: 18:24."
-                    ValidationExpression="^([0-1][0-9]|[2][0-3]):([0-5][0-9])$"></asp:RegularExpressionValidator>
+                    ValidationExpression="^([0-1][0-9]|[2][0-3]):([0-5][0-9])$" CssClass="Error" />
             </td>
         </tr>
         <tr>
@@ -62,10 +62,10 @@
                 <asp:TextBox ID="LocationBox" runat="server"></asp:TextBox>
             </td>
             <td>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="LocationBox">
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="LocationBox" CssClass="Error">
   Location is required.
                 </asp:RequiredFieldValidator>
-            </td>
+            </td> 
         </tr>
         <tr>
             <td>
@@ -87,7 +87,7 @@
             </td>
             <td>
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ErrorMessage="You must select a borough."
-                    ControlToValidate="BoroughSelection" InitialValue="--Select One--">
+                    ControlToValidate="BoroughSelection" InitialValue="--Select One--" CssClass="Error">
                 </asp:RequiredFieldValidator>
             </td>
         </tr>
@@ -99,7 +99,7 @@
                 <asp:TextBox ID="ChiefComplaintBox" runat="server"></asp:TextBox>
             </td>
             <td>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ChiefComplaintBox">
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ChiefComplaintBox" CssClass="Error">
   Chief Complaint / Summary is required.
                 </asp:RequiredFieldValidator>
             </td>
@@ -118,7 +118,7 @@
             </td>
             <td>
                 <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="Age must be a number."
-                    ControlToValidate="AgeBox" Operator="DataTypeCheck" Type="Integer" />
+                    ControlToValidate="AgeBox" Operator="DataTypeCheck" Type="Integer" CssClass="Error"/>
             </td>
         </tr>
         <tr>
@@ -146,7 +146,7 @@
             </td>
             <td>
                 <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ErrorMessage="You must select a disposition."
-                    ControlToValidate="DispositionSelection" InitialValue="--Select One--">
+                    ControlToValidate="DispositionSelection" InitialValue="--Select One--" CssClass="Error">
                 </asp:RequiredFieldValidator>
             </td>
         </tr>

@@ -6,8 +6,6 @@
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     
-<asp:Button ID="LoadButton" runat="server" Text="Load" OnClick="LoadButtonClick"  CausesValidation="False" />
-
 <foxwall:EditPersonControl runat="server" ID="PersonControl" /> 
 
     

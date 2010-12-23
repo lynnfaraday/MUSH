@@ -10,7 +10,7 @@
                 <asp:TextBox ID="FirstNameBox" runat="server"></asp:TextBox>
             </td>
             <td>
-               <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="FirstNameBox">
+               <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="FirstNameBox" CssClass="Error">
             First name is required.
                 </asp:RequiredFieldValidator>
             </td>
@@ -23,7 +23,7 @@
                 <asp:TextBox ID="LastNameBox" runat="server"></asp:TextBox>
             </td>
             <td>
-                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="LastNameBox">
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator7" runat="server" ControlToValidate="LastNameBox" CssClass="Error">
             Last name is required.
                 </asp:RequiredFieldValidator>
             </td>
@@ -50,7 +50,7 @@
             <td>
                 <asp:CustomValidator ID="CustomValidator1" runat="server" ControlToValidate="PasswordBox"
                     ErrorMessage="Password must be at least 5 characters and contain at least 1 letter, 1 number and one special character (@#$%^&+=)."
-                     OnServerValidate="ValidatePassword" ValidateEmptyText="true"
+                     OnServerValidate="ValidatePassword" ValidateEmptyText="true" CssClass="Error"
                      ></asp:CustomValidator>
             </td>
         </tr>
