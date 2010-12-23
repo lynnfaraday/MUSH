@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using FoxwallDashboard;
 using FoxwallDashboard.Database;
 using FoxwallDashboard.Handlers;
 using FoxwallDashboard.Models;
@@ -94,20 +93,17 @@ namespace Tests
             call.CallID = guid;
 
             // Not bothering to check EVERY field here, just a sampling.
-            call.ALS = true;
             call.ChiefComplaint = "My complaint.";
             call.Disposition = "Standby";
 
             var oldCall = Call.New();
             oldCall.CallID = guid;
-            oldCall.ALS = false;
             oldCall.ChiefComplaint = "X";
             oldCall.Disposition = "Presby";
 
             _repo.Expect(r => r.FindCallByID(guid)).Return(oldCall);
             _repo.Expect(r => r.SaveCall(Arg<Call>.Matches(c =>
                                                            c.CallID == guid &&
-                                                           c.ALS  &&
                                                            c.ChiefComplaint == "My complaint." &&
                                                            c.Disposition == "Standby"
                                              ))).Return(oldCall);
@@ -125,13 +121,11 @@ namespace Tests
             var call = Call.New();
 
             // Not bothering to check EVERY field here, just a sampling.
-            call.ALS = true;
             call.ChiefComplaint = "My complaint.";
             call.Disposition = "Standby";
 
             _repo.Expect(r => r.SaveCall(Arg<Call>.Matches(c =>
                                                            c.CallID == new Guid() &&
-                                                           c.ALS &&
                                                            c.ChiefComplaint == "My complaint." &&
                                                            c.Disposition == "Standby"
                                              ))).Return(call);

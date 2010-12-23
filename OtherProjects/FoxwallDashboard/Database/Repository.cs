@@ -33,6 +33,7 @@ namespace FoxwallDashboard.Database
     {
         readonly FoxwallDb _db = new FoxwallDb();
 
+        #region Calls
         public Call FindCallByID(Guid id)
         {
             return FindCall(c => c.CallID == id);
@@ -55,7 +56,9 @@ namespace FoxwallDashboard.Database
             _db.SubmitChanges();
             return call;
         }
+        #endregion
 
+        #region IncidentRecords
         public YearlyIncidentRecord FindIncidentRecordByYear(int year)
         {
             return _db.YearlyIncidents.Where(i => i.Year == year).FirstOrDefault();
@@ -71,7 +74,9 @@ namespace FoxwallDashboard.Database
             _db.SubmitChanges();
             return record;
         }
-        
+        #endregion
+
+        #region People
         public Person FindPersonByID(Guid id)
         {
             return FindPerson(p => p.ID == id);
@@ -104,5 +109,38 @@ namespace FoxwallDashboard.Database
             }
             return sort;
         }
+        #endregion
+
+        #region Associations
+        
+        public CallPersonAssociation FindAssociationByID(Guid id)
+        {
+            return _db.CallPersonAssociations.Where(a => a.ID == id).FirstOrDefault();
+        }
+
+        public IEnumerable<Guid> FindPeopleForCall(Guid callID)
+        {
+            return _db.CallPersonAssociations.Where(a => a.CallID == callID).Select(a => a.PersonID);
+        }
+
+        public IEnumerable<Guid> FindCallsForPerson(Guid personID)
+        {
+            return _db.CallPersonAssociations.Where(a => a.PersonID == personID).Select(a => a.CallID);
+        }
+
+        public CallPersonAssociation SaveAssociation(CallPersonAssociation association)
+        {
+            // Assign a new GUID if needed and add to the database.
+            if (association.IsNew)
+            {
+                association.ID = Guid.NewGuid();
+                _db.CallPersonAssociations.InsertOnSubmit(association);
+            }
+            _db.SubmitChanges();
+            return association;
+        }
+
+        #endregion
+
     }
 }

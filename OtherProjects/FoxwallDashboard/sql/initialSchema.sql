@@ -69,3 +69,22 @@ CREATE TABLE [dbo].[People](
 GO
 
 
+USE [test]
+GO
+
+/****** Object:  Table [dbo].[CallPersonAssociation]    Script Date: 12/23/2010 11:13:24 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[CallPersonAssociation](
+	[ID] [uniqueidentifier] NOT NULL,
+	[PersonID] [uniqueidentifier] NOT NULL,
+	[CallID] [uniqueidentifier] NOT NULL
+) ON [PRIMARY]
+
+GO
+
+
