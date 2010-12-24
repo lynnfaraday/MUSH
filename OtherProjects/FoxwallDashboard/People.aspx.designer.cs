@@ -11,7 +11,7 @@ namespace FoxwallDashboard
 {
 
 
-    public partial class Help
+    public partial class People
     {
     }
 }

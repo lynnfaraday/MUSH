@@ -7,19 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FoxwallDashboard {
+namespace FoxwallDashboard.Controls {
     
     
-    public partial class RecentCalls {
-        
-        /// <summary>
-        /// CallMenu control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::FoxwallDashboard.CallMenu CallMenu;
+    public partial class CallListDisplayControl {
         
         /// <summary>
         /// CallList control.

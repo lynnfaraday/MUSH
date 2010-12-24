@@ -14,7 +14,7 @@ using FoxwallDashboard.Database;
 using FoxwallDashboard.Handlers;
 using FoxwallDashboard.Models;
 
-namespace FoxwallDashboard
+namespace FoxwallDashboard.Controls
 {
     public partial class EditCallControl : System.Web.UI.UserControl
     {
@@ -78,7 +78,7 @@ namespace FoxwallDashboard
 
         private void HandlePageLoad(object sender, EventArgs e)
         {
-            // Ignore postbacks.
+            // Ignore postbacks.  // TODO: Unless switching from edit to add mode!
             if (Page.IsPostBack)
             {
                 return;

@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="SearchForCall.aspx.cs" Inherits="FoxwallDashboard.SearchForCall" %>
-<%@ Register TagPrefix="foxwall" Src="~/CallMenu.ascx" TagName="CallMenu" %>
+<%@ Register TagPrefix="foxwall" Src="~/Controls/CallMenu.ascx" TagName="CallMenu" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>

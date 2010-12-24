@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FoxwallDashboard {
+namespace FoxwallDashboard.Controls {
     
     
     public partial class CallMenu {

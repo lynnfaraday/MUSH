@@ -18,15 +18,9 @@
                 </h1>
             </div>
             <div class="loginDisplay">
-                <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">
-                    <AnonymousTemplate>
-                        [ <a href="~/" ID="HeadLoginStatus" runat="server">Log In</a> ]
-                    </AnonymousTemplate>
-                    <LoggedInTemplate>
-                        Welcome <span class="bold"><asp:LoginName ID="HeadLoginName" runat="server" /></span>!
-                        [ <asp:LoginStatus ID="HeadLoginStatus" runat="server" LogoutAction="Redirect" LogoutText="Log Out" LogoutPageUrl="~/"/> ]
-                    </LoggedInTemplate>
-                </asp:LoginView>
+                <asp:Label ID="LoginNameDisplay" runat="server"></asp:Label>   
+                <br />
+                <asp:LinkButton ID="LogoutButton" runat="server">[ Logout ]</asp:LinkButton>
             </div>
             <div class="clear hideSkiplink">
                 <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal">
@@ -41,6 +35,10 @@
         </div>
         <div class="main">
             <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
+            <asp:Panel ID="NotLoggedInPanel" runat="server" HorizontalAlign="Center">
+            Please <asp:LinkButton ID="LinkButton1" runat="server" PostBackUrl="~/Default.aspx">login</asp:LinkButton> to continue.
+            </asp:Panel>
+
         </div>
         <div class="clear">
         </div>

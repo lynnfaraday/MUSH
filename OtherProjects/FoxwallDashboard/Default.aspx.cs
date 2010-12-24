@@ -8,13 +8,19 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Linq;
 using FoxwallDashboard.Database;
 
 namespace FoxwallDashboard
 {
-    public partial class DefaultPage : System.Web.UI.Page
+    public partial class DefaultPage : BasePage
     {
+        // This is the login page so obviously we're not logged in yet.  Show the main content anyway.
+        protected override void DoCustomPageLoad()
+        {
+            MainContent.Visible = true;
+            NotLoggedInPanel.Visible = false;
+        }
+
         protected void LoginButtonClick(object sender, EventArgs e)
         {
             var repo = new Repository();
@@ -32,6 +38,7 @@ namespace FoxwallDashboard
                 return;
             }
 
+            Session["UserID"] = user.ID;
             Response.Redirect("~/AddCall.aspx");
         }
     }

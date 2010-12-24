@@ -14,11 +14,11 @@ using FoxwallDashboard.Database;
 using FoxwallDashboard.Handlers;
 using FoxwallDashboard.Models;
 
-namespace FoxwallDashboard
+namespace FoxwallDashboard.Controls
 {
     public partial class EditPersonControl : System.Web.UI.UserControl
     {
-        private Repository _repo;
+        private readonly Repository _repo;
 
         public EditPersonControl()
         {

@@ -18,7 +18,10 @@ namespace FoxwallDashboard.Database
     {
         Call FindCallByID(Guid id);
         Call FindCall(Func<Call, bool> predicate);
+        IEnumerable<Call> FindCalls(Func<Call, bool> predicate);
         Call SaveCall(Call call);
+        IEnumerable<Call> RecentCalls();
+        IEnumerable<Call> OutstandingCalls();
         
         YearlyIncidentRecord SaveIncidentRecord(YearlyIncidentRecord record);
         YearlyIncidentRecord FindIncidentRecordByYear(int year);
@@ -61,6 +64,11 @@ namespace FoxwallDashboard.Database
             return _db.Calls.Where(predicate).FirstOrDefault();
         }
 
+        public IEnumerable<Call> FindCalls(Func<Call, bool> predicate)
+        {
+            return _db.Calls.Where(predicate).ToList();
+        }
+
         // Will add a new call to the database if needed.
         public Call SaveCall(Call call)
         {
@@ -76,6 +84,12 @@ namespace FoxwallDashboard.Database
         public IEnumerable<Call> RecentCalls()
         {
             return _db.Calls.OrderByDescending(c => c.IncidentNumber).Take(25);
+        }
+
+        public IEnumerable<Call> OutstandingCalls()
+        {
+            // Can't use isnullorempty here for strange SQL error reasons.
+            return _db.Calls.Where(c => c.StateNumber == null || c.StateNumber.Length == 0).ToList();
         }
 
         #endregion
@@ -121,7 +135,7 @@ namespace FoxwallDashboard.Database
 
         public IEnumerable<Person> AllPeople()
         {
-            return _db.People.OrderByDescending(p => p.LastName);
+            return _db.People.OrderBy(p => p.LastName);
         }
         
         #endregion
@@ -163,6 +177,7 @@ namespace FoxwallDashboard.Database
         {
             _db.CallPersonAssociations.DeleteOnSubmit(association);
         }
-        #endregion       
+        #endregion
+
     }
 }

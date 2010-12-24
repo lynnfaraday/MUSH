@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Help.aspx.cs" company="Wordsmyth Games">
+//   Copyright (C) 2010 by Linda Naughton
+// </copyright>
+// <summary>
+//   Defines the Help type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace FoxwallDashboard
 {
-    public partial class About : System.Web.UI.Page
+    public partial class Help : BasePage
     {
-        protected void Page_Load(object sender, EventArgs e)
+        protected override void DoCustomPageLoad()
         {
-
+            // Help is always visible, even when not logged in.
+            MainContent.Visible = true;
+            NotLoggedInPanel.Visible = false;
         }
     }
 }

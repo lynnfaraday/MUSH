@@ -10,7 +10,7 @@
 namespace FoxwallDashboard {
     
     
-    public partial class SearchForCall {
+    public partial class ListCalls {
         
         /// <summary>
         /// CallMenu control.
@@ -22,40 +22,22 @@ namespace FoxwallDashboard {
         protected global::FoxwallDashboard.Controls.CallMenu CallMenu;
         
         /// <summary>
-        /// Label1 control.
+        /// TitleLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.Literal TitleLabel;
         
         /// <summary>
-        /// IncidentNumberBox control.
+        /// CallList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox IncidentNumberBox;
-        
-        /// <summary>
-        /// CompareValidator1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.CompareValidator CompareValidator1;
-        
-        /// <summary>
-        /// SearchButton control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button SearchButton;
+        protected global::FoxwallDashboard.Controls.CallListDisplayControl CallList;
         
         /// <summary>
         /// NoticeLabel control.

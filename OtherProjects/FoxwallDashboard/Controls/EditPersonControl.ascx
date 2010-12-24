@@ -1,4 +1,4 @@
-﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EditPersonControl.ascx.cs" Inherits="FoxwallDashboard.EditPersonControl" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EditPersonControl.ascx.cs" Inherits="FoxwallDashboard.Controls.EditPersonControl" %>
 
 <asp:Panel ID="ContentPanel" runat="server">
     <table>

@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="EditCallControl.ascx.cs"
-    Inherits="FoxwallDashboard.EditCallControl" %>
+    Inherits="FoxwallDashboard.Controls.EditCallControl" %>
 <asp:Panel ID="ContentPanel" runat="server">
     <table>
         <tr>
