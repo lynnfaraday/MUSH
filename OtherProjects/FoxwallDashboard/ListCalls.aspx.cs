@@ -32,8 +32,8 @@ namespace FoxwallDashboard
                         CallMenu.Visible = true;
                         break;
                     case "Search":
-                        var incidentNumber = (int)Session["SearchCriteria"]; // TODO - make object
-                        CallList.Calls = repo.FindCalls(c => c.IncidentNumber.ToString().Contains(incidentNumber.ToString()));
+                        var incidentNumber = (string)Session["SearchCriteria"]; // TODO - make object
+                        CallList.Calls = repo.FindCalls(c => c.IncidentNumber.ToString().Contains(incidentNumber));
                         TitleLabel.Text = "<h1>Search Results</h1>";
                         CallMenu.Visible = true;
                         break;
@@ -44,9 +44,10 @@ namespace FoxwallDashboard
                         break;
                     case "Mine":
                         TitleLabel.Text = "<h1>My Calls</h1>";
-                        var userID = (Guid)Session["UserID"];  // TODO - make constant
+                        var userID = (Guid)Session[UserIDSessionKey];
                         var callIDs = repo.FindCallsForPerson(userID);
                         List<Call> calls = callIDs.Select(repo.FindCallByID).ToList();
+                        calls.OrderByDescending(c => c.IncidentNumber);
                         CallList.Calls = calls;
                         CallMenu.Visible = false;
                         break;

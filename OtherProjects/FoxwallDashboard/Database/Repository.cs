@@ -66,7 +66,7 @@ namespace FoxwallDashboard.Database
 
         public IEnumerable<Call> FindCalls(Func<Call, bool> predicate)
         {
-            return _db.Calls.Where(predicate).ToList();
+            return _db.Calls.Where(predicate).ToList().OrderByDescending(c => c.IncidentNumber);            
         }
 
         // Will add a new call to the database if needed.
@@ -89,7 +89,7 @@ namespace FoxwallDashboard.Database
         public IEnumerable<Call> OutstandingCalls()
         {
             // Can't use isnullorempty here for strange SQL error reasons.
-            return _db.Calls.Where(c => c.StateNumber == null || c.StateNumber.Length == 0).ToList();
+            return _db.Calls.Where(c => c.StateNumber == null || c.StateNumber.Length == 0).ToList().OrderByDescending(c => c.IncidentNumber);
         }
 
         #endregion

@@ -24,7 +24,7 @@ namespace FoxwallDashboard
 
         protected void SearchButtonClick(object sender, EventArgs e)
         {
-            Session["SearchCriteria"] = int.Parse(IncidentNumberBox.Text); // TODO: Make this an object
+            Session["SearchCriteria"] = IncidentNumberBox.Text; // TODO: Make this an object
             Response.Redirect("~/ListCalls.aspx?List=Search");
         }
     }
