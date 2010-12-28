@@ -16,7 +16,7 @@
 </tr>
 
 <tr>
-<td><asp:LinkButton ID="LinkButton1" runat="server" PostBackUrl="~/EditCall.aspx">Add a Call</asp:LinkButton></td>
+<td><asp:LinkButton ID="LinkButton1" runat="server" PostBackUrl="~/AddCall.aspx">Add a Call</asp:LinkButton></td>
 <td><asp:LinkButton ID="LinkButton7" runat="server" PostBackUrl="~/People.aspx">Manage People</asp:LinkButton></td>
 </tr>
 

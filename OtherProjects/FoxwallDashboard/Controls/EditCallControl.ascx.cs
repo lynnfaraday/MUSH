@@ -103,36 +103,26 @@ namespace FoxwallDashboard.Controls
         {
             try
             {
-                Guid callIDToLoad = Call.NewCallID;
-
-                // If we're being asked to load an old call, try to do so.
-                if (Request.QueryString.AllKeys.Contains("CallID"))
-                {
-                    callIDToLoad = new Guid(Request.QueryString["CallID"]);
-                }
-                
-                // If it's a postback for the same call, ignore it.
-                if (Page.IsPostBack && callIDToLoad == CallID)
+                // Ignore postbacks
+                if (Page.IsPostBack)
                 {
                     return;
                 }
 
-                Call callData;
-                if (callIDToLoad != Call.NewCallID)
+                Call callData = Call.New();
+
+                // If we're being asked to load an old call, try to do so.
+                if (Request.QueryString.AllKeys.Contains("CallID"))
                 {
-                    callData = _repo.FindCallByID(callIDToLoad);
-                    
+                    CallID = new Guid(Request.QueryString["CallID"]);
+                    callData = _repo.FindCallByID(CallID);
+
                     if (callData == null)
                     {
                         throw new ApplicationException("Could not find call with ID " + CallID + ".");
                     }
                 }
-                else
-                {
-                    callData = Call.New();
-                }
                 UpdateFieldsFromCallData(callData);
-
                 HideNotice();
             }
             catch (Exception ex)
@@ -150,9 +140,8 @@ namespace FoxwallDashboard.Controls
                 return;
             }
 
-            var repo = new Repository();
-            var incidentNumberAssigner = new IncidentNumberAssigner(repo);
-            var saveHandler = new SaveCallHandler(repo, incidentNumberAssigner);
+            var incidentNumberAssigner = new IncidentNumberAssigner(_repo);
+            var saveHandler = new SaveCallHandler(_repo, incidentNumberAssigner);
             try
             {
                 var peopleOnCall = (from ListItem item in CrewList.Items

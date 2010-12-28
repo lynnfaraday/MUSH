@@ -26,11 +26,11 @@
             <asp:Panel ID="NavigationMenu" CSSClass="navMenuBorder" runat="server" Height="19">
             <asp:LinkButton ID="DashboardButton" runat="server" PostBackUrl="~/Dashboard.aspx" CSSClass="navMenu" 
                 CausesValidation="false" ForeColor="White">Home</asp:LinkButton>
-            <asp:LinkButton ID="CallsButton" runat="server" PostBackUrl="~/EditCall.aspx"  CSSClass="navMenu"
+            <asp:LinkButton ID="CallsButton" runat="server" PostBackUrl="~/AddCall.aspx"  CSSClass="navMenu"
                 CausesValidation="false" ForeColor="White">Calls</asp:LinkButton>
             <asp:LinkButton ID="PeopleButton" runat="server" PostBackUrl="~/People.aspx"  CSSClass="navMenu" 
                 CausesValidation="false" ForeColor="White">People</asp:LinkButton>
-            <a href="/Docs/UserGuide.pdf" class="navMenu" target="_blank" style="color:White">Help</a>
+            <a href="Docs/UserGuide.pdf" class="navMenu" target="_blank" style="color:White">Help</a>
             </asp:Panel>
         </div>
         <div class="main">

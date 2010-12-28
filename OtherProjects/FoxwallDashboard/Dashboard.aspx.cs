@@ -34,7 +34,7 @@ namespace FoxwallDashboard
                     builder.AppendLine("<ul>");
                     foreach (var call in outstandingCalls)
                     {
-                        builder.AppendLine("<li><a href=\"/EditCall.aspx?CallID=" + call.CallID + "\">" + call.IncidentNumber + "</a></li>");
+                        builder.AppendLine("<li><a href=\"EditCall.aspx?CallID=" + call.CallID + "\">" + call.IncidentNumber + "</a></li>");
                     }
                     builder.AppendLine("</ul>");
                     Notices.Text = builder.ToString();

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EditCall.aspx.cs" Inherits="FoxwallDashboard.EditCall" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AddCall.aspx.cs" Inherits="FoxwallDashboard.AddCall" %>
 <%@ Register TagPrefix="foxwall" Src="~/Controls/EditCallControl.ascx" TagName="EditCallControl" %>
 <%@ Register TagPrefix="foxwall" Src="~/Controls/CallMenu.ascx" TagName="CallMenu" %>
 
@@ -9,7 +9,7 @@
     
 <foxwall:CallMenu runat="server" ID="CallMenu" /> 
 
-<h1>Edit a Call</h1>
+<h1>Add a Call</h1>
 
 <foxwall:EditCallControl runat="server" ID="CallControl" /> 
 

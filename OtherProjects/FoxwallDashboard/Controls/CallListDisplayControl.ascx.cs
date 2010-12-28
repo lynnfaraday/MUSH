@@ -75,7 +75,7 @@ namespace FoxwallDashboard.Controls
                             builder.Append("&nbsp;");
                         }
                         builder.AppendLine("</td>");
-                        builder.AppendLine("<td><a href=\"/EditCall.aspx?CallID=" + call.CallID + "\">[ Edit ]</a></td>");
+                        builder.AppendLine("<td><a href=\"EditCall.aspx?CallID=" + call.CallID + "\">[ Edit ]</a></td>");
 
                         builder.AppendLine("</tr>");
                     }

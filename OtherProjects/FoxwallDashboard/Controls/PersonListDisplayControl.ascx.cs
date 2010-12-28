@@ -41,7 +41,7 @@ namespace FoxwallDashboard.Controls
                         AddColumn(builder, person.DisplayName);
                         AddColumn(builder, person.Active.ToString());
 
-                        builder.AppendLine("<td><a href=\"/EditPerson.aspx?PersonID=" + person.ID + "\">[ Edit ]</a></td>");
+                        builder.AppendLine("<td><a href=\"EditPerson.aspx?PersonID=" + person.ID + "\">[ Edit ]</a></td>");
                         builder.AppendLine("</tr>");
                     }
                     catch (Exception ex)
@@ -51,7 +51,7 @@ namespace FoxwallDashboard.Controls
 
                 }
 
-                builder.AppendLine("<tr><td><a href=\"/EditPerson.aspx\">[ Add ]</a></td></tr>");
+                builder.AppendLine("<tr><td><a href=\"EditPerson.aspx\">[ Add ]</a></td></tr>");
                 builder.AppendLine("</table>");
 
                 PersonList.Text = builder.ToString();

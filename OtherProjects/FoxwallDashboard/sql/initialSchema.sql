@@ -1,4 +1,4 @@
-USE [test]
+USE [foxwall2]
 GO
 
 /****** Object:  Table [dbo].[Calls]    Script Date: 12/22/2010 19:24:41 ******/
@@ -9,7 +9,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[Calls](
-	[CallID] [uniqueidentifier] NOT NULL,
+	[CallID] [uniqueidentifier] NOT NULL PRIMARY KEY,
 	[Dispatched] [datetime] NULL,
 	[Location] [nvarchar](200) NULL,
 	[Borough] [nvarchar](50) NULL,
@@ -21,10 +21,11 @@ CREATE TABLE [dbo].[Calls](
 	[IncidentNumber] [int] NULL
 ) ON [PRIMARY]
 
+
 GO
 
 
-USE [test]
+USE [foxwall2]
 GO
 
 /****** Object:  Table [dbo].[YearlyIncidents]    Script Date: 12/22/2010 19:25:24 ******/
@@ -45,7 +46,7 @@ CREATE TABLE [dbo].[YearlyIncidents](
 ) ON [PRIMARY]
 
 GO
-USE [test]
+USE [foxwall2]
 GO
 
 /****** Object:  Table [dbo].[People]    Script Date: 12/28/2010 00:38:44 ******/
@@ -56,7 +57,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[People](
-	[ID] [uniqueidentifier] NOT NULL,
+	[ID] [uniqueidentifier] NOT NULL PRIMARY KEY,
 	[FirstName] [nvarchar](50) NULL,
 	[LastName] [nvarchar](50) NOT NULL,
 	[Username] [nvarchar](50) NULL,
@@ -70,7 +71,7 @@ GO
 
 
 
-USE [test]
+USE [foxwall2]
 GO
 
 /****** Object:  Table [dbo].[CallPersonAssociation]    Script Date: 12/23/2010 11:13:24 ******/
@@ -81,7 +82,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[CallPersonAssociation](
-	[ID] [uniqueidentifier] NOT NULL,
+	[ID] [uniqueidentifier] NOT NULL PRIMARY KEY,
 	[PersonID] [uniqueidentifier] NOT NULL,
 	[CallID] [uniqueidentifier] NOT NULL
 ) ON [PRIMARY]
@@ -89,3 +90,18 @@ CREATE TABLE [dbo].[CallPersonAssociation](
 GO
 
 
+
+USE [foxwall2]
+GO
+INSERT INTO [dbo].[People]
+           ([ID]
+           ,[FirstName]
+           ,[LastName]
+           ,[Username]
+           ,[Password]
+           ,[Administrator]
+           ,[Active]
+           ,[Salt])
+     VALUES ('8A9100EA-E80B-4D26-84A5-220D902654F0', 'Default', 'Administrator', 'admin', 
+             '?,?JID??#???!??$Jk', 'true', 'true', '-1347497617',)
+GO

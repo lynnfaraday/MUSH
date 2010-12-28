@@ -10,7 +10,7 @@
 namespace FoxwallDashboard {
     
     
-    public partial class EditCall {
+    public partial class AddCall {
         
         /// <summary>
         /// CallMenu control.

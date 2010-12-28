@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile publishUrl="ftp://97.74.215.129/Crew" deleteExistingFiles="True" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FTP" replaceMatchingFiles="False" userName="phobos" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="Web.config" publishTime="12/28/2010 13:14:45" />
+    <file relUrl="Site.Master" publishTime="12/28/2010 13:40:44" />
+    <file relUrl="Dashboard.aspx" publishTime="12/28/2010 13:40:44" />
+    <file relUrl="People.aspx" publishTime="12/28/2010 10:33:04" />
+    <file relUrl="bin/FoxwallDashboard.pdb" publishTime="12/28/2010 13:47:32" />
+    <file relUrl="Controls/CallListDisplayControl.ascx" publishTime="12/23/2010 22:42:26" />
+    <file relUrl="Controls/CallMenu.ascx" publishTime="12/28/2010 13:40:44" />
+    <file relUrl="Docs/UserGuide.pdf" publishTime="12/28/2010 11:46:28" />
+    <file relUrl="SearchForCall.aspx" publishTime="12/28/2010 10:33:04" />
+    <file relUrl="EditCall.aspx" publishTime="12/28/2010 13:39:37" />
+    <file relUrl="bin/FoxwallDashboard.dll" publishTime="12/28/2010 13:47:32" />
+    <file relUrl="Reports.aspx" publishTime="12/28/2010 10:28:17" />
+    <file relUrl="Styles/Site.css" publishTime="12/28/2010 12:01:36" />
+    <file relUrl="Scripts/jquery-1.4.1.js" publishTime="12/20/2010 10:07:03" />
+    <file relUrl="Controls/PersonListDisplayControl.ascx" publishTime="12/27/2010 23:35:49" />
+    <file relUrl="EditPerson.aspx" publishTime="12/28/2010 01:13:53" />
+    <file relUrl="Help.aspx" publishTime="12/23/2010 22:34:11" />
+    <file relUrl="Global.asax" publishTime="12/20/2010 10:07:03" />
+    <file relUrl="Controls/EditPersonControl.ascx" publishTime="12/28/2010 10:33:04" />
+    <file relUrl="Controls/EditCallControl.ascx" publishTime="12/28/2010 11:32:21" />
+    <file relUrl="Scripts/jquery-1.4.1-vsdoc.js" publishTime="12/20/2010 10:07:03" />
+    <file relUrl="Default.aspx" publishTime="12/28/2010 10:33:04" />
+    <file relUrl="Scripts/jquery-1.4.1.min.js" publishTime="12/20/2010 10:07:03" />
+    <file relUrl="ListCalls.aspx" publishTime="12/28/2010 10:33:04" />
+    <file relUrl="AddCall.aspx" publishTime="12/28/2010 13:39:37" />
+  </publishProfile>
+</publishData>

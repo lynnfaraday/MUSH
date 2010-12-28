@@ -8,68 +8,54 @@
   </SettingsComponent>
   <RecentFiles>
     <RecentFiles>
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditPerson.aspx.designer.cs" caret="1473" fromTop="10" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:CallListDisplayControl.ascx.cs" caret="3443" fromTop="14" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Site.Master" caret="1331" fromTop="23" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditCall.aspx" caret="713" fromTop="15" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Reports.aspx.cs" caret="528" fromTop="13" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:ListCalls.aspx" caret="719" fromTop="13" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:People.aspx.cs" caret="656" fromTop="16" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:PersonListDisplayControl.ascx.cs" caret="1064" fromTop="27" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Default.aspx" caret="575" fromTop="11" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Handlers/f:PasswordValidator.cs" caret="482" fromTop="5" />
-      <File id="7B52AD46-8AAC-4EB8-9BD1-A3754331820B/f:PasswordValidatorTests.cs" caret="1636" fromTop="4" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Database/f:FoxwallDB.cs" caret="1047" fromTop="12" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:Password.cs" caret="489" fromTop="2" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Default.aspx.cs" caret="1755" fromTop="21" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:Person.cs" caret="1296" fromTop="5" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:CallPersonAssociation.cs" caret="1051" fromTop="18" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:Call.cs" caret="1844" fromTop="23" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:YearlyIncidentRecord.cs" caret="1328" fromTop="10" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="4312" fromTop="13" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:CallMenu.ascx" caret="421" fromTop="2" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Reports.aspx" caret="637" fromTop="10" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditPersonControl.ascx" caret="1975" fromTop="0" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:People.aspx" caret="460" fromTop="6" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditPerson.aspx" caret="582" fromTop="7" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditCall.aspx.cs" caret="524" fromTop="12" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditPerson.aspx.cs" caret="539" fromTop="12" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditPersonControl.ascx.cs" caret="704" fromTop="9" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Database/f:Repository.cs" caret="2405" fromTop="18" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:ListCalls.aspx.cs" caret="1322" fromTop="11" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:SearchForCall.aspx.cs" caret="964" fromTop="19" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:CallMenu.ascx.cs" caret="547" fromTop="12" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Scripts/f:jquery-1.4.1.min.js" caret="10794" fromTop="16" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:SearchForCall.aspx.cs" caret="0" fromTop="0" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:PersonListDisplayControl.ascx.cs" caret="2289" fromTop="19" />
+      <File id="7B52AD46-8AAC-4EB8-9BD1-A3754331820B/f:PasswordValidatorTests.cs" caret="453" fromTop="7" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Handlers/f:SaveCallHandler.cs" caret="1430" fromTop="20" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Database/f:Repository.cs" caret="4221" fromTop="15" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Web.config" caret="2652" fromTop="23" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:AddCall.aspx" caret="595" fromTop="10" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:AddCall.aspx.cs" caret="597" fromTop="13" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditCall.aspx.cs" caret="154" fromTop="0" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditCall.aspx" caret="111" fromTop="0" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Dashboard.aspx.cs" caret="1330" fromTop="17" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:CallListDisplayControl.ascx.cs" caret="3196" fromTop="16" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Site.Master" caret="1413" fromTop="10" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:CallMenu.ascx" caret="201" fromTop="1" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Dashboard.aspx" caret="728" fromTop="14" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditPersonControl.ascx.cs" caret="0" fromTop="0" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="4042" fromTop="4" />
     </RecentFiles>
     <RecentEdits>
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:Person.cs" caret="1554" fromTop="16" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditPersonControl.ascx.cs" caret="4294" fromTop="15" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:CallPersonAssociation.cs" caret="978" fromTop="19" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:CallPersonAssociation.cs" caret="1068" fromTop="23" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:CallPersonAssociation.cs" caret="934" fromTop="13" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:CallPersonAssociation.cs" caret="1240" fromTop="25" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:YearlyIncidentRecord.cs" caret="1356" fromTop="29" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:YearlyIncidentRecord.cs" caret="1216" fromTop="11" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:YearlyIncidentRecord.cs" caret="991" fromTop="6" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:Call.cs" caret="1746" fromTop="18" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:Call.cs" caret="1844" fromTop="23" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Models/f:YearlyIncidentRecord.cs" caret="1328" fromTop="10" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:CallMenu.ascx" caret="421" fromTop="2" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Reports.aspx" caret="637" fromTop="10" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditPerson.aspx" caret="718" fromTop="11" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditPerson.aspx" caret="582" fromTop="7" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:People.aspx" caret="460" fromTop="6" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditPerson.aspx.cs" caret="646" fromTop="14" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditPerson.aspx.cs" caret="788" fromTop="18" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditPerson.aspx.cs" caret="956" fromTop="23" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditPersonControl.ascx.cs" caret="767" fromTop="12" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditPersonControl.ascx.cs" caret="992" fromTop="20" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditPersonControl.ascx.cs" caret="766" fromTop="12" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditPersonControl.ascx.cs" caret="891" fromTop="16" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:ListCalls.aspx.cs" caret="1819" fromTop="15" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Database/f:Repository.cs" caret="3347" fromTop="18" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Database/f:Repository.cs" caret="2489" fromTop="19" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:ListCalls.aspx.cs" caret="2054" fromTop="23" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:ListCalls.aspx.cs" caret="1322" fromTop="11" />
-      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:SearchForCall.aspx.cs" caret="964" fromTop="19" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Site.Master" caret="1744" fromTop="14" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:CallListDisplayControl.ascx.cs" caret="3183" fromTop="22" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:PersonListDisplayControl.ascx.cs" caret="1672" fromTop="21" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Web.config" caret="2337" fromTop="17" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Dashboard.aspx.cs" caret="1317" fromTop="17" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:PersonListDisplayControl.ascx.cs" caret="2126" fromTop="15" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="7599" fromTop="69" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:AddCall.aspx" caret="149" fromTop="0" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:AddCall.aspx" caret="684" fromTop="10" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:AddCall.aspx" caret="595" fromTop="10" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditCall.aspx" caret="598" fromTop="10" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:EditCall.aspx.cs" caret="805" fromTop="19" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:AddCall.aspx.cs" caret="504" fromTop="8" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:AddCall.aspx.cs" caret="0" fromTop="0" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:AddCall.aspx.cs" caret="802" fromTop="21" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:AddCall.aspx.cs" caret="430" fromTop="8" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Site.Master" caret="1413" fromTop="10" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:CallMenu.ascx" caret="201" fromTop="1" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/f:Dashboard.aspx" caret="728" fromTop="14" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="4356" fromTop="6" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="4165" fromTop="5" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="4862" fromTop="18" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="4863" fromTop="23" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="4589" fromTop="15" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="5635" fromTop="16" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="778" fromTop="20" />
+      <File id="C7389D3D-314D-4A68-BF9D-C5F0E8C5ADF6/d:Controls/f:EditCallControl.ascx.cs" caret="1159" fromTop="5" />
     </RecentEdits>
   </RecentFiles>
   <NAntValidationSettings>
@@ -85,15 +71,15 @@
   </UnitTestRunnerNUnit>
   <CompletionStatisticsManager>
     <ItemStatistics item="Default">
-      <Item value="public" priority="77" />
+      <Item value="public" priority="79" />
       <Item value="Column" priority="16" />
       <Item value="base" priority="0" />
       <Item value="const" priority="4" />
-      <Item value="string" priority="35" />
+      <Item value="string" priority="36" />
       <Item value="FoxwallDB`0" priority="0" />
-      <Item value="new" priority="87" />
+      <Item value="new" priority="94" />
       <Item value="FoxwallDB" priority="0" />
-      <Item value="Call`0" priority="37" />
+      <Item value="Call`0" priority="39" />
       <Item value="Call" priority="3" />
       <Item value="Age" priority="3" />
       <Item value="AgeBox" priority="2" />
@@ -103,31 +89,31 @@
       <Item value="DispatchedCalendar" priority="6" />
       <Item value="int" priority="17" />
       <Item value="db" priority="10" />
-      <Item value="call" priority="76" />
-      <Item value="CallID" priority="18" />
-      <Item value="Guid`0" priority="33" />
-      <Item value="var" priority="63" />
+      <Item value="call" priority="80" />
+      <Item value="CallID" priority="19" />
+      <Item value="Guid`0" priority="34" />
+      <Item value="var" priority="79" />
       <Item value="SelectedDatesCollection`0" priority="0" />
-      <Item value="c" priority="17" />
-      <Item value="if" priority="54" />
+      <Item value="c" priority="40" />
+      <Item value="if" priority="60" />
       <Item value="DateTime`0" priority="9" />
       <Item value="e" priority="4" />
       <Item value="System" priority="1" />
       <Item value="Drawing" priority="0" />
       <Item value="Color`0" priority="0" />
-      <Item value="false" priority="13" />
+      <Item value="false" priority="14" />
       <Item value="EditCallControl`0" priority="1" />
       <Item value="Load" priority="1" />
       <Item value="Page" priority="14" />
       <Item value="ErrorLabel" priority="3" />
-      <Item value="return" priority="60" />
+      <Item value="return" priority="65" />
       <Item value="DataBind`0" priority="1" />
       <Item value="BindingContainer" priority="0" />
       <Item value="_callData" priority="0" />
       <Item value="CallData" priority="28" />
       <Item value="Guid" priority="28" />
       <Item value="DateTime" priority="4" />
-      <Item value="bool" priority="11" />
+      <Item value="bool" priority="12" />
       <Item value="newGuid" priority="0" />
       <Item value="newGuidString" priority="0" />
       <Item value="CallControl" priority="3" />
@@ -150,9 +136,9 @@
       <Item value="StateNumber" priority="1" />
       <Item value="IncidentNumber" priority="1" />
       <Item value="dateString" priority="0" />
-      <Item value="else" priority="11" />
-      <Item value="char" priority="1" />
-      <Item value="null" priority="29" />
+      <Item value="else" priority="12" />
+      <Item value="char" priority="6" />
+      <Item value="null" priority="31" />
       <Item value="throw" priority="4" />
       <Item value="AppDomainUnloadedException" priority="0" />
       <Item value="IncidentNumberValue" priority="2" />
@@ -169,7 +155,7 @@
       <Item value="Year" priority="3" />
       <Item value="lock" priority="1" />
       <Item value="object" priority="2" />
-      <Item value="try" priority="3" />
+      <Item value="try" priority="4" />
       <Item value="ex" priority="4" />
       <Item value="Exception" priority="3" />
       <Item value="Request" priority="3" />
@@ -187,8 +173,8 @@
       <Item value="repo" priority="14" />
       <Item value="FindCall`0" priority="0" />
       <Item value="id" priority="2" />
-      <Item value="_db" priority="17" />
-      <Item value="true" priority="11" />
+      <Item value="_db" priority="32" />
+      <Item value="true" priority="14" />
       <Item value="incidentNumber" priority="4" />
       <Item value="number" priority="1" />
       <Item value="YearlyIncidents`0" priority="0" />
@@ -197,7 +183,7 @@
       <Item value="record" priority="4" />
       <Item value="IncidentNumberAssigner`0" priority="2" />
       <Item value="YearlyIncidentRecord`0" priority="5" />
-      <Item value="_repo" priority="38" />
+      <Item value="_repo" priority="42" />
       <Item value="ContentPanel" priority="1" />
       <Item value="MailMessageEventArgs`0" priority="0" />
       <Item value="ShowError`0" priority="1" />
@@ -222,7 +208,7 @@
       <Item value="r" priority="12" />
       <Item value="guid" priority="6" />
       <Item value="Arg`0" priority="8" />
-      <Item value="a" priority="8" />
+      <Item value="a" priority="12" />
       <Item value="Assert`0" priority="3" />
       <Item value="_currentTime" priority="1" />
       <Item value="_currentIncidentNumberOffset" priority="2" />
@@ -234,8 +220,8 @@
       <Item value="_call" priority="0" />
       <Item value="DefaultYear" priority="0" />
       <Item value="Active" priority="0" />
-      <Item value="Person`0" priority="19" />
-      <Item value="p" priority="6" />
+      <Item value="Person`0" priority="25" />
+      <Item value="p" priority="9" />
       <Item value="FindPerson`0" priority="1" />
       <Item value="lastName" priority="0" />
       <Item value="EditPersonControl`0" priority="1" />
@@ -265,12 +251,12 @@
       <Item value="_handler" priority="0" />
       <Item value="ExpectedException" priority="0" />
       <Item value="typeof" priority="0" />
-      <Item value="ApplicationException`0" priority="0" />
+      <Item value="ApplicationException`0" priority="1" />
       <Item value="class" priority="1" />
       <Item value="Exception`0" priority="2" />
       <Item value="DuplicateUsernameException`0" priority="1" />
       <Item value="Message" priority="0" />
-      <Item value="override" priority="11" />
+      <Item value="override" priority="12" />
       <Item value="catch" priority="2" />
       <Item value="ShowNotice`0" priority="0" />
       <Item value="rawPersonData" priority="2" />
@@ -278,8 +264,8 @@
       <Item value="otherPerson" priority="0" />
       <Item value="Person" priority="0" />
       <Item value="Username" priority="1" />
-      <Item value="foreach" priority="11" />
-      <Item value="in" priority="10" />
+      <Item value="foreach" priority="15" />
+      <Item value="in" priority="14" />
       <Item value="Repository" priority="0" />
       <Item value="ListItem`0" priority="3" />
       <Item value="Text" priority="0" />
@@ -288,12 +274,12 @@
       <Item value="sort" priority="2" />
       <Item value="for" priority="0" />
       <Item value="CrewList" priority="7" />
-      <Item value="item" priority="6" />
+      <Item value="item" priority="9" />
       <Item value="Name" priority="0" />
       <Item value="CallProviderAssociation`0" priority="0" />
       <Item value="CallPersonAssociation`0" priority="10" />
-      <Item value="List" priority="3" />
-      <Item value="IEnumerable" priority="8" />
+      <Item value="List" priority="4" />
+      <Item value="IEnumerable" priority="9" />
       <Item value="callID" priority="6" />
       <Item value="peopleOnCall" priority="7" />
       <Item value="SetPasswordTextValue`0" priority="0" />
@@ -314,9 +300,9 @@
       <Item value="HeadingLabel" priority="2" />
       <Item value="SortedList" priority="0" />
       <Item value="CallList" priority="5" />
-      <Item value="StringBuilder" priority="0" />
-      <Item value="builder" priority="7" />
-      <Item value="people" priority="5" />
+      <Item value="StringBuilder" priority="1" />
+      <Item value="builder" priority="11" />
+      <Item value="people" priority="6" />
       <Item value="personID" priority="0" />
       <Item value="CallListDisplayControl`0" priority="1" />
       <Item value="columnValue" priority="1" />
@@ -327,7 +313,7 @@
       <Item value="TitleLabel" priority="0" />
       <Item value="break" priority="1" />
       <Item value="default" priority="0" />
-      <Item value="userID" priority="0" />
+      <Item value="userID" priority="6" />
       <Item value="ListCalls`0" priority="1" />
       <Item value="CallMenu" priority="1" />
       <Item value="List&lt;Call&gt;" priority="0" />
@@ -345,8 +331,8 @@
       <Item value="logoutButton" priority="1" />
       <Item value="loginName" priority="2" />
       <Item value="protected" priority="6" />
-      <Item value="CurrentUser" priority="1" />
-      <Item value="LinkButton`0" priority="0" />
+      <Item value="CurrentUser" priority="4" />
+      <Item value="LinkButton`0" priority="1" />
       <Item value="MainContent" priority="1" />
       <Item value="NotLoggedInPanel" priority="1" />
       <Item value="callData" priority="1" />
@@ -387,6 +373,29 @@
       <Item value="IDisposable`0" priority="0" />
       <Item value="NewYearlyIncidentRecordID" priority="0" />
       <Item value="PersonControl" priority="0" />
+      <Item value="Dashboard`0" priority="0" />
+      <Item value="outstandingCalls" priority="4" />
+      <Item value="IsOutstanding`0" priority="1" />
+      <Item value="from" priority="4" />
+      <Item value="join" priority="3" />
+      <Item value="on" priority="2" />
+      <Item value="ContextStaticAttribute`0" priority="0" />
+      <Item value="select" priority="5" />
+      <Item value="query" priority="2" />
+      <Item value="Notices" priority="3" />
+      <Item value="where" priority="4" />
+      <Item value="personCalls" priority="2" />
+      <Item value="finalList" priority="1" />
+      <Item value="inner" priority="0" />
+      <Item value="params" priority="0" />
+      <Item value="equals" priority="2" />
+      <Item value="NavMenu" priority="0" />
+      <Item value="MenuItem`0" priority="0" />
+      <Item value="control" priority="4" />
+      <Item value="cpa" priority="1" />
+      <Item value="CallId" priority="0" />
+      <Item value="q" priority="0" />
+      <Item value="is" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Web.UI.WebControls.TextBox">
       <Item value="Text" priority="32" />
@@ -403,12 +412,13 @@
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Data.Linq.Table`1">
       <Item value="InsertOnSubmit`0" priority="3" />
-      <Item value="Where`1" priority="4" />
+      <Item value="Where`1" priority="6" />
       <Item value="Attach`0" priority="0" />
       <Item value="AsEnumerable`1" priority="0" />
       <Item value="DeleteOnSubmit`0" priority="0" />
       <Item value="OrderBy`2" priority="1" />
       <Item value="OrderByDescending`2" priority="1" />
+      <Item value="Join`4" priority="1" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@System.Guid">
       <Item value="NewGuid`0" priority="12" />
@@ -432,8 +442,12 @@
       <Item value="FirstOrDefault`1" priority="4" />
       <Item value="First`1" priority="0" />
       <Item value="All`1" priority="0" />
-      <Item value="Select`2" priority="1" />
-      <Item value="ToList`1" priority="1" />
+      <Item value="Select`2" priority="2" />
+      <Item value="ToList`1" priority="4" />
+      <Item value="Join`4" priority="0" />
+      <Item value="Where`1" priority="1" />
+      <Item value="Contains`1" priority="2" />
+      <Item value="Any`1" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Web.UI.WebControls.DayRenderEventArgs">
       <Item value="Day" priority="2" />
@@ -511,7 +525,7 @@
     <ItemStatistics item="Qualified:@System.String">
       <Item value="Format`0" priority="2" />
       <Item value="IsNullOrEmpty`0" priority="8" />
-      <Item value="Empty" priority="2" />
+      <Item value="Empty" priority="3" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Exception">
       <Item value="Message" priority="3" />
@@ -544,9 +558,10 @@
       <Item value="FirstOrDefault`1" priority="1" />
       <Item value="Contains`1" priority="0" />
       <Item value="GetEnumerator`0" priority="0" />
-      <Item value="Any`1" priority="0" />
+      <Item value="Any`1" priority="1" />
       <Item value="ToList`1" priority="0" />
       <Item value="OrderBy`2" priority="0" />
+      <Item value="Count`1" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:FoxwallDashboard.YearlyIncidentRecord">
       <Item value="ID" priority="0" />
@@ -567,6 +582,7 @@
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Web.UI.WebControls.Panel">
       <Item value="Visible" priority="4" />
+      <Item value="Controls" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:FoxwallDashboard.SaveCallHandler">
       <Item value="SaveCall`0" priority="3" />
@@ -602,10 +618,10 @@
       <Item value="Arguments" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:FoxwallDashboard.Database.FoxwallDb">
-      <Item value="People" priority="3" />
-      <Item value="CallPersonAssociations" priority="3" />
+      <Item value="People" priority="4" />
+      <Item value="CallPersonAssociations" priority="10" />
       <Item value="SubmitChanges`0" priority="0" />
-      <Item value="Calls" priority="2" />
+      <Item value="Calls" priority="10" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:FoxwallDashboard.Models.Person">
       <Item value="LastName" priority="6" />
@@ -631,12 +647,13 @@
       <Item value="FindPerson`0" priority="2" />
       <Item value="SaveCall`0" priority="0" />
       <Item value="AllPeople`0" priority="2" />
-      <Item value="FindPeopleForCall`0" priority="1" />
+      <Item value="FindPeopleForCall`0" priority="2" />
       <Item value="FindPersonByID`0" priority="1" />
       <Item value="FindCallByID`0" priority="1" />
       <Item value="FindCall`0" priority="0" />
       <Item value="FindCalls`0" priority="0" />
       <Item value="FindCallsForPerson`0" priority="0" />
+      <Item value="OutstandingCalls`0" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:FoxwallDashboard.Database.IRepository">
       <Item value="Expect`2" priority="6" />
@@ -678,17 +695,17 @@
     <ItemStatistics item="Qualified:FoxwallDashboard.Models.CallPersonAssociation">
       <Item value="ID" priority="1" />
       <Item value="CrewID" priority="0" />
-      <Item value="PersonID" priority="1" />
-      <Item value="CallID" priority="1" />
+      <Item value="PersonID" priority="7" />
+      <Item value="CallID" priority="3" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:FoxwallDashboard.Models.Call">
-      <Item value="CallID" priority="9" />
-      <Item value="IncidentNumber" priority="8" />
+      <Item value="CallID" priority="19" />
+      <Item value="IncidentNumber" priority="10" />
       <Item value="IsNew" priority="0" />
       <Item value="Dispatched" priority="1" />
       <Item value="Location" priority="0" />
       <Item value="ChiefComplaint" priority="0" />
-      <Item value="StateNumber" priority="4" />
+      <Item value="StateNumber" priority="6" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Web.UI.WebControls.ListItem">
       <Item value="Selected" priority="1" />
@@ -696,12 +713,14 @@
       <Item value="Enabled" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Collections.Generic.List`1">
-      <Item value="Add`0" priority="1" />
-      <Item value="OrderByDescending`2" priority="0" />
+      <Item value="Add`0" priority="2" />
+      <Item value="OrderByDescending`2" priority="1" />
+      <Item value="Contains`0" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:@FoxwallDashboard.Models.Call">
       <Item value="New`0" priority="2" />
       <Item value="NewCallGuid" priority="2" />
+      <Item value="NewCallID" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:FoxwallDashboard.Handlers.SaveCallHandler">
       <Item value="Save`0" priority="2" />
@@ -719,12 +738,12 @@
       <Item value="Items" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Text.StringBuilder">
-      <Item value="AppendLine`0" priority="4" />
+      <Item value="AppendLine`0" priority="7" />
       <Item value="Append`0" priority="1" />
-      <Item value="ToString`0" priority="0" />
+      <Item value="ToString`0" priority="1" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Web.UI.WebControls.Literal">
-      <Item value="Text" priority="0" />
+      <Item value="Text" priority="4" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:FoxwallDashboard.CallListDisplayControl">
       <Item value="Calls" priority="2" />
@@ -743,6 +762,8 @@
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Web.UI.WebControls.LinkButton">
       <Item value="Visible" priority="0" />
+      <Item value="Width" priority="0" />
+      <Item value="CssClass" priority="0" />
     </ItemStatistics>
     <ItemStatistics item="Qualified:System.Web.UI.HtmlControls.HtmlForm">
       <Item value="DefaultButton" priority="3" />
@@ -780,6 +801,16 @@
     </ItemStatistics>
     <ItemStatistics item="Qualified:@FoxwallDashboard.Models.Password">
       <Item value="CreateRandomSalt`0" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.UI.WebControls.Menu">
+      <Item value="Items" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.UI.WebControls.MenuItem">
+      <Item value="Enabled" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Web.UI.Control">
+      <Item value="Visible" priority="0" />
+      <Item value="ID" priority="1" />
     </ItemStatistics>
   </CompletionStatisticsManager>
 </Configuration>
