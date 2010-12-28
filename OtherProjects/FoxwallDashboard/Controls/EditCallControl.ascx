@@ -93,7 +93,7 @@
         </tr>
         <tr>
             <td>
-                <asp:Label ID="Label6" runat="server" CSSClass="labelTitle" Text="Chief Complaint/Summary:"></asp:Label>
+                <asp:Label ID="Label6" runat="server" CSSClass="labelTitle" Text="Chief Complaint/Dispatch:"></asp:Label>
             </td>
             <td>
                 <asp:TextBox ID="ChiefComplaintBox" runat="server"></asp:TextBox>

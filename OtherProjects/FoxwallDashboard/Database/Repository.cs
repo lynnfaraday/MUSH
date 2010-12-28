@@ -165,19 +165,13 @@ namespace FoxwallDashboard.Database
 
         public IEnumerable<Call> OutstandingCallsForUser(Guid userID)
         {
-            // This is hideously inefficient but I can't figure out the join :(
             // Can't use string.isnullorempty here because SQL chokes
-            var outstandingCalls = from c in _db.Calls
-                                   where (c.StateNumber == null || c.StateNumber.Length == 0)
-                                   select c;
-            var personCalls = from a in _db.CallPersonAssociations
-                              where a.PersonID == userID
-                              select a;
-            var finalList = (from c in outstandingCalls
-                             where personCalls.Any(a => a.CallID == c.CallID)
-                             select c).ToList();
-
-            return finalList;
+            var q = from c in _db.Calls
+                    join cpa in _db.CallPersonAssociations on c.CallID equals cpa.CallID
+                    where (c.StateNumber == null || c.StateNumber.Length == 0)
+                    where cpa.PersonID == userID
+                    select c;
+            return q.ToList().OrderByDescending(c => c.IncidentNumber);
         }
 
         public CallPersonAssociation SaveAssociation(CallPersonAssociation association)

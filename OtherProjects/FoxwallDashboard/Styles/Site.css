@@ -107,7 +107,7 @@ first child of the left and right table columns */
 {
     font-weight: 700;
     margin: 0px;
-    padding: 0px 0px 0px 20px;
+    padding: 0px 0px 0px 5px;
     color: #f9f9f9;
     border: none;
     line-height: 2em;
@@ -142,51 +142,21 @@ first child of the left and right table columns */
 /* TAB MENU   
 ----------------------------------------------------------*/
 
-div.hideSkiplink
+.navMenuBorder
 {
     background-color:#444444;
     width:100%;
 }
 
-div.menu
-{
-    padding: 2px 0px 2px 2px;
-}
-
-div.menu ul
-{
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
-    width: auto;
-}
-
-div.menu ul li a, div.menu ul li a:visited
+.navMenu 
 {
     background-color: #666666;
     border: 1px #444444 solid;
     color: #FFFFFF;
-    display: block;
     line-height: 1.35em;
-    padding: 0px 20px;
-    text-decoration: none;
-    white-space: nowrap;
+    padding: 0px 20px 0px 20px;
+    text-decoration: none;        
 }
-
-div.menu ul li a:hover
-{
-    background-color: #666666;
-    color: #FFFFFF;
-    text-decoration: none;
-}
-
-div.menu ul li a:active
-{
-    background-color: #555555;
-    color: #FFFFFF;
-    text-decoration: none;
-}
-
 
 /* MISC  
 ----------------------------------------------------------*/

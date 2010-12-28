@@ -14,7 +14,7 @@
         <div class="header">
             <div class="title">
                 <h1>
-                    Foxwall Dashboard
+                    Foxwall Portal
                 </h1>
             </div>
             <div class="loginDisplay">
@@ -22,16 +22,16 @@
                 <br />
                 <asp:LinkButton ID="LogoutButton" runat="server" OnClick="LogoutClick" CausesValidation="false">[ Logout ]</asp:LinkButton>
             </div>
-            <div class="clear hideSkiplink">
-                <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal">
-                    <Items>
-                        <asp:MenuItem NavigateUrl="~/Dashboard.aspx" Text="Home"/>
-                        <asp:MenuItem NavigateUrl="~/EditCall.aspx" Text="Calls"/>
-                        <asp:MenuItem NavigateUrl="~/People.aspx" Text="People"/>
-                        <asp:MenuItem NavigateUrl="~/Help.aspx" Text="Help"/>
-                    </Items>
-                </asp:Menu>
-            </div>
+
+            <asp:Panel ID="NavigationMenu" CSSClass="navMenuBorder" runat="server" Height="19">
+            <asp:LinkButton ID="DashboardButton" runat="server" PostBackUrl="~/Dashboard.aspx" CSSClass="navMenu" 
+                CausesValidation="false" ForeColor="White">Home</asp:LinkButton>
+            <asp:LinkButton ID="CallsButton" runat="server" PostBackUrl="~/EditCall.aspx"  CSSClass="navMenu"
+                CausesValidation="false" ForeColor="White">Calls</asp:LinkButton>
+            <asp:LinkButton ID="PeopleButton" runat="server" PostBackUrl="~/People.aspx"  CSSClass="navMenu" 
+                CausesValidation="false" ForeColor="White">People</asp:LinkButton>
+            <a href="/Docs/UserGuide.pdf" class="navMenu" target="_blank" style="color:White">Help</a>
+            </asp:Panel>
         </div>
         <div class="main">
             <asp:ContentPlaceHolder ID="MainContent" runat="server"/>

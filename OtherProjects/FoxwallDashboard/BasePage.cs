@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using FoxwallDashboard.Database;
@@ -37,6 +38,11 @@ namespace FoxwallDashboard
         protected Label LoginNameDisplay
         {
             get { return Master == null ? null : Master.FindControl("LoginNameDisplay") as Label; }
+        }
+
+        protected Panel NavMenu
+        {
+            get { return Master == null ? null : Master.FindControl("NavigationMenu") as Panel; }
         }
 
         protected virtual Control DefaultFocus
@@ -71,6 +77,10 @@ namespace FoxwallDashboard
                 NotLoggedInPanel.Visible = false;
                 MainContent.Visible = true;         
                 
+                foreach (Control control in NavMenu.Controls)
+                {
+                    control.Visible = true;
+                }
                
             }
             catch (Exception)
@@ -79,6 +89,13 @@ namespace FoxwallDashboard
                 MainContent.Visible = false;
                 LogoutButton.Visible = false;
                 LoginNameDisplay.Text = "";
+
+                // Hide all the nav items except for help.
+                foreach (LinkButton control in NavMenu.Controls.OfType<LinkButton>())
+                {
+                    control.Visible = false;                    
+                }
+
             }
 
             DoCustomPageLoad();

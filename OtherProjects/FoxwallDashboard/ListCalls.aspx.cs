@@ -36,7 +36,7 @@ namespace FoxwallDashboard
                         TitleLabel.Text = "<h1>Search Results</h1>";
                         break;
                     case "Outstanding":
-                        TitleLabel.Text = "<h1>Outstanding Calls</h1>";
+                        TitleLabel.Text = "<h1>Outstanding Tripsheets</h1>";
                         CallList.Calls = repo.OutstandingCalls();
                         break;
                     case "Mine":
