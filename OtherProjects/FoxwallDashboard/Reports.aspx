@@ -9,6 +9,8 @@
 
 <asp:LinkButton ID="LinkButton1" runat="server" PostBackUrl="~/ListCalls.aspx?List=Outstanding">Outstanding Tripsheets</asp:LinkButton>
 <br />
+<asp:LinkButton ID="LinkButton3" runat="server" PostBackUrl="~/ListCalls.aspx?List=Recent">Recent Calls</asp:LinkButton>
+<br />
 <asp:LinkButton ID="LinkButton2" runat="server" PostBackUrl="~/ListCalls.aspx?List=Mine">My Calls</asp:LinkButton>
 
 </asp:Content>

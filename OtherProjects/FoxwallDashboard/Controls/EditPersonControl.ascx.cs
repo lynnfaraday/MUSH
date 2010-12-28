@@ -9,7 +9,6 @@
 
 using System;
 using System.Linq;
-using System.Web.UI.WebControls;
 using FoxwallDashboard.Database;
 using FoxwallDashboard.Handlers;
 using FoxwallDashboard.Models;
@@ -19,6 +18,15 @@ namespace FoxwallDashboard.Controls
     public partial class EditPersonControl : System.Web.UI.UserControl
     {
         private readonly Repository _repo;
+
+        public System.Web.UI.WebControls.Button DefaultButton
+        {
+            get { return SaveButton; }
+        }
+        public System.Web.UI.Control DefaultFocus
+        {
+            get { return FirstNameBox; }
+        }
 
         public EditPersonControl()
         {
@@ -44,12 +52,12 @@ namespace FoxwallDashboard.Controls
             {
                 Person personData;
 
-                // If we're being asked to load an old call, try to do so.
+                // If we're being asked to load an old person, try to do so.
                 if (Request.QueryString.AllKeys.Contains("PersonID"))
                 {
-                    PersonID = new Guid(Request.QueryString["PersonID"]);
+                    var personID = new Guid(Request.QueryString["PersonID"]);
                     var repo = new Repository();
-                    personData = repo.FindPersonByID(PersonID);
+                    personData = repo.FindPersonByID(personID);
 
                     if (personData == null)
                     {
@@ -60,9 +68,10 @@ namespace FoxwallDashboard.Controls
                 // Otherwise it's new.
                 else
                 {
-                    PersonID = new Guid();
                     personData = Person.New();
                 }
+
+                PersonID = personData.ID;
 
                 UpdateFieldsFromPersonData(personData);
 
@@ -89,8 +98,14 @@ namespace FoxwallDashboard.Controls
             person.LastName = LastNameBox.Text;
             person.Active = IsActiveBox.Checked;
             person.Username = UsernameBox.Text;
-            Password password = new Password(PasswordBox.Text, person.LastName);
-            person.Password = password.ComputeSaltedHash();
+
+            // Ignore the password box if it's empty, just leave the password what it was.
+            if (!string.IsNullOrEmpty(PasswordBox.Text))
+            {
+                Password password = new Password(PasswordBox.Text, person.Salt);
+                person.Password = password.ComputeSaltedHash();
+            }
+            
         }
 
         protected void SaveButtonClick(object sender, EventArgs e)
@@ -104,6 +119,19 @@ namespace FoxwallDashboard.Controls
             var saveHandler = new SavePersonHandler(_repo);
             try
             {
+
+                // This validation can't be done by a validator because ASP forgets the password on postback
+                // and we allow it to be blank when editing an existing user.
+                if (!string.IsNullOrEmpty(PasswordBox.Text) || PersonID == Person.NewPersonID)
+                {
+                    bool isPasswordValid = PasswordValidator.Validate(UsernameBox.Text, PasswordBox.Text);
+                    PasswordError.Visible = !isPasswordValid;
+                    if (!isPasswordValid)
+                    {
+                        return;
+                    }
+                }
+
                 // Create or update our person to save.
                 var person = _repo.FindPersonByID(PersonID);
                 if (person == null)
@@ -116,8 +144,7 @@ namespace FoxwallDashboard.Controls
                 
                 // Update our ID now that we have one
                 PersonID = person.ID;
-                // TODO: This loses the password each time.  Fix that!
-
+                
                 ShowNotice("Person saved!", false);
             }
             // This is an expected exception if they enter a username that already exists, so don't throw up the "something bad happened"
@@ -144,18 +171,6 @@ namespace FoxwallDashboard.Controls
         {
             ContentPanel.Visible = true;
             NoticeLabel.Text = string.Empty;
-        }
-
-        protected void ValidatePassword(object source, ServerValidateEventArgs args)
-        {
-            // Password is only required at all if a username is set.
-            if (string.IsNullOrEmpty(UsernameBox.Text))
-            {
-                args.IsValid = true;
-                return;
-            }
-
-            args.IsValid = PasswordValidator.Validate(PasswordBox.Text);
-        }
+        }        
     }
 }

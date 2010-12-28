@@ -47,11 +47,9 @@
                 <asp:TextBox ID="PasswordBox" runat="server" TextMode="Password">
                 </asp:TextBox>
             </td>
-            <td>
-                <asp:CustomValidator ID="CustomValidator1" runat="server" ControlToValidate="PasswordBox"
-                    ErrorMessage="Password must be at least 5 characters and contain at least 1 letter, 1 number and one special character (@#$%^&+=)."
-                     OnServerValidate="ValidatePassword" ValidateEmptyText="true" CssClass="Error"
-                     ></asp:CustomValidator>
+            <td><i>Leave blank if you wish to keep the old password.</i>&nbsp;&nbsp;
+                <asp:Label ID="PasswordError" runat="server" CSSClass="Error" Visible="false"
+                Text="Password must be at least 5 characters and contain at least 1 letter, 1 number and one special character (@#$%^&+=)."></asp:Label>                
             </td>
         </tr>
         <tr>

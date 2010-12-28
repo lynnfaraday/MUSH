@@ -34,16 +34,20 @@ namespace FoxwallDashboard.Models
         public bool Administrator { get; set; }
 
         [Column]
+        public int Salt { get; set; }
+
+        [Column]
         public bool Active { get; set; }
         
         public bool IsNew
         {
-            get
-            {
-                return ID == new Guid();
-            }
+            get { return ID == NewPersonID; }
         }
 
+        public static Guid NewPersonID
+        {
+            get { return new Guid(); }
+        }
         public string DisplayName
         {
             get { return LastName + ", " + FirstName; }
@@ -53,8 +57,9 @@ namespace FoxwallDashboard.Models
         {
             return new Person
             {
-                ID = new Guid(),
-                Active = true
+                ID = NewPersonID,
+                Active = true,
+                Salt = Models.Password.CreateRandomSalt()
             };
         }
 

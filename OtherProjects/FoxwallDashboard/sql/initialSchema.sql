@@ -45,11 +45,10 @@ CREATE TABLE [dbo].[YearlyIncidents](
 ) ON [PRIMARY]
 
 GO
-
 USE [test]
 GO
 
-/****** Object:  Table [dbo].[People]    Script Date: 12/22/2010 19:28:23 ******/
+/****** Object:  Table [dbo].[People]    Script Date: 12/28/2010 00:38:44 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -63,10 +62,12 @@ CREATE TABLE [dbo].[People](
 	[Username] [nvarchar](50) NULL,
 	[Password] [nvarchar](50) NULL,
 	[Administrator] [bit] NOT NULL,
-	[Active] [bit] NOT NULL
+	[Active] [bit] NOT NULL,
+	[Salt] [int] NULL
 ) ON [PRIMARY]
 
 GO
+
 
 
 USE [test]

@@ -33,7 +33,7 @@ namespace FoxwallDashboard.Controls
         public EditCallControl()
         {
             Load += HandlePageLoad;
-            CallID = new Guid();
+            CallID = Call.NewCallID;
             _repo = new Repository();
         }
 
@@ -103,24 +103,24 @@ namespace FoxwallDashboard.Controls
         {
             try
             {
-                string callIDToLoad = string.Empty;
+                Guid callIDToLoad = Call.NewCallID;
 
                 // If we're being asked to load an old call, try to do so.
                 if (Request.QueryString.AllKeys.Contains("CallID"))
                 {
-                    callIDToLoad = Request.QueryString["CallID"];
+                    callIDToLoad = new Guid(Request.QueryString["CallID"]);
                 }
-
+                
                 // If it's a postback for the same call, ignore it.
-                if (Page.IsPostBack && callIDToLoad == CallID.ToString())
+                if (Page.IsPostBack && callIDToLoad == CallID)
                 {
                     return;
                 }
 
                 Call callData;
-                if (!string.IsNullOrEmpty(callIDToLoad))
+                if (callIDToLoad != Call.NewCallID)
                 {
-                    callData = _repo.FindCallByID(new Guid(callIDToLoad));
+                    callData = _repo.FindCallByID(callIDToLoad);
                     
                     if (callData == null)
                     {

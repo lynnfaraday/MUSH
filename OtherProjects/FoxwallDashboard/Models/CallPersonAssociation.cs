@@ -26,17 +26,19 @@ namespace FoxwallDashboard.Models
 
         public bool IsNew
         {
-            get
-            {
-                return ID == new Guid();
-            }
+            get { return ID == NewCallPersonAssociationID; }
+        }
+
+        public static Guid NewCallPersonAssociationID
+        {
+            get { return new Guid(); }
         }
 
         public static CallPersonAssociation New()
         {
             return new CallPersonAssociation
             {
-                ID = new Guid()
+                ID = NewCallPersonAssociationID
             };
         }
     }

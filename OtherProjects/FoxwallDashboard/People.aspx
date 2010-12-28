@@ -5,6 +5,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
+<h1>People</h1>
 <foxwall:PersonListDisplayControl runat="server" ID="PersonListControl" /> 
 <asp:Label ID="NoticeLabel" runat="server" CSSClass="Error"></asp:Label>
 

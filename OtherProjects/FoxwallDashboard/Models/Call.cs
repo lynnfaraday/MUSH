@@ -47,10 +47,12 @@ namespace FoxwallDashboard.Models
         
         public bool IsNew
         {
-            get
-            {
-                return CallID == new Guid();
-            }
+            get { return CallID == NewCallID; }
+        }
+
+        public static Guid NewCallID
+        {
+            get { return new Guid(); }
         }
 
         public static Call New()
@@ -59,10 +61,10 @@ namespace FoxwallDashboard.Models
             {
                 Age = 0,
                 AgeUnits = "years",
-                CallID = new Guid(),
+                CallID = NewCallID,
                 Dispatched = DateTime.Now,
                 IncidentNumber = 0
-            };
+            };            
         }
 
         public void UpdateFrom(Call otherCall)

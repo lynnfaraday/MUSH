@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using FoxwallDashboard.Handlers;
+using FoxwallDashboard.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 // Disabling per unit test conventions.
@@ -22,42 +23,49 @@ namespace Tests
         public void good_password_passes_validation()
         {
             const string Password = "ab$d6";
-            Assert.IsTrue(PasswordValidator.Validate(Password));
+            Assert.IsTrue(PasswordValidator.Validate("test", Password));
         }
 
         [TestMethod]
         public void empty_password_fails_validation()
         {
             const string Password = "";
-            Assert.IsFalse(PasswordValidator.Validate(Password));
+            Assert.IsFalse(PasswordValidator.Validate("test", Password));
         }
 
         [TestMethod]
         public void short_password_fails_validation()
         {
             const string Password = "ab$6";
-            Assert.IsFalse(PasswordValidator.Validate(Password));
+            Assert.IsFalse(PasswordValidator.Validate("test", Password));
         }
 
         [TestMethod]
         public void letters_only_password_fails_validation()
         {
             const string Password = "abcde";
-            Assert.IsFalse(PasswordValidator.Validate(Password));
+            Assert.IsFalse(PasswordValidator.Validate("test", Password));
         }
 
         [TestMethod]
         public void numbers_only_password_fails_validation()
         {
             const string Password = "12345";
-            Assert.IsFalse(PasswordValidator.Validate(Password));
+            Assert.IsFalse(PasswordValidator.Validate("test", Password));
         }
 
         [TestMethod]
         public void no_special_char_password_fails_validation()
         {
             const string Password = "ab123";
-            Assert.IsFalse(PasswordValidator.Validate(Password));
+            Assert.IsFalse(PasswordValidator.Validate("test", Password));
+        }
+
+        [TestMethod]
+        public void password_ignored_when_username_is_blank()
+        {
+            const string Password = "1";
+            Assert.IsTrue(PasswordValidator.Validate(string.Empty, Password));
         }
     }
 }

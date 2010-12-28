@@ -4,9 +4,13 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
+
+<asp:LinkButton ID="LinkButton1" runat="server" PostBackUrl="~/People.aspx" CausesValidation="false">[ Back to People ]</asp:LinkButton>
     
 <asp:Literal ID="TitleLabel" runat="server" />
 
 <foxwall:EditPersonControl runat="server" ID="PersonControl" /> 
+    
+<br />
 
 </asp:Content>

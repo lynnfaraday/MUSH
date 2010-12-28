@@ -27,12 +27,17 @@ namespace FoxwallDashboard.Models
         public static YearlyIncidentRecord New(int year)
         {
             // Multiplying by 10,000 will make the year something like 20110000
-            return new YearlyIncidentRecord {ID = new Guid(), LastIncident = year * 10000, Year = year};
+            return new YearlyIncidentRecord { ID = NewYearlyIncidentRecordID, LastIncident = year * 10000, Year = year };
+        }
+
+        public static Guid NewYearlyIncidentRecordID
+        {
+            get { return new Guid(); }
         }
 
         public bool IsNew
         {
-            get { return ID == new Guid(); }
+            get { return ID == NewYearlyIncidentRecordID; }
         }        
     }
 }

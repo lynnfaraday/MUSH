@@ -112,13 +112,13 @@ namespace FoxwallDashboard.Controls {
         protected global::System.Web.UI.WebControls.TextBox PasswordBox;
         
         /// <summary>
-        /// CustomValidator1 control.
+        /// PasswordError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CustomValidator CustomValidator1;
+        protected global::System.Web.UI.WebControls.Label PasswordError;
         
         /// <summary>
         /// Label4 control.

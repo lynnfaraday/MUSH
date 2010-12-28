@@ -48,7 +48,9 @@ namespace FoxwallDashboard
                 return;
             }
 
-            Password enteredPassword = new Password(PasswordBox.Text, user.LastName);
+            var salt = Password.CreateRandomSalt();
+
+            Password enteredPassword = new Password(PasswordBox.Text, user.Salt);
             var enteredHash = enteredPassword.ComputeSaltedHash();
             if (user.Password != enteredHash)
             {
