@@ -51,9 +51,11 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="AddCall.aspx" />
+    <Content Include="EditCall.aspx" />
+    <Content Include="EditPerson.aspx" />
     <Content Include="Controls\CallListDisplayControl.ascx" />
     <Content Include="Controls\CallMenu.ascx" />
+    <Content Include="Controls\PersonListDisplayControl.ascx" />
     <Content Include="Help.aspx" />
     <Content Include="Controls\EditPersonControl.ascx" />
     <Content Include="ListCalls.aspx" />
@@ -76,12 +78,19 @@
     <Content Include="Controls\EditCallControl.ascx" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddCall.aspx.cs">
-      <DependentUpon>AddCall.aspx</DependentUpon>
+    <Compile Include="EditCall.aspx.cs">
+      <DependentUpon>EditCall.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AddCall.aspx.designer.cs">
-      <DependentUpon>AddCall.aspx</DependentUpon>
+    <Compile Include="EditCall.aspx.designer.cs">
+      <DependentUpon>EditCall.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EditPerson.aspx.cs">
+      <DependentUpon>EditPerson.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EditPerson.aspx.designer.cs">
+      <DependentUpon>EditPerson.aspx</DependentUpon>
     </Compile>
     <Compile Include="BasePage.cs">
       <SubType>ASPXCodeBehind</SubType>
@@ -99,6 +108,13 @@
     </Compile>
     <Compile Include="Controls\CallMenu.ascx.designer.cs">
       <DependentUpon>CallMenu.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PersonListDisplayControl.ascx.cs">
+      <DependentUpon>PersonListDisplayControl.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PersonListDisplayControl.ascx.designer.cs">
+      <DependentUpon>PersonListDisplayControl.ascx</DependentUpon>
     </Compile>
     <Compile Include="Handlers\IncidentNumberAssigner.cs" />
     <Compile Include="Help.aspx.cs">

@@ -1,15 +1,15 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AddCall.aspx.cs" company="Wordsmyth Games">
+// <copyright file="EditCall.aspx.cs" company="Wordsmyth Games">
 //   Copyright (C) 2010 by Linda Naughton
 // </copyright>
 // <summary>
-//   Defines the AddCall type.
+//   Defines the EditCall type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace FoxwallDashboard
 {
-    public partial class AddCall : BasePage
+    public partial class EditCall : BasePage
     {
         protected override System.Web.UI.WebControls.Button DefaultButton
         {

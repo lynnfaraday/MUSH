@@ -7,27 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace FoxwallDashboard {
+namespace FoxwallDashboard.Controls {
     
     
-    public partial class People {
+    public partial class PersonListDisplayControl {
         
         /// <summary>
-        /// PersonListControl control.
+        /// PersonList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::FoxwallDashboard.Controls.PersonListDisplayControl PersonListControl;
-        
-        /// <summary>
-        /// NoticeLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label NoticeLabel;
+        protected global::System.Web.UI.WebControls.Literal PersonList;
     }
 }

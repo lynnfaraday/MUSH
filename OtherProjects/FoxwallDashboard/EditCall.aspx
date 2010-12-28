@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AddCall.aspx.cs" Inherits="FoxwallDashboard.AddCall" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EditCall.aspx.cs" Inherits="FoxwallDashboard.EditCall" %>
 <%@ Register TagPrefix="foxwall" Src="~/Controls/EditCallControl.ascx" TagName="EditCallControl" %>
 <%@ Register TagPrefix="foxwall" Src="~/Controls/CallMenu.ascx" TagName="CallMenu" %>
 

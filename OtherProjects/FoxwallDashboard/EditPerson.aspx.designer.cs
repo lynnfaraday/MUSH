@@ -10,24 +10,24 @@
 namespace FoxwallDashboard {
     
     
-    public partial class People {
+    public partial class EditPerson {
         
         /// <summary>
-        /// PersonListControl control.
+        /// TitleLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::FoxwallDashboard.Controls.PersonListDisplayControl PersonListControl;
+        protected global::System.Web.UI.WebControls.Literal TitleLabel;
         
         /// <summary>
-        /// NoticeLabel control.
+        /// PersonControl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label NoticeLabel;
+        protected global::FoxwallDashboard.Controls.EditPersonControl PersonControl;
     }
 }

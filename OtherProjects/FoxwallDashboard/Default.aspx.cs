@@ -42,6 +42,12 @@ namespace FoxwallDashboard
                 return;
             }
 
+            if (!user.Active)
+            {
+                NoticeLabel.Text = "Sorry, that username is disabled.";
+                return;
+            }
+
             Password enteredPassword = new Password(PasswordBox.Text, user.LastName);
             var enteredHash = enteredPassword.ComputeSaltedHash();
             if (user.Password != enteredHash)
@@ -51,7 +57,7 @@ namespace FoxwallDashboard
             }
 
             Session[UserIDSessionKey] = user.ID;
-            Response.Redirect("~/AddCall.aspx");
+            Response.Redirect("~/EditCall.aspx");
         }
     }
 

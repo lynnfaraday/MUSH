@@ -66,9 +66,19 @@ namespace FoxwallDashboard.Controls
             CrewList.Items.Clear();
             foreach (var person in _repo.AllPeople())
             {
-                var item = new ListItem {Text = person.DisplayName, Value = person.ID.ToString()};
-                CrewList.Items.Add(item);
-                item.Selected = peopleOnCall.Contains(person.ID);                
+                bool isOnCall = peopleOnCall.Contains(person.ID);
+                // Only add if they're active or on the call (i.e. it's an old call).
+                if (person.Active || isOnCall)
+                {
+                    var item = new ListItem
+                    {
+                        Text = person.DisplayName,
+                        Value = person.ID.ToString(),
+                        Selected = isOnCall,
+                        Enabled = person.Active
+                    };
+                    CrewList.Items.Add(item);
+                }
             }
         }
 
