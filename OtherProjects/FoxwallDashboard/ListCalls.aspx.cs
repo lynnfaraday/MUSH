@@ -29,18 +29,15 @@ namespace FoxwallDashboard
                     case "Recent":
                         TitleLabel.Text = "<h1>Recent Calls</h1>";
                         CallList.Calls = repo.RecentCalls();
-                        CallMenu.Visible = true;
                         break;
                     case "Search":
                         var incidentNumber = (string)Session["SearchCriteria"]; // TODO - make object
                         CallList.Calls = repo.FindCalls(c => c.IncidentNumber.ToString().Contains(incidentNumber));
                         TitleLabel.Text = "<h1>Search Results</h1>";
-                        CallMenu.Visible = true;
                         break;
                     case "Outstanding":
                         TitleLabel.Text = "<h1>Outstanding Calls</h1>";
                         CallList.Calls = repo.OutstandingCalls();
-                        CallMenu.Visible = false;
                         break;
                     case "Mine":
                         TitleLabel.Text = "<h1>My Calls</h1>";
@@ -49,7 +46,6 @@ namespace FoxwallDashboard
                         List<Call> calls = callIDs.Select(repo.FindCallByID).ToList();
                         calls.OrderByDescending(c => c.IncidentNumber);
                         CallList.Calls = calls;
-                        CallMenu.Visible = false;
                         break;
                     default:
                         throw new Exception("Unrecognized list type " + listType);

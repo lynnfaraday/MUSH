@@ -9,7 +9,7 @@
           <asp:Literal ID="Notices" runat="server"></asp:Literal>
     </asp:Panel>
 
-<table cellpadding="10">
+<table cellpadding="5">
 <tr>
 <td><h2>Calls</h2></td>
 <td><h2>People</h2></td>
@@ -27,6 +27,12 @@
 
 <tr>
 <td><asp:LinkButton ID="LinkButton3" runat="server" PostBackUrl="~/ListCalls.aspx?List=Outstanding">All Outstanding Tripsheets</asp:LinkButton></td>
+<td>&nbsp;</td>
+</tr>
+
+
+<tr>
+<td><asp:LinkButton ID="LinkButton4" runat="server" PostBackUrl="~/Reports.aspx">Other Call Reports</asp:LinkButton></td>
 <td>&nbsp;</td>
 </tr>
 

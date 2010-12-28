@@ -150,7 +150,7 @@ div.hideSkiplink
 
 div.menu
 {
-    padding: 4px 0px 4px 8px;
+    padding: 2px 0px 2px 2px;
 }
 
 div.menu ul
@@ -168,7 +168,7 @@ div.menu ul li a, div.menu ul li a:visited
     color: #FFFFFF;
     display: block;
     line-height: 1.35em;
-    padding: 4px 20px;
+    padding: 0px 20px;
     text-decoration: none;
     white-space: nowrap;
 }
@@ -248,12 +248,17 @@ div.menu ul li a:active
 /* FORM ELEMENTS   
 ---------------------------------------------------------- */
 
-.LabelTitle
+.labelTitle
 {
     font-weight: bold;
 }
 
-.Error
+.errorMessage
 {
     color: Red;
+}
+
+.dashboardTable
+{
+    padding: 5px 10px 5px 10px;
 }

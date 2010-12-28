@@ -12,6 +12,6 @@
 <asp:Literal ID="TitleLabel" runat="server" />
 
 <foxwall:CallListDisplayControl runat="server" ID="CallList" /> 
-<asp:Label ID="NoticeLabel" runat="server" CSSClass="Error"></asp:Label>
+<asp:Label ID="NoticeLabel" runat="server" CSSClass="errorMessage"></asp:Label>
 
 </asp:Content>

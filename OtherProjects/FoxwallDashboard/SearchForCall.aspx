@@ -7,13 +7,13 @@
    
 <foxwall:CallMenu runat="server" ID="CallMenu" /> 
 <h1>Search for a Call</h1>
-    <asp:Label ID="Label1" runat="server" Text="Incident Number:" CssClass="LabelTitle"></asp:Label>
+    <asp:Label ID="Label1" runat="server" Text="Incident Number:" CSSClass="labelTitle"></asp:Label>
     <asp:TextBox ID="IncidentNumberBox" runat="server"></asp:TextBox>
      <asp:CompareValidator ID="CompareValidator1" runat="server" ErrorMessage="Incident number must be a number."
-                    ControlToValidate="IncidentNumberBox" Operator="DataTypeCheck" Type="Integer" CssClass="Error"/>
+                    ControlToValidate="IncidentNumberBox" Operator="DataTypeCheck" Type="Integer" CSSClass="errorMessage"/>
     <br />
     <asp:Button ID="SearchButton" runat="server" Text="Search" OnClick="SearchButtonClick" />
     <br />
-    <asp:Label ID="NoticeLabel" runat="server" CssClass="Error"></asp:Label>
+    <asp:Label ID="NoticeLabel" runat="server" CSSClass="errorMessage"></asp:Label>
     
 </asp:Content>

@@ -65,6 +65,7 @@ namespace FoxwallDashboard
                     Page.Form.DefaultButton = DefaultButton.UniqueID;
                 }
 
+                // This will throw an exception if there's no user and hide our invalid page items.
                 LoginNameDisplay.Text = "Welcome, " + CurrentUser.FirstName;
                 LogoutButton.Visible = true;
                 NotLoggedInPanel.Visible = false;

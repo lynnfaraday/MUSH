@@ -13,6 +13,15 @@ namespace FoxwallDashboard {
     public partial class Reports {
         
         /// <summary>
+        /// CallMenu control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::FoxwallDashboard.Controls.CallMenu CallMenu;
+        
+        /// <summary>
         /// LinkButton1 control.
         /// </summary>
         /// <remarks>
