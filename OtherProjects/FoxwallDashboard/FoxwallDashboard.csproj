@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="Handlers\SaveCallHandler.cs" />
     <Compile Include="Models\CallPersonAssociation.cs" />
+    <Compile Include="Models\Password.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\YearlyIncidentRecord.cs" />
     <Compile Include="People.aspx.cs">

@@ -14,11 +14,20 @@ namespace FoxwallDashboard
 {
     public partial class DefaultPage : BasePage
     {
+        protected override System.Web.UI.WebControls.Button DefaultButton
+        {
+            get { return LoginButton; }
+        }
+        protected override System.Web.UI.Control DefaultFocus
+        {
+            get { return UsernameBox; }
+        }
+
         // This is the login page so obviously we're not logged in yet.  Show the main content anyway.
         protected override void DoCustomPageLoad()
         {
             MainContent.Visible = true;
-            NotLoggedInPanel.Visible = false;
+            NotLoggedInPanel.Visible = false;            
         }
 
         protected void LoginButtonClick(object sender, EventArgs e)
@@ -38,7 +47,7 @@ namespace FoxwallDashboard
                 return;
             }
 
-            Session["UserID"] = user.ID;
+            Session[UserIDSessionKey] = user.ID;
             Response.Redirect("~/AddCall.aspx");
         }
     }

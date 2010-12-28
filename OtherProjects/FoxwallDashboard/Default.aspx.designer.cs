@@ -58,15 +58,6 @@ namespace FoxwallDashboard {
         protected global::System.Web.UI.WebControls.TextBox PasswordBox;
         
         /// <summary>
-        /// NoticeLabel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label NoticeLabel;
-        
-        /// <summary>
         /// LoginButton control.
         /// </summary>
         /// <remarks>
@@ -74,5 +65,14 @@ namespace FoxwallDashboard {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button LoginButton;
+        
+        /// <summary>
+        /// NoticeLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label NoticeLabel;
     }
 }

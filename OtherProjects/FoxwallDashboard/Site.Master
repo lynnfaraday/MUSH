@@ -20,7 +20,7 @@
             <div class="loginDisplay">
                 <asp:Label ID="LoginNameDisplay" runat="server"></asp:Label>   
                 <br />
-                <asp:LinkButton ID="LogoutButton" runat="server">[ Logout ]</asp:LinkButton>
+                <asp:LinkButton ID="LogoutButton" runat="server" OnClick="LogoutClick" CausesValidation="false">[ Logout ]</asp:LinkButton>
             </div>
             <div class="clear hideSkiplink">
                 <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false" IncludeStyleBlock="false" Orientation="Horizontal">

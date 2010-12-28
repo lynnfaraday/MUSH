@@ -16,8 +16,6 @@ namespace FoxwallDashboard.Database
 {
     public class FoxwallDb : DataContext
     {
-        private const string ConnectionString = "Data Source=(local);Initial Catalog=test;user=test;password=test;";
-
         [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Required for SQL binding.")]
         public Table<Call> Calls;
 
@@ -30,7 +28,7 @@ namespace FoxwallDashboard.Database
         [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Required for SQL binding.")]
         public Table<CallPersonAssociation> CallPersonAssociations;
 
-        public FoxwallDb() : base(new SqlConnection(ConnectionString))
+        public FoxwallDb() : base(new SqlConnection(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["Foxwall"].ConnectionString))
         {
         }
     }

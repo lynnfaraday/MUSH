@@ -20,9 +20,20 @@ namespace FoxwallDashboard.Controls
     {
         private readonly Repository _repo;
 
+        public Button DefaultButton
+        {
+            get { return SaveButton; }
+        }
+
+        public System.Web.UI.Control DefaultFocus
+        {
+            get { return StateNumberBox; }
+        }
+
         public EditCallControl()
         {
             Load += HandlePageLoad;
+            CallID = new Guid();
             _repo = new Repository();
         }
 
@@ -37,6 +48,7 @@ namespace FoxwallDashboard.Controls
         // Sure would be great to do this in binding, if only I could figure out how :(
         private void UpdateFieldsFromCallData(Call call)
         {
+            CallID = call.CallID;
             StateNumberBox.Text = call.StateNumber;
             DispatchedCalendar.SelectedDate = call.Dispatched.Date;
             DispatchTimeBox.Text = call.Dispatched.ToString("HH:mm");
@@ -51,11 +63,12 @@ namespace FoxwallDashboard.Controls
 
             var peopleOnCall = _repo.FindPeopleForCall(call.CallID);
 
+            CrewList.Items.Clear();
             foreach (var person in _repo.AllPeople())
             {
                 var item = new ListItem {Text = person.DisplayName, Value = person.ID.ToString()};
                 CrewList.Items.Add(item);
-                item.Selected = peopleOnCall.Contains(person.ID);
+                item.Selected = peopleOnCall.Contains(person.ID);                
             }
         }
 
@@ -78,35 +91,36 @@ namespace FoxwallDashboard.Controls
 
         private void HandlePageLoad(object sender, EventArgs e)
         {
-            // Ignore postbacks.  // TODO: Unless switching from edit to add mode!
-            if (Page.IsPostBack)
-            {
-                return;
-            }
-
             try
             {
-                Call callData;
+                string callIDToLoad = string.Empty;
 
                 // If we're being asked to load an old call, try to do so.
                 if (Request.QueryString.AllKeys.Contains("CallID"))
                 {
-                    CallID = new Guid(Request.QueryString["CallID"]);
-                    callData = _repo.FindCallByID(CallID);
+                    callIDToLoad = Request.QueryString["CallID"];
+                }
 
+                // If it's a postback for the same call, ignore it.
+                if (Page.IsPostBack && callIDToLoad == CallID.ToString())
+                {
+                    return;
+                }
+
+                Call callData;
+                if (!string.IsNullOrEmpty(callIDToLoad))
+                {
+                    callData = _repo.FindCallByID(new Guid(callIDToLoad));
+                    
                     if (callData == null)
                     {
                         throw new ApplicationException("Could not find call with ID " + CallID + ".");
                     }
                 }
-
-                // Otherwise it's new.
                 else
                 {
-                    CallID = new Guid();
                     callData = Call.New();
                 }
-
                 UpdateFieldsFromCallData(callData);
 
                 HideNotice();
