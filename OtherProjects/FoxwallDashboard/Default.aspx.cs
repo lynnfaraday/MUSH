@@ -9,6 +9,7 @@
 
 using System;
 using FoxwallDashboard.Database;
+using FoxwallDashboard.Models;
 
 namespace FoxwallDashboard
 {
@@ -41,7 +42,9 @@ namespace FoxwallDashboard
                 return;
             }
 
-            if (user.Password != PasswordBox.Text) // TODO - hashing
+            Password enteredPassword = new Password(PasswordBox.Text, user.LastName);
+            var enteredHash = enteredPassword.ComputeSaltedHash();
+            if (user.Password != enteredHash)
             {
                 NoticeLabel.Text = "Invalid password.";
                 return;

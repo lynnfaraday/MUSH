@@ -80,17 +80,7 @@ namespace FoxwallDashboard.Controls
             FirstNameBox.Text = person.FirstName;
             LastNameBox.Text = person.LastName;
             IsActiveBox.Checked = person.Active;
-            UsernameBox.Text = person.Username;
-            SetPasswordTextValue(person.Password);
-        }
-
-        private void SetPasswordTextValue(string password)
-        {
-            // As a security feature, ASP tries to prevent you from directly setting the 'Text' property on a 
-            // password box.  To set it, you have to use the 'value' attribute.  We really want to set it here,
-            // because otherwise the person editing the user would have to re-enter their password every time
-            // they edited them!
-            PasswordBox.Attributes.Add("value", password); // TODO: Dehash
+            UsernameBox.Text = person.Username;            
         }
 
         private void UpdatePersonDataFromFields(Person person)
@@ -99,7 +89,8 @@ namespace FoxwallDashboard.Controls
             person.LastName = LastNameBox.Text;
             person.Active = IsActiveBox.Checked;
             person.Username = UsernameBox.Text;
-            person.Password = PasswordBox.Text;  // TODO: Hash
+            Password password = new Password(PasswordBox.Text, person.LastName);
+            person.Password = password.ComputeSaltedHash();
         }
 
         protected void SaveButtonClick(object sender, EventArgs e)
@@ -123,9 +114,9 @@ namespace FoxwallDashboard.Controls
 
                 person = saveHandler.Save(person);
                 
-                // Update our ID now that we have one, and reset the password box because ASP irritatingly loses it.
+                // Update our ID now that we have one
                 PersonID = person.ID;
-                SetPasswordTextValue(person.Password);
+                // TODO: This loses the password each time.  Fix that!
 
                 ShowNotice("Person saved!", false);
             }

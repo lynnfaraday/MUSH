@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -19,10 +20,11 @@ namespace FoxwallDashboard.Models
         private readonly string _password;
         private readonly int _salt;
 
-        public Password(string strPassword, int nSalt)
+        public Password(string strPassword, string salt)
         {
             _password = strPassword;
-            _salt = nSalt;
+            var bytes = Encoding.UTF8.GetBytes(salt);
+            _salt = bytes.Aggregate(0, (current, b) => current + b);
         }
 
         public static string CreateRandomPassword(int passwordLength)

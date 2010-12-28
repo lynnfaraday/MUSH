@@ -10,6 +10,6 @@
 namespace FoxwallDashboard
 {
     public partial class People : BasePage
-    {
+    {        
     }
 }
