@@ -7,7 +7,7 @@
 
 <p>Please select a report:</p>
 
-<asp:LinkButton ID="LinkButton1" runat="server" PostBackUrl="~/ListCalls.aspx?List=Outstanding">Outstanding Tripsheets</asp:LinkButton>
+<asp:LinkButton ID="LinkButton1" runat="server" PostBackUrl="~/ListCalls.aspx?List=Outstanding">All Outstanding Tripsheets</asp:LinkButton>
 <br />
 <asp:LinkButton ID="LinkButton3" runat="server" PostBackUrl="~/ListCalls.aspx?List=Recent">Recent Calls</asp:LinkButton>
 <br />

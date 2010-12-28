@@ -35,6 +35,7 @@ namespace FoxwallDashboard.Database
         IEnumerable<Guid> FindPeopleForCall(Guid callID);
         IEnumerable<Guid> FindCallsForPerson(Guid personID);
         CallPersonAssociation SaveAssociation(CallPersonAssociation association);
+        IEnumerable<Call> OutstandingCallsForUser(Guid userID);
 
         // Sorted by lastname.
         IEnumerable<Person> AllPeople();
@@ -88,7 +89,7 @@ namespace FoxwallDashboard.Database
 
         public IEnumerable<Call> OutstandingCalls()
         {
-            // Can't use isnullorempty here for strange SQL error reasons.
+            // Can't use string.isnullorempty here because SQL chokes
             return _db.Calls.Where(c => c.StateNumber == null || c.StateNumber.Length == 0).ToList().OrderByDescending(c => c.IncidentNumber);
         }
 
@@ -132,7 +133,7 @@ namespace FoxwallDashboard.Database
             }
             return person;
         }
-
+        
         public IEnumerable<Person> AllPeople()
         {
             return _db.People.OrderBy(p => p.LastName);
@@ -162,6 +163,23 @@ namespace FoxwallDashboard.Database
             return _db.CallPersonAssociations.Where(a => a.PersonID == personID).Select(a => a.CallID).ToList();
         }
 
+        public IEnumerable<Call> OutstandingCallsForUser(Guid userID)
+        {
+            // This is hideously inefficient but I can't figure out the join :(
+            // Can't use string.isnullorempty here because SQL chokes
+            var outstandingCalls = from c in _db.Calls
+                                   where (c.StateNumber == null || c.StateNumber.Length == 0)
+                                   select c;
+            var personCalls = from a in _db.CallPersonAssociations
+                              where a.PersonID == userID
+                              select a;
+            var finalList = (from c in outstandingCalls
+                             where personCalls.Any(a => a.CallID == c.CallID)
+                             select c).ToList();
+
+            return finalList;
+        }
+
         public CallPersonAssociation SaveAssociation(CallPersonAssociation association)
         {
             // Assign a new GUID if needed and add to the database.
@@ -177,7 +195,6 @@ namespace FoxwallDashboard.Database
         {
             _db.CallPersonAssociations.DeleteOnSubmit(association);
         }
-        #endregion
-
+        #endregion       
     }
 }

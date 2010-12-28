@@ -51,6 +51,7 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Dashboard.aspx" />
     <Content Include="EditCall.aspx" />
     <Content Include="EditPerson.aspx" />
     <Content Include="Controls\CallListDisplayControl.ascx" />
@@ -78,6 +79,13 @@
     <Content Include="Controls\EditCallControl.ascx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+    </Compile>
     <Compile Include="EditCall.aspx.cs">
       <DependentUpon>EditCall.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

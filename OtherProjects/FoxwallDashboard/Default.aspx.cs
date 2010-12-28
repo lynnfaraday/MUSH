@@ -48,8 +48,6 @@ namespace FoxwallDashboard
                 return;
             }
 
-            var salt = Password.CreateRandomSalt();
-
             Password enteredPassword = new Password(PasswordBox.Text, user.Salt);
             var enteredHash = enteredPassword.ComputeSaltedHash();
             if (user.Password != enteredHash)
@@ -59,7 +57,7 @@ namespace FoxwallDashboard
             }
 
             Session[UserIDSessionKey] = user.ID;
-            Response.Redirect("~/EditCall.aspx");
+            Response.Redirect("~/Dashboard.aspx");
         }
     }
 
