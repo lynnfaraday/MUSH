@@ -109,19 +109,10 @@ namespace FoxwallDashboard.Controls
                     return;
                 }
 
-                Call callData = Call.New();
+                EditCallLoadHandler handler = new EditCallLoadHandler(_repo);
+                Call callData = handler.Handle(Request.QueryString);
 
-                // If we're being asked to load an old call, try to do so.
-                if (Request.QueryString.AllKeys.Contains("CallID"))
-                {
-                    CallID = new Guid(Request.QueryString["CallID"]);
-                    callData = _repo.FindCallByID(CallID);
-
-                    if (callData == null)
-                    {
-                        throw new ApplicationException("Could not find call with ID " + CallID + ".");
-                    }
-                }
+                CallID = callData.CallID;
                 UpdateFieldsFromCallData(callData);
                 HideNotice();
             }

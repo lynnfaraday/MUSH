@@ -131,6 +131,8 @@
     <Compile Include="Controls\PersonListDisplayControl.ascx.designer.cs">
       <DependentUpon>PersonListDisplayControl.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\EditCallLoadHandler.cs" />
+    <Compile Include="Handlers\EditPersonLoadHandler.cs" />
     <Compile Include="Handlers\IncidentNumberAssigner.cs" />
     <Compile Include="Help.aspx.cs">
       <DependentUpon>Help.aspx</DependentUpon>

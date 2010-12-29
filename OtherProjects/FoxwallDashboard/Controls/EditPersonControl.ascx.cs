@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Linq;
 using FoxwallDashboard.Database;
 using FoxwallDashboard.Handlers;
 using FoxwallDashboard.Models;
@@ -50,31 +49,11 @@ namespace FoxwallDashboard.Controls
 
             try
             {
-                Person personData;
-
-                // If we're being asked to load an old person, try to do so.
-                if (Request.QueryString.AllKeys.Contains("PersonID"))
-                {
-                    var personID = new Guid(Request.QueryString["PersonID"]);
-                    var repo = new Repository();
-                    personData = repo.FindPersonByID(personID);
-
-                    if (personData == null)
-                    {
-                        throw new ApplicationException("Could not find person with ID " + PersonID + ".");
-                    }
-                }
-
-                // Otherwise it's new.
-                else
-                {
-                    personData = Person.New();
-                }
-
+                var handler = new EditPersonLoadHandler(_repo);
+                Person personData = handler.Handle(Request.QueryString);
+                
                 PersonID = personData.ID;
-
                 UpdateFieldsFromPersonData(personData);
-
                 HideNotice();
             }
             catch (Exception ex)
