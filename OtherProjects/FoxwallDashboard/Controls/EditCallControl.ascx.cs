@@ -50,8 +50,9 @@ namespace FoxwallDashboard.Controls
         {
             CallID = call.CallID;
             StateNumberBox.Text = call.StateNumber;
-            DispatchedCalendar.SelectedDate = call.Dispatched.Date;
-            DispatchTimeBox.Text = call.Dispatched.ToString("HH:mm");
+            // Use local time for display.
+            DispatchedCalendar.SelectedDate = call.LocalDispatchedTime.Date;
+            DispatchTimeBox.Text = call.LocalDispatchedTime.ToString("HH:mm");
             LocationBox.Text = call.Location;
             BoroughSelection.SelectedValue = call.Borough;
             ChiefComplaintBox.Text = call.ChiefComplaint;
@@ -87,7 +88,8 @@ namespace FoxwallDashboard.Controls
             // It's ok to do all this updating blindly because we know that our validation already ran.
             call.StateNumber = StateNumberBox.Text;
             var dateString = DispatchedCalendar.SelectedDate.ToString("MM/dd/yyyy");
-            call.Dispatched = DateTime.Parse(dateString + " " + DispatchTimeBox.Text);
+            // Dates are stored in UTC and must be converted for display.
+            call.LocalDispatchedTime = DateTime.Parse(dateString + " " + DispatchTimeBox.Text);
             call.Location = LocationBox.Text;
             call.Borough = BoroughSelection.SelectedValue;
             call.ChiefComplaint = ChiefComplaintBox.Text;

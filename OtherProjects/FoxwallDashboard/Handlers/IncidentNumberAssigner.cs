@@ -30,7 +30,7 @@ namespace FoxwallDashboard.Handlers
         // that whoever's requesting the incident number assignment will do so.
         public int UpdateOrAssignIncidentNumber(Call call)
         {
-            var year = call.Dispatched.Year;
+            var year = call.LocalDispatchedTime.Year;
             var oldIncidentNumber = call.IncidentNumber;
             YearlyIncidentRecord record;
 

@@ -54,7 +54,7 @@ namespace FoxwallDashboard.Controls
                         builder.AppendLine("<tr>");
                         AddColumn(builder, call.IncidentNumber.ToString());
                         AddColumn(builder, call.StateNumber);
-                        AddColumn(builder, call.Dispatched.ToString());
+                        AddColumn(builder, call.LocalDispatchedTime.ToString());
                         AddColumn(builder, call.ChiefComplaint);
                         AddColumn(builder, call.Location);
                         AddColumn(builder, call.Borough);
