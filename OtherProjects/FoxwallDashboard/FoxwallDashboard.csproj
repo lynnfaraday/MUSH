@@ -59,6 +59,7 @@
     <Content Include="Controls\CallListDisplayControl.ascx" />
     <Content Include="Controls\CallMenu.ascx" />
     <Content Include="Controls\PersonListDisplayControl.ascx" />
+    <Content Include="ForgotPassword.aspx" />
     <Content Include="Help.aspx" />
     <Content Include="Controls\EditPersonControl.ascx" />
     <Content Include="ListCalls.aspx" />
@@ -146,6 +147,13 @@
     </Compile>
     <Compile Include="Controls\PersonListDisplayControl.ascx.designer.cs">
       <DependentUpon>PersonListDisplayControl.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ForgotPassword.aspx.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ForgotPassword.aspx.designer.cs">
+      <DependentUpon>ForgotPassword.aspx</DependentUpon>
     </Compile>
     <Compile Include="Handlers\ChangePasswordHandler.cs" />
     <Compile Include="Handlers\EditCallLoadHandler.cs" />

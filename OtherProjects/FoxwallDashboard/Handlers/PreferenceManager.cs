@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using FoxwallDashboard.Database;
 using FoxwallDashboard.Models;
 
@@ -33,6 +34,11 @@ namespace FoxwallDashboard.Handlers
         private string GetPreference(string name)
         {
             Preference pref = _repo.FindPreference(name);
+
+            if (pref == null)
+            {
+                throw new ApplicationException("Error loading preferences: Can't find a preference named " + name);
+            }
             return pref.Value;
         }
 
