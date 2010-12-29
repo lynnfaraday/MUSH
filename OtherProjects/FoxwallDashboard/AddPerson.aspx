@@ -9,8 +9,11 @@
     
 <h1>Add a Person</h1>
 
-<foxwall:EditPersonControl runat="server" ID="PersonControl" /> 
-    
+<asp:Panel runat="server" ID="EditPanel">
+   <foxwall:EditPersonControl runat="server" ID="PersonControl" /> 
+</asp:Panel>
+
 <br />
+<asp:Label ID="NoticeLabel" runat="server" CSSClass="errorMessage"></asp:Label>   
 
 </asp:Content>

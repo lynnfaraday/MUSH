@@ -22,6 +22,15 @@ namespace FoxwallDashboard {
         protected global::System.Web.UI.WebControls.LinkButton LinkButton2;
         
         /// <summary>
+        /// EditPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel EditPanel;
+        
+        /// <summary>
         /// PersonControl control.
         /// </summary>
         /// <remarks>
@@ -29,5 +38,14 @@ namespace FoxwallDashboard {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::FoxwallDashboard.Controls.EditPersonControl PersonControl;
+        
+        /// <summary>
+        /// NoticeLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label NoticeLabel;
     }
 }

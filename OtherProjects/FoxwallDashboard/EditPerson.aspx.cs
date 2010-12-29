@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace FoxwallDashboard
 {
     public partial class EditPerson : BasePage
@@ -18,6 +20,23 @@ namespace FoxwallDashboard
         protected override System.Web.UI.Control DefaultFocus
         {
             get { return PersonControl.DefaultFocus; }
+        }
+
+        protected override void DoCustomPageLoad()
+        {
+            try
+            {
+                if (!CurrentUser.Administrator)
+                {
+                    EditPanel.Visible = false;
+                    NoticeLabel.Text = "Only administrators may manage people.";
+                }
+            }
+            catch (Exception ex)
+            {
+                NoticeLabel.Text = "Error loading people management page.  Please try again. " +
+                                  "If the problem persists, contact support and mention the following message: " + ex.Message;
+            }
         }
     }
 }

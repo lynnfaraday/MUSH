@@ -112,7 +112,7 @@ namespace FoxwallDashboard
             get
             {
                 var repo = new Repository();
-                var userID = (Guid) Session["UserID"];
+                var userID = (Guid) Session[UserIDSessionKey];
                 return repo.FindPersonByID(userID);
             }
         }
