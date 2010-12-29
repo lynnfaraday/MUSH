@@ -1,4 +1,4 @@
-USE [foxwall2]
+USE [foxwall]
 GO
 
 /****** Object:  Table [dbo].[Calls]    Script Date: 12/22/2010 19:24:41 ******/
@@ -25,7 +25,7 @@ CREATE TABLE [dbo].[Calls](
 GO
 
 
-USE [foxwall2]
+USE [foxwall]
 GO
 
 /****** Object:  Table [dbo].[YearlyIncidents]    Script Date: 12/22/2010 19:25:24 ******/
@@ -46,7 +46,7 @@ CREATE TABLE [dbo].[YearlyIncidents](
 ) ON [PRIMARY]
 
 GO
-USE [foxwall2]
+USE [foxwall]
 GO
 
 /****** Object:  Table [dbo].[People]    Script Date: 12/28/2010 00:38:44 ******/
@@ -71,7 +71,7 @@ GO
 
 
 
-USE [foxwall2]
+USE [foxwall]
 GO
 
 /****** Object:  Table [dbo].[CallPersonAssociation]    Script Date: 12/23/2010 11:13:24 ******/
@@ -91,7 +91,7 @@ GO
 
 
 
-USE [foxwall2]
+USE [foxwall]
 GO
 INSERT INTO [dbo].[People]
            ([ID]
@@ -103,5 +103,5 @@ INSERT INTO [dbo].[People]
            ,[Active]
            ,[Salt])
      VALUES ('8A9100EA-E80B-4D26-84A5-220D902654F0', 'Default', 'Administrator', 'admin', 
-             '?,?JID??#???!??$Jk', 'true', 'true', '-1347497617',)
+             '?,?JID??#???!??$Jk', 'true', 'true', '-1347497617')
 GO
