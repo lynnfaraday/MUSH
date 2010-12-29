@@ -70,7 +70,8 @@ namespace FoxwallDashboard.Controls
             FirstNameBox.Text = person.FirstName;
             LastNameBox.Text = person.LastName;
             IsActiveBox.Checked = person.Active;
-            UsernameBox.Text = person.Username;            
+            UsernameBox.Text = person.Username;
+            IsAdminBox.Checked = person.Administrator;
         }
 
         private void UpdatePersonDataFromFields(Person person)
@@ -79,6 +80,7 @@ namespace FoxwallDashboard.Controls
             person.LastName = LastNameBox.Text;
             person.Active = IsActiveBox.Checked;
             person.Username = UsernameBox.Text;
+            person.Administrator = IsAdminBox.Checked;
 
             // Ignore the password box if it's empty, just leave the password what it was.
             if (!string.IsNullOrEmpty(PasswordBox.Text))

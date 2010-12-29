@@ -79,6 +79,17 @@
         </tr>
         <tr>
             <td>
+                <asp:Label ID="Label6" runat="server" CSSClass="labelTitle" Text="Is Administartor?"></asp:Label>
+            </td>
+            <td>
+                <asp:CheckBox ID="IsAdminBox" runat="server" />
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <asp:Button ID="SaveButton" runat="server" OnClick="SaveButtonClick" Text="Save" />
             </td>
             <td>
