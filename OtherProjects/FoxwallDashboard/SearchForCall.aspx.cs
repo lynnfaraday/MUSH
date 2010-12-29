@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
+using FoxwallDashboard.Models;
 
 namespace FoxwallDashboard
 {
@@ -24,7 +25,7 @@ namespace FoxwallDashboard
 
         protected void SearchButtonClick(object sender, EventArgs e)
         {
-            Session["SearchCriteria"] = IncidentNumberBox.Text; // TODO: Make this an object
+            Session[SearchCriteria.SearchCriteriaSessionKey] = new SearchCriteria {IncidentNumber = IncidentNumberBox.Text};
             Response.Redirect("~/ListCalls.aspx?List=Search");
         }
     }

@@ -51,7 +51,7 @@ namespace FoxwallDashboard.Controls
 
                 }
 
-                builder.AppendLine("<tr><td><a href=\"EditPerson.aspx\">[ Add ]</a></td></tr>");
+                builder.AppendLine("<tr><td><a href=\"AddPerson.aspx\">[ Add ]</a></td></tr>");
                 builder.AppendLine("</table>");
 
                 PersonList.Text = builder.ToString();

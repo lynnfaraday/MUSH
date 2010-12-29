@@ -7,7 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
 using System.Linq;
 using System.Text;
 using FoxwallDashboard.Database;
@@ -16,7 +15,7 @@ namespace FoxwallDashboard
 {
     public partial class Dashboard : BasePage
     {
-        private Repository _repo;
+        private readonly Repository _repo;
 
         public Dashboard()
         {

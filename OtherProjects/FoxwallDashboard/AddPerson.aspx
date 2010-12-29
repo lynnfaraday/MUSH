@@ -1,13 +1,13 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EditPerson.aspx.cs" Inherits="FoxwallDashboard.EditPerson" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="AddPerson.aspx.cs" Inherits="FoxwallDashboard.AddPerson" %>
 <%@ Register TagPrefix="foxwall" Src="~/Controls/EditPersonControl.ascx" TagName="EditPersonControl" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
-<asp:LinkButton ID="LinkButton1" runat="server" PostBackUrl="~/People.aspx" CausesValidation="false">[ Manage People ]</asp:LinkButton>
+<asp:LinkButton ID="LinkButton2" runat="server" PostBackUrl="~/People.aspx" CausesValidation="false">[ Manage People ]</asp:LinkButton>
     
-<h1>Edit a Person</h1>
+<h1>Add a Person</h1>
 
 <foxwall:EditPersonControl runat="server" ID="PersonControl" /> 
     

@@ -18,7 +18,7 @@ namespace FoxwallDashboard.Database
     {
         Call FindCallByID(Guid id);
         Call FindCall(Func<Call, bool> predicate);
-        IEnumerable<Call> FindCalls(Func<Call, bool> predicate);
+        IEnumerable<Call> FindCalls(SearchCriteria predicate);
         Call SaveCall(Call call);
         IEnumerable<Call> RecentCalls();
         IEnumerable<Call> OutstandingCalls();
@@ -65,9 +65,13 @@ namespace FoxwallDashboard.Database
             return _db.Calls.Where(predicate).FirstOrDefault();
         }
 
-        public IEnumerable<Call> FindCalls(Func<Call, bool> predicate)
+        public IEnumerable<Call> FindCalls(SearchCriteria searchCriteria)
         {
-            return _db.Calls.Where(predicate).ToList().OrderByDescending(c => c.IncidentNumber);            
+            // For now the only search criteria is Incident Number so this is a pretty simple deal.
+            // In the future it will become a more complex query.
+
+            var list = _db.Calls.Where(c => c.IncidentNumber.ToString().Contains(searchCriteria.IncidentNumber));
+            return list.ToList().OrderByDescending(c => c.IncidentNumber);
         }
 
         // Will add a new call to the database if needed.

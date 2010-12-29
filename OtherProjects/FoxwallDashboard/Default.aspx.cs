@@ -52,7 +52,7 @@ namespace FoxwallDashboard
             var enteredHash = enteredPassword.ComputeSaltedHash();
             if (user.Password != enteredHash)
             {
-                NoticeLabel.Text = "Invalid password.";
+                NoticeLabel.Text = "Invalid password.  If you've forgotten your password, please contact support to have it reset.";
                 return;
             }
 

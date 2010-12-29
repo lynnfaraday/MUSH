@@ -8,48 +8,47 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using FoxwallDashboard.Database;
+using FoxwallDashboard.Handlers;
 using FoxwallDashboard.Models;
 
 namespace FoxwallDashboard
 {
     public partial class ListCalls : BasePage
     {
+        private readonly Repository _repo;
+
+        public ListCalls()
+        {
+            _repo = new Repository();
+        }
+
         protected override void DoCustomPageLoad()
         {
             try
             {
-                // TODO : Make handlers for this and other page loads.
-                var repo = new Repository();
-                var listType = Request.QueryString["List"];
-                switch (listType)
+                var handler = new ListCallsLoadHandler(_repo);
+                var result = handler.Handle(Request.QueryString, CurrentUser, (SearchCriteria)Session[SearchCriteria.SearchCriteriaSessionKey]); 
+
+                switch (result.ListType)
                 {
-                    case "Recent":
-                        TitleLabel.Text = "<h1>Recent Calls</h1>";
-                        CallList.Calls = repo.RecentCalls();
-                        break;
-                    case "Search":
-                        var incidentNumber = (string)Session["SearchCriteria"]; // TODO - make object
-                        CallList.Calls = repo.FindCalls(c => c.IncidentNumber.ToString().Contains(incidentNumber));
+                    case ListCallsResult.CallListEnum.Search:
                         TitleLabel.Text = "<h1>Search Results</h1>";
                         break;
-                    case "Outstanding":
-                        TitleLabel.Text = "<h1>Outstanding Tripsheets</h1>";
-                        CallList.Calls = repo.OutstandingCalls();
-                        break;
-                    case "Mine":
+                    case ListCallsResult.CallListEnum.Mine:
                         TitleLabel.Text = "<h1>My Calls</h1>";
-                        var userID = (Guid)Session[UserIDSessionKey];
-                        var callIDs = repo.FindCallsForPerson(userID);
-                        List<Call> calls = callIDs.Select(repo.FindCallByID).ToList();
-                        calls.OrderByDescending(c => c.IncidentNumber);
-                        CallList.Calls = calls;
+                        break;
+                    case ListCallsResult.CallListEnum.Outstanding:
+                        TitleLabel.Text = "<h1>Outstanding Tripsheets</h1>";
+                        break;
+                    case ListCallsResult.CallListEnum.Recent:
+                        TitleLabel.Text = "<h1>Recent Calls</h1>";
                         break;
                     default:
-                        throw new Exception("Unrecognized list type " + listType);
+                        TitleLabel.Text = "<h1>" + result.ListType + "</h1>";
+                        break;
                 }
+                CallList.Calls = result.CallList;
             }
             catch (Exception ex)
             {

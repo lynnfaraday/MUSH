@@ -112,6 +112,15 @@ namespace FoxwallDashboard.Controls {
         protected global::System.Web.UI.WebControls.TextBox PasswordBox;
         
         /// <summary>
+        /// KeepOldPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label KeepOldPassword;
+        
+        /// <summary>
         /// PasswordError control.
         /// </summary>
         /// <remarks>

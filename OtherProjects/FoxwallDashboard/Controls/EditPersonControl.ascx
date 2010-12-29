@@ -47,7 +47,8 @@
                 <asp:TextBox ID="PasswordBox" runat="server" TextMode="Password">
                 </asp:TextBox>
             </td>
-            <td><i>Leave blank if you wish to keep the old password.</i>&nbsp;&nbsp;
+            <td>            
+                <asp:Label ID="KeepOldPassword" runat="server" Text="Leave blank to keep the old password." />
                 <asp:Label ID="PasswordError" runat="server" CSSClass="errorMessage" Visible="false"
                 Text="Password must be at least 5 characters and contain at least 1 letter, 1 number and one special character (@#$%^&+=)."></asp:Label>                
             </td>

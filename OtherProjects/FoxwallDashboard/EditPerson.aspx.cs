@@ -19,10 +19,5 @@ namespace FoxwallDashboard
         {
             get { return PersonControl.DefaultFocus; }
         }
-
-        protected override void DoCustomPageLoad()
-        {
-            TitleLabel.Text = Request.QueryString.HasKeys() ? "<h1>Edit a Person</h1>" : "<h1>Add a Person</h1>";
-        }
     }
 }

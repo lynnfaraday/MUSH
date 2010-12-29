@@ -51,6 +51,7 @@
     <Compile Include="EditCallLoadHandlerTests.cs" />
     <Compile Include="EditPersonLoadHandlerTests.cs" />
     <Compile Include="IncidentNumberAssignerTests.cs" />
+    <Compile Include="ListCallsLoadHandlerTests.cs" />
     <Compile Include="PasswordValidatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveCallHandlerTests.cs" />

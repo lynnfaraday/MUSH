@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AddCall.aspx" />
+    <Content Include="AddPerson.aspx" />
     <Content Include="Dashboard.aspx" />
     <Content Include="EditCall.aspx" />
     <Content Include="EditPerson.aspx" />
@@ -85,6 +86,13 @@
     </Compile>
     <Compile Include="AddCall.aspx.designer.cs">
       <DependentUpon>AddCall.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AddPerson.aspx.cs">
+      <DependentUpon>AddPerson.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AddPerson.aspx.designer.cs">
+      <DependentUpon>AddPerson.aspx</DependentUpon>
     </Compile>
     <Compile Include="Dashboard.aspx.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
@@ -134,6 +142,7 @@
     <Compile Include="Handlers\EditCallLoadHandler.cs" />
     <Compile Include="Handlers\EditPersonLoadHandler.cs" />
     <Compile Include="Handlers\IncidentNumberAssigner.cs" />
+    <Compile Include="Handlers\ListCallsLoadHandler.cs" />
     <Compile Include="Help.aspx.cs">
       <DependentUpon>Help.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -166,6 +175,7 @@
     <Compile Include="Models\CallPersonAssociation.cs" />
     <Compile Include="Models\Password.cs" />
     <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\SearchCriteria.cs" />
     <Compile Include="Models\YearlyIncidentRecord.cs" />
     <Compile Include="People.aspx.cs">
       <DependentUpon>People.aspx</DependentUpon>

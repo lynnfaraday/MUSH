@@ -51,7 +51,9 @@ namespace FoxwallDashboard.Controls
             {
                 var handler = new EditPersonLoadHandler(_repo);
                 Person personData = handler.Handle(Request.QueryString);
-                
+
+                // Show or hide the message about keeping the old password depending on whether it's an old or new user.
+                KeepOldPassword.Visible = !personData.IsNew;
                 PersonID = personData.ID;
                 UpdateFieldsFromPersonData(personData);
                 HideNotice();
