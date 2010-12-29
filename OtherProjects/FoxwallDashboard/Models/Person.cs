@@ -72,5 +72,12 @@ namespace FoxwallDashboard.Models
             Password = otherPerson.Password;
             Administrator = otherPerson.Administrator;
         }
+
+        // Saves a secure password based on a raw password entry.
+        public void SaveSecuredPassword(string rawPassword)
+        {
+            Password password = new Password(rawPassword, Salt);
+            Password = password.ComputeSaltedHash();
+        }
     }
 }

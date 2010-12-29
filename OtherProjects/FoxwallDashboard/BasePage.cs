@@ -35,6 +35,11 @@ namespace FoxwallDashboard
             get { return Master == null ? null : Master.FindControl("LogoutButton") as LinkButton; }
         }
 
+        protected LinkButton ChangePasswordButton
+        {
+            get { return Master == null ? null : Master.FindControl("ChangePasswordButton") as LinkButton; }
+        }
+
         protected Label LoginNameDisplay
         {
             get { return Master == null ? null : Master.FindControl("LoginNameDisplay") as Label; }
@@ -74,6 +79,7 @@ namespace FoxwallDashboard
                 // This will throw an exception if there's no user and hide our invalid page items.
                 LoginNameDisplay.Text = "Welcome, " + CurrentUser.FirstName;
                 LogoutButton.Visible = true;
+                ChangePasswordButton.Visible = true;
                 NotLoggedInPanel.Visible = false;
                 MainContent.Visible = true;         
                 
@@ -88,6 +94,8 @@ namespace FoxwallDashboard
                 NotLoggedInPanel.Visible = true;
                 MainContent.Visible = false;
                 LogoutButton.Visible = false;
+                ChangePasswordButton.Visible = false;
+                
                 LoginNameDisplay.Text = "";
 
                 // Hide all the nav items except for help.

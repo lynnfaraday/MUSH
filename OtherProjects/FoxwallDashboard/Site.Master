@@ -20,6 +20,7 @@
             <div class="loginDisplay">
                 <asp:Label ID="LoginNameDisplay" runat="server"></asp:Label>   
                 <br />
+                <asp:LinkButton ID="ChangePasswordButton" runat="server" PostbackUrl="~/ChangePassword.aspx" CausesValidation="false">[ Change Password ]</asp:LinkButton>
                 <asp:LinkButton ID="LogoutButton" runat="server" OnClick="LogoutClick" CausesValidation="false">[ Logout ]</asp:LinkButton>
             </div>
 

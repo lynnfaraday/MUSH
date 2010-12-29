@@ -83,8 +83,7 @@ namespace FoxwallDashboard.Controls
             // Ignore the password box if it's empty, just leave the password what it was.
             if (!string.IsNullOrEmpty(PasswordBox.Text))
             {
-                Password password = new Password(PasswordBox.Text, person.Salt);
-                person.Password = password.ComputeSaltedHash();
+                person.SaveSecuredPassword(PasswordBox.Text);
             }
             
         }
@@ -100,18 +99,12 @@ namespace FoxwallDashboard.Controls
             var saveHandler = new SavePersonHandler(_repo);
             try
             {
+                PasswordMatchError.Visible = false;
+                PasswordError.Visible = false;
 
                 // This validation can't be done by a validator because ASP forgets the password on postback
                 // and we allow it to be blank when editing an existing user.
-                if (!string.IsNullOrEmpty(PasswordBox.Text) || PersonID == Person.NewPersonID)
-                {
-                    bool isPasswordValid = PasswordValidator.Validate(UsernameBox.Text, PasswordBox.Text);
-                    PasswordError.Visible = !isPasswordValid;
-                    if (!isPasswordValid)
-                    {
-                        return;
-                    }
-                }
+                PasswordValidator.Validate(UsernameBox.Text, PasswordBox.Text, ConfirmPasswordBox.Text);
 
                 // Create or update our person to save.
                 var person = _repo.FindPersonByID(PersonID);
@@ -122,11 +115,20 @@ namespace FoxwallDashboard.Controls
                 UpdatePersonDataFromFields(person);
 
                 person = saveHandler.Save(person);
-                
+
                 // Update our ID now that we have one
                 PersonID = person.ID;
-                
-                ShowNotice("Person saved!", false);
+
+                ShowNotice("Person saved!", false);               
+            }
+            // Password exceptions shouldn't trigger our big error notice, just alittle warning.
+            catch (InvalidPasswordException)
+            {
+                PasswordError.Visible = true;
+            }
+            catch (PasswordsDontMatchException)
+            {
+                PasswordMatchError.Visible = true;
             }
             // This is an expected exception if they enter a username that already exists, so don't throw up the "something bad happened"
             // error message.

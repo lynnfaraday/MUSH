@@ -10,105 +10,105 @@
 namespace FoxwallDashboard {
     
     
-    public partial class SiteMaster {
+    public partial class ChangePassword {
         
         /// <summary>
-        /// HeadContent control.
+        /// Label1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder HeadContent;
+        protected global::System.Web.UI.WebControls.Label Label1;
         
         /// <summary>
-        /// LoginNameDisplay control.
+        /// OldPasswordBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label LoginNameDisplay;
+        protected global::System.Web.UI.WebControls.TextBox OldPasswordBox;
         
         /// <summary>
-        /// ChangePasswordButton control.
+        /// OldPasswordError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton ChangePasswordButton;
+        protected global::System.Web.UI.WebControls.Label OldPasswordError;
         
         /// <summary>
-        /// LogoutButton control.
+        /// Label3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LogoutButton;
+        protected global::System.Web.UI.WebControls.Label Label3;
         
         /// <summary>
-        /// NavigationMenu control.
+        /// PasswordBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel NavigationMenu;
+        protected global::System.Web.UI.WebControls.TextBox PasswordBox;
         
         /// <summary>
-        /// DashboardButton control.
+        /// PasswordError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton DashboardButton;
+        protected global::System.Web.UI.WebControls.Label PasswordError;
         
         /// <summary>
-        /// CallsButton control.
+        /// Label5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton CallsButton;
+        protected global::System.Web.UI.WebControls.Label Label5;
         
         /// <summary>
-        /// PeopleButton control.
+        /// ConfirmPasswordBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton PeopleButton;
+        protected global::System.Web.UI.WebControls.TextBox ConfirmPasswordBox;
         
         /// <summary>
-        /// MainContent control.
+        /// PasswordMatchError control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.WebControls.Label PasswordMatchError;
         
         /// <summary>
-        /// NotLoggedInPanel control.
+        /// ChangeButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel NotLoggedInPanel;
+        protected global::System.Web.UI.WebControls.Button ChangeButton;
         
         /// <summary>
-        /// LinkButton1 control.
+        /// NoticeLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+        protected global::System.Web.UI.WebControls.Label NoticeLabel;
     }
 }

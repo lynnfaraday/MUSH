@@ -55,6 +55,19 @@
         </tr>
         <tr>
             <td>
+                <asp:Label ID="Label5" runat="server" CSSClass="labelTitle" Text="Confirm Password:"></asp:Label>
+            </td>
+            <td>
+                <asp:TextBox ID="ConfirmPasswordBox" runat="server" TextMode="Password">
+                </asp:TextBox>
+            </td>
+            <td>            
+                <asp:Label ID="PasswordMatchError" runat="server" CSSClass="errorMessage" Visible="false"
+                Text="Passwords do not match."></asp:Label> 
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <asp:Label ID="Label4" runat="server" CSSClass="labelTitle" Text="Is Active?"></asp:Label>
             </td>
             <td>

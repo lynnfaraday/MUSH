@@ -52,6 +52,7 @@
   <ItemGroup>
     <Content Include="AddCall.aspx" />
     <Content Include="AddPerson.aspx" />
+    <Content Include="ChangePassword.aspx" />
     <Content Include="Dashboard.aspx" />
     <Content Include="EditCall.aspx" />
     <Content Include="EditPerson.aspx" />
@@ -93,6 +94,13 @@
     </Compile>
     <Compile Include="AddPerson.aspx.designer.cs">
       <DependentUpon>AddPerson.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ChangePassword.aspx.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ChangePassword.aspx.designer.cs">
+      <DependentUpon>ChangePassword.aspx</DependentUpon>
     </Compile>
     <Compile Include="Dashboard.aspx.cs">
       <DependentUpon>Dashboard.aspx</DependentUpon>
@@ -139,6 +147,7 @@
     <Compile Include="Controls\PersonListDisplayControl.ascx.designer.cs">
       <DependentUpon>PersonListDisplayControl.ascx</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\ChangePasswordHandler.cs" />
     <Compile Include="Handlers\EditCallLoadHandler.cs" />
     <Compile Include="Handlers\EditPersonLoadHandler.cs" />
     <Compile Include="Handlers\IncidentNumberAssigner.cs" />

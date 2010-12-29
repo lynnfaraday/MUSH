@@ -48,6 +48,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChangePasswordHandlerTests.cs" />
     <Compile Include="EditCallLoadHandlerTests.cs" />
     <Compile Include="EditPersonLoadHandlerTests.cs" />
     <Compile Include="IncidentNumberAssignerTests.cs" />
