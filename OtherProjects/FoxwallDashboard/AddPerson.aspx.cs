@@ -38,5 +38,11 @@ namespace FoxwallDashboard
                                   "If the problem persists, contact support and mention the following message: " + ex.Message;
             }
         }
+
+        protected void AddPersonClick(object sender, EventArgs e)
+        {
+            // Can't use a postback because postback keeps you editing the same person.
+            Response.Redirect("AddPerson.aspx");
+        }
     }
 }

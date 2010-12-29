@@ -5,6 +5,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
+<asp:LinkButton ID="LinkButton1" runat="server" OnClick="AddPersonClick" CausesValidation="false">[ Add Another Person ]</asp:LinkButton>
 <asp:LinkButton ID="LinkButton2" runat="server" PostBackUrl="~/People.aspx" CausesValidation="false">[ Manage People ]</asp:LinkButton>
     
 <h1>Add a Person</h1>

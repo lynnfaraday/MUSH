@@ -7,9 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+
 namespace FoxwallDashboard.Controls
 {
     public partial class CallMenu : System.Web.UI.UserControl
     {
+        protected void AddCallClick(object sender, EventArgs e)
+        {
+            // Can't use a postback because postback keeps you editing the same call.
+            Response.Redirect("AddCall.aspx");
+        }
     }
 }
