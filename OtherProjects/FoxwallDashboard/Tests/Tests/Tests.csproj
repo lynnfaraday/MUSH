@@ -54,6 +54,7 @@
     <Compile Include="IncidentNumberAssignerTests.cs" />
     <Compile Include="ListCallsLoadHandlerTests.cs" />
     <Compile Include="PasswordValidatorTests.cs" />
+    <Compile Include="PreferenceManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveCallHandlerTests.cs" />
     <Compile Include="SavePersonHandlerTests.cs" />

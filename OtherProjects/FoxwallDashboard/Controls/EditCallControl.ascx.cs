@@ -19,6 +19,7 @@ namespace FoxwallDashboard.Controls
     public partial class EditCallControl : System.Web.UI.UserControl
     {
         private readonly Repository _repo;
+        private PreferenceManager _preferenceManager;
 
         public Button DefaultButton
         {
@@ -35,6 +36,7 @@ namespace FoxwallDashboard.Controls
             Load += HandlePageLoad;
             CallID = Call.NewCallID;
             _repo = new Repository();
+            _preferenceManager = new PreferenceManager(_repo);
         }
 
         // This stores the call ID we're working with, whether it's a new one or came out of a query string.
@@ -50,9 +52,9 @@ namespace FoxwallDashboard.Controls
         {
             CallID = call.CallID;
             StateNumberBox.Text = call.StateNumber;
-            // Use local time for display.
-            DispatchedCalendar.SelectedDate = call.LocalDispatchedTime.Date;
-            DispatchTimeBox.Text = call.LocalDispatchedTime.ToString("HH:mm");
+            var dispatchInLocalTime = call.GetLocalDispatchedTime(_preferenceManager.ServerToLocalOffsetHours);
+            DispatchedCalendar.SelectedDate = dispatchInLocalTime.Date;
+            DispatchTimeBox.Text = dispatchInLocalTime.ToString("HH:mm");
             LocationBox.Text = call.Location;
             BoroughSelection.SelectedValue = call.Borough;
             ChiefComplaintBox.Text = call.ChiefComplaint;
@@ -88,8 +90,10 @@ namespace FoxwallDashboard.Controls
             // It's ok to do all this updating blindly because we know that our validation already ran.
             call.StateNumber = StateNumberBox.Text;
             var dateString = DispatchedCalendar.SelectedDate.ToString("MM/dd/yyyy");
-            // Dates are stored in UTC and must be converted for display.
-            call.LocalDispatchedTime = DateTime.Parse(dateString + " " + DispatchTimeBox.Text);
+            
+            var localDispatchTime = DateTime.Parse(dateString + " " + DispatchTimeBox.Text);
+            call.SetLocalDispatchedTime(localDispatchTime, _preferenceManager.ServerToLocalOffsetHours);
+
             call.Location = LocationBox.Text;
             call.Borough = BoroughSelection.SelectedValue;
             call.ChiefComplaint = ChiefComplaintBox.Text;
@@ -133,7 +137,7 @@ namespace FoxwallDashboard.Controls
                 return;
             }
 
-            var incidentNumberAssigner = new IncidentNumberAssigner(_repo);
+            var incidentNumberAssigner = new IncidentNumberAssigner(_repo, _preferenceManager);
             var saveHandler = new SaveCallHandler(_repo, incidentNumberAssigner);
             try
             {

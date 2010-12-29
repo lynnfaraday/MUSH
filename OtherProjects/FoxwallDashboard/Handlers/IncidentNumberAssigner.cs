@@ -20,19 +20,20 @@ namespace FoxwallDashboard.Handlers
     public class IncidentNumberAssigner : IAssignIncidentNumbers
     {
         private readonly IRepository _repo;
-       
-        public IncidentNumberAssigner(IRepository repo)
+        private readonly IPreferenceManager _preferenceManager;
+
+        public IncidentNumberAssigner(IRepository repo, IPreferenceManager preferenceManager)
         {
             _repo = repo;
+            _preferenceManager = preferenceManager;
         }
 
         // This method assigns an incident number.  NOTE: This does NOT commit changes to the database; it is assumed
         // that whoever's requesting the incident number assignment will do so.
         public int UpdateOrAssignIncidentNumber(Call call)
         {
-            var year = call.LocalDispatchedTime.Year;
+            var year = call.GetLocalDispatchedTime(_preferenceManager.ServerToLocalOffsetHours).Year;
             var oldIncidentNumber = call.IncidentNumber;
-            YearlyIncidentRecord record;
 
             // If the year of the call matches the year of the incident number, we're good.  Return.
             if (oldIncidentNumber.ToString().StartsWith(year.ToString()))
@@ -43,7 +44,7 @@ namespace FoxwallDashboard.Handlers
             // Otherwise we'll need a new one, so proceed.
             // See if we already have an incident record for this year.
 
-            record = _repo.FindIncidentRecordByYear(year);
+            YearlyIncidentRecord record = _repo.FindIncidentRecordByYear(year);
 
             // If it doesn't exist, create it.
             if (record == null)

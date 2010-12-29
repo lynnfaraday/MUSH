@@ -56,7 +56,7 @@ namespace FoxwallDashboard.Handlers
                 case ListCallsResult.CallListEnum.Mine:
                     var callIDs = _repo.FindCallsForPerson(currentUser.ID);
                     List<Call> calls = callIDs.Select(_repo.FindCallByID).ToList();
-                    calls.OrderByDescending(c => c.IncidentNumber);
+                    calls.OrderByDescending(c => c.IncidentNumber).Take(25);
 
                     return new ListCallsResult(listType)
                     {

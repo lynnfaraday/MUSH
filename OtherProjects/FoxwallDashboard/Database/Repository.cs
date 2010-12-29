@@ -37,6 +37,9 @@ namespace FoxwallDashboard.Database
         CallPersonAssociation SaveAssociation(CallPersonAssociation association);
         IEnumerable<Call> OutstandingCallsForUser(Guid userID);
 
+        Preference FindPreference(string name);
+        Preference SavePreference(Preference preference);
+
         // Sorted by lastname.
         IEnumerable<Person> AllPeople();
         void DeleteAssociation(CallPersonAssociation association);
@@ -94,7 +97,8 @@ namespace FoxwallDashboard.Database
         public IEnumerable<Call> OutstandingCalls()
         {
             // Can't use string.isnullorempty here because SQL chokes
-            return _db.Calls.Where(c => c.StateNumber == null || c.StateNumber.Length == 0).ToList().OrderByDescending(c => c.IncidentNumber);
+            var list = _db.Calls.Where(c => c.StateNumber == null || c.StateNumber.Length == 0);
+            return list.ToList().OrderByDescending(c => c.IncidentNumber).Take(25);
         }
 
         #endregion
@@ -177,7 +181,7 @@ namespace FoxwallDashboard.Database
                     select c;
             return q.ToList().OrderByDescending(c => c.IncidentNumber);
         }
-
+        
         public CallPersonAssociation SaveAssociation(CallPersonAssociation association)
         {
             // Assign a new GUID if needed and add to the database.
@@ -194,5 +198,22 @@ namespace FoxwallDashboard.Database
             _db.CallPersonAssociations.DeleteOnSubmit(association);
         }
         #endregion       
+
+        #region Preferences
+        public Preference SavePreference(Preference preference)
+        {
+            if (preference.IsNew)
+            {
+                preference.ID = Guid.NewGuid();
+                _db.Preferences.InsertOnSubmit(preference);
+            }
+            return preference;
+        }
+
+        public Preference FindPreference(string name)
+        {
+            return _db.Preferences.Where(p => p.Name == name).FirstOrDefault();
+        }
+        #endregion
     }
 }

@@ -23,15 +23,8 @@ namespace FoxwallDashboard.Models
 
         // This is stored in UTC time.
         [Column]
-        public DateTime Dispatched { get; set; }
+        private DateTime Dispatched { get; set; }
         
-        // Used to access the dispatch time as a local time.
-        public DateTime LocalDispatchedTime
-        {
-            get { return Dispatched.ToLocalTime(); }
-            set { Dispatched = value.ToUniversalTime(); }
-        }
-
         [Column]
         public int Age { get; set; }
 
@@ -71,22 +64,26 @@ namespace FoxwallDashboard.Models
                 AgeUnits = "years",
                 CallID = NewCallID,
                 Dispatched = DateTime.UtcNow,
-                IncidentNumber = 0
-            };            
+                IncidentNumber = 0                
+            };
+        }
+        
+        // Used to access the dispatch time as a local time from the server's perspective.
+        private DateTime ServerDispatchedTime
+        {
+            get { return Dispatched.ToLocalTime(); }
+            set { Dispatched = value.ToUniversalTime(); }
         }
 
-        public void UpdateFrom(Call otherCall)
+        public DateTime GetLocalDispatchedTime(int serverToLocalOffsetHours)
         {
-            CallID = otherCall.CallID;
-            Location = otherCall.Location;
-            Dispatched = otherCall.Dispatched;
-            Age = otherCall.Age;
-            AgeUnits = otherCall.AgeUnits;
-            Borough = otherCall.Borough;
-            ChiefComplaint = otherCall.ChiefComplaint;
-            Disposition = otherCall.Disposition;
-            StateNumber = otherCall.StateNumber;
-            IncidentNumber = otherCall.IncidentNumber;
+            return ServerDispatchedTime.AddHours(-serverToLocalOffsetHours);
         }
+
+        public void SetLocalDispatchedTime(DateTime localTime, int serverToLocalOffsetHours)
+        {
+            ServerDispatchedTime = localTime.AddHours(serverToLocalOffsetHours);
+        }
+
     }
 }

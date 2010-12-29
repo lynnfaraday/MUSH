@@ -102,10 +102,6 @@ namespace FoxwallDashboard.Controls
                 PasswordMatchError.Visible = false;
                 PasswordError.Visible = false;
 
-                // This validation can't be done by a validator because ASP forgets the password on postback
-                // and we allow it to be blank when editing an existing user.
-                PasswordValidator.Validate(UsernameBox.Text, PasswordBox.Text, ConfirmPasswordBox.Text);
-
                 // Create or update our person to save.
                 var person = _repo.FindPersonByID(PersonID);
                 if (person == null)
@@ -113,6 +109,14 @@ namespace FoxwallDashboard.Controls
                     person = Person.New();
                 }
                 UpdatePersonDataFromFields(person);
+
+                // This validation can't be done by a validator because ASP forgets the password on postback
+                // and we allow it to be blank when editing an existing user.  Verify the password when they've
+                // entered a new one, or if it's a new user.
+                if (!string.IsNullOrEmpty(PasswordBox.Text) || person.IsNew)
+                {
+                    PasswordValidator.Validate(UsernameBox.Text, PasswordBox.Text, ConfirmPasswordBox.Text);
+                }
 
                 person = saveHandler.Save(person);
 

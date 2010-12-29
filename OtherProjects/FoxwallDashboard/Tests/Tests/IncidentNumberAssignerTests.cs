@@ -25,6 +25,7 @@ namespace Tests
         private IncidentNumberAssigner _incidentAssigner;
         private IRepository _repo;
         private Call _call;
+        private IPreferenceManager _preferenceManager;
         private const int DefaultYear = 2010;
         private const int DefaultIncidentNumber = 20100001;
 
@@ -32,15 +33,18 @@ namespace Tests
         public void Init()
         {
             _repo = MockRepository.GenerateMock<IRepository>();
-            _incidentAssigner = new IncidentNumberAssigner(_repo);
+            _preferenceManager = MockRepository.GenerateMock<IPreferenceManager>();
+            _incidentAssigner = new IncidentNumberAssigner(_repo, _preferenceManager);
             _call = Call.New();
-            _call.Dispatched = new DateTime(DefaultYear, 12, 24);
+            _call.SetLocalDispatchedTime(new DateTime(DefaultYear, 12, 24), 0);
         }
 
         [TestMethod]
         public void assigner_returns_same_number_if_its_set_and_matches_year()
         {
             _call.IncidentNumber = DefaultIncidentNumber;
+            SetPreferenceManagerTimeOffsetExpectation(0); 
+            
             var number = _incidentAssigner.UpdateOrAssignIncidentNumber(_call);
             Assert.AreEqual(_call.IncidentNumber, number);
         }
@@ -50,6 +54,7 @@ namespace Tests
         {
             var newYearRecord = new YearlyIncidentRecord { LastIncident = DefaultIncidentNumber, Year = DefaultYear };
 
+            SetPreferenceManagerTimeOffsetExpectation(0);
             _repo.Expect(r => r.FindIncidentRecordByYear(DefaultYear)).Return(null);
             _repo.Expect(r => r.SaveIncidentRecord(Arg<YearlyIncidentRecord>.Matches(
                 y => y.Year == DefaultYear &&
@@ -68,6 +73,7 @@ namespace Tests
             const int OldIncidentNumber = 2010200;
             var existingRecord = new YearlyIncidentRecord { LastIncident = OldIncidentNumber, Year = DefaultYear };
 
+            SetPreferenceManagerTimeOffsetExpectation(0);
             _repo.Expect(r => r.FindIncidentRecordByYear(DefaultYear)).Return(existingRecord);
 
             _repo.Expect(r => r.SaveIncidentRecord(Arg<YearlyIncidentRecord>.Matches(
@@ -84,7 +90,7 @@ namespace Tests
         [TestMethod]
         public void assigner_will_give_new_number_if_year_changes()
         {
-            _call.Dispatched = new DateTime(2007, 12, 24);
+            _call.SetLocalDispatchedTime(new DateTime(2007, 12, 24), 0);
             _call.IncidentNumber = 20100001;
 
             // We expect that internally the assigner will create a new incident record
@@ -93,6 +99,7 @@ namespace Tests
             var newYearRecord = YearlyIncidentRecord.New(2007);
             newYearRecord.LastIncident++;
 
+            SetPreferenceManagerTimeOffsetExpectation(0);
             _repo.Expect(r => r.FindIncidentRecordByYear(2007)).Return(null);
 
             _repo.Expect(r => r.SaveIncidentRecord(Arg<YearlyIncidentRecord>.Matches(
@@ -104,6 +111,36 @@ namespace Tests
 
             _repo.VerifyAllExpectations();
             Assert.AreEqual(newYearRecord.LastIncident, number);
+        }
+
+        [TestMethod]
+        public void assigner_uses_correct_year_even_with_offset()
+        {
+            const int hoursOffset = 2;
+
+            // Set time to just before midnight local time.  When this is converted to server time,
+            // it will push it over the edge into the next year.
+            _call.SetLocalDispatchedTime(new DateTime(DefaultYear, 12, 31, 23, 45, 00), hoursOffset);
+
+            var existingRecord = new YearlyIncidentRecord { LastIncident = DefaultIncidentNumber, Year = DefaultYear };
+
+            SetPreferenceManagerTimeOffsetExpectation(hoursOffset);
+            _repo.Expect(r => r.FindIncidentRecordByYear(DefaultYear)).Return(existingRecord);
+
+            _repo.Expect(r => r.SaveIncidentRecord(Arg<YearlyIncidentRecord>.Matches(
+                y => y.LastIncident == (DefaultIncidentNumber + 1) &&
+                     y.Year == DefaultYear
+                ))).Return(existingRecord);
+
+            var number = _incidentAssigner.UpdateOrAssignIncidentNumber(_call);
+
+            _repo.VerifyAllExpectations();
+            Assert.AreEqual(existingRecord.LastIncident, number);
+        }
+
+        private void SetPreferenceManagerTimeOffsetExpectation(int offset)
+        {
+            _preferenceManager.Stub(p => p.ServerToLocalOffsetHours).Return(offset);
         }
     }
 }

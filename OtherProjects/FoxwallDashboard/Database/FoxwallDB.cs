@@ -28,6 +28,9 @@ namespace FoxwallDashboard.Database
         [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Required for SQL binding.")]
         public Table<CallPersonAssociation> CallPersonAssociations;
 
+        [SuppressMessage("Microsoft.StyleCop.CSharp.MaintainabilityRules", "SA1401:FieldsMustBePrivate", Justification = "Required for SQL binding.")]
+        public Table<Preference> Preferences;
+
         public FoxwallDb() : base(new SqlConnection(System.Web.Configuration.WebConfigurationManager.ConnectionStrings["Foxwall"].ConnectionString))
         {
         }

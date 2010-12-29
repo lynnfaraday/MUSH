@@ -77,7 +77,7 @@ namespace Tests
         public void validation_fails_when_passwords_dont_match()
         {
             const string Password = "test3$";
-            PasswordValidator.Validate(string.Empty, Password, "xyz");
+            PasswordValidator.Validate("test", Password, "xyz");
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FoxwallDashboard.Database;
+using FoxwallDashboard.Handlers;
 using FoxwallDashboard.Models;
 
 namespace FoxwallDashboard.Controls
@@ -19,10 +20,12 @@ namespace FoxwallDashboard.Controls
     public partial class CallListDisplayControl : System.Web.UI.UserControl
     {
         private readonly Repository _repo;
+        private PreferenceManager _preferenceManager;
 
         public CallListDisplayControl()
         {
             _repo = new Repository();
+            _preferenceManager = new PreferenceManager(_repo);
         }
         public IEnumerable<Call> Calls
         {
@@ -54,7 +57,8 @@ namespace FoxwallDashboard.Controls
                         builder.AppendLine("<tr>");
                         AddColumn(builder, call.IncidentNumber.ToString());
                         AddColumn(builder, call.StateNumber);
-                        AddColumn(builder, call.LocalDispatchedTime.ToString());
+                        var dispatchInLocalTime = call.GetLocalDispatchedTime(_preferenceManager.ServerToLocalOffsetHours);
+                        AddColumn(builder, dispatchInLocalTime.ToString());
                         AddColumn(builder, call.ChiefComplaint);
                         AddColumn(builder, call.Location);
                         AddColumn(builder, call.Borough);
