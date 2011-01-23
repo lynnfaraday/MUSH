@@ -116,10 +116,13 @@ think install_patch(ROOM_PLACES_PARENT,Max's Table Code Parent,0,0,6.0,Places pa
 &fun_avail_rooms TP Room Foyer=[center([ansi(h,Room Availability)],78)][iter(sort_names(v(room_exits)),[switch(mod(#@,3),1,%R%T)][padstr([last(name(##))]: [switch(1,xget(##,islocked),ansi(hr,Locked),t(lvplayers(loc(##))),[ansi(hr,Occupied)],t(lplayers(loc(##))),[ansi(hy,Available*)],[ansi(hg,Available)])],18)])]
 &ROOM_EXITS TP Room Foyer=
 
-
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
 @wait 10=+install/updategroup ROOM
+
+@wait 10=@wipe [install_aliasdb(ROOM_PARENT)]/cmd-+lhelp
+@wait 10=@wipe [install_aliasdb(ROOM_TPROOM_PARENT)]/cmd-+lhelp
+
 
 @wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 
