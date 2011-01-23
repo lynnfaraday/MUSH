@@ -1,0 +1,246 @@
+@@ Faraday's MUSH FaraMail System
+@@ Author:  Linda O'Meara
+@@ Website: http://www.wordsmyth.org/aresmush/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Mail System Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+
+think install_patch(MAIL_CMD,FaraMail Commands,1,0,6.0,Faraday's +mail system.)
+think install_patch(MAIL_FUN,FaraMail Functions,1,1,6.0,+mail functions.)
+think install_patch(MAIL_OBJECTS,FaraMail Objects,0,1,6.0,+mail object storage.)
+think install_patch(MAIL_LIST,FaraMail Lists,0,1,6.0,+mail mailing lists.)
+
+@pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
+
+
+@aconnect FaraMail Commands=@fo %#=+mail/scan
+@adisconnect FaraMail Commands=@fo %#=+mail/purge
+
+&CMD-+MAIL-++ FaraMail Commands=$++*:think [setq(0,xget(%#,mail_object))]switch(0,hasattr(%q0,mailsub),pemit(%#,<MAIL> You are not composing a mail message.),pemit(%#,<MAIL> You add to your mail message.[set(%q0,mailbody:[xget(%q0,mailbody)][escape_cr(%0)])] It now reads:%R[u(#MAIL_FUN/fun_format_composition,%q0)])
+
+&CMD-+MAIL-ABORT FaraMail Commands=$+mail/abort:think [setq(0,xget(%#,mail_object))]pemit(%#,<MAIL> You abort your mail composition.[iter(mailto mailsub mailbody,wipe(%q0/##))])
+
+&CMD-+MAIL-TOSS FaraMail Commands=$+mail/toss:@fo %#=+mail/abort
+
+&CMD-+MAIL-ARCHIVE FaraMail Commands=$+mail/archive:think [setq(2,lattr([xget(%#,mail_object)]/folder_*))][setq(3,1 [iter(%q2,words(u(#MAIL_FUN/fun_messages_in_folder,xget(%#,mail_object),after(##,_))))])][pemit(%#,ansi(hg,Archiving Mail....))];@dolist %q2=@wait [add(extract(%q3,#@,1),1)]=@fo %#=+mail/archive [after(##,_)]
+
+&CMD-+MAIL-ARCHIVE-FOLDER FaraMail Commands=$+mail/archive *:@switch [setq(0,xget(%#,mail_object))]0=hasattr(%q0,folder_[trim(%0)]),@pemit %#=<MAIL> There is no such folder.,{think pemit(%#,[setq(1,u(#MAIL_FUN/fun_messages_in_folder,%q0,%0))]%R<H2>Mail Archive %0:[xget(%q0,foldername_%0)]</h2><H3>[time()]</h3>%R<UL>[iter(%q1,%R<LI><a href="#[itext(0)]">[u(#MAIL_FUN/fun_get_subject,xget(%q0,##))]</a></li>)]%R</UL>);@dolist %q1=@wait #@=think pemit(%#,<P><HR><P><a name="##"></a>%R[u(#MAIL_FUN/fun_format_msg_html,xget(%q0,##))])}
+
+&CMD-+MAIL-CLEAR FaraMail Commands=$+mail/clear *:think switch(%0,*-*,,[setq(0,xget(%#,mail_object))][pemit(%#,switch(0,isnum(%0),,lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))]<MAIL> You clear [switch(u(#MAIL_FUN/fun_get_status_flag,xget(%q0,%q1)),U,UNREAD%B)]message %0.[u(#MAIL_FUN/fun_set_status_flag,%q0,%q1,C)]))])
+
+&CMD-+MAIL-CLEAR-RANGE FaraMail Commands=$+mail/clear *-*:@switch 0=isnum(%0),@pemit %#=<MAIL> That is not a valid message number,isnum(%1),@pemit %#=<MAIL> That is not a valid message number,@dolist lnum(%0,%1)=@fo %#=+mail/clear ##
+
+&CMD-+MAIL-CLEARALL FaraMail Commands=$+mail/clearall:think [setq(0,xget(%#,mail_object))][pemit(%#,<MAIL> You clear all messages in the current folder.)][iter(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)),[u(#MAIL_FUN/fun_set_status_flag,%q0,##,C)])]
+
+&CMD-+MAIL-COLOR FaraMail Commands=$+mail/color *:think [setq(0,xget(%#,mail_object))]pemit(%#,switch(0,member(r g y b m c w,lcstr(%0)),<MAIL> That is not a valid color option.,[set(%q0,color:[trim(lcstr(%0))])]<MAIL> You set your mail color to [ansi(lcstr(%0),lcstr(%0))].))
+
+&CMD-+MAIL-DELFOLDER FaraMail Commands=$+mail/delfolder *:think [setq(0,xget(%#,mail_object))][pemit(%#,switch(0,isnum(%0),<MAIL> That is not a valid folder.,hasattr(%q0,folder_[trim(%0)]),<MAIL> That is not a valid folder.,not(match(%0,0)),<MAIL> You cannot delete your Inbox.,not(match(xget(%q0,current_folder),%0)),<MAIL> You cannot delete your currently active folder.  Switch to another one then try again.,not(words(grep(%q0,route_*,%0))),<MAIL> You cannot delete a folder that you're routing mail to.  Use +mail/route to see where your messages are being routed and change the routing.,<MAIL> You delete folder %0 and all its messages.[iter(xget(%q0,folder_[trim(%0)]),wipe(%q0/##))][wipe(%q0/folder_[trim(%0)])][wipe(%q0/foldername_[trim(%0)])]))]
+
+&CMD-+MAIL-EDIT FaraMail Commands=$+mail/edit *=*:think [setq(0,xget(%#,mail_object))]switch(hasattr(%q0,mailbody),0,pemit(%#,<MAIL> There is no text in the mail message to edit.),[set(%q0,mailbody:[edit(xget(%q0,mailbody),%0,%1)])][pemit(%#,<MAIL> You edit your mail message.  It now reads:%r[u(#MAIL_FUN/fun_format_composition,%q0)])])
+
+&CMD-+MAIL-FILE FaraMail Commands=$+mail/file *=*:think [setq(0,xget(%#,mail_object))][pemit(%#,switch(0,hasattr(%q0,folder_[trim(%1)]),<MAIL> There is no such folder.,isnum(%0),<MAIL> That is not a valid message number.,lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))][set(%q0,folder_[xget(%q0,current_folder)]:[remove(xget(%q0,folder_[xget(%q0,current_folder)]),%q1)])][set(%q0,folder_[trim(%1)]:[xget(%q0,folder_[trim(%1)])] %q1)]<MAIL> You move message %0 to folder %1.))]
+
+&CMD-+MAIL-FOLDER-CHANGE FaraMail Commands=$+mail/fo *:think [setq(0,xget(%#,mail_object))][pemit(%#,switch(hasattr(%q0,folder_[trim(%0)]),0,<MAIL> There is no such folder.,<MAIL> You change to folder %0.[set(%q0,current_folder:[trim(%0)])]))]
+
+&CMD-+MAIL-FWD FaraMail Commands=$+mail/fwd *=*:think switch(%1,*/*,,[setq(0,xget(%#,mail_object))][pemit(%#,switch(0,isnum(%0),,lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))][setq(2,xget(%q0,%q1))][u(#MAIL_FUN/fun_send_msg,%#,%1,[u(#MAIL_FUN/fun_get_thread,%q2)],Fwd: [u(#MAIL_FUN/fun_get_subject,%q2)],%R%R----Original Message----%RFrom: [u(#MAIL_FUN/fun_get_from_list,%q2)]%RTo: [u(#MAIL_FUN/fun_get_to_list,%q2)]%RDate: [u(#MAIL_FUN/fun_get_full_date,%q2)]%R%R[u(#MAIL_FUN/fun_get_message,%q2)]%R)][pemit(%#,<MAIL> You forward message %0 to %1.)]
+
+&CMD-+MAIL-FWD-COMMENT FaraMail Commands=$+mail/fwd *=*/*:think switch(%1,*/*,,[setq(0,xget(%#,mail_object))][pemit(%#,switch(0,isnum(%0),,lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))][setq(2,xget(%q0,%q1))][u(#MAIL_FUN/fun_send_msg,%#,%1,[u(#MAIL_FUN/fun_get_thread,%q2)],Fwd: [u(#MAIL_FUN/fun_get_subject,%q2)],%2%R%R----Original Message----%RFrom: [u(#MAIL_FUN/fun_get_from_list,%q2)]%RTo: [u(#MAIL_FUN/fun_get_to_list,%q2)]%RDate: [u(#MAIL_FUN/fun_get_full_date,%q2)]%R%R[u(#MAIL_FUN/fun_get_message,%q2)]%R)][pemit(%#,<MAIL> You forward message %0 to %1.)]
+
+&CMD-+MAIL-HANDLE FaraMail Commands=$+mail/handle *:think [setq(0,xget(%#,mail_object))][pemit(%#,switch(0,lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,gt(%0,0),<MAIL> That is not a valid message number.,<MAIL> You mark message %0 as handled.[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))][iter(xget(#MAIL_LIST,list_staff),u(#MAIL_FUN/fun_set_action_flag,xget(pmatch(##),mail_object),%q1,H))]))]
+
+&cmd-+mail-index FaraMail Commands=$+mail:think pemit(%#,[setq(0,xget(%#,mail_object))][setq(2,xget(%q0,current_folder))][setq(4,xget(%q0,color))][ansi(%q4,line_no_color())]%R[center(ansi(h,Mail Messages),78)]%R[center(\(sorted by [lcstr(xget(%q0,sort_method))]\),78)]%R[setq(i,iter(lattr(%q0/folder_*),FOLDER_[after(##,_)] [switch(eq(%q2,after(##,_)),1,MSGS[setq(l,u(#MAIL_FUN/fun_messages_in_folder,%q0,%q2))])]))][iter(%qi,switch(##,FOLDER_*,u(#MAIL_FUN/fun_format_folder_title,##),switch(words(%ql),<75,iter(%ql,u(#MAIL_FUN/fun_long_summary,itext(0),inum(0))),[iter(%ql,u(#MAIL_FUN/fun_short_summary,itext(0),inum(0)))]%R[ansi(hg,You have a lot messages so only the subject is displayed.%RPlease consider archiving or moving some to separate folders!)])),,)]%R[ansi(%q4,line_no_color())]
+
+
+&CMD-+MAIL-INIT FaraMail Commands=$+mail/init:@switch hasattr(%#,mail_object)=1,@pemit %#=<MAIL> Mail already initialized.,{think [setq(0,create(%N Mail))][set(%#,mail_object:%q0)][set(%q0,current_folder:0)][set(%q0,foldername_0:Inbox)][set(%q0,sort_method:date)][set(%q0,color:r)][set(%q0,sig:)][set(%q0,describe:%N Mail)][set(%q0,folder_0:)];@chown %q0=*Postmaster;@set %q0=!halt;@tel %q0=#MAIL_OBJECTS}
+&TR-UNINSTALL FaraMail Commands=@dolist lcon(#MAIL_OBJECTS)={@set ##=!safe;@nuke ##}
+
+&CMD-+MAIL-NAMEFOLDER FaraMail Commands=$+mail/namefolder *=*:think [setq(0,xget(%#,mail_object))]pemit(%#,switch(0,hasattr(%q0,folder_[trim(%0)]),<MAIL> There is no such folder.,not(match(%0,0)),<MAIL> You cannot rename your Inbox.,<MAIL> You name folder %0 "%1"[set(%q0,foldername_[trim(%0)]:[mid(%1,0,15)])]))
+
+&CMD-+MAIL-NEWFOLDER FaraMail Commands=$+mail/newfolder *:think [setq(0,xget(%#,mail_object))][setq(1,words(lattr(%q0/folder_*)))][pemit(%#,<MAIL> You create a new mail folder \(number %q1\) named %0.)][set(%q0,folder_%q1:)][set(%q0,foldername_%q1:%0)]
+
+&CMD-+MAIL-OPTIONS FaraMail Commands=$+mail/options:think pemit(%#,[setq(0,xget(%#,mail_object))][setq(1,xget(%q0,color))][ansi(%q1,line_no_color())]%R[center(ansi(h,Mail Options),78)]%R%R[ansi(h%q1,Routing)][iter(lattr(%q0/route*),%RMessages from [capstr(lcstr(after(after(##,_),_)))] routed to folder [xget(%q0,##)] \([xget(%q0,foldername_[xget(%q0,##)])]\).)]%R%R[ansi(h%q1,Signature)]%R[replace_cr(xget(%q0,sig))]%R%R[ansi(h%q1,SentMail:)] [switch(xget(%q0,sent_mail),1,on,off)]%R%R[ansi(h%q1,Messages Sorted By:)] [xget(%q0,sort_method)]%R[ansi(%q1,line_no_color())]
+
+&CMD-+MAIL-PROOF FaraMail Commands=$+mail/proof:think [setq(0,xget(%#,mail_object))]switch(hasattr(%q0,mailto),0,pemit(%#,You are not composing a mail message.),pemit(%#,<MAIL> Your mail message reads:%R[u(#MAIL_FUN/fun_format_composition,%q0)]))
+
+&CMD-+MAIL-PURGE FaraMail Commands=$+mail/purge:think [pemit(%#,<MAIL> Mail purged.)][setq(0,xget(%#,mail_object))][iter(lattr(%q0/folder_*),iter(xget(%q0,##),switch(match(u(#MAIL_FUN/fun_get_status_flag,xget(%q0,itext(0))),C),1,[wipe(%q0/[itext(0)])][set(%q0,[itext(1)]:[remove(xget(%q0,itext(1)),itext(0))])])))]
+
+&CMD-+MAIL-READ FaraMail Commands=$+mail *:think [setq(0,xget(%#,mail_object))][pemit(%#,switch(0,isnum(%0),switch(1,t(match(%0,*-*)),,t(match(%0,*=*)),,<MAIL> Unrecognized command.),lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,gt(%0,0),<MAIL> That is not a valid message number.,[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))][switch(t(match(u(#MAIL_FUN/fun_get_status_flag,[xget(%q0,%q1)]),U)),1,u(#MAIL_FUN/fun_set_status_flag,%q0,%q1,-))][u(#MAIL_FUN/fun_format_msg,xget(%q0,%q1),%q0)]))]
+
+&CMD-+MAIL-READ-RANGE FaraMail Commands=$+mail *-*:@switch t(strmatch(%0%1,*=*/*))=1,,{@switch 0=isnum(%0),@pemit %#=<MAIL> That is not a valid message number,isnum(%1),@pemit %#=<MAIL> That is not a valid message number,@dolist lnum(%0,%1)=@fo %#=+mail ##}
+
+&CMD-+MAIL-REPLY FaraMail Commands=$+mail/reply *=*:think [setq(0,xget(%#,mail_object))][pemit(%#,switch(0,isnum(%0),,lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))][setq(2,xget(%q0,%q1))][setq(3,u(#MAIL_FUN/fun_get_from_list,%q2))][u(#MAIL_FUN/fun_send_msg,%#,%q3,[u(#MAIL_FUN/fun_get_thread,%q2)],Re: [u(#MAIL_FUN/fun_get_subject,%q2)],%1)][pemit(%#,<MAIL> You reply to message %0 - [u(#MAIL_FUN/fun_get_subject,%q2)].)][u(#MAIL_FUN/fun_set_status_flag,%q0,%q1,R)]
+
+&CMD-+MAIL-REPLYALL FaraMail Commands=$+mail/replyall *=*:think [setq(0,xget(%#,mail_object))][pemit(%#,switch(0,isnum(%0),,lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))][setq(2,xget(%q0,%q1))][setq(3,[setunion([u(#MAIL_FUN/fun_get_from_list,%q2)]%B[u(#MAIL_FUN/fun_get_to_list,%q2)],)])][u(#MAIL_FUN/fun_send_msg,%#,%q3,[u(#MAIL_FUN/fun_get_thread,%q2)],Re: [u(#MAIL_FUN/fun_get_subject,%q2)],%1)][pemit(%#,<MAIL> You reply to message %0.)][u(#MAIL_FUN/fun_set_status_flag,%q0,%q1,R)]
+&CMD-+MAIL-REVIEW FaraMail Commands=$+mail/review *:@pemit %#=switch(0,pmatch(%0),ansi(hr,That is not a valid player.),[setq(0,xget(pmatch(%0),mail_object))][line()]%R[ansi(h,Review of Messages Sent to [name(pmatch(%0))])]%R[iter(lattr(%q0/MSG_*),[setq(1,xget(%q0,##))][setq(2,u(#MAIL_FUN/FUN_GET_STATUS_FLAG_NAME,%q1))][switch(u(#MAIL_FUN/fun_get_from_list,%q1),%N,%R[padstr(u(#MAIL_FUN/FUN_GET_SUBJECT,%q1),30)][switch(%q2,,Read,%q2)])])]%R%RNote: Does not include messages the person already deleted.%R[line()])
+
+&CMD-+MAIL-ROUTE FaraMail Commands=$+mail/route *=*:think [setq(0,xget(%#,mail_object))]pemit(%#,switch(0,eq(words(%0),1),<MAIL> Each mail routing option may only have one name.,hasattr(%q0,folder_[trim(%1)]),<MAIL> There is no such folder.,[set(%q0,route_from_[trim(%0)]:[trim(%1)])]<MAIL> You route all messages from [trim(%0)] to folder [trim(%1)] \([xget(%q0,foldername_%1)]\)))
+
+&CMD-+MAIL-SEND FaraMail Commands=$+mail *=*/*:think pemit(%#,switch(1,or(match(%1,*|*),match(%2,*|*)),<MAIL> Mail messages may not include the '|' character.,<MAIL> You send your message to %0.[u(#MAIL_FUN/fun_send_msg,%#,%0,#-1,%1,%2)]))
+
+&cmd-+mail-sendcomp FaraMail Commands=$+mail/send:think  [setq(0,xget(%#,mail_object))][pemit(%#,switch(1,not(hasattr(%q0,mailto)),ansi(hr,You are not composing a mail message.),or(match(%1,*|*),match(%2,*|*)),<MAIL> Mail messages may not include the '|' character.,<MAIL> You send your message to [xget(%q0,mailto)].[u(#MAIL_FUN/fun_send_msg,%#,[xget(%q0,mailto)],#-1,[xget(%q0,mailsub)],[replace_cr(xget(%q0,mailbody))])]))];@dolist mailto mailsub mailbody=@wipe %q0/##
+
+&CMD-+MAIL-SENTMAIL FaraMail Commands=$+mail/sentmail *:think [setq(0,xget(%#,mail_object))]pemit(%#,switch(%0,on,<MAIL> You will automatically get a copy of messages you send.[set(%q0,sent_mail:1)],off,<MAIL> You will not automatically get a copy of messages you send.[set(%q0,sent_mail:0)],<MAIL> That is not a valid option.  Use on or off.))
+
+&CMD-+MAIL-SIG FaraMail Commands=$+mail/sig *:think [setq(0,xget(%#,mail_object))]pemit(%#,switch(%0,clear,<MAIL> You clear your +mail signature.[set(%q0,sig:)],<MAIL> You set your +mail signature.[set(%q0,sig:[escape_cr(%0)])]))
+
+&CMD-+MAIL-SORT FaraMail Commands=$+mail/sort *:think [setq(0,xget(%#,mail_object))]pemit(%#,switch(0,hasattr(#MAIL_FUN,key_%0),<MAIL> That is not a valid sort option.  Try one of these:  [iter(lattr(#MAIL_FUN/key_*),after(##,_))],[set(%q0,sort_method:[trim(%0)])]<MAIL> You sort your messages by %0.))
+
+&CMD-+MAIL-START FaraMail Commands=$+mail/start *=*:think [setq(0,xget(%#,mail_object))]switch(hasattr(%q0,mailto),1,pemit(%#,<MAIL> You are already composing a mail message.),pemit(%#,<MAIL> You begin composing your mail message to "%0" with subject "%1".  Use ++<text> to add text to your mail message.[set(%q0,mailto:%0)][set(%q0,mailsub:%1)]))
+
+&CMD-+MAIL-START2 FaraMail Commands=$+mail *=*:think [setq(0,xget(%#,mail_object))]switch(1,t(match(%1,*/*)),,hasattr(%q0,mailto),pemit(%#,<MAIL> You are already composing a mail message.),pemit(%#,<MAIL> You begin composing your mail message to "%0" with subject "%1".  Use ++<text> to add text to your mail message.[set(%q0,mailto:%0)][set(%q0,mailsub:%1)]))
+
+&CMD-+MAIL-UNCLEAR FaraMail Commands=$+mail/unclear *:think [setq(0,xget(%#,mail_object))][pemit(%#,switch(0,isnum(%0),switch(%0,*-*,,<MAIL> That is not a valid message number),lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))][u(#MAIL_FUN/fun_set_status_flag,%q0,%q1,-)]<MAIL> You unclear message %0.))]
+
+&CMD-+MAIL-UNCLEAR-RANGE FaraMail Commands=$+mail/unclear *-*:@switch 0=isnum(%0),@pemit %#=<MAIL> That is not a valid message number,isnum(%1),@pemit %#=<MAIL> That is not a valid message number,@dolist lnum(%0,%1)=@fo %#=+mail/unclear ##
+
+&CMD-+MAIL-UNSEND FaraMail Commands=$+mail/unsend *:think [setq(0,xget(%#,mail_object))][pemit(%#,switch(0,lte(%0,words(u(#MAIL_FUN/fun_messages_in_folder,%q0,xget(%q0,current_folder)))),<MAIL> You don't have that many messages.,gt(%0,0),<MAIL> That is not a valid message number.,[setq(1,u(#MAIL_FUN/fun_msg_index_to_id,%q0,xget(%q0,current_folder),%0))][switch(0,match(u(#MAIL_FUN/fun_get_from_list,xget(%q0,%q1)),%N),<MAIL> You cannot unsend a message you did not send.,<MAIL> You attempt to unsend message %0...[iter(u(#MAIL_FUN/fun_get_to_list,xget(%q0,%q1)),[setq(2,xget(pmatch(##),mail_object))]%R##%B[switch(1,match(u(#MAIL_FUN/fun_get_status_flag,xget(%q2,%q1)),U),has not yet read your message.  Deleting it.[u(#MAIL_FUN/fun_set_message,%q2,%q1,This message has been retracted by %N.)][u(#MAIL_FUN/fun_set_subject,%q2,%q1,Retracted)],has already read your message.  Marking it as retracted.)][u(#MAIL_FUN/fun_set_status_flag,%q2,%q1,X)])])]))]
+
+&cmd-+mail-scan FaraMail Commands=$+mail/scan: think think setq(1, u(#MAIL_FUN/fun_total_unread, %#)); @switch [gt(%q1,0)]=1,{@pemit %#=[center(ansi(h[get(%q0/color)], ~ You have [%q1] unread +mail message[ifelse(gt(%q1,1),s,)]! ~),78)]}
+&CMD-+LIST FaraMail Commands=$+list:think pemit(%#,[line()]%R[ansi(h[rand_color()],Mailing Lists)]%R%R[ansi(h,Title[space(15)]Description)]%r[repeat(-,78)]%R[iter(sort([lattr(#MAIL_LIST/list_*)]),u(#MAIL_FUN/FUN_SHOW_LIST_SUMMARY,##,%#))]%R%R[ansi(hb,Private Lists)][iter(sort([lattr(%#/list_*)]),u(#MAIL_FUN/FUN_SHOW_LIST_SUMMARY,##,%#))]%R%RUse [ansi(h,+mail <list title>=<subject>/<message>)] to send a message to a mailing list.%RUse [ansi(h,+list <list title>)] to view the members of a list.%R[line()]
+&CMD-+LIST-ADD FaraMail Commands=$+list/add *=*:think [setq(0,pmatch(%0))][setq(1,trim(%1))]pemit(%#,switch(0,t(%q0),ansi(hr,That is not a valid player.),hasattr(#MAIL_LIST,list_%q1),ansi(hr,That is not a valid list.  Use +list/new to create a new one.),not(match(xget(#MAIL_LIST,list_%q1),%0)),ansi(hr,That person is already on that list.),ansi(hg,You add %0 to the %1 list.)[set(#MAIL_LIST,list_%q1:[xget(#MAIL_LIST,list_%q1)][name(%q0)]%B)]))
+&CMD-+LIST-COMMENT FaraMail Commands=$+list/comment */*=*:think [setq(0,pmatch(%0))][setq(1,trim(%1))]pemit(%#,switch(0,t(%q0),ansi(hr,That is not a valid player.),hasattr(#MAIL_LIST,list_%q1),ansi(hr,That is not a valid list.),ansi(hg,You set %0's comment for the %1 list to %2.)[set(%q0,comment_%q1:%2)]))
+&CMD-+LIST-DELETE FaraMail Commands=$+list/delete *:think [setq(0,trim(%0))]pemit(%#,switch(0,hasattr(#MAIL_LIST,list_%q0),ansi(hr,That is not a valid list name.),ansi(hg,You delete list %0.)[wipe(#MAIL_LIST/list_%q0)][set(#MAIL_LIST,restricted:[remove(xget(#MAIL_LIST,restricted),%q0)]%B)][wipe(#MAIL_LIST/comment_%q0)]))
+&CMD-+LIST-DETAIL FaraMail Commands=$+list *:think [setq(0,%#)][switch(1,not(or(hasattr(%q0,list_[trim(%0)]),hasattr(#MAIL_LIST,list_[trim(%0)]))),pemit(%#,ansi(hr,[capstr(%0)] is not a valid list.  Type +list to see what lists are available.)),and(match(xget(#MAIL_LIST,restricted),[trim(%0)]),not(or(isstaff(%#),match(xget(#MAIL_LIST,list_[trim(%0)]),%#)))),pemit(%#,ansi(hr,[capstr(%0)] is a restricted list and you are not on it.  You can still send messages to it but you can't see who's on it.)),pemit(%#,[line()]%R[center(ansi(h,[capstr(lcstr(trim(%0)))] List),78)]%R [center(switch(t(match(lattr(%q0/list_*),list_[trim(%0)])),1,xget(%q0,comment_[trim(%0)]),xget(#MAIL_LIST,comment_[trim(%0)])),78)]%R%RName[space(12)]Comment[space(30)]Last Online%r[repeat(-,78)][iter(sortby(#MAIL_FUN/FUN_SORT_LIST,switch(t(match(lattr(%q0/list_*),list_[trim(%0)])),1,xget(%q0,list_[trim(%0)]),xget(#MAIL_LIST,list_[trim(%0)]))),%R[padstr(##,14,left,.)]%B%B[padstr(xget(pmatch(##),comment_[trim(%0)]),35,left,.)]%B%B[padstr(switch(and(hasflag(pmatch(##),connected),not(hasflag(pmatch(##),dark))),1,CONNECTED,xget(pmatch(##),last)),24,left,.)])]%R[line()]))]
+&CMD-+LIST-NEW FaraMail Commands=$+list/new *=*/*:think [setq(0,edit(trim(%0),%B,_))]pemit(%#,switch(0,not(hasattr(#MAIL_LIST,list_%q0)),ansi(hr,There is already a list with that name.),match(yes no,%1),ansi(hr,You must specify 'yes' or 'no' for whether the list is restricted.),ansi(hg,You create a new list %0.)[set(#MAIL_LIST,list_%q0:)][switch(%1,y*,set(#MAIL_LIST,restricted:[xget(#MAIL_LIST,restricted)]%q0%B))][set(#MAIL_LIST,comment_%q0:%2)]))
+&CMD-+LIST-REMOVE FaraMail Commands=$+list/remove *=*:think [setq(0,pmatch(%0))][setq(1,trim(%1))]pemit(%#,switch(0,t(%q0),ansi(hr,That is not a valid player.),hasattr(#MAIL_LIST,list_%q1),ansi(hr,That is not a valid list.),match(xget(#MAIL_LIST,list_%q1),%0),ansi(hr,That person is not on that list.),ansi(hg,You remove %0 from the %1 list.)[set(#MAIL_LIST,list_%q1:[remove(xget(#MAIL_LIST,list_%q1),name(%q0))]%B)]))
+
+&REM_FUN_SEND_MSG FaraMail Commands=%0 = %0 = Sender DB#  //  %1 = To List (not expanded) // %2 = Thread, #-1 or blank for default // %3 = Subject // %4 = Message
+
+@STARTUP FaraMail Commands=@set me=!no_command
+
+@startup FaraMail Functions=@fun send_mail=[num(me)],fun_send_msg,5,5,admin;@fun unread_mail=[num(me)],fun_total_unread,1,1,admin;@fun total_mail=[num(me)],fun_total_mail,1,1,admin
+
+
+&FUN_EXPANDED_TO_LIST FaraMail Functions=[squish([setq(9,)][iter(%0,switch(1,match(##,friends),friends(%#),t(pmatch(##)),setq(9,%q9##%B),t(match(lattr(%1/list_*),LIST_##)),setq(9,%q1[xget(%1,list_##)]%B),t(match(lattr(#MAIL_LIST/list_*),LIST_##)),setq(9,%q9[xget(#MAIL_LIST,list_##)]%B),pemit(%#,ansi(hr,WARNING!  ## is an invalid player or list, mail not deliverable to that person!))))][setunion(capstr_all(%q9),)])]
+
+&FUN_FORMAT_COMPOSITION FaraMail Functions=[ansi(xget(%0,color),line_no_color())]%R[ansi(h,To:)]%B%B%B%B%B%B[xget(%0,mailto)]%R[ansi(h,From:)]%B%B%B [first(name(%0))]%R[ansi(h,Date:)] %B%B%B[time()]%R[ansi(h,Flags:)]%B%B %R[ansi(h,Subject:)] [xget(%0,mailsub)]%R[repeat(-,78)]%R[replace_cr(xget(%0,mailbody))]%R[ansi(xget(%0,color),line_no_color())]
+
+&FUN_FORMAT_MSG FaraMail Functions=[ansi(xget(%1,color),line_no_color())]%R[ansi(h,To:)]%B%B%B%B%B%B[u(fun_get_to_list,%0)]%R[ansi(h,From:)]%B%B%B [u(fun_get_from_list,%0)]%R[ansi(h,Date:)] %B%B%B[u(fun_get_full_date,%0)]%R[ansi(h,Flags:)]%B%B [squish([u(fun_get_status_flag_name,%0)]%B[u(fun_get_priority_flag_name,%0)]%B[u(fun_get_action_flag_name,%0)])]%R[ansi(h,Subject:)] [replace_cr(u(fun_get_subject,%0))]%R[repeat(-,78)]%R[replace_cr(u(fun_get_message,%0))]%R[ansi(xget(%1,color),line_no_color())]
+
+&FUN_FORMAT_MSG_HTML FaraMail Functions=%R<BR><B>To:</B>%B[u(fun_get_to_list,%0)]%R<BR><B>From:</B> [u(fun_get_from_list,%0)]%R<BR><B>Date:</B> [u(fun_get_full_date,%0)]%R<BR>%R<BR><B>Subject:</B> [edit(u(fun_get_subject,%0),\\\%r,%r<BR>,\\\%R,%R<BR>)]%R<BR>[repeat(-,78)]%R<BR>[edit(u(fun_get_message,%0),<,\[,>,\],\\\%r,%r<BR>,\\\%R,%R<BR>)]%R<BR><BR>
+
+&FUN_GET_ACTION_FLAG FaraMail Functions=[extract(%0,5,1,|)]
+
+
+&FUN_GET_ACTION_FLAG_NAME FaraMail Functions=[switch(extract(%0,5,1,|),Q,[ansi(hb,Reply Requested)],H,[ansi(hg,Handled)])]
+
+&FUN_GET_ALL_FLAGS FaraMail Functions=[extract(%0,4,1,|)][extract(%0,3,1,|)][extract(%0,5,1,|)]
+
+&FUN_GET_DATE FaraMail Functions=[setq(9,convsecs(extract(%0,6,1,|)))][extract(%q9,3,1)]%B[extract(%q9,2,1)]%B[extract(%q9,5,1)]
+
+
+&FUN_GET_FROM_LIST FaraMail Functions=[extract(%0,2,1,|)]
+
+&FUN_GET_FULL_DATE FaraMail Functions=[convsecs(extract(%0,6,1,|))]
+
+&FUN_GET_MESSAGE FaraMail Functions=[extract(%0,9,1,|)]
+
+&FUN_GET_PRIORITY_FLAG FaraMail Functions=[extract(%0,4,1,|)]
+
+&FUN_GET_PRIORITY_FLAG_NAME FaraMail Functions=[switch(extract(%0,4,1,|),H,[ansi(hR,High Priority)],L,[ansi(hc,Low Priority)])]
+
+&FUN_GET_STATUS_FLAG FaraMail Functions=[extract(%0,3,1,|)]
+
+&FUN_GET_STATUS_FLAG_NAME FaraMail Functions=[switch(extract(%0,3,1,|),C,[ansi(hy,Cleared)],U,[ansi(hr,Unread)],X,[ansi(h,Retracted)],R,[ansi(hm,Replied)])]
+
+&FUN_GET_SUBJECT FaraMail Functions=[extract(%0,8,1,|)]
+
+&FUN_GET_THREAD FaraMail Functions=[extract(%0,7,1,|)]
+
+&FUN_GET_TO_LIST FaraMail Functions=[extract(%0,1,1,|)]
+
+&FUN_INIT_MAIL FaraMail Functions=[setq(9,create())][set(%0,mail_object)]
+
+&FUN_FORMAT_FOLDER_TITLE FaraMail Functions=%R[ansi(switch(after(%0,_),%q2,hw[capstr(%q4)],h%q4),[repeat(~,10)][ljust(%B[after(%0,_)]:[xget(%q0,foldername_[after(%0,_)])]%B,25,~)][space(5)][setq(5,u(#MAIL_FUN/fun_total_unread_cleared,%q0,after(%0,_)))][rjust([extract(%q5,2,1)] Unread\, [extract(%q5,1,1)] Total\, [extract(%q5,3,1)] Cleared,38)])]
+
+&FUN_LONG_SUMMARY FaraMail Functions=[setq(1,xget(%q0,%0))]%R[padstr(%1.,3)]%B\[[u(#MAIL_FUN/fun_get_all_flags,%q1)]\]%B%B[padstr(u(#MAIL_FUN/fun_get_from_list,%q1),20)][padstr(u(#MAIL_FUN/fun_get_subject,%q1),35)]%B[u(#MAIL_FUN/fun_get_date,%q1)]
+
+&FUN_SHORT_SUMMARY FaraMail Functions=[setq(1,xget(%q0,%0))]%R[ljust(%1.,3)]%B[u(#MAIL_FUN/fun_get_subject,%q1)]
+
+&FUN_MESSAGES_IN_FOLDER FaraMail Functions=[setq(m,%0)][sortkey(key_[xget(%0,sort_method)],xget(%0,folder_%1))]
+
+&FUN_MSG_INDEX_TO_ID FaraMail Functions=extract(u(fun_messages_in_folder,%0,%1),%2,1)
+
+&FUN_NUM_CLEARED FaraMail Functions=[words(iter(u(fun_messages_in_folder,%0,%1),switch(u(fun_get_status_flag,xget(%0,##)),C,##)))]
+
+&FUN_NUM_UNREAD FaraMail Functions=[words(iter(u(fun_messages_in_folder,%0,%1),switch(u(fun_get_status_flag,xget(%0,##)),U,##)))]
+
+&FUN_SEND_MSG FaraMail Functions=[setq(7,u(#MAIL_FUN/fun_expanded_to_list,%1[switch(xget(xget(%0,mail_object),sent_mail),1,%B[name(%0)])],xget(%0,mail_object)))][iter(%q7,[u(#MAIL_FUN/fun_send_msg_to_player,pmatch(##),%0,MSG_[xget(#MAIL_FUN,next_message)],%q7|[name(%0)]|[switch(##,name(%0),-,U)]|-|-|[secs()]|[switch(%2,#-1,xget(#MAIL_FUN,next_message),,xget(#MAIL_FUN,next_message),%2)]|[escape_cr(%3)]|[escape_cr(%4)][switch(isplayer(%0),1,xget(xget(%0,mail_object),sig))])][pemit(pmatch(##),<MAIL> You have a new message from [name(%0)].)])][set(#MAIL_FUN,next_message:[inc(xget(#MAIL_FUN,next_message))])]
+
+&FUN_SEND_MSG_TO_PLAYER FaraMail Functions=[setq(9,xget(%0,mail_object))][setq(8,switch(hasattr(%q9,route_from_[name(%1)]),1,xget(%q9,route_from_[name(%1)]),0))][set(%q9,%2:%3)][set(%q9,folder_%q8:[xget(%q9,folder_%q8)] %2)]
+
+&FUN_SET_ACTION_FLAG FaraMail Functions=set(%0,%1:[replace(xget(%0,%1),5,%2,|)])
+
+&FUN_SET_MESSAGE FaraMail Functions=set(%0,%1:[replace(xget(%0,%1),9,%2,|)])
+
+&FUN_SET_STATUS_FLAG FaraMail Functions=set(%0,%1:[replace(xget(%0,%1),3,%2,|)])
+
+&FUN_SET_SUBJECT FaraMail Functions=set(%0,%1:[replace(xget(%0,%1),8,%2,|)])
+
+&FUN_TOTAL_MAIL FaraMail Functions=words(lattr([xget(%0,mail_object)]/MSG_*))
+
+&FUN_TOTAL_UNREAD FaraMail Functions=localize([setq(0,xget(%0,mail_object))][setq(9,0)][iter(lattr(%q0/folder_*),setq(9,add(%q9,u(fun_num_unread,%q0,after(##,_)))),,)]%q9)
+
+&FUN_TOTAL_UNREAD_CLEARED FaraMail Functions=[setq(9,)][setq(8,)][words(iter(u(fun_messages_in_folder,%0,%1),[setq(7,xget(%0,##))][switch(u(fun_get_status_flag,%q7),U,setq(9,%q9##%B),C,setq(8,%q8##%B))]##))] [words(%q9)] [words(%q8)]
+&KEY_ACTION FaraMail Functions=[match(U H Q C X R L -,u(fun_get_action_flag,xget(%qm,%0)))]
+&KEY_DATE FaraMail Functions=after(%0,_)
+&KEY_FROM FaraMail Functions=[u(fun_get_from_list,xget(%qm,%0))]
+&KEY_PRIORITY FaraMail Functions=[match(U H Q C X R L -,u(fun_get_priority_flag,xget(%qm,%0)))]
+&KEY_STATUS FaraMail Functions=[match(U H Q C X R L -,u(fun_get_status_flag,xget(%qm,%0)))]
+&KEY_SUBJECT FaraMail Functions=[edit(u(fun_get_subject,xget(%qm,%0)),Re:%B,)]
+&KEY_THREAD FaraMail Functions=[u(fun_get_thread,xget(%qm,%0))]
+
+&MORE_HELP_+MAIL_ARCHIVE FaraMail Functions=We strongly encourage players to keep an offline archive of their mail messages, for two reasons.  First and foremost, it provides you a safeguard against lost mail.  The +mail system is brand new and custom-built, so it doesn't have the years of bug-fixing and player testing behind it like PennMUSH @mail.  Protect your mail, and archive it!  As an added benefit, archiving your messages and then clearing them prevents old mail from cluttering up the database.%R%RThe archive commands create a HTML version of your mail messages.  You can capture the output to a text file using your MUSH client's logging capabilities.  To protect against too much spam overflowing the communications buffer, there is a short delay between each message.  However, you should always look over your log file (searching for the keyword "Output flushed", which indicates lost text) after using the archive command just to be safe.%R%R[ansi(h,+mail/archive)] - Archives all your mail messages, in all your folders.%R[ansi(h,+mail/archive <folder#>)] - Archives messages from the given folder only.
+
+&MORE_HELP_+MAIL_CLEARING FaraMail Functions=When deleting messages, you must first mark the messages as "Cleared".  This indicates that the message is to be deleted.  Cleared messages are purged when you disconnect, or when you manually use the purge command.  Once purged, mail can never be recovered.%R%RIf you change your mind and don't want to delete a message after all, use the unclear command.%R%R[ansi(h,+mail/clear <#>)]%B%B - Clears a message.%R[ansi(h,+mail/clear <#>-<#>)] - Clears a range of messages.%R[ansi(h,+mail/clearall)] %B%B%B- Clears all messages in your current folder.%R%R[ansi(h,+mail/unclear <#>)] - Unclears a cleared message.%R[ansi(h,+mail/unclear <#>-<#>)] - Unclears a range of messages.%R%R[ansi(h,+mail/purge)] %B%B%B%B%B%B- Purges any 'cleared' messages from all folders - deleting them permanently.  This will automatically be done when you disconnect.
+
+&MORE_HELP_+MAIL_COMPOSE FaraMail Functions=The mail system also allows you to compose messages a little bit at a time (ala MUX mail), instead of typing it all at once.%R%R[ansi(h,+mail/start <to>=<subject>)] - Begins composing a message.%RYou can also use just [ansi(h,+mail <to>=<subject>)] as long as there's no "/" character in your subject.%R%R[ansi(h,++<text>)] - Adds text to the body of your mail message%R%R[ansi(h,+mail/proof)] - Reviews the message%R%R[ansi(h,+mail/edit <text to find>=<text to replace it with>)] - Edits your message%R%R[ansi(h,+mail/abort)] - Cancels your message in progress%R%R[ansi(h,+mail/send)]- Sends the mail message when you're done.
+
+&MORE_HELP_+MAIL_FLAGS FaraMail Functions=Mail flags are used to show various kinds of information about a message.  An abbreviated symbol for each flag appears in your main mail index screen.  The details of each flag are shown when you view an individual message.  Mail flags fall into three categories, and a given message may only have one flag per category.  Each category has its own column in the mail index screen.%R%RStatus flags show the overall status of the message.  It can be one of:%R%R- [ansi(h,Cleared (C))]- You have marked the message for deletion.%R- [ansi(h,Unread (U))] - The message is new.%R- [ansi(h,Retracted (X))] - The sender wanted to un-send the message but wasn't able to do so because someone had already read it.  Instead, the message has been marked as retracted.%R- [ansi(h,Replied (R))] - You have replied to the message.%R%RWhen a message is sent, the sender can give it a priority flag.  Normal messages don't have a priority flag.  The sender must explicitly request one if he wants it.%R%R[ansi(h,- Low Priority (L))] - The message is not very urgent.%R[ansi(h,- High Priority (H))] - The message is urgent.%R%RAction flags indicate some special action that needs to be taken with the message.%R%R[ansi(h,- Reply Requested (Q))] - The sender has requested that you reply to this message.
+
+&MORE_HELP_+MAIL_FOLDERS FaraMail Functions=Mail folders allow you to organize your messages.  You can have as many mail folders as you want and you can name each of them to help you keep them straight.%R%R[ansi(h,+mail/fo <#>)] - Changes your current mail folder.%R[ansi(h,+mail/file <msg#>=<folder#>)] - Moves a message from your current folder to another folder.%R%R[ansi(h,+mail/newfolder <folder name>)] - Creates a new folder.%R[ansi(h,+mail/delfolder <#>)] - Deletes a folder AND all the messages in it.  There is no way to undo this.%R%R[ansi(h,+mail/namefolder <folder#>=<new folder name>)] - Changes the name of one of your folders.  You can't change the name of your "Inbox" (folder 0).%R%R[ansi(h,+mail/route <player name>=<folder#>)] - Routes all incoming messages from the specified player into the specified folder.  Particularly handy for those who use the sent mail option, so you can route messages from yourself into a separate sent mail folder.%R%R[ansi(h,+mail/sort <sort method>)] - Determines how your messages are sorted.  You can sort by: date, from, status, priority, thread (to put replies to messages next to one another), or subject.  The default is by date.
+
+&HELP_+MAIL FaraMail Functions=The +mail system is used for sending OOC messages to players.  It entirely replaces the traditional @mail system offered by PennMUSH, though its interfaces should be familiar to those who have used @mail.  +mail offers a number of advanced features, with more to come.%R%RDetailed help files are available on a number of mail-related topics:%R%R[space(7)][ansi(h,Reading)] - Getting your mail messages%R[space(7)][ansi(h,Sending)] - Writing and sending mail messages%R[space(7)][ansi(h,Compose)] - Compose messages a piece at a time.%R%R[space(7)][ansi(h,Clearing)] - Deleting messages%R[space(7)][ansi(h,Folders)] - Organizing your mail messages%R[space(7)][ansi(h,Archive)] - Saving copies of your messages offline.%R[space(7)][ansi(h,Flags)] - Special flags that appear on messages.%R%R[space(7)][ansi(h,Options)] - Customizing your mail.%R%RType [ansi(h,+help +mail_<topic>)] to read a topic.
+
+&MORE_HELP_+MAIL_OPTIONS FaraMail Functions=There are a variety of commands you can use to customize how your messages are sent and displayed.  You can change colors, add folders and change their names, route messages to different folders, and more.  The various options are described in detail in their respective sections (i.e. folder names are described in [ansi(h,+help +mail_folders)]), so see the other help files for details.%R%R[ansi(h,+mail/options)] - Displays a summary of your configured options.
+
+&MORE_HELP_+MAIL_READING FaraMail Functions=The following commands let you read messages.  Reading is fairly straightforward.  The only thing of note is that you can only view messages in your current folder.  To read other messages, you must switch folders.  See [ansi(h,+help +mail_folders)] for details.  New messages will automatically be placed into your Inbox (folder 0) unless you specify otherwise.%R%RMessages will show a variety of flags depending on the way the message was sent and what you've done with it.  See [ansi(h,+help +mail_flags)] for more information.%R%R[ansi(h,+mail)] %B%B%B%B- Views your current folder%R[ansi(h,+mail <#>)] - Views a message in your current folder%R[ansi(h,+mail <#>-<#>)] - Reads a range of messages all at once.%R%R[ansi(h,+mail/sort <sort method>)] - Determines how your messages are sorted.  You can sort by: date, from, status, priority, thread (to put replies to messages next to one another), or subject.  The default is by date.%R%R[ansi(h,+mail/color <ansi color>)] - Changes the color of your mail display.
+
+&MORE_HELP_+MAIL_SENDING FaraMail Functions=The following commands let you send messages to players or Mailing Lists.  Mailing Lists are groups of related players, either IC or OOC (such as the MUSH staff or members of the Martian Volunteers.)  You can also configure your own personal Mailing Lists.  See [ansi(h,+help +list)] for more detailed help with Mailing Lists.%R%RWhen sending messages, the "to" field can include any number of player or mailing list names.  They must be separated by spaces.  For example, [ansi(h,+mail Joe Frank Staff=Subject/This is my message.)] will send a message to Joe, Frank, and everyone on the Staff mailing list.%R%RPlayers will only receive a single copy of a message, even if you put them in your "to" list more than once.  This is particularly important for the "sentmail" option.  If you send a message to a mailing list that you are on, and you have your sentmail option turned on, you'll still only get a single copy of the message.%R%R[ansi(h,+mail <to>=<subject>/<message>)] - Sends a message all at once.  See [ansi(h,+help +mail_compose)] for the commands that let you compose a message a piece at a time (like MUX mail).%R%R[ansi(h,+mail/reply <#>=<reply message>)] - Replies to ONLY the sender of a message.%R[ansi(h,+mail/replyall <#>=<reply message>)] - Replies to the sender AND all other recipients of a message.%R%RContinued in [ansi(h,+help +mail_sending2)]
+
+&MORE_HELP_+MAIL_SENDING2 FaraMail Functions=[ansi(h,+mail/fwd <msg#>=<to>)] - Forwards a copy of a message.%R[ansi(h,+mail/fwd <msg#>=<to>/<comment>)] - Forwards a copy of a message, along with a comment of your own.%R%R[ansi(h,+mail/unsend <msg#>)] - Attempts to unsend a message you've sent.  You must have a copy of the message in one of your folders to do this.  Change to that folder, and use the listed message number to unsend it.  Note that if a player has already read your message, you can mark it as "retracted" but cannot remove it entirely.  This prevents abuse of the feature.%R[ansi(h,+mail/review <player>)] - Gets a summary of the status of messages sent to someone.%R%R[ansi(h,+mail/sentmail <on or off>)] - Enables the "sent-mail" option.  If this is on, your name will automatically be added to the "to" of any message you send.  This ensures that you will always have a copy of messages you send (but don't worry, you won't be spammed multiple times if you were already on the "to" list).  You can route sent-mail automatically to a separate "Sent-Mail" folder using the [ansi(h,+mail/route)] command.  See the mail help files on folders and options for details.%R%R[ansi(h,+mail/sig <signature or clear>)] - Sets a signature, which will automatically be pasted at the bottom of any mail message you send.  Using the word "clear" for your signature will erase your signature.
+&HELP_+LIST FaraMail Functions=The +mail system supports sending messages to FaraMail Lists.  There are certain public lists, created by staff, and private lists that you can create for your own purposes.%R%RPublic lists may be restricted, meaning that only members of the list (or staff) can see who's on it.  You can still send messages to those lists - you just won't be able to tell who it's going to.%R%R[ansi(hg,Mailing List Usage:)]%R[ansi(h,+list)] - Shows all lists%R[ansi(h,+list <list name>)] - Views members of a list.%R%R[ansi(h,&list_<name> me=Player1 Player2 etc.)] - Create your own personal mailing list.  You can edit or delete it later using the standard MUSH attribute commands.%R[ansi(h,&comment_<listname> me=<comment>)] - Change the comment that shows up beside your name if you're on a list.
+&SHELP_+LIST FaraMail Functions=These commands can be used to manage the +mail Mailing Lists:%R%R[ansi(h,+list/add <player>=<list>)] - Adds someone to a list.%R[ansi(h,+list/remove <player>=<list>)] - Removes someone from a list.%R[ansi(h,+list/comment <player>/<list>=<comment>)] - Sets a player's list comment.%R%R[ansi(h,+list/new <list>=<restricted? yes or no>/<list comment>)] - Creates a new mailing list.%R[ansi(h,+list/delete <list>)] - Deletes a mailing list.%R%RIf you need to do other stuff, like moving a list from restricted to public, or changing its title, submit a code +job.
+&SHELP_+MAIL FaraMail Functions=There are two functions you may want to incorporate into your other systems:%R%R[ansi(h,send_mail\(<sender db#>, <to list>, <thread*>, <subject>, <message>\))]%R%TThread should be #-1 unless replying to another message.%R%R[ansi(h,unread_mail\(<db#>\))] - Lists a player's total unread mail.%R%R[ansi(h,total_mail\(<db#>\))] - Lists a player's TOTAL mail.
+
+&FUN_SHOW_LIST_SUMMARY FaraMail Functions=%R[padstr(capstr(lcstr(after(%0,_))),20)][switch(t(match(lattr(%1/list_*),%0)),1,Private List,u(#MAIL_LIST/comment_[after(%0,_)]))]
+&FUN_SORT_LIST FaraMail Functions=localize(comp(%0,%1))
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup MAIL
+
+@wait 9=@pemit/silent %#=[ansi(hg,Initializing Mail...)]%R
+
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 10=@set me=!quiet
+
+@wait 20=@dolist [remove(lsearch(all,type,player),#1)]=@fo ##=+mail/init

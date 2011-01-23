@@ -73,7 +73,16 @@ Wipe out help and commands and aconnect/adisconnect before upgrading
 **NOTE TO SELF: Make special patch file to copy over who data
 think [setq(0,install_aliasdb(GLOBALS_DB))][setq(1,install_aliasdb(WHO_DB))][switch(1,match(%q0,#-1),ansi(hc,Globals not installed.  No special action needed.),match(%q1,#-1),ansi(hc,Who system not installed.  No special action needed.),ansi(hc,Moving who config from globals to new who system.)[iter(MUSH_NAME WHO_COLOR TP_ROOM_PARENT WHO_RECORD,switch(hasattr(%q0/##),1,[set(%q1,[switch(##,WHO_COLOR,COLOR,##)]:[xget(%q0,##)])][wipe(%q0/##)]))])]
 
+@wipe [install_aliasdb(ROOM_TPROOM_PARENT)]/cmd-+lhelp
+
+think [setq(0,install_aliasdb(SETUP_DB))][switch(strmatch(xget(%q0,additional_setup),*+mail/init*),1,ansi(hg,Your player setup object is already set up properly.  No further action needed.),[set(%q0,additional_setup:[xget(%q0,additional_setup)]\;@fo \%0=+mail/init)]
+
+@switch [t(install_aliasdb(MAIL_CMD))]={@dolist real_players()=@fo ##=+mail/init}
+
+
+FUTURE PLAN
 DBS: Created a ready-to-go database with all the systems installed and mostly configured (other than the custom configurations).
+
 
 ================================================================
 Version 5.0 Patches

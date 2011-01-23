@@ -10,7 +10,7 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &FUN_ASSERT Tests=switch(1,strmatch(%0,%1),ansi(hg,OK - %0 matches %1.),ansi(hr,FAIL - %0 doesn't match %1.))
 &FUN_GET_TESTS Tests=sort(lattr(me/test_%0_*))
 
-&TEST_ACTOR_01 Tests=Setting actor.|+actor Sean Connery
+&TEST_ACTOR_01 Tests=Setting actor.|+actor/set Sean Connery
 &TEST_ACTOR_02 Tests=Viewing actor list.|+actors
 &TEST_ACTOR_03 Tests=Global actor function.|think u(%#/FUN_ASSERT,actor(name(me)),Sean Connery)
 &TEST_ACTOR_04 Tests=Actor help|+help actor
@@ -391,6 +391,24 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_FS3CG_83 Tests=Advance|D
 &TEST_FS3CG_84 Tests=Unsubmit BG|+bg/unsubmit
 &TEST_FS3CG_85 Tests=Sheet|+sheet
+&TEST_FS3CG_85 Tests=Sheet Page 2|+sheet2
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FS3XP
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+&TEST_FS3XP_01 Tests=Clear Old XP|&xp me=0;@wipe me/last_xp_raise;&bgskills me=
+&TEST_FS3XP_02 Tests=XP Costs|+xp/costs
+&TEST_FS3XP_03 Tests=XP Costs|+xp/cost bg/Foo
+&TEST_FS3XP_04 Tests=Spend XP Without Any|+xp/raise bg/Foo
+&TEST_FS3XP_05 Tests=Award XP|+xp/award Faraday=1/Test
+&TEST_FS3XP_06 Tests=Spend XP|+xp/raise bg/Foo
+&TEST_FS3XP_07 Tests=Check XP|think switch(ability_level(*Faraday,Foo),1,ansi(hg,OK - skill raised to 1),ansi(hr,FAIL - skill wasn't raised))
+&TEST_FS3XP_08 Tests=Global XP Award|@tr [install_aliasdb(FS3XP_CMD)]/TR-AWARDXP
+&TEST_FS3XP_09 Tests=Wait|think Waiting...
+&TEST_FS3XP_10 Tests=XP Awarded|think switch(xget(*Faraday,XP),1,ansi(hg,OK - XP raised to 1),ansi(hr,FAIL - XP wasn't raised))
+&TEST_FS3XP_11 Tests=Raise before time|+xp/raise bg/Foo
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -472,3 +490,16 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_FUDGECG_67 Tests=Advance|D
 &TEST_FUDGECG_68 Tests=Unsubmit BG|+bg/unsubmit
 &TEST_FUDGECG_69 Tests=Sheet|+sheet
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ RANKS
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+&TEST_RANKS_01 Tests=Show Rank Factions|+ranks
+&TEST_RANKS_02 Tests=Army Ranks|+ranks Army
+&TEST_RANKS_03 Tests=Set Rank|&Rank me=Private
+&TEST_RANKS_04 Tests=Rank Function|think rank(*Faraday)
+
+
+

@@ -1,0 +1,45 @@
+@@ Faraday's Help System
+@@ Author:  Linda O'Meara
+@@ Website: http://www.wordsmyth.org/aresmush/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning +help Installation.   Please wait until the Installation Complete message appears...)]%R
+
+think install_patch(HELP_CMD,+help Commands,1,0,6.0,+help system commands.)
+think install_patch(HELP_DB,+help Database,0,0,6.0,Stores +help files.)
+
+@pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
+
+&CMD-+HELP +help Commands=$+help:think pemit(%#,[line()]%R[center(ansi(h,+help Topics),78)]%R[iter(lattr(#HELP_DB/help_*),[switch(mod(#@,3),1,%R)][ljust(after(##,_),25)])]%R%RSee [ansi(h,+help <topic>)] for more information about a topic.%R[line()])
+&CMD-+HELP-SEARCH +help Commands=$+help/search *:think pemit(%#,[line()]%R[center(ansi(h,+help files containing %0),78)]%R[iter([grepi(#HELP_DB,help_*,%0)]%B[grepi(#HELP_DB,more_help_*,%0)],[switch(mod(#@,3),1,%R)][ljust(last(##,_),25)])]%R[line()])
+&CMD-+HELP-TOPIC +help Commands=$+help *:think pemit(%#,[line()]%R[u(FUN_FIND_HELPFILE,HELP,trim(%0))]%R[line()])
+&CMD-+FUNHELP +help Commands=$+funhelp *:think pemit(%#,[line()]%R[function_help(%0)]%R[line()])
+&CMD-+SHELP +help Commands=$+shelp:think switch(isstaff(%#),0,pemit(%#,ansi(hr,This command is for staff only.)),pemit(%#,[line()]%R[center(ansi(h,+shelp Topics),78)]%R[iter(lattr(#HELP_DB/SHELP_*),[switch(mod(#@,3),1,%R)][ljust(after(##,_),25)])]%R%RSee [ansi(h,+shelp <topic>)] for more information about a topic.%R[line()]))
+&CMD-+SHELP-SEARCH +help Commands=$+shelp/search *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),[line()]%R[center(ansi(h,+shelp files containing %0),78)]%R[iter([grepi(#HELP_DB,SHELP_*,%0)]%B[grepi(#HELP_DB,more_SHELP_*,%0)],[switch(mod(#@,3),1,%R)][ljust(last(##,_),25)])]%R[line()]))
+&CMD-+SHELP-TOPIC +help Commands=$+shelp *:think pemit(%#,switch(1,not(isstaff(%#)),ansi(hr,This command is for staff only.),[line()]%R[u(FUN_FIND_HELPFILE,SHELP,trim(%0))]%R[line()]))
+&CMD-+LHELP +help Commands=$+lhelp*:think switch(words(u(%l/fun_lhelp_files)),0,pemit(%#,ansi(c,There are no local help files here.)),switch(%0,,pemit(%#,[line()]%rLocal Help Topics::%r%r[setq(0,iter(u(%l/fun_lhelp_files),after(##,_)))][table([sort(%q0)],15,78,,)]%r%rType [ansi(hb,+lhelp <topic>)] for more information about a given topic.%r[line()]),pemit(%#,[line()]%rLocal Help Topic : [ansi(hr,[ucstr(%0)])]%r%r[u(%l/lhelp_[trim(%0)])]%r[line()])))
+
+&FUN_FIND_HELPFILE +help Commands=localize([setq(9,graball([lattr(#HELP_DB/%0_*)]%B[lattr(#HELP_DB/more_%0_*)],*[edit(%1,+,)]*))][switch(1,hasattr(#HELP_DB,%0_%1),[center(ansi(h,%0 [trim(ucstr(%1))]),78)]%R[u(#HELP_DB/%0_%1)],hasattr(#HELP_DB,more_%0_%1),u(#HELP_DB/more_%0_%1),t(words(%q9)),[center(ansi(h,%0 [u(FUN_RAW_HELPFILE_NAME,[first(%q9)])]),78)]%R[u(#HELP_DB/[first(%q9)])][switch(gt(words(%q9),1),1,%R%R[ansi(h,Other possible matches:)] [iter(rest(%q9),u(FUN_RAW_HELPFILE_NAME,##))])],[center(ansi(h,%0 [trim(ucstr(%1))]),78)]%RNo match found.)])
+&FUN_RAW_HELPFILE_NAME +help Commands=edit(edit(edit(edit(%0,MORE_SHELP_,),SHELP_,),MORE_HELP_,),HELP_,)
+&FUN_FIND_ALL_HELP +help Commands=[lattr(%0/HELP_*)]%B[lattr(%0/MORE_HELP_*)]%B[lattr(%0/SHELP_*)]%B[lattr(%0/MORE_SHELP_*)]
+
+@STARTUP +help Commands=@set me=!no_command
+
+&HELP_+HELP +help Database=The +help system supplements the 'help' command by providing help files on MUSH softcode and systems.%R%RUsage:%R[ansi(h,+help)] - Displays main help index%R[ansi(h,+help <topic>)] - Views a help file topic%R[ansi(h,+help/search <keyword>)] - Searches the help files
+&SHELP_+SHELP +help Database=The +shelp system supplements the 'help' command by providing help files on MUSH softcode and systems.  It is only available to staff members.%R%RUsage:%R[ansi(h,+shelp)] - Displays main staff help index%R[ansi(h,+shelp <topic>)] - Views a staff help file topic%R[ansi(h,+shelp/search <keyword>)] - Searches the staff help files%R%R[ansi(h,Adding help files:)]%RTo add a new help file, simply add an attribute to object #HELP_DB for each help file.  The attribute names determine how the help file will be displayed:%R%RHELP_XYZ - Shows up in the main +help index.%RSHELP_XYZ - Shows up in the main +shelp index (for staff only)%RMORE_HELP_XYZ - Does not show up in the main +help index, but you can still view it.  Perfect for multi-part help files, so only the first part appears in the index.%RMORE_SHELP_XYZ - Same as MORE_HELP_XYZ but for +shelp (for staff only)%R%RNote that the top and bottom lines are automatically included by the +help/+shelp commands.%R%RIf there is an exact match, +help will display the appropriate file.  If there is not, it will try to find the best match, ignoring +signs.  So +help +skills would match +help skills (and vice-versa), and +help cen would match +help +census.
+&SHELP_FUNCTIONS +help Database=@function will list all the global utility functions and their object.  Fara's global functions each have an associated help file, which you can view by typing [ansi(h,+funhelp <functionname>)]
+&SHELP_+INSTALL +help Database=The Install Manager is used to maintain all of Faraday's softcode systems.  It tracks the DB numbers and allows you to patch and uninstall the systems.%R[ansi(h,+install/dir)] - Lists installed systems.%R[ansi(h,+install/dir <system>)] - Lists db#s and objects for a specific system.%R[ansi(h,+uninstall <system>)] - Uninstalls a system.
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup HELP
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R
+
+@wait 5=@set me=!quiet
+
+
