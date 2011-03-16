@@ -34,7 +34,7 @@ think install_create(WHO_DB,Who Data,1,1,6.0,Data storage for the Who system.)
 @@ %0 = running count of RPOK peeps
 @@ %1 = the next person to check if they're RPOK
 @@ --------------------------
-&FUN_FOLD_RPOK Who Functions=add(%0,switch(u(FUN_IS_IC,%0),1,0))
+&FUN_FOLD_RPOK Who Functions=add(%0,u(FUN_IS_IC,%1))
 
 @@ --------------------------
 @@ FUN_SORT_AGE

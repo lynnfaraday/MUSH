@@ -216,7 +216,7 @@ think install_create(RANK_DB,Rank DB,0,0,6.0,Chargen rank system.,FS3_STORAGE)
 
 @lock Demographic Commands=me
 @set Demographic Commands = DARK
-&CMD-+AGE Demographic Commands=$+age *:think pemit(%#,switch(0,isnum(%0),ansi(hr,Your name must be a number.),lte(%0,75),ansi(hr,You cannot be that old without special staff permission. Contact a member of staff.),gte(%0,11),ansi(hr,You cannot be that young without special staff permission.  Contact a member of staff.),[set(%#,birthdate:[rand(1,12)]/[rand(1,28)]/[sub(last(time()),%0)])][ansi(hg,You set your age to %0.%R%RYour birthdate has been randomly set to: [birthdate(%#)].  If you would like a different random birthday you can use the command again.  If you would like a specific birthday, contact a staff member.)]))
+&CMD-+AGE Demographic Commands=$+age *:think pemit(%#,switch(0,isnum(%0),ansi(hr,Your name must be a number.),lte(%0,75),ansi(hr,You cannot be that old without special staff permission. Contact a member of staff.),gte(%0,11),ansi(hr,You cannot be that young without special staff permission.  Contact a member of staff.),[set(%#,birthdate:[rand(1,12)]/[rand(1,28)]/[sub(last(time()),add(%0,1))])][ansi(hg,You set your age to %0.%R%RYour birthdate has been randomly set to: [birthdate(%#)].  If you would like a different random birthday you can use the command again.  If you would like a specific birthday, contact a staff member.  Note that if your birthday is coming up soon you will turn one year older then.)]))
 &CMD-+FACTION Demographic Commands=$+faction *:think pemit(%#,switch(0,t(match(factions(),%0)),ansi(hr,That is not a valid faction.  Use one of: [factions()].),ansi(hg,You set your faction to %0.)[set(%#,rank:)][set(%#,faction:[trim(capstr(%0))])]))
 &CMD-+FULLNAME Demographic Commands=$+fullname *:think pemit(%#,ansi(hg,You set your full name to %0.))[set(%#,fullname:%0)]
 &CMD-+ORG Demographic Commands=$+org *:think pemit(%#,switch(0,u(#FS3SKILL_CGINFO/fun_is_valid_org,%0),ansi(hr,That is not a valid org. Use one of: [orgs()].),ansi(hg,You set your organization to %0.)[set(%#,org:[trim(capstr(%0))])]))
@@ -231,7 +231,7 @@ think install_create(RANK_DB,Rank DB,0,0,6.0,Chargen rank system.,FS3_STORAGE)
 &FUN_IS_VALID_ORG Chargen Info Functions=t(match(orgs(),%0))
 &FUN_IS_VALID_POSITION Chargen Info Functions=t(match(positions(),%0))
 &MONTHS Chargen Info Functions=Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
-@STARTUP Chargen Info Functions=@set me=!no_command;@fun AGE=[num(me)]/FUN_GET_AGE;@fun RANK=[num(me)]/FUN_RANK;@fun BIRTHDATE=[num(me)]/fun_display_birthdate
+@STARTUP Chargen Info Functions=@set me=!no_command;@fun AGE=[num(me)]/FUN_GET_AGE;@fun BIRTHDATE=[num(me)]/fun_display_birthdate
 
 &CMD-+RANKS Rank System=$+ranks:@pemit %#=[line()]%RThe following rank charts are available:[iter(xget(#RANK_DB,factions),%R##)]%R[line()]
 &CMD-+RANKS-FACTION Rank System=$+ranks *:@pemit %#=[line()]%R[ansi(h,[capstr(%0)] Ranks)]%R%R[ansi(h,[center(Enlisted,25,-)])][space(5)][ansi(h,[center(Officer,25,-)])][iter(lnum(1,9),u(fun_display_rank_num,%0,##))]%R%R[ansi(hx,Gray)] = Rank off-limits to PCs except in special circumstances.%R[line()]
@@ -350,7 +350,7 @@ think install_create(RANK_DB,Rank DB,0,0,6.0,Chargen rank system.,FS3_STORAGE)
 
 @wait 2=+install/updategroup RANK
 @wait 2=+install/updategroup FS3SKILL
-
+@wait 2=+install/updategroup FS3XP
 
 @wait 10=@set me=!quiet
 @wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]
