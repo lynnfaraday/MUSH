@@ -70,23 +70,23 @@ think install_create(FS3COMBAT_DB_EQUIP,FS3Combat Equipment Stats,0,1,6.0,FS3Com
 &WEAPON_GRENADELAUNCH_FRAG FS3Combat Equipment Stats=Fragmentation Grenade fired from a grenade launcher.|Firearms|Reactive|0|7|Explosive|Personal|0|0|0|150|15|Physical|0|1|0
 &WEAPON_GRENADELAUNCH_HEAT FS3Combat Equipment Stats=Armor piercing Grenade fired from a grenade launcher.  Very effective against an individual Centurion or a vehicle but does not have as big of a blast radius.|Firearms|Reactive|0|20|Explosive|Personal|0|0|0|150|5|Physical|0|1|0
 &WEAPON_MISSILE_HE  FS3Combat Equipment Stats=High Explosive Anti-Personnel Missile|Gunnery|Reactive|20|10|Explosive|Personal|0|0|0|5000|50|Physical|0|1|0
-&WEAPON_MINE_HE FS3Combat Equipment Stats=Antiperssonel mine (such as a Claymore in modern terms)|Demolitions|5|25|7|Explosive|Personal|0|0|0|1|15|Physical|0|1|0
-&WEAPON_MINE_HEAT FS3Combat Equipment Stats=Anti-Vehicle mine|Demolitions|5|15|20|Explosive|Vehicle|0|0|0|1|25|Physical|0|1|0
-&WEAPON_IED FS3Combat Equipment Stats=Improvised Explosive Device - aka booby trap|Demolitions|5|25|7|Explosive|Personal|0|0|0|1|15|Physical|0|1|0
+&WEAPON_MINE_HE FS3Combat Equipment Stats=Antiperssonel mine (such as a Claymore in modern terms)|Demolitions|3|25|7|Explosive|Personal|0|0|0|1|15|Physical|0|1|0
+&WEAPON_MINE_HEAT FS3Combat Equipment Stats=Anti-Vehicle mine|Demolitions|3|15|20|Explosive|Vehicle|0|0|0|1|25|Physical|0|1|0
+&WEAPON_IED FS3Combat Equipment Stats=Improvised Explosive Device - aka booby trap|Demolitions|3|25|7|Explosive|Personal|0|0|0|1|15|Physical|0|1|0
 
 
-&WEAPON_PISTOL FS3Combat Equipment Stats=Pistol|Firearms|5|0|3|Ranged|Personal|0|10|0|50|0|Physical|0|0|1
-&WEAPON_PISTOL_AP FS3Combat Equipment Stats=Pistol with armor piercing rounds|Firearms|5|-10|5|Ranged|Personal|0|10|0|50|0|Physical|0|0|1
-&WEAPON_SMG FS3Combat Equipment Stats=Sub-machinegun|Firearms|5|0|3|Ranged|Personal|1|30|25|150|0|Physical|0|0|1
-&WEAPON_RIFLE FS3Combat Equipment Stats=Assault Rifle|Firearms|5|0|4|Ranged|Personal|1|20|20|500|0|Physical|0|0|1
-&WEAPON_RIFLE_AP FS3Combat Equipment Stats=Assault Rifle with armor piercing rounds.|Firearms|5|-10|6|Ranged|Personal|1|20|20|500|0|Physical|0|0|1
-&WEAPON_LMG FS3Combat Equipment Stats=Light machinegun/SAW|Firearms|5|0|4|Ranged|Personal|1|100|30|1000|0|Physical|0|0|1
-&WEAPON_LMG_TRIPOD FS3Combat Equipment Stats=Light machinegun/SAW with bipod|Firearms|5|0|4|Ranged|Personal|1|100|10|1000|0|Physical|0|0|1
-&WEAPON_LMG_AP FS3Combat Equipment Stats=Light machinegun/SAW with armor piercing rounds|Firearms|5|-10|6|Ranged|Personal|1|100|30|1000|0|Physical|0|0|1
-&WEAPON_SHOTGUN FS3Combat Equipment Stats=Shotgun|Firearms|5|10|3|Ranged|Personal|0|8|0|100|0|Physical|0|0|1
-&WEAPON_HUNTING_RIFLE FS3Combat Equipment Stats=Hunting Rifle|Firearms|5|0|3|Ranged|Personal|0|10|20|500|0|Physical|0|0|1
+&WEAPON_PISTOL FS3Combat Equipment Stats=Pistol|Firearms|3|0|3|Ranged|Personal|0|10|0|50|0|Physical|0|0|1
+&WEAPON_PISTOL_AP FS3Combat Equipment Stats=Pistol with armor piercing rounds|Firearms|3|-10|5|Ranged|Personal|0|10|0|50|0|Physical|0|0|1
+&WEAPON_SMG FS3Combat Equipment Stats=Sub-machinegun|Firearms|3|0|3|Ranged|Personal|1|30|25|150|0|Physical|0|0|1
+&WEAPON_RIFLE FS3Combat Equipment Stats=Assault Rifle|Firearms|3|0|4|Ranged|Personal|1|20|20|500|0|Physical|0|0|1
+&WEAPON_RIFLE_AP FS3Combat Equipment Stats=Assault Rifle with armor piercing rounds.|Firearms|3|-10|6|Ranged|Personal|1|20|20|500|0|Physical|0|0|1
+&WEAPON_LMG FS3Combat Equipment Stats=Light machinegun/SAW|Firearms|3|0|4|Ranged|Personal|1|100|30|1000|0|Physical|0|0|1
+&WEAPON_LMG_TRIPOD FS3Combat Equipment Stats=Light machinegun/SAW with bipod|Firearms|3|0|4|Ranged|Personal|1|100|10|1000|0|Physical|0|0|1
+&WEAPON_LMG_AP FS3Combat Equipment Stats=Light machinegun/SAW with armor piercing rounds|Firearms|3|-10|6|Ranged|Personal|1|100|30|1000|0|Physical|0|0|1
+&WEAPON_SHOTGUN FS3Combat Equipment Stats=Shotgun|Firearms|3|10|3|Ranged|Personal|0|8|0|100|0|Physical|0|0|1
+&WEAPON_HUNTING_RIFLE FS3Combat Equipment Stats=Hunting Rifle|Firearms|3|0|3|Ranged|Personal|0|10|20|500|0|Physical|0|0|1
 
-&WEAPON_SHRAPNEL FS3Combat Equipment Stats=Random Shrapnel|5|5|0|3|Ranged|Personal|0|0|0|5|5|Physical|0|0|0
+&WEAPON_SHRAPNEL FS3Combat Equipment Stats=Random Shrapnel|3|3|0|3|Ranged|Personal|0|0|0|5|5|Physical|0|0|0
 
 
 &WEAPON_UNARMED FS3Combat Equipment Stats=Unarmed|Melee|Melee|0|0|Melee|Personal|0|0|0|0|0|Stun|0|0|0
