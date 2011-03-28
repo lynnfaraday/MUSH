@@ -5,9 +5,8 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
 
-This README file describes how to configure the code.  
-Consult the Player's and Storyteller's guides for full details on the mechanics behind all 
-of these numbers.
+This file describes how to configure the code.  
+Consult the Player's and Storyteller's guides for full details on the mechanics behind all of these numbers.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
