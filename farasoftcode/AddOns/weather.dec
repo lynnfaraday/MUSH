@@ -12,12 +12,21 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
+<<<<<<< HEAD
 think install_create(WEATHER_CMD,Weather Generator,1,0,6.0.1,Weather Generator.)
 think install_create(WEATHER_HOLDER,Weather Seasons,0,1,6.0.1,Weather descs.)
 think install_create(WEATHER_WINTER,Winter,0,1,6.0.1,Weather descs.,WEATHER_HOLDER)
 think install_create(WEATHER_SPRING,Spring,0,1,6.0.1,Weather descs.,WEATHER_HOLDER)
 think install_create(WEATHER_SUMMER,Summer,0,1,6.0.1,Weather descs.,WEATHER_HOLDER)
 think install_create(WEATHER_FALL,Fall,0,1,6.0.1,Weather descs.,WEATHER_HOLDER)
+=======
+think install_create(WEATHER_CMD,Weather Generator,1,0,6.0,Weather Generator.)
+think install_create(WEATHER_HOLDER,Weather Seasons,0,1,6.0,Weather descs.)
+think install_create(WEATHER_WINTER,Winter,0,1,6.0,Weather descs.,WEATHER_HOLDER)
+think install_create(WEATHER_SPRING,Spring,0,1,6.0,Weather descs.,WEATHER_HOLDER)
+think install_create(WEATHER_SUMMER,Summer,0,1,6.0,Weather descs.,WEATHER_HOLDER)
+think install_create(WEATHER_FALL,Fall,0,1,6.0,Weather descs.,WEATHER_HOLDER)
+>>>>>>> 37bc97f01a79273addeb85ce9dffac86099222f3
 
 @set Weather Generator = VISUAL
 &CMD-+WEATHER Weather Generator=$+weather:think pemit(%#,u(fun_weather))

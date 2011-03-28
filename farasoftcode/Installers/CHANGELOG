@@ -16,7 +16,7 @@ Firearms in +gear were supposed to be using a defense skill of '3' not '5'.
 Documentation is now managed in with the code, in Word/PDF docs.
 
 ================================================================
-Version 6.0 (11/14/2010)
+Version 6.0 (1/23/2011)
 ================================================================
 ----------------------------------------------------------------================================================================
 
@@ -82,22 +82,15 @@ Wipe out help and commands and aconnect/adisconnect before upgrading
 ~~~~~~~~~~~~~~~
 +lhelp totally didn't work when you used the ancestor_room setting in the MUSH config. It's now part of the help system. 
 
+Idle Purger
+~~~~~~~~~~~~~~~~~~~
+Idle Purger - Fixed a problem with the idle protect command where it wasn't adding new names properly to the end of the list.
 
-
-**NOTE TO SELF: Make special patch file to copy over who data
-think [setq(0,install_aliasdb(GLOBALS_DB))][setq(1,install_aliasdb(WHO_DB))][switch(1,match(%q0,#-1),ansi(hc,Globals not installed.  No special action needed.),match(%q1,#-1),ansi(hc,Who system not installed.  No special action needed.),ansi(hc,Moving who config from globals to new who system.)[iter(MUSH_NAME WHO_COLOR TP_ROOM_PARENT WHO_RECORD,switch(hasattr(%q0/##),1,[set(%q1,[switch(##,WHO_COLOR,COLOR,##)]:[xget(%q0,##)])][wipe(%q0/##)]))])]
-
-DBS: Created a ready-to-go database with all the systems installed and mostly configured (other than the custom configurations).
 
 ================================================================
 Version 5.0 Patches
 ================================================================
 ----------------------------------------------------------------================================================================
-
-
-Patch 5.0.3
-
-Idle Purger - Fixed a problem with the idle protect command where it wasn't adding new names properly to the end of the list.
 
 Patch 5.0.2
 

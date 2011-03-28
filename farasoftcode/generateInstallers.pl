@@ -1,4 +1,9 @@
 #!/usr/bin/perl
+
+# Usage:  generateInstallers.pl <old version#> <new version #>
+#  Directories must already exist in the Installer directory - one for upgrade and one for fresh install
+#  Run from the root softcode dir.
+
 use File::Find;
 use Cwd;
 use File::stat;
@@ -42,7 +47,7 @@ processFile("Core/faramail.dec", "-CORE-");
 processFile("Core/BBS-Myrddin.dec", "-CORE-");
 processFile("Core/CRON-Myrddin.dec", "-CORE-");
 
-find(\&forEachFile, cwd . "/Addons/");
+find(\&forEachFile, cwd . "/AddOns/");
 find(\&forEachFile, cwd . "/FUDGE/");
 find(\&forEachFile, cwd . "/FS3/");
 
@@ -95,8 +100,10 @@ else
   $outFileName = "Installers/Fresh Install v$version/$indexString $prefix $shortName";
 }
 
+# When parsing sub-dirs the script has the CWD as the sub-dir, so we have to go up one to get
+# the installers directory.
 my $cwd = cwd;
-if ($cwd !~ /trunk$/)
+if ($cwd !~ /farasoftcode$/)
    {
    $outFileName = "../$outFileName";
    }
