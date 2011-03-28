@@ -1,12 +1,19 @@
 ================================================================
-6.1 (in progress)
+6.0.1
 ----------------------------------------------------------------
 Who
 ~~~~~~~
 Fixed bug in the IC counter function.
 
 Weather
-fixed type calculation (Cags)
+~~~~~~~
+Fixed type calculation (Fixed by Caggles@Pioneer)
+Added parameter to weather() to select different formats
+
+FS3
+~~~~~~~
+Firearms in +gear were supposed to be using a defense skill of '3' not '5'.
+Documentation is now managed in with the code, in Word/PDF docs.
 
 ================================================================
 Version 6.0 (11/14/2010)

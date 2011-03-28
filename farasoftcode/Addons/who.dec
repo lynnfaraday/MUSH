@@ -11,9 +11,9 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(WHO_CMD,Who Commands,1,0,6.0,Configurable Who system.)
-think install_create(WHO_FUN,Who Functions,1,1,6.0,Functions for the Who system.)
-think install_create(WHO_DB,Who Data,1,1,6.0,Data storage for the Who system.)
+think install_create(WHO_CMD,Who Commands,1,0,6.0.1,Configurable Who system.)
+think install_create(WHO_FUN,Who Functions,1,1,6.0.1,Functions for the Who system.)
+think install_create(WHO_DB,Who Data,1,1,6.0.1,Data storage for the Who system.)
 
 @pemit/silent %#=[ansi(hg,Setting Up Object Attributes...)]%R
 
