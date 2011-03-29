@@ -9,6 +9,7 @@ Weather
 ~~~~~~~
 Fixed type calculation (Fixed by Caggles@Pioneer)
 Added parameter to weather() to select different formats
+Weather now uses cron instead of its own internal timing system
 
 FS3
 ~~~~~~~

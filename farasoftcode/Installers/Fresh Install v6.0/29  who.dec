@@ -11,9 +11,9 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(WHO_CMD,Who Commands,1,0,6.0,Configurable Who system.)
-think install_create(WHO_FUN,Who Functions,1,1,6.0,Functions for the Who system.)
-think install_create(WHO_DB,Who Data,1,1,6.0,Data storage for the Who system.)
+think install_create(WHO_CMD,Who Commands,1,0,6.0.1,Configurable Who system.)
+think install_create(WHO_FUN,Who Functions,1,1,6.0.1,Functions for the Who system.)
+think install_create(WHO_DB,Who Data,1,1,6.0.1,Data storage for the Who system.)
 
 @pemit/silent %#=[ansi(hg,Setting Up Object Attributes...)]%R
 
@@ -34,7 +34,7 @@ think install_create(WHO_DB,Who Data,1,1,6.0,Data storage for the Who system.)
 @@ %0 = running count of RPOK peeps
 @@ %1 = the next person to check if they're RPOK
 @@ --------------------------
-&FUN_FOLD_RPOK Who Functions=add(%0,switch(u(FUN_IS_IC,%0),1,0))
+&FUN_FOLD_RPOK Who Functions=add(%0,u(FUN_IS_IC,%1))
 
 @@ --------------------------
 @@ FUN_SORT_AGE
@@ -90,7 +90,7 @@ think install_create(WHO_DB,Who Data,1,1,6.0,Data storage for the Who system.)
 @@ Player is IC if they're status is IC or they're in a TP Room
 @@ %0 = player
 @@ --------------------------
-&FUN_IS_IC Who Functions=or(switch(xget(%1,status),IC,1,0),u(FUN_IS_IN_TPROOM,%0))
+&FUN_IS_IC Who Functions=or(switch(xget(%0,status),IC,1,0),u(FUN_IS_IN_TPROOM,%0))
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -192,8 +192,6 @@ think install_create(WHO_DB,Who Data,1,1,6.0,Data storage for the Who system.)
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
 @wait 2=+install/updategroup WHO
-
-@wait 4=think [setq(0,install_aliasdb(GLOBALS_DB))][setq(1,install_aliasdb(WHO_DB))][switch(1,match(%q0,#-1),ansi(hc,Globals not installed.  No special action needed.),match(%q1,#-1),ansi(hc,Who system not installed.  No special action needed.),ansi(hc,Moving who config from globals to new who system.)[iter(MUSH_NAME WHO_COLOR TP_ROOM_PARENT WHO_RECORD,switch(hasattr(%q0/##),1,[set(%q1,[switch(##,WHO_COLOR,COLOR,##)]:[xget(%q0,##)])][wipe(%q0/##)]))])]
 
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 

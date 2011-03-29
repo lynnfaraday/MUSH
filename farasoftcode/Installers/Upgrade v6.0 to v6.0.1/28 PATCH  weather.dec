@@ -44,54 +44,6 @@ think install_create(WEATHER_FALL,Fall,0,1,6.0.1,Weather descs.,WEATHER_HOLDER)
 &CRON_TIME_WEATHER Weather Generator=||||00 30|
 &CRON_JOB_WEATHER Weather Generator=@tr #WEATHER_CMD/TR-CHANGEWEATHER
 
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@    *****       DATA SECTION           *****
-@@    *****   CHECK BEFORE UPGRADING     *****
-@@    *****   REMOVE OF MODIFY AS NEEDED *****
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-&SEASON Weather Generator=winter
-&TEMP Weather Generator=cold
-&TIME Weather Generator=evening
-&TYPE Weather Generator=flurrying
-
-&TEMP Winter=cold cold cold cold cold cold cold cool cool freezing freezing
-&TYPE-CLEAR Winter=clear clear clear fair fair fair flurrying flurrying overcast snowing
-&TYPE-FAIR Winter=fair fair fair flurrying flurrying flurrying clear clear overcast overcast snowing
-&TYPE-FLURRYING Winter=flurrying flurrying flurrying fair fair fair overcast clear snowing snowing
-&TYPE-OVERCAST Winter=overcast overcast overcast flurrying flurrying flurrying fair fair clear clear snowing
-&TYPE-SNOWING Winter=snowing snowing snowing overcast overcast fair fair flurrying flurrying flurrying
-
-&TEMP Fall=cool cool cool cool cool cool cool freezing warm warm
-&TYPE-CLEAR Fall=clear clear clear fair fair fair drizzling drizzling overcast raining
-&TYPE-DRIZZLING Fall=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
-&TYPE-FAIR Fall=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
-&TYPE-OVERCAST Fall=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
-&TYPE-RAINING Fall=raining raining raining overcast overcast overcast stormy stormy fair fair
-&TYPE-STORMY Fall=stormy stormy stormy raining raining raining clear overcast drizzling fair
-
-&TEMP Summer=hot hot hot hot hot warm warm warm warm cool cool
-&TYPE-CLEAR Summer=clear clear clear fair fair fair drizzling drizzling overcast raining
-&TYPE-DRIZZLING Summer=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
-&TYPE-FAIR Summer=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
-&TYPE-OVERCAST Summer=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
-&TYPE-RAINING Summer=raining raining raining overcast overcast overcast stormy stormy fair fair
-&TYPE-STORMY Summer=stormy stormy stormy raining raining raining clear overcast drizzling fair
-
-&TEMP Spring=cool cool cool cool cool warm warm warm warm warm
-&TYPE-CLEAR Spring=clear clear clear fair fair fair drizzling drizzling overcast raining
-&TYPE-DRIZZLING Spring=drizzling drizzling drizzling fair fair fair overcast overcast clear stormy
-&TYPE-FAIR Spring=fair fair fair drizzling drizzling drizzling clear clear overcast overcast raining
-&TYPE-OVERCAST Spring=overcast overcast overcast drizzling drizzling drizzling fair fair clear clear raining
-&TYPE-RAINING Spring=raining raining raining overcast overcast overcast stormy stormy fair fair
-&TYPE-STORMY Spring=stormy stormy stormy raining raining raining clear overcast drizzling fair
-
-@wait 5=+jobs/create CODE=Weather/Customize weather system.  See +shelp weather.
-
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
