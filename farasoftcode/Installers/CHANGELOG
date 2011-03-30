@@ -2,16 +2,39 @@
 ================================================================
 Version 7.0 (in progress)
 ----------------------------------------------------------------
+
+** NOTE **
+When you patch a system, the installer will wipe out any existing
+commands or help files on that object.  This is a feature to prevent
+obsolete commands from lingering on the objects.  
+
+HOWEVER it also means that if you put extra commands on my system 
+objects, they'll be wiped out when you upgrade.  I heartily recommend
+you put your own custom commands on separate objects to prevent that.
+
 IC Time
 ~~~~~~~~
 New *Core* module for tracking IC time.  Supports flexible IC/OOC
 time ratios.  Your ictime() function will need to be modified.
+
+Install Manager
+~~~~~~~~~~~~~~~
+Was uninstalling the HELP files but not all the extra help MORE_HELP, SHELP, etc.
+
+Autospacer
+~~~~~~~~~~~
+Now triggers the combat pose tracking @hook.  This was necessary to
+do here because there can be only one @hook for a command.
 
 Globals
 ~~~~~~~
 +time moved to IC Time system
 
 Idle timer now only runs once an hour and only boots people who have been idle for 6 hours or more.
+
+Cookies / Luck
+~~~~~~~~~~~~~~
+* Luck is now its own module, separate from cookies.  it's nominally considered part of the FS3 system, but you can still install it separately if you want to use luck without FS3.
 
 FS3 Skills / Chargen
 ~~~~~~~~~~~~~~~~~~~~~
@@ -20,6 +43,26 @@ Removed +roll/casual because it was confusing and useless.
 Age/birthdate functions moved to IC Time system.
 
 Setting your age in chargen now works as you'd expect, and the min/max ages are configurable.
+
+FS3 Combat
+~~~~~~~~~~~~~~~~~~~~~
+*** Damage modifiers for small wounds (light/moderate) are much much less.  This effectively means you will never be KO'd by a single light or moderate wound.
+
+*** +treat no longer exists.  You cannot use first aid outside of combat.  It was causing too much confusion with people using the wrong command when they were in combat, and it really isn't necessary if you're not using +combat.
+
+*** Removed the 'fit for duty' and similar status displays.  They never really fit the wound modifiers in the way I intended them to, and made even less sense after tweaking the wound modifiers this time around.
+
+*** Range is simplified; you now just specify short, medium or long.  The range listed in the weapon stats is just a guide to help you figure out what the range bracket should be.
+
+* Hero factor has been removed; it never really worked as intended
+
+* Chance of crew being hit on low-severity vehicle wounds is lessened.
+
+* Luck modifiers were too high.  Now they mirror what's described in +luck
+
+* Defensive weapons are now called Suppressive weapons.
+
+* Put in a +job so you'd know to configure the pose hook to enable pose tracking.  The autospacer module will do this for you, though.
 
 
 ================================================================

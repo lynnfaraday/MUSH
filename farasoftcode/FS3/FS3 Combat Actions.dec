@@ -13,8 +13,6 @@ think install_create(FS3COMBAT_CMD_ACTIONS,FS3Combat Action Commands,1,0,6.0,The
 
 think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,6.0,FS3Combat Preferences.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
-@startup FS3Combat Action Commands=@set me=!no_command
-
 &CREDITS FS3Combat Action Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
 @set FS3Combat Preferences = !NO_COMMAND
@@ -349,7 +347,7 @@ think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,6.0,FS3Combat Pre
 @@ %qz = tmporary ammo register
 @@ --------------------------
 
-&FUN_ACTION_SUPPRESS FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,suppress),u(fun_cant_act_msg,%0),lte(words(%1,\,),5),ansi(hr,You cannot target more than 5 targets.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),or(eq(words(%1,\,),1),match(u(%q0/fun_weaponstat,%0,wpntype),defensive),u(%q0/fun_weaponstat,%0,auto)),ansi(hr,You cannot suppress multiple targets without a fullauto or defensive weapon.),switch(u(%q0/fun_weaponstat,%0,wpntype),Ranged,[setq(z,u(%q0/fun_combatstat,%0,ammo))]or(eq(%qz,0),gte(%qz,words(%1,\,))),1),ansi(hr,You don't have enough bullets.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,suppress,%1,)]))
+&FUN_ACTION_SUPPRESS FS3Combat Action Commands=localize(switch(0,u(fun_can_act,%0,suppress),u(fun_cant_act_msg,%0),lte(words(%1,\,),5),ansi(hr,You cannot target more than 5 targets.),[setq(1,u(fun_check_targets,%1,%q0))][eq(%q1,1)],ansi(hr,after(%q1,|)),or(eq(words(%1,\,),1),match(u(%q0/fun_weaponstat,%0,wpntype),Suppressive),u(%q0/fun_weaponstat,%0,auto)),ansi(hr,You cannot suppress multiple targets without a fullauto or suppressive weapon.),switch(u(%q0/fun_weaponstat,%0,wpntype),Ranged,[setq(z,u(%q0/fun_combatstat,%0,ammo))]or(eq(%qz,0),gte(%qz,words(%1,\,))),1),ansi(hr,You don't have enough bullets.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,suppress,%1,)]))
 
 
 @@ ---------------   Aim -----------------
@@ -452,7 +450,7 @@ think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,6.0,FS3Combat Pre
 @@ %1 = target name
 @@ %2 = option
 @@ %3 = combat num
-&FUN_CHECK_OPT_RANGE FS3Combat Action Commands=switch(0,isnum(%2),0|Range must be a number.,gt(%2,0),0|Range must be greater than 0.,lte(%2,u(%3/fun_weaponstat,%0,range)),0|You cannot exceed your weapon's max range.,1)
+&FUN_CHECK_OPT_RANGE FS3Combat Action Commands=switch(0,match(short medium long),0|Range must be short medium or long.,1)
 
 &FUN_CHECK_OPT_CALLED FS3Combat Action Commands=[setq(h,u(%3/fun_valid_hitlocs,switch(u(%3/fun_is_in_vehicle,%1),1,u(%3/fun_combatstat,%1,vehicle),%1)))][switch(0,t(%2),0|You must specify a hit location.,match(%qh,unprettify(%2)),0|That is not a valid hit location for that target.  Try one of these: %qh,1)]
 
@@ -631,8 +629,6 @@ think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,6.0,FS3Combat Pre
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-
-&HERO_FACTOR FS3Combat Preferences=0
 
 &DEFAULT_RIFLE FS3Combat Preferences=Rifle
 

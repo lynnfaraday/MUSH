@@ -26,8 +26,7 @@ You need to configure the ruling attributes for each action skill.
 
   &RULING_ATTR Skill Data=Alertness:Reactive Demolitions:Technical
 
-You can also set the default ruling attribute for background and language skills. 
-Right now they both use the same ruling ruling attribute.  
+You can also set the default ruling attribute for background skills.
 
   &RULING_ATTR_BG Skill Data=Academic
 
@@ -62,7 +61,7 @@ For example, to say that they can only have 4 abilities at 7 or higher:
 * The number of points you can spend on action skills and attributes.
 
   &MAX_POINTS_ACTION Skill Data=32
-  &MAX_POINTS_ATTRIBUTES Skill Data=32
+  &MAX_POINTS_ATTRIBUTES Skill Data=20
 
 * The minimum and max number of quirks they can have.
 
@@ -74,9 +73,8 @@ For example, to say that they can only have 4 abilities at 7 or higher:
   &MIN_BGSKILLS Skill Data=2
 
 * The number of points they start with in chargen.  
-Bear in mind that the system will automatically give them the average rating (5) in every attribute 
-and the default language at veteran (7), but this counts towards their overall point total!   
-So make sure they have enough points to include sensible attribute and language ratings.
+Bear in mind that the system will automatically give them the average rating (2) in every attribute 
+and the default language, but this counts towards their overall point total!   
 
   &STARTING_POINTS Skill Data=80
 
@@ -223,14 +221,14 @@ corresponding entry in the vehicle database.  Otherwise it won't be able to be u
 There's currently no way to flip a switch and remove vehicles completely.  
 A bunch of code relies at least on the "isvehicle" function, so you have to 
 install the vehicle module even if your game doesn't plan on actually ''using'' 
-vehicles.   The best you can do is simply remove the vehicle help files; the 
-commands will still be there, but without any vehicle types defined it doesn't 
-really matter.
+vehicles.   The best you can do is simply remove the vehicle help files and move
+the Commands objects out of the globals room.
 
 ==NPCs==
 
 You can set up any recurring NPCs using the +npc command.  
 Otherwise there's nothing else to configure for the NPC system.
+
 
 ==Hit Locations==
 
