@@ -19,7 +19,7 @@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-@wait 5=+jobs/create CODE=FS3 Combat Config/Configure FS3Combat.  See guide here: http://wordsmyth.org/aresmush/index.php?title=FS3_Configuration
+@wait 5=+jobs/create CODE=FS3 Combat Config/Configure FS3Combat.  See the configuration text file that accompanied the installation.
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

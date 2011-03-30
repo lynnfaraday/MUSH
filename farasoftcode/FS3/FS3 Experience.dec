@@ -49,7 +49,7 @@ think install_create(FS3XP_DB,FS3 XP Data,0,1,6.0,FS3 XP Data.)
 &XP_PER_LEVEL FS3 XP Data=0:1 1:2 2:2 3:4 4:4 5:4 6:8 7:8 8:8 9:12 10:12 11:12
 &XP_PER_WEEK FS3 XP Data=1
 
-@wait 5=+jobs/create CODE=FS3 XP Config/{Configure FS3 XP System.  See guide here: http://wordsmyth.org/aresmush/index.php?title=FS3_Configuration}
+@wait 5=+jobs/create CODE=FS3 XP Config/{Configure FS3 XP System. See the configuration text file that accompanied the installation.
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

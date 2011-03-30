@@ -1,5 +1,29 @@
+
 ================================================================
-6.0.1
+Version 7.0 (in progress)
+----------------------------------------------------------------
+IC Time
+~~~~~~~~
+New *Core* module for tracking IC time.  Supports flexible IC/OOC
+time ratios.  Your ictime() function will need to be modified.
+
+Globals
+~~~~~~~
++time moved to IC Time system
+
+Idle timer now only runs once an hour and only boots people who have been idle for 6 hours or more.
+
+FS3 Skills / Chargen
+~~~~~~~~~~~~~~~~~~~~~
+Removed +roll/casual because it was confusing and useless.  
+
+Age/birthdate functions moved to IC Time system.
+
+Setting your age in chargen now works as you'd expect, and the min/max ages are configurable.
+
+
+================================================================
+Version 6.0.1 (3/29/2011)
 ----------------------------------------------------------------
 Who
 ~~~~~~~
