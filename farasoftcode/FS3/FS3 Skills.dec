@@ -31,7 +31,7 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 
 &CREDITS FS3 Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
-&CMD-+SUCCESSCHART FS3 Skill System=$+successchart *:@pemit %#=[space(5)]-1%B%B[iter(lnum(0,10),ljust(itext(0),3))];@dolist lnum(1,16)={@pemit %#=[setq(0,iter(lnum(1,600),roll_ability(min(##,%0),max(0,sub(##,%0)))))][setq(2,0)][ljust(##,2)] : [iter(-1 [lnum(0,10)],ljust([setq(1,u(FS3SKILL_FUN/fun_successchart,%q0,itext(0)))][switch(itext(0),-1,ansi(hm,%q1),0,ansi(hr,%q1),[ansi(hg,%q1)][setq(2,add(%q2,%q1))])],3))]%B[ansi(hc,%q2)]}
+&CMD-+SUCCESSCHART FS3 Skill System=$+successchart *:@pemit %#=[space(5)]-1%B%B[iter(lnum(0,10),ljust(itext(0),3))];@dolist lnum(1,16)={@pemit %#=[setq(0,iter(lnum(1,600),roll_ability(min(##,%0),max(0,sub(##,%0)))))][setq(2,0)][ljust(##,2)] : [iter(-1 [lnum(0,10)],ljust([setq(1,u(#FS3SKILL_FUN/fun_successchart,%q0,itext(0)))][switch(itext(0),-1,ansi(hm,%q1),0,ansi(hr,%q1),[ansi(hg,%q1)][setq(2,add(%q2,%q1))])],3))]%B[ansi(hc,%q2)]}
 
 &CMD-+LIMITS FS3 Skill System=$+limits:think pemit(%#,[line()]%R[ansi(h,Ability Limits in Chargen)]%R%RYou can't spend more than [xget(#FS3SKILL_DB,max_points_attributes)] points on attributes%RAll attributes must be at least level 1.%RYou can't spend more than [xget(#FS3SKILL_DB,max_points_action)] points on action skills.%RYou must have [xget(#FS3SKILL_DB,min_quirks)]-[xget(#FS3SKILL_DB,max_quirks)] Quirks.%RYou must have at least [xget(#FS3SKILL_DB,min_bgskills)] different background skills.%RYou must be a native speaker in at least one language.%R%R[ansi(h,Ability Limits For Chargen and XP)]%R%RYou can't have more than [xget(#FS3SKILL_DB,max_high_abilities)] abilities above level [xget(#FS3SKILL_DB,high_ability_level)].%R[line()])
 
@@ -45,15 +45,30 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 
 &CMD-+ATTRIBUTES FS3 Skill System=$+attributes:@fo %#=+abilities
 
-&REM-+ROLL FS3 Skill System= %q0 = parsed roll params  %R %q1=ability %R %q2=ruling attr or blank %R  %q3=modifier or 0 %r %q4=roll result
+@@ %q0 = parsed roll params
+@@ %q1=ability (name or number)
+@@ %q2=ruling attr or blank 
+@@ %q3=modifier or 0 
+@@ %q4=roll result
+&CMD-+ROLL FS3 Skill System=$+roll ([^\+-]+)([\+-][^\+-]+)?([\+-].+)?:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%0,%1,%2))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid skill rating.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),not(isnum(%q3)),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(%0)]: [u(#FS3SKILL_FUN/fun_pretty_success_level,%q4)].))])
 
-TODO: IS VALID RATING needs skill/attribute
-&CMD-+ROLL FS3 Skill System=$+roll *:think switch(%0,* vs *,,[setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%0))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1))),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(%0)]: [u(#FS3SKILL_FUN/fun_pretty_success_level,%q4)].))])
+@set FS3 Skill System/CMD-+ROLL=regex
 
-&REM_+ROLL_OPPOSED FS3 Skill System=%q0 = parsed roll params A  %R%T %q1 = A ability %R%T  %q2 = A ruling attr or blank   %R%T   %q3 = A modifier  %R%T   %q4 = A result  %R%R   %q5 = B parsed params %R%T %q6 = B ability %R%T  %q7 = B ruling attr or blank   %R%T   %q8 = B modifier  %R%T   %q9 = B result  %R%R   %qa = Opposed result text
+@@ %q0 = parsed roll params A 
+@@   %q1 = A ability
+@@   %q2 = A ruling attr or blank   
+@@   %q3 = A modifier 
+@@   %q4 = A result 
+@@ %q5 = B parsed params
+@@   %q6 = B ability 
+@@   %q7 = B ruling attr or blank  
+@@   %q8 = B modifier  
+@@   %q9 = B result 
+@@ %qa = Opposed result text
 
-TODO: IS VALID RATING needs skill/attribute
-&CMD-+ROLL-OPPOSED FS3 Skill System=$+roll *=* vs *=*:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%1))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(pmatch(%0),%q1,%q3,%q2))][setq(5,u(#FS3SKILL_FUN/fun_parse_roll_params,%3))][setq(6,extract(%q5,1,1,|))][setq(7,extract(%q5,2,1,|))][setq(8,extract(%q5,3,1,|))][setq(9,roll_ability(pmatch(%2),%q6,%q8,%q7))][setq(a,u(#FS3SKILL_FUN/FUN_GET_OPPOSED_RESULT,%q4,%q9))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1))),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q6),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q6))),pemit(%#,ansi(hr,%q6 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),and(t(%q7),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q7))),pemit(%#,ansi(hr,%q7 is not an attribute.)),and(t(%q8),not(isnum(%q8))),pemit(%#,ansi(hr,%q8 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] Opposed Roll -- [capstr(%0)]:[prettify(%1)] vs [capstr(%2)]:[prettify(%3)]%R<%T[capstr(%0)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q4)][space(10)][capstr(%2)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q9)]%R<%T%TNet Result: [u(#FS3SKILL_FUN/FUN_PRETTY_OPPOSED_RESULT,[capstr(%0)],[capstr(%2)],%qa)])]
+&CMD-+ROLL-OPPOSED FS3 Skill System=$+roll (.+)=([^\+-]+)([\+-][^\+-]+)?([\+-].+)? vs (.+)=([^\+-]+)([\+-][^\+-]+)?([\+-].+)?:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%2,%3,%4))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(pmatch(%1),%q1,%q3,%q2))][setq(5,u(#FS3SKILL_FUN/fun_parse_roll_params,%6,%7,%8))][setq(6,extract(%q5,1,1,|))][setq(7,extract(%q5,2,1,|))][setq(8,extract(%q5,3,1,|))][setq(9,roll_ability(pmatch(%5),%q6,%q8,%q7))][setq(a,u(#FS3SKILL_FUN/FUN_GET_OPPOSED_RESULT,%q4,%q9))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q6),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q6,skill))),pemit(%#,ansi(hr,%q6 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),and(t(%q7),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q7))),pemit(%#,ansi(hr,%q7 is not an attribute.)),and(t(%q8),not(isnum(%q8))),pemit(%#,ansi(hr,%q8 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] Opposed Roll -- [capstr(%1)]:[prettify(before(after(%0,),vs))] vs [capstr(%5)]:[prettify(after(after(%0,),vs))]%R<%T[capstr(%0)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q4)][space(10)][capstr(%2)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q9)]%R<%T%TNet Result: [u(#FS3SKILL_FUN/FUN_PRETTY_OPPOSED_RESULT,[capstr(%1)],[capstr(%5)],%qa)])]
+
+@set FS3 Skill System/CMD-+ROLL-OPPOSED=regex
 
 &CMD-+RULINGATTR FS3 Skill System=$+rulingattr:think pemit(%#,[line()]%R[ansi(h,Ruling Attributes)]%R%R[ansi(h,Action Skills)]%R[table(iter(lattr(#FS3SKILL_DB/actionskill_*),[prettify(lcstr(after(##,_)))]:[prettify(u(#FS3SKILL_FUN/fun_ruling_attr,%#,[after(##,_)]))],,|),25,78,|)]%R%R[ansi(h,Background Skills)] (May be customized using the +rulingattr command.)%R[table(iter(xget(%#,bgskills),[prettify(before(##,:))]:[prettify(u(#FS3SKILL_FUN/fun_ruling_attr,%#,before(##,:)))],,|),25,78,|)]%R%R[ansi(h,Language Skills)]%RAll use [xget(#FS3SKILL_DB,ruling_attr_bg)]%R[line()]
 
@@ -82,7 +97,7 @@ TODO: IS VALID RATING needs skill/attribute
 @@ %0 = list of success rolls
 @@ %1 = the target number
 @@ --------------------------
-&FUN_SUCCESSCHART New FS3=ceil(mul(fdiv(words(graball(%0,%1)),words(%0)),100))
+&FUN_SUCCESSCHART FS3 Skill Functions=ceil(mul(fdiv(words(graball(%0,%1)),words(%0)),100))
 
 @@ --------------------------
 @@ FUN_COUNT_SUCCESSES
@@ -90,11 +105,38 @@ TODO: IS VALID RATING needs skill/attribute
 @@ %0 = running total
 @@ %1 = current value
 @@ --------------------------
-&FUN_COUNT_SUCCESSES FS3 Skill System=add(%0,switch(%1,>6,1,0))
+&FUN_COUNT_SUCCESSES FS3 Skill Functions=add(%0,switch(%1,>6,1,0))
 
 @@ --------------------------
 @@ FUN_ROLL_ABILITY
 @@ Makes an ability roll
+@@ %0 = player DB
+@@ %1 = skill
+@@ %2 = modifier
+@@ %3 = attribute (may be blank)
+@@
+@@ %q0 = ruling attr rating
+@@ %q1 = ability rating
+@@ --------------------------
+&FUN_ROLL_ABILITY FS3 Skill Functions=localize([setq(0,u(fun_ruling_attr_mod,%0,%1,%3))][setq(1,ability_level(%0,%1))][u(FUN_ROLL_DICE,%q0,add(%q1,%2))])
+
+@@ --------------------------
+@@ FUN_RULING_ATTR_MOD
+@@ Determines the rating of the ruling attribute
+@@ %0 = player DB
+@@ %1 = skill
+@@ %2 = ruling attr override (may be blank)
+@@
+@@ %q0 = ruling attr for that skill
+@@ %q1 = total modifier
+@@ --------------------------
+
+&FUN_RULING_ATTR_MOD FS3 Skill Functions=localize([setq(0,switch(t(%2),1,%2,u(fun_ruling_attr,%0,%1)))][ability_level(%0,%q0)])
+
+
+@@ --------------------------
+@@ FUN_ROLL_DICE
+@@ Performs the raw die rolls for an ability roll.
 @@ %0 = attribute
 @@ %1 = skill
 @@
@@ -102,7 +144,7 @@ TODO: IS VALID RATING needs skill/attribute
 @@ %q1 = # successes
 @@ %q2 = # ones
 @@ --------------------------
-&FUN_ROLL_ABILITY FS3 Skill System3=localize([setq(0,die(add(%0,%1),8,1))][setq(1,fold(fun_count_successes,%q0,0))][setq(2,words(graball(%q0,1)))][switch(%q1,0,switch(1,gte(%q2,%0),-1,0),%q1)])
+&FUN_ROLL_DICE FS3 Skill Functions=localize([setq(0,die(add(%0,%1),8,1))][setq(1,fold(fun_count_successes,%q0,0))][setq(2,words(graball(%q0,1)))][switch(%q1,0,switch(1,gte(%q2,%0),-1,0),%q1)])
 
 
 @@ --------------------------
@@ -241,7 +283,7 @@ TODO: IS VALID RATING needs skill/attribute
 @@
 @@ %q0 = Stores ansi|text for the desired success level
 @@ --------------------------
-&FUN_PRETTY_SUCCESS_LEVEL FS3 Skill Functions=localize([setq(0,switch(%0,-1,hR|Embarassing Failure,-0,hr| Failure,1,g|Success,<4,hg|Good Success,<6,hG|Great Success,hm|Amazing Success))][ansi(before(%q0,|),after(%q0,|))])
+&FUN_PRETTY_SUCCESS_LEVEL FS3 Skill Functions=localize([setq(0,switch(%0,-1,hR|Embarassing Failure,0,hr| Failure,1,g|Success,<4,hg|Good Success,<6,hG|Great Success,hm|Amazing Success))][ansi(before(%q0,|),after(%q0,|))])
 
 @@ --------------------------
 @@ FUN_PRINT_LEVEL
@@ -249,7 +291,7 @@ TODO: IS VALID RATING needs skill/attribute
 @@ %0 = rating
 @@ %1 = ability type
 @@ --------------------------
-&FUN_PRINT_LEVEL FS3 Skill Functions=switch(%0,0,,[ljust([u(fun_level_bracket_abbrev,%0,%1)],4)] [iter(lnum(1,%0),[ansi(switch(%1,attribute,switch(#@,1,g,2,y,3,r,b),switch(#@,<4,g,<7,y,<10,r,b)),@)],,)])
+&FUN_PRINT_LEVEL FS3 Skill Functions=switch(%0,0,,[ljust([u(fun_level_bracket_abbrev,%0,%1)],4)] [iter(lnum(1,%0),[ansi(switch(%1,attribute,g,switch(#@,<4,g,<7,y,<10,r,b)),@)],,)])
 
 @@ --------------------------
 @@ FUN_PRINT_LEVEL
@@ -272,34 +314,18 @@ TODO: IS VALID RATING needs skill/attribute
 @@ Parses params in the form *+/-*+/-* where everything's optional.
 @@ %0 = params
 @@ 
-@@ Returns attribute|ability|modifier
+@@ Returns skill|attribute|modifier
 @@
 @@ %q0 = list of the three params together without +'s or spaces
-@@ %q1 = the attribute, if there is one
-@@ %q2 = ability
-@@ %q3 = modifier or 0
+@@ %q1 = list with the attribute taken out, if one was found
+@@ %q2 = list with the modifier and attribute taken out
+@@ 
+@@ %q9 = attribute
+@@ %q8 = modifier
+@@ %q7 = skill
 @@ --------------------------
-&FUN_PARSE_ROLL_PARAMS FS3 Skill Functions=localize([setq(0,[unprettify(%0)] [unprettify(after(%1,+))] [unprettify(after(%2,+))])][iter(%0 %q1 %q2,switch(u(FUN_IS_VALID_ATTRIBUTE,##),1,[setq(1,##)][setq(0,replace(%q0,#@,))]),,)][setq(2,before(%q0,))][setq(3,after(%q0,))][switch(%q2,,setq(2,0))][switch(%q3,,setq(3,0))]%q1|%q2|%q3)
+&FUN_PARSE_ROLL_PARAMS FS3 Skill Functions=localize([setq(0,[unprettify(%0)] [unprettify(edit(%1,+,))] [unprettify(edit(%2,+,))])][setq(1,%q0)][iter(%q0,switch(u(FUN_IS_VALID_ATTRIBUTE,##),1,[setq(9,##)][setq(1,squish(replace(%q0,#@,)))]),,)][setq(2,%q1)][iter(%q1,switch(isnum(##),1,[setq(8,##)][setq(2,squish(replace(%q1,#@,)))]),,)][setq(7,first(%q2))][switch(%q8,,setq(8,0))][switch(%q7,,setq(7,0))][switch(words(%q2),>1,pemit(%#,ansi(hr,WARNING!  It looks like you specified some invalid roll parameters.  Interpreting the best we can.)))]%q7|%q9|%q8)
 
-%q0 = list of the three params together without +'s or spaces
-%q1 = list with the attribute taken out, if one was found
-%q2 = list with the modifier and attribute taken out
-
-%q9 = attribute
-%q8 = modifier
-%q7 = skill
-
-localize([setq(0,[unprettify(%0)] [unprettify(edit(%1,+,))] [unprettify(edit(%2,+,))])][setq(1,%q0)][iter(%q0,switch(u(FUN_IS_VALID_ATTRIBUTE,##),1,[setq(9,##)][setq(1,squish(replace(%q0,#@,)))]),,)][setq(2,%q1)][iter(%q1,switch(isnum(##),1,[setq(8,##)][setq(2,squish(replace(%q1,#@,)))]),,)][setq(7,first(%q2))][switch(%q8,,setq(8,0))][switch(%q7,,setq(7,0))][switch(words(%q2),>1,pemit(%#,ansi(hr,WARNING!  It looks like you specified some invalid roll parameters.  Interpreting the best we can.)))]%q7|%q9|%q8)
-
-
-[setq(2,squish(before(%q4,)))][setq(3,squish(after(%q4,)))][switch(%q2,,setq(2,0))][switch(%q3,,setq(3,0))]%q4|%q1|%q2|%q3)
-
-
-([^\+-]+)([\+-][^\+-]+)?([\+-].+)?
-
-
-
-&FUN_PARSE_ROLL_HELPER FS3 Skill Functions=[unprettify(%0)]|[unprettify(%1)]|[trim(%2)]
 
 @@ --------------------------
 @@ FUN_RULING_ATTR
@@ -311,10 +337,9 @@ localize([setq(0,[unprettify(%0)] [unprettify(edit(%1,+,))] [unprettify(edit(%2,
 @@
 @@ %q0 = unpretty ability name
 @@ --------------------------
-&FUN_RULING_ATTR FS3 Skill Functions=localize([setq(0,unprettify(%1))]switch(u(fun_ability_type,%0,%1),attribute,0,action,after(grab(xget(#FS3SKILL_DB,ruling_attr),%q0:*),:),switch(match(xget(%0,ruling_attr),%q0:*),0,xget(#FS3SKILL_DB,ruling_attr_bg),after(grab(xget(%0,ruling_attr),%q0:*),:))))
+&FUN_RULING_ATTR FS3 Skill Functions=localize([setq(0,unprettify(%1))]switch(u(fun_ability_type,%0,%1),attribute,%1,action,after(grab(xget(#FS3SKILL_DB,ruling_attr),%q0:*),:),switch(match(xget(%0,ruling_attr),%q0:*),0,xget(#FS3SKILL_DB,ruling_attr_bg),after(grab(xget(%0,ruling_attr),%q0:*),:))))
  
-&REM_GET_OPPOSED_RESULT FS3 Skill Functions=%0 = A result, %1 = B result, Returns AB AL D BL BB F for "A wins big" "A wins little" "Draw" "Fail" etc.
-
+ 
 @@ --------------------------
 @@ FUN_GET_OPPOSED_RESULT
 @@ Given two success levels, computes the winner.
@@ -335,7 +360,7 @@ localize([setq(0,[unprettify(%0)] [unprettify(edit(%1,+,))] [unprettify(edit(%2,
 @@ %1 = B's name
 @@ %2 = result code
 @@ --------------------------
-&FUN_PRETTY_OPPOSED_RESULT FS3 Skill Functions=[switch(before(%2,|),D,ansi(hy,DRAW),F,ansi(hr,Both Fail.),A,ansi(c,%0 wins),ansi(c,%1 wins),error)][switch(after(%2,|),M,ansi(c,Marginal Victory),V,ansi(c,Victory),C,ansi(c,Crushing Victory))]
+&FUN_PRETTY_OPPOSED_RESULT FS3 Skill Functions=[switch(before(%2,|),D,ansi(hy,DRAW),F,ansi(hr,Both Fail.),A,ansi(c,%0 wins - ),B,ansi(c,%1 wins - ),error)][switch(after(%2,|),M,ansi(c,Marginal Victory),V,ansi(c,Victory),C,ansi(c,Crushing Victory))]
 
 @@ --------------------------
 @@ FUN_HAS_QUIRK
@@ -357,7 +382,7 @@ localize([setq(0,[unprettify(%0)] [unprettify(edit(%1,+,))] [unprettify(edit(%2,
 @@
 @@ %q0 = quirks list
 @@ --------------------------
-&FUN_HAS_QUIRK FS3 Skill Functions=localize([setq(0,xget(%0,langskills))][t(match(ucstr(%q0),ucstr(squish(%1)),|))])
+&FUN_HAS_LANGUAGE FS3 Skill Functions=localize([setq(0,xget(%0,langskills))][t(match(ucstr(%q0),ucstr(squish(%1)),|))])
 
 @@ --------------------------
 @@ FUN_MAP_ABILITY_ABBR
@@ -372,9 +397,8 @@ localize([setq(0,[unprettify(%0)] [unprettify(edit(%1,+,))] [unprettify(edit(%2,
 &FUN_MAP_ABILITY_ABBR FS3 Skill Functions=switch(%0,attribute,attribute,attr,attribute,action,action,act,action,language,language,lang,language,bg,background,background,background)
 
 @@ --------------------------
-@@ FUN_MAP_ABILITY_ABBR
-@@ Given an abbreviation (act for action, attr for attribute), return its real
-@@ type.
+@@ FUN_SET_ABILITY
+@@ Adjusts ability rating.
 @@
 @@ %0 = player
 @@ %1 = ability type
