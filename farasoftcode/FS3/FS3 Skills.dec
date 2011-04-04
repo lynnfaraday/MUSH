@@ -31,7 +31,7 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 
 &CREDITS FS3 Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
-&CMD-+SUCCESSCHART FS3 Skill System=$+successchart *:@pemit %#=[space(5)]-1%B%B[iter(lnum(0,10),ljust(itext(0),3))];@dolist lnum(1,16)={@pemit %#=[setq(0,iter(lnum(1,600),roll_ability(min(##,%0),max(0,sub(##,%0)))))][setq(2,0)][ljust(##,2)] : [iter(-1 [lnum(0,10)],ljust([setq(1,u(#FS3SKILL_FUN/fun_successchart,%q0,itext(0)))][switch(itext(0),-1,ansi(hm,%q1),0,ansi(hr,%q1),[ansi(hg,%q1)][setq(2,add(%q2,%q1))])],3))]%B[ansi(hc,%q2)]}
+&CMD-+SUCCESSCHART FS3 Skill System=$+successchart *:@pemit %#=[space(5)]-1%B%B[iter(lnum(0,10),ljust(itext(0),3))];@dolist lnum(1,16)={@wait #@={@pemit %#=[setq(0,iter(lnum(1,300),roll_ability(min(##,%0),max(0,sub(##,%0)))))][setq(2,0)][ljust(##,2)] : [iter(-1 [lnum(0,10)],ljust([setq(1,u(#FS3SKILL_FUN/fun_successchart,%q0,itext(0)))][switch(itext(0),-1,ansi(hm,%q1),0,ansi(hr,%q1),[ansi(hg,%q1)][setq(2,add(%q2,%q1))])],3))]%B[ansi(hc,%q2)]}}
 
 &CMD-+LIMITS FS3 Skill System=$+limits:think pemit(%#,[line()]%R[ansi(h,Ability Limits in Chargen)]%R%RYou can't spend more than [xget(#FS3SKILL_DB,max_points_attributes)] points on attributes%RAll attributes must be at least level 1.%RYou can't spend more than [xget(#FS3SKILL_DB,max_points_action)] points on action skills.%RYou must have [xget(#FS3SKILL_DB,min_quirks)]-[xget(#FS3SKILL_DB,max_quirks)] Quirks.%RYou must have at least [xget(#FS3SKILL_DB,min_bgskills)] different background skills.%RYou must be a native speaker in at least one language.%R%R[ansi(h,Ability Limits For Chargen and XP)]%R%RYou can't have more than [xget(#FS3SKILL_DB,max_high_abilities)] abilities above level [xget(#FS3SKILL_DB,high_ability_level)].%R[line()])
 
@@ -50,7 +50,7 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 @@ %q2=ruling attr or blank 
 @@ %q3=modifier or 0 
 @@ %q4=roll result
-&CMD-+ROLL FS3 Skill System=$+roll ([^\+-]+)([\+-][^\+-]+)?([\+-].+)?:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%0,%1,%2))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid skill rating.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),not(isnum(%q3)),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(%0)]: [u(#FS3SKILL_FUN/fun_pretty_success_level,%q4)].))])
+&CMD-+ROLL FS3 Skill System=$^\+roll ([^\+-]+)([\+-][^\+-]+)?([\+-].+)?$:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%1,%2,%3))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid skill rating.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),not(isnum(%q3)),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(%0)]: [u(#FS3SKILL_FUN/fun_pretty_success_level,%q4)].))])
 
 @set FS3 Skill System/CMD-+ROLL=regex
 
@@ -66,7 +66,7 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 @@   %q9 = B result 
 @@ %qa = Opposed result text
 
-&CMD-+ROLL-OPPOSED FS3 Skill System=$+roll (.+)=([^\+-]+)([\+-][^\+-]+)?([\+-].+)? vs (.+)=([^\+-]+)([\+-][^\+-]+)?([\+-].+)?:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%2,%3,%4))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(pmatch(%1),%q1,%q3,%q2))][setq(5,u(#FS3SKILL_FUN/fun_parse_roll_params,%6,%7,%8))][setq(6,extract(%q5,1,1,|))][setq(7,extract(%q5,2,1,|))][setq(8,extract(%q5,3,1,|))][setq(9,roll_ability(pmatch(%5),%q6,%q8,%q7))][setq(a,u(#FS3SKILL_FUN/FUN_GET_OPPOSED_RESULT,%q4,%q9))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q6),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q6,skill))),pemit(%#,ansi(hr,%q6 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),and(t(%q7),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q7))),pemit(%#,ansi(hr,%q7 is not an attribute.)),and(t(%q8),not(isnum(%q8))),pemit(%#,ansi(hr,%q8 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] Opposed Roll -- [capstr(%1)]:[prettify(before(after(%0,),vs))] vs [capstr(%5)]:[prettify(after(after(%0,),vs))]%R<%T[capstr(%0)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q4)][space(10)][capstr(%2)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q9)]%R<%T%TNet Result: [u(#FS3SKILL_FUN/FUN_PRETTY_OPPOSED_RESULT,[capstr(%1)],[capstr(%5)],%qa)])]
+&CMD-+ROLL-OPPOSED FS3 Skill System=$^\+roll (.+)=([^\+-]+)([\+-][^\+-]+)?([\+-].+)? vs (.+)=([^\+-]+)([\+-][^\+-]+)?([\+-].+)?$:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%2,%3,%4))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(pmatch(%1),%q1,%q3,%q2))][setq(5,u(#FS3SKILL_FUN/fun_parse_roll_params,%6,%7,%8))][setq(6,extract(%q5,1,1,|))][setq(7,extract(%q5,2,1,|))][setq(8,extract(%q5,3,1,|))][setq(9,roll_ability(pmatch(%5),%q6,%q8,%q7))][setq(a,u(#FS3SKILL_FUN/FUN_GET_OPPOSED_RESULT,%q4,%q9))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q6),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q6,skill))),pemit(%#,ansi(hr,%q6 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),and(t(%q7),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q7))),pemit(%#,ansi(hr,%q7 is not an attribute.)),and(t(%q8),not(isnum(%q8))),pemit(%#,ansi(hr,%q8 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] Opposed Roll -- [capstr(%1)]:[prettify(after(before(after(%0,),vs),=))] vs [capstr(%5)]:[prettify(after(after(after(%0,),vs),=))]%R<%T[capstr(%1)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q4)][space(10)][capstr(%5)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q9)]%R<%T%TNet Result: [u(#FS3SKILL_FUN/FUN_PRETTY_OPPOSED_RESULT,[capstr(%1)],[capstr(%5)],%qa)])]
 
 @set FS3 Skill System/CMD-+ROLL-OPPOSED=regex
 
@@ -97,7 +97,7 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 @@ %0 = list of success rolls
 @@ %1 = the target number
 @@ --------------------------
-&FUN_SUCCESSCHART FS3 Skill Functions=ceil(mul(fdiv(words(graball(%0,%1)),words(%0)),100))
+&FUN_SUCCESSCHART FS3 Skill Functions=div(mul(100,words(graball(%0,%1))),words(%0)
 
 @@ --------------------------
 @@ FUN_COUNT_SUCCESSES
@@ -117,8 +117,9 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 @@
 @@ %q0 = ruling attr rating
 @@ %q1 = ability rating
+@@ %q2 = die roll
 @@ --------------------------
-&FUN_ROLL_ABILITY FS3 Skill Functions=localize([setq(0,u(fun_ruling_attr_mod,%0,%1,%3))][setq(1,ability_level(%0,%1))][u(FUN_ROLL_DICE,%q0,add(%q1,%2))])
+&FUN_ROLL_ABILITY FS3 Skill Functions=localize([setq(0,u(fun_ruling_attr_mod,%0,%1,%3))][setq(1,ability_level(%0,%1))][setq(2,u(FUN_ROLL_DICE,add(%q0,%q1,%2)))][u(fun_roll_result,%q2,%q0)])
 
 @@ --------------------------
 @@ FUN_RULING_ATTR_MOD
@@ -137,14 +138,20 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 @@ --------------------------
 @@ FUN_ROLL_DICE
 @@ Performs the raw die rolls for an ability roll.
-@@ %0 = attribute
-@@ %1 = skill
+@@ %0 = number of dice
+@@ --------------------------
+&FUN_ROLL_DICE FS3 Skill Functions=switch(%0,0,1,die(%0,8,1))
+
+@@ --------------------------
+@@ FUN_ROLL_RESULT
+@@ Performs the raw die rolls for an ability roll.
+@@ %0 = raw dice roll
+@@ %1 = attribute level
 @@
-@@ %q0 = raw dice result
 @@ %q1 = # successes
 @@ %q2 = # ones
 @@ --------------------------
-&FUN_ROLL_DICE FS3 Skill Functions=localize([setq(0,die(add(%0,%1),8,1))][setq(1,fold(fun_count_successes,%q0,0))][setq(2,words(graball(%q0,1)))][switch(%q1,0,switch(1,gte(%q2,%0),-1,0),%q1)])
+&FUN_ROLL_RESULT FS3 Skill Functions=localize([setq(1,fold(fun_count_successes,%0,0))][setq(2,words(graball(%0,1)))][switch(%q1,0,switch(1,gte(%q2,%1),-1,0),%q1)])
 
 
 @@ --------------------------
@@ -165,7 +172,8 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 @@ --------------------------
 @@ FUN_ABILITY_TYPE
 @@ Ability type for a given skill.
-@@ %0 = ability
+@@ %0 = player db# (no longer used, there for legacy reasons)
+@@ %1 = ability
 @@
 @@ %q0 = unpretty ability name
 @@ --------------------------
@@ -258,7 +266,7 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 @@ %0 = ability
 @@ %1 = type (skill or attribute)
 @@ --------------------------
-&FUN_IS_VALID_RATING FS3 Skill Functions=and(isnum(%0),lte(%0,switch(%1,skill,12,4),gte(%0,1))
+&FUN_IS_VALID_RATING FS3 Skill Functions=and(isnum(%0),lte(%0,switch(%1,skill,12,4)),gte(%0,switch(%1,skill,0,1)))
 
 @@ --------------------------
 @@ FUN_LEVEL_BRACKET
@@ -283,7 +291,7 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 @@
 @@ %q0 = Stores ansi|text for the desired success level
 @@ --------------------------
-&FUN_PRETTY_SUCCESS_LEVEL FS3 Skill Functions=localize([setq(0,switch(%0,-1,hR|Embarassing Failure,0,hr| Failure,1,g|Success,<4,hg|Good Success,<6,hG|Great Success,hm|Amazing Success))][ansi(before(%q0,|),after(%q0,|))])
+&FUN_PRETTY_SUCCESS_LEVEL FS3 Skill Functions=localize([setq(0,switch(%0,-1,hR|Embarassing Failure,0,hr|Failure,1,g|Success,<4,hg|Good Success,<6,hG|Great Success,hm|Amazing Success))][ansi(before(%q0,|),after(%q0,|))])
 
 @@ --------------------------
 @@ FUN_PRINT_LEVEL
@@ -360,7 +368,7 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 @@ %1 = B's name
 @@ %2 = result code
 @@ --------------------------
-&FUN_PRETTY_OPPOSED_RESULT FS3 Skill Functions=[switch(before(%2,|),D,ansi(hy,DRAW),F,ansi(hr,Both Fail.),A,ansi(c,%0 wins - ),B,ansi(c,%1 wins - ),error)][switch(after(%2,|),M,ansi(c,Marginal Victory),V,ansi(c,Victory),C,ansi(c,Crushing Victory))]
+&FUN_PRETTY_OPPOSED_RESULT FS3 Skill Functions=[switch(before(%2,|),D,ansi(hy,DRAW),F,ansi(hr,Both Fail.),A,ansi(c,%0 wins -%B),B,ansi(c,%1 wins -%B),error)][switch(after(%2,|),M,ansi(c,Marginal Victory),V,ansi(c,Solid Victory),C,ansi(c,Crushing Victory))]
 
 @@ --------------------------
 @@ FUN_HAS_QUIRK
@@ -471,31 +479,39 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 @describe FS3 Chargen Commands=Commands for setting up abilities in Chargen using the FS3 system.  See the FS3 skills command object for important copyright/license information.
 @set FS3 Chargen Commands = DARK
 
-&CMD-+ABILITY FS3 Chargen Commands=$+ability */*=*:think pemit(%#,switch(isnum(%2),0,ansi(hr,That is not a valid rating.),u(fun_set,[trim(%0)],%1,sub(%2,ability_level(%#,%1)))))
+&CMD-+ABILITY FS3 Chargen Commands=$+ability *=*:think pemit(%#,switch(isnum(%1),0,ansi(hr,That is not a valid rating.),u(fun_set,[trim(%0)],sub(%1,ability_level(%#,%0)))))
 
-&CMD-+ABILITY-ERROR FS3 Chargen Commands=$+ability *=*:think switch(%0,*/*,,[setq(0,u(#FS3SKILL_FUN/FUN_ABILITY_TYPE,%#,%0))]pemit(%#,switch(isnum(%1),0,ansi(hr,That is not a valid rating.),switch(%q0,background,ansi(hr,Remember to specify a type\, such as +raise background/Basketweaving.),u(fun_set,%q0,%0,sub(%1,ability_level(%#,%0))))))
-
-&CMD-+LOWER FS3 Chargen Commands=$+lower */*:think pemit(%#,u(fun_set,[trim(%0)],%1,-1))
-
-&CMD-+LOWER-ERROR FS3 Chargen Commands=$+lower *:think switch(%0,*/*,,[setq(0,u(#FS3SKILL_FUN/FUN_ABILITY_TYPE,%#,%0))]pemit(%#,switch(%q0,background,ansi(hr,Remember to specify a type\, such as +raise background/Basketweaving.),u(fun_set,%q0,%0,-1)))
+&CMD-+LOWER FS3 Chargen Commands=$+lower *:think pemit(%#,u(fun_set,[trim(%0)],-1))
 
 &CMD-+POINTS FS3 Chargen Commands=$+points:think pemit(%#,u(fun_display_points,%#))
 
-&CMD-+RAISE FS3 Chargen Commands=$+raise */*:think pemit(%#,u(fun_set,[trim(%0)],%1,1))
+&CMD-+RAISE FS3 Chargen Commands=$+raise *:think pemit(%#,u(fun_set,[trim(%0)],1))
 
-&CMD-+RAISE-ERROR FS3 Chargen Commands=$+raise *:think switch(%0,*/*,,[setq(0,u(#FS3SKILL_FUN/FUN_ABILITY_TYPE,%#,%0))]pemit(%#,switch(%q0,background,ansi(hr,Remember to specify a type\, such as +raise background/Basketweaving.),u(fun_set,%q0,%0,1)))
-
-&CMD-+RESET FS3 Chargen Commands=$+reset:think pemit(%#,ansi(hg,You reset your abilities.))[set(%#,attributes:[iter(lattr(#FS3SKILL_DB/attribute_*),[capstr(lcstr(after(##,_)))]:4)])][iter(langskills bgskills actionskills quirks,set(%#,##:))][set(%#,langskills:[xget(#FS3SKILL_DB,default_lang)]:7)]
+&CMD-+RESET FS3 Chargen Commands=$+reset:think pemit(%#,ansi(hg,You reset your abilities.))[set(%#,attributes:[iter(lattr(#FS3SKILL_DB/attribute_*),[capstr(lcstr(after(##,_)))]:2)])][iter(langskills bgskills actionskills quirks,set(%#,##:))][set(%#,langskills:[xget(#FS3SKILL_DB,default_lang)])]
 
 &CMD-+QUIRK-ADD FS3 Chargen Commands=$+quirk/add *:think [setq(0,xget(%#,quirks))]pemit(%#,switch(1,u(#FS3SKILL_FUN/fun_has_quirk,%#,%0),ansi(hr,You already have that quirk.),match(%0,*|*),ansi(hr,Quirks may not contain the '|' character.),ansi(hg,You add the %0 quirk.)[set(%#,quirks:%q0[switch(words(%q0,|),>0,|)][squish(%0)])][setq(z,u(fun_check_errors,%#))]))
 
 &CMD-+QUIRK-DELETE FS3 Chargen Commands=$+quirk/delete *:think [setq(0,xget(%#,quirks))]pemit(%#,switch(0,u(#FS3SKILL_FUN/fun_has_quirk,%#,%0),ansi(hr,You don't have that quirk.),ansi(hg,You remove the %0 quirk.)[set(%#,quirks:[setdiff(find_and_replace(%q0,squish(%0),,|),,|)])][setq(z,u(fun_check_errors,%#))]))
 
-&FUN_SET FS3 Chargen Commands=localize([setq(0,u(#FS3SKILL_FUN/fun_set_ability,%#,%0,%1,%2))][switch(%q0,1,[ansi(hg,You [switch(%2,>0,raise,lower)] the [prettify(%1)] ability by [abs(%2)] points.  It is now [ability_level(%#,%1)].)]%R[u(fun_display_points,%#)],ansi(hr,after(%q0,|)))])
+&CMD-+LANG-ADD FS3 Chargen Commands=$+lang/add *:think [setq(0,xget(%#,langskills))]pemit(%#,switch(1,u(#FS3SKILL_FUN/fun_has_language,%#,%0),ansi(hr,You already have that language.),match(%0,*|*),ansi(hr,Languages may not contain the '|' character.),[set(%#,langskills:%q0[switch(words(%q0,|),>0,|)][squish(%0)])]ansi(hg,You add the %0 language.%R[u(fun_display_points,%#)])))
+
+&CMD-+LANG-DELETE FS3 Chargen Commands=$+lang/delete *:think [setq(0,xget(%#,langskills))]pemit(%#,switch(0,u(#FS3SKILL_FUN/fun_has_language,%#,%0),ansi(hr,You don't have that language.),[set(%#,langskills:[setdiff(find_and_replace(%q0,squish(%0),,|),,|)])]ansi(hg,You remove the %0 language.%R[u(fun_display_points,%#)])))
+
+@@ --------------------------
+@@ FUN_SET
+@@ Local utility for setting abilities.
+@@
+@@ %0 = ability
+@@ %1 = offset to current rating
+@@
+@@ %q0 = result of setting the ability: 1 or 0|error
+@@ %q1 = ability type
+@@ --------------------------
+&FUN_SET FS3 Chargen Commands=localize([setq(1,u(#FS3SKILL_FUN/fun_ability_type,%#,%0))][setq(0,u(#FS3SKILL_FUN/fun_set_ability,%#,%q1,%0,%1))][switch(%q0,1,[ansi(hg,You [switch(%1,>0,raise,lower)] the [prettify(%0)] ability by [abs(%1)] points.  It is now [ability_level(%#,%0)].)]%R[u(fun_display_points,%#)],ansi(hr,after(%q0,|)))])
 
 @STARTUP FS3 Chargen Commands=@set me=!no_command
 
-&FUN_AVAILABLE_POINTS FS3 Chargen Commands=add(xget(#FS3SKILL_DB,starting_points),xget(%0,bonus_points))
+&FUN_AVAILABLE_POINTS FS3 Chargen Commands=add(u(#FS3SKILL_DB/starting_points,%0),xget(%0,bonus_points))
 
 &CHECK_1 FS3 Chargen Commands=gte(u(fun_points_left,%0),0)
 &ERROR_1 FS3 Chargen Commands=You have spent too many points.
@@ -521,21 +537,54 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 &CHECK_8 FS3 Chargen Commands=not(match(iter(lattr(#FS3SKILL_DB/attribute_*),gt(ability_level(%0,after(##,_)),0),,),*0*))
 &ERROR_8 FS3 Chargen Commands=You can't have attributes at 0.
 
-&CHECK_9 FS3 Chargen Commands=localize([setq(0,0)][iter(xget(%0,langskills),switch(after(##,:),>6,setq(0,1)),,)]%q0)
-&ERROR_9 FS3 Chargen Commands=You must be a native speaker (rating 7) in at least one language.
+&CHECK_9 FS3 Chargen Commands=gte(words(xget(%0,langskills),|),1)
+&ERROR_9 FS3 Chargen Commands=You must have at least one language.
 
-&CHECK_10 FS3 Chargen Commands=localize([setq(0,0)][iter(xget(%0,langskills),switch(after(##,:),>9,setq(0,1)),,)]not(%q0))
-&ERROR_10 FS3 Chargen Commands=Language skills have a max value of 9.  7 represents a native speaker.  8 and 9 are for those with advanced training, like linguists and teachers.
+&CHECK_10 FS3 Chargen Commands=1
+&ERROR_10 FS3 Chargen Commands=This error check was removed.  Reserved for future use.
 
+@@ --------------------------
+@@ FUN_CHECK_ERRORS
+@@ Check all the CHECK_XXX error conditions.
+@@
+@@ %0 = player db
+@@
+@@ %q0 = count of errors
+@@ %q1 = error messages
+@@ 
+@@ Returns 0|error message or 1|<blank>
+@@ Also sets the CG_ERRORS attr to same as a side effect.
+@@ --------------------------
 &FUN_CHECK_ERRORS FS3 Chargen Commands=localize([setq(0,1)][setq(1,)][iter(lattr(me/check_*),switch(u(check_#@,%0),0,[setq(0,0)][setq(1,%q1%R[u(error_#@)])]),,)][set(%0,cg_errors:[squish(%q0|%q1)])][squish(%q0|%q1)])
 
 &FUN_DISPLAY_POINTS FS3 Chargen Commands=localize([setq(0,u(fun_points_left,%0))][setq(1,u(FUN_CHECK_ERRORS,%0))][setq(2,xget(#FS3SKILL_DB,max_bonus_points_request))][line()]%RYou have spent [ansi(h,u(fun_spent_points,%0))] of your [ansi(h,u(fun_available_points,%0))] available points.%R[switch(%q0,<0,ansi(hr,[abs(%q0)] points overspent.),ansi(hg,%q0 points remaining.))][switch(1,and(lte(%q0,5),gt(%q2,0)),ansi(c,%RYou can +request up to %q2 extra points. Just explain why you need them.))][switch(%q1,0*,%R%R[ansi(hr,ERRORS:%R)][after(%q1,|)])]%R[line()])
 
 &FUN_POINTS_LEFT FS3 Chargen Commands=sub(u(fun_available_points,%0),u(fun_spent_points,%0))
 
-&FUN_SPENT_ON FS3 Chargen Commands=localize([setq(0,0)][iter(xget(%0,%1),setq(0,add(%q0,after(itext(0),:))),,)]%q0)
 
-&FUN_SPENT_POINTS FS3 Chargen Commands=localize([setq(0,0)][iter(attributes actionskills langskills bgskills,setq(0,add(%q0,u(fun_spent_on,%0,##))),,)]%q0)
+@@ --------------------------
+@@ FUN_SPENT_ON
+@@ Points spent on abilities based on their rating.
+@@
+@@ %0 = player db
+@@ %1 = storage attribute (bgskills, attributes, etc.)
+@@
+@@ %q0 = num of rating points
+@@ --------------------------
+&FUN_SPENT_ON FS3 Chargen Commands=localize([setq(0,0)][iter(xget(%0,%1),setq(0,add(%q0,after(itext(0),:))),,)]%q0))
+
+@@ --------------------------
+@@ FUN_SPENT_POINTS
+@@ Total points spent.
+@@ Abilities are counted individually
+@@ Languages cost 2 points each
+@@ Quirks are free
+@@
+@@ %0 = player db
+@@
+@@ %q0 = num of rating points
+@@ --------------------------
+&FUN_SPENT_POINTS FS3 Chargen Commands=localize([setq(0,0)][iter(attributes actionskills bgskills,setq(0,add(%q0,u(fun_spent_on,%0,##))),,)][add(%q0,mul(2,words(xget(%0,langskills),|)))])
 
 @startup FS3 Chargen Commands=@set me=!NO_COMMAND
 
@@ -657,9 +706,9 @@ think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.,FS3_STORAGE)
 &FUN_DISPLAY_SHEET_PAGE0 FS3 Skill Data=[line()]%R[center([xget(%0,fullname)] \([name(%0)]\),78)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_ATTRS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_ACTSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_BGSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_LANGSKILLS,%0)]%R%R[u(#FS3SKILL_FUN/FUN_DISPLAY_QUIRKS,%0)]%R%R[ljust([ansi(hc,Experience Points:)] [xget(%0,XP)],38)][ansi(hc,Luck Points:)] [xget(%0,LUCK_POINTS)]%R[line_with_text(More on +sheet2)]
 &FUN_DISPLAY_SHEET_PAGE2 FS3 Skill Data=[line()]%R[padstr(ansi(h,Full Name:),15)][xget(%0,fullname)]%R[padstr(ansi(h,Age:),15)][age(%0)] \([birthdate(%0)]\)%R[padstr(ansi(h,Faction:),15)][xget(%0,faction)]%R[padstr(ansi(h,Org:),15)][xget(%0,org)]%R[padstr(ansi(h,Position:),15)][xget(%0,position)]%R[padstr(ansi(h,Rank:),15)][xget(%0,rank)]%R[line2()]%R[u(%0/describe)]%R[line()]
 
-&MAX_HIGH_ABILITIES FS3 Skill Data=5
+&MAX_HIGH_ABILITIES FS3 Skill Data=4
 &MAX_POINTS_ACTION FS3 Skill Data=32
-&MAX_POINTS_ATTRIBUTES FS3 Skill Data=32
+&MAX_POINTS_ATTRIBUTES FS3 Skill Data=15
 &STARTING_POINTS FS3 Skill Data=80
 &HIGH_ABILITY_LEVEL FS3 Skill Data=7
 &MAX_QUIRKS FS3 Skill Data=4

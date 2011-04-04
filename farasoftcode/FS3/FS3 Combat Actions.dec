@@ -65,7 +65,7 @@ think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,6.0,FS3Combat Pre
 @@ Displays a damage meter that fills up as you become more hurt.
 @@ --------------------------
 
-&FUN_DMG_METER FS3Combat Action Commands=switch(%0,>80,ansi(hR,XXXXX),>60,ansi(hr,XXXX.),>40,ansi(hr,XXX..),>20,ansi(hy,XX...),>0,ansi(hg,X....),.....)
+&FUN_DMG_METER FS3Combat Action Commands=switch(%0,>3,ansi(hR,XXXXX),>2,ansi(hr,XXXX.),>1,ansi(hr,XXX..),>0.5,ansi(hy,XX...),>0,ansi(hg,X....),.....)
 
 @@ --------------------------
 @@ FUN_IS_IN_COMBAT

@@ -74,15 +74,15 @@ For example, to say that they can only have 4 abilities at 7 or higher:
   &MIN_BGSKILLS Skill Data=2
 
 * The number of points they start with in chargen.  
-Bear in mind that the system will automatically give them the average rating (5) in every attribute 
-and the default language at veteran (7), but this counts towards their overall point total!   
-So make sure they have enough points to include sensible attribute and language ratings.
+Bear in mind that the system will automatically give them the average rating in every attribute 
+and the default language, but this counts towards their overall point total!   
+This is executed like a function, with the player DB# passed in as %0, so you could assign different
+point values based on age, or a character tier, or whatever.
 
   &STARTING_POINTS Skill Data=80
 
 * The system will let you assign bonus points to players above and beyond the starting points.  
-You can do this manually or automatically (based on faction or position or whatever) 
-just by setting the BONUS_POINTS attribute on the player.  
+You can do this manually just by setting the BONUS_POINTS attribute on the player.  
 You can also tell players that it's ok to +request extra points by configuring the 
 max # of points they can request.  If you set this to 0 they will not see a message about extra points at all.
 

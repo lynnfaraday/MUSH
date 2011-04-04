@@ -38,6 +38,22 @@ Cookies / Luck
 
 FS3 Skills / Chargen
 ~~~~~~~~~~~~~~~~~~~~~
+FS3 skill rolls now use a brand new dice mechanic, similar to New WoD and Shadowrun.  Rolls are attribute+skill using d8's, counting successes.  Modifiers give more/fewer dice to roll.
+
+Attributes are now rated from 1-4.  This hopefully avoids confusion, since everyone kept thinking they were equivalent to skills, and fits better with the new dice mechanic.
+
+Action and Background skill ratings have different names to hopefully avoid confusion.  
+	1-3 is still for students/hobbyists ("Novice")
+	4-6 is still a typical professional level ("Proficient")
+	7-9 is for very experienced/talented folks ("Veteran") 
+	10-12 is for experts ("Master").   
+
+True "Rookies", who are fully trained but still at the beginning of their experience (such as a first-year doctor or pilot) could be at the 3-4 rating depending on their talent.
+
+Language skills no longer have ratings.  This is intended to simplify chargen, and de-emphasize languages.   Being multi-lingual was crazy expensive under the old system.
+
+Since language skills don't have ratings, the chargen ability room commands are greatly simplified.
+
 Removed +roll/casual because it was confusing and useless.  
 
 Age/birthdate functions moved to IC Time system.
@@ -53,6 +69,8 @@ FS3 Combat
 *** Removed the 'fit for duty' and similar status displays.  They never really fit the wound modifiers in the way I intended them to, and made even less sense after tweaking the wound modifiers this time around.
 
 *** Range is simplified; you now just specify short, medium or long.  The range listed in the weapon stats is just a guide to help you figure out what the range bracket should be.
+
+* KO rolls are now an ability roll not a flat percentage
 
 * Hero factor has been removed; it never really worked as intended
 

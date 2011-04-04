@@ -127,7 +127,17 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@   %qz = temp vehicle register
 @@ --------------------------
 
-&FUN_REMOVE FS3Combat Instance Parent=[localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))][u(#FS3COMBAT_CMD_DMG/fun_clear_mock,%0)][switch([setq(z,u(fun_combatstat,%0,vehicle))]t(%qz),1,[set(me,vehicle_%qz:[remove(lcstr(v(vehicle_%qz)),lcstr(unprettify(%0)))])][switch(words(v(vehicle_%qz)),0,[wipe(me/vehicle_%qz)][u(#FS3COMBAT_CMD_DMG/fun_clear_mock,%qz)][switch(vehiclestat(%qz,temp),1,u(#FS3COMBAT_CMD_VEH/fun_delete_vehicle,%qz))])])][switch(1,isplayer(%0),wipe([pmatch(%0)]/combat),switch(npcstat(%0,temp),1,u(#FS3COMBAT_CMD_NPC/fun_delete_npc,%0)))][wipe(me/stat_[unprettify(%0)]`**)][wipe(me/stat_[unprettify(%0)])][u(fun_untarget,%0)][u(fun_combat_log,Removing %0 - vehicle %qz=[vehiclestat(%qz,temp)] [u(fun_vehicle_combat_num,%qz)].)])]
+&FUN_REMOVE FS3Combat Instance Parent=[localize([u(FUN_CLEAR_SUBDUING,%0)][u(#FS3COMBAT_CMD_DMG/fun_clear_mock,%0)][setq(z,u(fun_combatstat,%0,vehicle))][switch(t(%qz),1,[u(FUN_REMOVE_PERSON_FROM_VEHICLE,%0,%qz)][switch(words(v(vehicle_%qz)),0,u(FUN_REMOVE_VEHICLE,%qz))])][switch(1,isplayer(%0),wipe([pmatch(%0)]/combat),switch(npcstat(%0,temp),1,u(#FS3COMBAT_CMD_NPC/fun_delete_npc,%0)))][wipe(me/stat_[unprettify(%0)]`**)][wipe(me/stat_[unprettify(%0)])][u(fun_untarget,%0)][u(fun_combat_log,Removing %0 - vehicle %qz=[vehiclestat(%qz,temp)] [u(fun_vehicle_combat_num,%qz)].)])]
+
+@@ %0 = Person
+&FUN_CLEAR_SUBDUING FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,subduing))][switch(t(%q0),1,u(fun_mod_combatstat,%q0,subduedby,))])
+
+@@ %0 = Person
+@@ %1 = Vehicle
+&FUN_REMOVE_PERSON_FROM_VEHICLE FS3Combat Instance Parent=set(me,vehicle_%1:[remove(lcstr(v(vehicle_%1)),lcstr(unprettify(%0)))
+
+@@ %0 = Vehicle
+&FUN_REMOVE_VEHICLE FS3Combat Instance Parent=[wipe(me/vehicle_%0)][u(#FS3COMBAT_CMD_DMG/fun_clear_mock,%0)][switch(vehiclestat(%0,temp),1,u(#FS3COMBAT_CMD_VEH/fun_delete_vehicle,%0))]
 
 
 @@ ==================================================================================================
@@ -137,7 +147,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 
 @@ --------------------------
 @@ FUN_DAMAGEMOD
-@@ Gets the damage modifier, which is for the person (if a soldier) or them + their  (for pilot/passenger)
+@@ Gets the damage modifier, which is for the person (if a soldier) or them + their vehicle (for pilot/passenger)
 @@ %0 = name
 @@ --------------------------
 
@@ -344,7 +354,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@ %0 = weapon name (no longer used)
 @@ %1 = range (short, medium, long)
 @@ --------------------------
-&FUN_RANGE_MOD FS3Combat Instance Parent=switch(%1,short,0,medium,-15,long,-30,0)
+&FUN_RANGE_MOD FS3Combat Instance Parent=switch(%1,short,0,medium,-1,long,-3,0)
 
 @@ --------------------------
 @@ FUN_ACTION_FULLAUTO
@@ -466,7 +476,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@   %qz = damage (set by FUN_DO_HIT)
 @@ --------------------------
 
-&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] [switch(1,lt(%qa,0),and MISSES!,lt(%qa,%qd),but [switch(weaponstat(%qw,wpntype),Melee,[prettify(lcstr(%qt))] DODGES!,MISSES!)],[u(fun_do_hit,%0,%1,%2,%3,%4)])])][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))])
+&FUN_DO_ATTACK  FS3Combat Instance Parent=localize([setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][u(fun_combat_msg,[prettify(lcstr(%0))] attacks [prettify(lcstr(%qt))] with [prettify(%qw)] [switch(1,lte(%qa,0),and MISSES!,lt(%qa,%qd),but [switch(weaponstat(%qw,wpntype),Melee,[prettify(lcstr(%qt))] DODGES!,MISSES!)],[u(fun_do_hit,%0,%1,%2,%3,%4)])])][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))])
 
 @@ --------------------------
 @@ FUN_DO_HIT
@@ -552,7 +562,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@ %0 = zone number
 @@   Returns in the form minshrapnel:maxshrapnel
 @@ --------------------------
-&FUN_SHRAPNEL_FOR_ZONE FS3Combat Instance Parent=switch(%0,0,5:10,1,1:5,2,0:2,3,0:1,0:0)
+&FUN_SHRAPNEL_FOR_ZONE FS3Combat Instance Parent=switch(%0,0,4:16,1,1:6,2,1:4,3,0:2,0:0)
 
 @@ --------------------------
 @@ FUN_LETHAL_MOD_FOR_ZONE
@@ -617,7 +627,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@ %3 = armor lethal. mod
 @@ --------------------------
 
-&FUN_RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,die(2,50))][setq(1,add(%q0,switch(%0,critical,30,vital,15,normal,0),%1,-%2,-%3))][switch(%q1,<41,L,<81,M,<100,S,C)][u(fun_combat_log,DAMAGE: hitloc=%0 wpn=%1 cov=%2 arm=%3 random=%q0 modified=%q1)])
+&FUN_RANDOM_DAMAGE FS3Combat Instance Parent=localize([setq(0,die(1,100))][setq(1,add(%q0,switch(%0,critical,30,vital,15,normal,0),%1,-%2,-%3))][switch(%q1,<41,L,<81,M,<100,S,C)][u(fun_combat_log,DAMAGE: hitloc=%0 wpn=%1 cov=%2 arm=%3 random=%q0 modified=%q1)])
 
 @@ --------------------------
 @@ FUN_ROLL_ATTACK
@@ -639,13 +649,13 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@ - Suppression value x 5
 @@ - Weapon accuracy
 @@ - Special modifiers
-@@ - Aim modifier (30)
+@@ - Aim modifier (3)
 @@ - Stance modifier
-@@ - Luck modifier (50 if spending luck on attack)
-@@ - Melee modifier (30)
+@@ - Luck modifier (5 if spending luck on attack)
+@@ - Melee modifier (3)
 @@ --------------------------
 
-&FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),5)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mod),switch(u(fun_combatstat,%0,lastaim),%1,30,0),u(fun_stance_mod,%0,attacker),u(fun_luck_mod,%0,attack),switch(u(fun_weaponstat,%0,wpntype),Melee,30,0))
+&FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),5)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mod),switch(u(fun_combatstat,%0,lastaim),%1,3,0),u(fun_stance_mod,%0,attacker),u(fun_luck_mod,%0,attack),switch(u(fun_weaponstat,%0,wpntype),Melee,3,0))
 
 
 @@ --------------------------
@@ -664,11 +674,11 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 
 @@ --------------------------
 @@ FUN_GET_SKILL
-@@ Gets the appropriate skill level for a PC or NPC.  If neither, defaults to 5.
+@@ Gets the appropriate skill level for a PC or NPC.  If neither, defaults to 4.
 @@ %0 = name
 @@ %1 = skill name
 @@ --------------------------
-&FUN_GET_SKILL FS3Combat Instance Parent=switch(1,isnum(%1),%1,isnpc(%0),npcstat(%0,skill),isplayer(%0),ability_level(pmatch(%0),%1),5)
+&FUN_GET_SKILL FS3Combat Instance Parent=switch(1,isnum(%1),%1,isnpc(%0),npcstat(%0,skill),isplayer(%0),ability_level(pmatch(%0),%1),4)
 
 @@ --------------------------
 @@ FUN_DEFENSE_MODS
@@ -678,12 +688,12 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@ - Damage modifier
 @@ - Special modifiers
 @@ - Stance mods
-@@ - Luck mods (50 if spending luck on defense)
-@@ - Attacker melee (30)
+@@ - Luck mods (5 if spending luck on defense)
+@@ - Attacker melee (3)
 @@ - Defender vehicle dodge bonus
 @@ --------------------------
 
-&FUN_DEFENSE_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%1)],u(fun_combatstat,%1,mod),u(fun_stance_mod,%1,defender),u(fun_luck_mod,%1,defense),switch(u(fun_weaponstat,%0,wpntype),Melee,30,0),switch(u(fun_is_in_vehicle,%1),1,u(fun_vehiclestat,%1,dodge)))
+&FUN_DEFENSE_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%1)],u(fun_combatstat,%1,mod),u(fun_stance_mod,%1,defender),u(fun_luck_mod,%1,defense),switch(u(fun_weaponstat,%0,wpntype),Melee,3,0),switch(u(fun_is_in_vehicle,%1),1,u(fun_vehiclestat,%1,dodge)))
 
 
 @@ --------------------------
@@ -698,9 +708,9 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 
 @@ Note: Cover and out of sight are handled specially so they don't have direct modifiers
 
-&STANCEMOD_ATTACKER FS3Combat Instance Parent=normal:0 banzai:+30 evade:-50 cautious:-15 cover:0 outofsight:0
+&STANCEMOD_ATTACKER FS3Combat Instance Parent=normal:0 banzai:+3 evade:-3 cautious:-1 cover:0 outofsight:0
 
-&STANCEMOD_DEFENDER FS3Combat Instance Parent=normal:0 banzai:-50 evade:+30 cautious:+15 cover:0 outofsight:0
+&STANCEMOD_DEFENDER FS3Combat Instance Parent=normal:0 banzai:-3 evade:+3 cautious:+1 cover:0 outofsight:0
 
 @@ --------------------------
 @@ FUN_LUCK_MOD
@@ -709,7 +719,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@ %1 = attack, defense or initative
 @@ --------------------------
 
-&FUN_LUCK_MOD FS3Combat Instance Parent=switch(u(fun_combatstat,%0,luck),%1,50,0)
+&FUN_LUCK_MOD FS3Combat Instance Parent=switch(u(fun_combatstat,%0,luck),%1,5,0)
 
 
 @@ --------------------------
@@ -724,6 +734,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@ --------------------------
 
 &FUN_ARMOR_MOD FS3Combat Instance Parent=localize([setq(0,u(fun_armorstat,%0,protection))][setq(1,u(fun_armorstat,%0,hitloc))][u(fun_combat_log,ARMOR: target=%0 hitloc=%1 protect=%q0)][switch(0,t(%q0),0,match(%q1,%1),0,u(FUN_PROTECT_MOD,weaponstat(%2,pen),%q0))])
+
 @@ --------------------------
 @@ FUN_COVER_MOD
 @@ Determines the lethality modifier based on cover.
@@ -737,6 +748,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@ --------------------------
 
 &FUN_COVER_MOD FS3Combat Instance Parent=switch(0,strmatch(u(fun_combatstat,%0,stance),cover),0,lt(%1,3),0,lte(rand(1,100),75),0,u(fun_protect_mod,weaponstat(%2,pen),4))
+
 @@ --------------------------
 @@ FUN_PROTECT_MOD
 @@ Figures out how much to modify lethality based on the ratio between the protection and penetration.
@@ -765,7 +777,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,6.0,FS3Com
 @@   %q1 = random roll
 @@   %q2 = num of hits
 @@ --------------------------
-&FUN_DO_CREW_DAMAGE FS3Combat Instance Parent=localize([setq(0,u(fun_crew_damage_chance,%0,%1,%2))][iter(v(vehicle_%0),[setq(1,rand(100))][setq(2,rand(1,switch(%1,C,3,S,2,1)))][u(fun_combat_log,CREW: ## veh=%0 dmg=%1 hitloc=%2 dmgchance=%q0 roll=%q1 numhits=%q2)][switch(lt(%q1,%q0),1,iter(lnum(1,%q2),u(fun_combat_msg,CREW HIT! [prettify(lcstr(##))] [u(fun_auto_attack,##,Shrapnel,switch(%1,C,10,S,5,0))])))])])
+&FUN_DO_CREW_DAMAGE FS3Combat Instance Parent=localize([setq(0,u(fun_crew_damage_chance,%0,%1,%2))][iter(v(vehicle_%0),[setq(1,rand(100))][setq(2,rand(1,switch(%1,C,4,S,2,1)))][u(fun_combat_log,CREW: ## veh=%0 dmg=%1 hitloc=%2 dmgchance=%q0 roll=%q1 numhits=%q2)][switch(lt(%q1,%q0),1,iter(lnum(1,%q2),u(fun_combat_msg,CREW HIT! [prettify(lcstr(##))] [u(fun_auto_attack,##,Shrapnel,switch(%1,C,10,S,5,0))])))])])
 
 @@ --------------------------
 @@ FUN_CREW_DAMAGE_CHANCE
