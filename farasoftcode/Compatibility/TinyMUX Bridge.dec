@@ -1,0 +1,11 @@
+@create TinyMUX Bridge
+
+@@ %0 = name
+&FUN_FIND_OBJECTS_BY_NAME TinyMUX Bridge=search(eobject=\[strmatch(name(##),%0)\])
+&FUN_FIND_ROOMS_BY_NAME TinyMUX Bridge=search(eroom=\[strmatch(name(##),%0)\])
+
+
+&FUN_ALL_PLAYERS TinyMUX Bridge=search(type=player)
+
+@@ %0 = type
+&FUN_SEARCH_ALL PennMUSH Bridge=search(type=%0)

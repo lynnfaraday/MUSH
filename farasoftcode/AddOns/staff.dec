@@ -18,13 +18,13 @@ think install_create(STAFF_CMD,Staff Commands,1,0,6.0,Staff-only commands.)
 @STARTUP Staff Commands=@set me=!no_command
 &ISSTAFF Staff Commands=isstaff(%#)
 
-&CMD-+FINDSITE Staff Commands=$+findsite *:think pemit(%#,[setq(0,switch(t(pmatch(%0)),1,xget(pmatch(%0),lastsite),%0))][setq(1,mid(%q0,0,4))][squish(iter(lsearch(all,type,player),switch(1,strmatch(xget(##,lastsite),*%q0*),setq(2,%q2##%B),strmatch(xget(##,lastsite),*%q1*),setq(3,%q3##%B))))][line()]%R[ansi(hr,Search String:  %q0%R)]%R[ansi(hg,Exact Matches:)][iter(%q2,%R[name(##)] - [xget(##,lastsite)])]%R%R[ansi(hb,Partial Matches:)][iter(%q3,%R[name(##)] - [xget(##,lastsite)])]%R[line()]
-&FUN_FINDSITE Staff Commands=[setq(0,switch(t(pmatch(%0)),1,xget(pmatch(%0),lastsite),%0))][iter(lsearch(all,type,player),switch(strmatch(xget(##,lastsite),*%q0*),1,%R[name(##)] - [xget(##,lastsite)]))]
+&CMD-+FINDSITE Staff Commands=$+findsite *:think pemit(%#,[setq(0,switch(t(pmatch(%0)),1,xget(pmatch(%0),lastsite),%0))][setq(1,mid(%q0,0,4))][squish(iter(all_players(),switch(1,strmatch(xget(##,lastsite),*%q0*),setq(2,%q2##%B),strmatch(xget(##,lastsite),*%q1*),setq(3,%q3##%B))))][line()]%R[ansi(hr,Search String:  %q0%R)]%R[ansi(hg,Exact Matches:)][iter(%q2,%R[name(##)] - [xget(##,lastsite)])]%R%R[ansi(hb,Partial Matches:)][iter(%q3,%R[name(##)] - [xget(##,lastsite)])]%R[line()]
+&FUN_FINDSITE Staff Commands=[setq(0,switch(t(pmatch(%0)),1,xget(pmatch(%0),lastsite),%0))][iter(all_players(),switch(strmatch(xget(##,lastsite),*%q0*),1,%R[name(##)] - [xget(##,lastsite)]))]
 &SHELP_+FINDSITE Staff Commands=The findsite command is used to find people who may be playing multiple characters.  If you give it a player name, it will find any other players who login from the same site.  If you give it a site name (or part of a name), it will find any other players whose site matches.  It will identify exact matches and also partial matches (which is important since many ISPs change IP addresses).%R%R +findsite <player name or site name>
 
-&CMD-+HOP Staff Commands=$+hop *:think [setq(0,lsearch(all,type,room))][setq(1,1)][squish(iter(%q0,switch(and(strmatch(name(##),*%0*),%q1),1,[setq(1,0)][tel(%#,##)])))][switch(%q1,1,pemit(%#,ansi(hr,That is not a valid location))]
-&CMD-+HOP-DIR Staff Commands=$+hop/dir:think [setq(0,lsearch(all,type,room))][setq(0,sort_names(%q0))]pemit(%#,iter(%q0,[switch(mod(#@,2),1,%R,space(5))][ljust(##,4)] - [ljust([name(##)],28)]))
-&CMD-+HOP-DIR-SEARCH Staff Commands=$+hop/dir *:think [setq(0,lsearch(all,eroom,\[strmatch(name(##),*%0*)\]))][setq(0,sort_names(%q0))]pemit(%#,iter(%q0,[switch(mod(#@,2),1,%R,space(5))][ljust(##,4)] - [ljust([name(##)],28)]))
+&CMD-+HOP Staff Commands=$+hop *:think [setq(0,search_all(room))][setq(1,1)][squish(iter(%q0,switch(and(strmatch(name(##),*%0*),%q1),1,[setq(1,0)][tel(%#,##)])))][switch(%q1,1,pemit(%#,ansi(hr,That is not a valid location))]
+&CMD-+HOP-DIR Staff Commands=$+hop/dir:think [setq(0,search_all(room))][setq(0,sort_names(%q0))]pemit(%#,iter(%q0,[switch(mod(#@,2),1,%R,space(5))][ljust(##,4)] - [ljust([name(##)],28)]))
+&CMD-+HOP-DIR-SEARCH Staff Commands=$+hop/dir *:think [setq(0,find_rooms_by_name(*%0*))][setq(0,sort_names(%q0))]pemit(%#,iter(%q0,[switch(mod(#@,2),1,%R,space(5))][ljust(##,4)] - [ljust([name(##)],28)]))
 &SHELP_+HOP Staff Commands=The +hop command is used to teleport easily to a particular room on the MUSH.  Instead of having to search for the DB#, you just give it the name and it does the searching.%R%RLimitations:  If two rooms have similar names, it will jump you to the first one that matches.   If your MUSH has too many rooms, you may need to increase your function invocation limit to make the command work.%R%R+hop <location name>%R+hop/dir - shows all locations and their DB#s.%R+hop/dir <search> - searches the +hop directory
 
 &CMD-+JOIN Staff Commands=$+join *:@remit loc(pmatch(%0))=[ansi(h,<OOC> %N is about to join your location.)];@wait 5={@fo %#=@tel loc(pmatch(%0));@remit loc(pmatch(%0))=[ansi(h,<OOC> %N hops into the room.)]}
@@ -34,7 +34,7 @@ think install_create(STAFF_CMD,Staff Commands,1,0,6.0,Staff-only commands.)
 &SHELP_SUMMON Staff Commands=The +summon command will teleport a player to your location.  It will set them OOC so that they can return to where they were by going IC.%R%R+summon <playername> - Summons a player.
 
 
-&cmd-+send Staff Commands=$+send *=*:think [setq(0,lsearch(all,type,room))][setq(1,0)][squish(iter(%q0,switch(and(strmatch(name(##),*%1*),not(%q1)),1,[setq(1,##)])))][switch(%q1,0,pemit(%#,ansi(hr,That is not a valid location.)),iter(%0,[setq(2,pmatch(##))][pemit(%#,[switch(0,t(%q2),ansi(hr,That is not a valid player.),match(xget(%q2,STATUS),IC),ansi(hr,## is not IC.),[ansi(hg,You send [name(%q2)] to [name(%q1)].)][remit(loc(%q2),[ansi(hy,<OOC> %N whisks [name(%q2)] away.)])][tel(%q2,%q1)])]))]
+&cmd-+send Staff Commands=$+send *=*:think [setq(0,search_all(room))][setq(1,0)][squish(iter(%q0,switch(and(strmatch(name(##),*%1*),not(%q1)),1,[setq(1,##)])))][switch(%q1,0,pemit(%#,ansi(hr,That is not a valid location.)),iter(%0,[setq(2,pmatch(##))][pemit(%#,[switch(0,t(%q2),ansi(hr,That is not a valid player.),match(xget(%q2,STATUS),IC),ansi(hr,## is not IC.),[ansi(hg,You send [name(%q2)] to [name(%q1)].)][remit(loc(%q2),[ansi(hy,<OOC> %N whisks [name(%q2)] away.)])][tel(%q2,%q1)])]))]
 &SHELP_+SEND Staff Commands=The +send command is a people-mover for teleporting a bunch of folks to a specific room.  Like +hop, it will attempt to find the first matching room name for what you give it.  If your MUSH has too many rooms, you may need to increase your function invocation limit to make the command work.%R%R+send <list of players>=<room name>
 
 
@@ -47,7 +47,7 @@ think install_create(STAFF_CMD,Staff Commands,1,0,6.0,Staff-only commands.)
 &CMD-NUKE-OVERRIDE Staff Commands=$+nuke/o *:@set %0=!safe;@fo %#=@nuke %0
 &SHELP_+NUKE Staff Commands=Shortcut for setting an object !safe and then nuking it.%R%R[ansi(h,+nuke/o <db#>)]
 
-&cmd-+grep Staff Commands=$+grep *:@pemit %#=iter(lsearch(all,type,object),switch(words(grep(##,*,%0)),>0,%R##: [grep(##,*,%0)]))
+&cmd-+grep Staff Commands=$+grep *:@pemit %#=iter(search_all(object),switch(words(grep(##,*,%0)),>0,%R##: [grep(##,*,%0)]))
 &SHELP_+GREP Staff Commands=Searches for a string on all objects in the database.  Warning: Computationally expensive.  Use with discretion.%R%R[ansi(h,+grep <string to search>)]
 
 

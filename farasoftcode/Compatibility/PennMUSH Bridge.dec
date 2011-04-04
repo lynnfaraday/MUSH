@@ -1,0 +1,12 @@
+
+@create PennMUSH Bridge
+
+@@ %0 = name
+&FUN_FIND_OBJECTS_BY_NAME PennMUSH Bridge=lsearch(all,eobjects,\[strmatch(name(##),%0)\])
+&FUN_FIND_ROOMS_BY_NAME PennMUSH Bridge=lsearch(all,erooms,\[strmatch(name(##),%0)\])
+
+
+&FUN_ALL_PLAYERS PennMUSH Bridge=lsearch(all,type,player)
+
+@@ %0 = type
+&FUN_SEARCH_ALL PennMUSH Bridge=lsearch(all,type,%0)
