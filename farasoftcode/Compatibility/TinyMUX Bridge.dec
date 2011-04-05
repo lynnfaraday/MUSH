@@ -1,23 +1,11 @@
 @create TinyMUX Bridge
-@set TinyMUX Bridge=INHERIT
-@set TinyMUX Bridge=!NO_COMMAND
-
-@@ TinyMUX doesn't really have a concept of a restricted function.  We will
-@@ compensate with softcoded checks.
-&CMD-+FUN TinyMUX Bridge=$+fun *=*/*:@function/privileged %0=%1/%2
-&CMD-+FUN-RESTRICT TinyMUX Bridge=$+fun/restrict *=*/*:@function/privileged %0=%1/%2
 
 @@ %0 = name
 &FUN_FIND_OBJECTS_BY_NAME TinyMUX Bridge=search(eobject=\[strmatch(name(##),%0)\])
 &FUN_FIND_ROOMS_BY_NAME TinyMUX Bridge=search(eroom=\[strmatch(name(##),%0)\])
 
-&FUN_MU_TYPE TinyMUX Bridge=TinyMux
 
 &FUN_ALL_PLAYERS TinyMUX Bridge=search(type=player)
 
 @@ %0 = type
-&FUN_SEARCH_ALL TinyMUX Bridge=search(type=%0)
-
-@startup TinyMUX Bridge=@dolist lattr(me/fun_*)={@function after(##,_)=[num(me)]/##}
-
-@tr TinyMUX Bridge/startup
+&FUN_SEARCH_ALL PennMUSH Bridge=search(type=%0)
