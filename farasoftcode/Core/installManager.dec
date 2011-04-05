@@ -12,7 +12,7 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\(INSTALL_MGR\),Install Manager created: DB# [create(Install Manager,10)].%RInstall DB created: DB# [create(Install DB,10)].%RInstall Object Storage created: DB# [create(Install Object Storage,10)])],[ansi(c,Install Manager already exists.  Updating.[setq(1,install_aliasdb(INSTALL_STORAGE))][setq(2,install_aliasdb(INSTALL_DB))][tel(%q0,%#)][tel(%q1,%#)][tel(%q2,%#)])])]
+think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\(INSTALL_MGR\),Install Manager created: DB# [create(Install Manager,0)].%RInstall DB created: DB# [create(Install DB,0)].%RInstall Object Storage created: DB# [create(Install Object Storage,0)],[ansi(c,Install Manager already exists.  Updating.[setq(1,install_aliasdb(INSTALL_STORAGE))][setq(2,install_aliasdb(INSTALL_DB))][tel(%q0,%#)][tel(%q1,%#)][tel(%q2,%#)])])]
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 
@@ -48,7 +48,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 
 &CMD-+UNINSTALL-CONFIRM Install Manager=$+uninstall/confirm:@switch 0[setq(0,u(fun_get_group_attrs,xget(%#,uninstall)))]=t(xget(%#,uninstall)),@pemit %#=ansi(hr,You are not uninstalling anything.),{@pemit %#=ansi(hc,You uninstall the [xget(%#,uninstall)] system.  Before reinstalling - you need to make sure the old objects are deleted.  Run the @purge command *TWICE* to clean up purged objects.)[wipe(%#/uninstall)];@dolist %q0={think setq(1,u(fun_get_dbref,after(##,_)));@wipe #INSTALL_DB/##;@tr %q1/tr-uninstall;@set %q1=!safe;@nuke %q1;think %R[u(FUN_UNINSTALL_HELP,%q1)]%R[u(FUN_UNINSTALL_CRON,%q1)]}}
 
-&CMD-+INSTALL-FIND-AND-REGISTER Install Manager=$+install/findreg *=*:@pemit %#=[setq(0,find_objects_by_name(%0))][switch(words(%q0),>1,[ansi(hR,More than one object found with name %0.  Picking the first one.)][setq(0,first(%q0))])][switch(%q0,,ansi(hr,Cannot find object %0.  Perhaps it's been renamed or was never installed.),ansi(c,Object %0 found and registered as %1.)[u(fun_register,%1,%q0)])]
+&CMD-+INSTALL-FIND-AND-REGISTER Install Manager=$+install/findreg *=*:@pemit %#=[setq(0,lsearch(all,eobjects,\[strmatch(name(##),%0)\]))][switch(words(%q0),>1,[ansi(hR,More than one object found with name %0.  Picking the first one.)][setq(0,first(%q0))])][switch(%q0,,ansi(hr,Cannot find object %0.  Perhaps it's been renamed or was never installed.),ansi(c,Object %0 found and registered as %1.)[u(fun_register,%1,%q0)])]
 
 &CMD-+INSTALL-DIR Install Manager=$+install/dir:@pemit %#=[line()]%R[ansi(h,Installed Systems)]%R[iter(lattr(#INSTALL_DB/OBJ_*),setq(0,%q0 [extract(##,2,1,_)]),,)][table(iter(setunion(%q0,),[capstr(lcstr(##))]..v[xget(install_aliasdb(after(first(lattr(#INSTALL_DB/OBJ_##*)),_)),version)]),20,78)]%R%R[ansi(h,Use +install/dir <name> for more info about a system.)]%R[line()]
 
@@ -99,7 +99,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @@  Creates a new object and then sets up the attributes on it.
 @@  Same params as FUN_INSTALL_CREATE.  Sets %q0 for use by other funs so DO NOT LOCALIZE
 @@ --------------------------
-&FUN_CREATE_AND_SETUP_OBJECT Install Manager=[setq(0,create(%1,10))][u(fun_register,%0,%q0)][tel(%q0,%#)][ansi(hc,Created object %0 with DB# %q0.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)]
+&FUN_CREATE_AND_SETUP_OBJECT Install Manager=[setq(0,create(%1,0))][u(fun_register,%0,%q0)][tel(%q0,%#)][ansi(hc,Created object %0 with DB# %q0.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)]
 
 @@ --------------------------
 @@  FUN_WIPE_COMMANDS

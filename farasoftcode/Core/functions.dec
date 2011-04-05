@@ -20,7 +20,7 @@ think install_create(GLOBFUN_DB,Global Utility Function Data,1,1,6.0,Customizabl
 &FUN_APPEND Global Utility Functions=localize([setq(0,xget(%0,%1))][set(%0,%1:%q0[switch(words(%q0),>0,switch(%3,,%B,%3))]%2)])
 &FUN_IS_REAL_PLAYER Global Utility Functions=and(pmatch(%0),not(match(xget(#GLOBFUN_DB,non_players),%0)))
 &FUN_WIKIFI Global Utility Functions=edit(regeditalli(%0,\\\[ansi\\\(\[^\,\]+\,\(\[^\\\)\]+\)\\\)\\\],'''$1'''),\%R,%R%R,\%r,%R%R,\%b,%b,\%B,%b,\%t,,\%T,)
-&FUN_REAL_PLAYERS Global Utility Functions=setdiff(all_players(),xget(#GLOBFUN_DB,non_players))
+&FUN_REAL_PLAYERS Global Utility Functions=setdiff(lsearch(all,type,player),xget(#GLOBFUN_DB,non_players))
 &FUN_CENTER_STR Global Utility Functions=[center(mid(%0,0,%1),%1)]
 &FUN_ESCAPE_CR Global Utility Functions=[edit(edit(%0,%r,\\\%r),%R,\\\%R)]
 &FUN_FIND_AND_REPLACE Global Utility Functions=replace(%0,match(%0,%1,%3),%2,%3)
