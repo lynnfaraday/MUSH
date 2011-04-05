@@ -12,7 +12,7 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\(INSTALL_MGR\),Install Manager created: DB# [create(Install Manager,0)].%RInstall DB created: DB# [create(Install DB,0)].%RInstall Object Storage created: DB# [create(Install Object Storage,0)],[ansi(c,Install Manager already exists.  Updating.[setq(1,install_aliasdb(INSTALL_STORAGE))][setq(2,install_aliasdb(INSTALL_DB))][tel(%q0,%#)][tel(%q1,%#)][tel(%q2,%#)])])]
+think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\(INSTALL_MGR\),Install Manager created: DB# [create(Install Manager,10)].%RInstall DB created: DB# [create(Install DB,10)].%RInstall Object Storage created: DB# [create(Install Object Storage,10)],[ansi(c,Install Manager already exists.  Updating.[setq(1,install_aliasdb(INSTALL_STORAGE))][setq(2,install_aliasdb(INSTALL_DB))][tel(%q0,%#)][tel(%q1,%#)][tel(%q2,%#)])])]
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 
@@ -99,7 +99,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @@  Creates a new object and then sets up the attributes on it.
 @@  Same params as FUN_INSTALL_CREATE.  Sets %q0 for use by other funs so DO NOT LOCALIZE
 @@ --------------------------
-&FUN_CREATE_AND_SETUP_OBJECT Install Manager=[setq(0,create(%1,0))][u(fun_register,%0,%q0)][tel(%q0,%#)][ansi(hc,Created object %0 with DB# %q0.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)]
+&FUN_CREATE_AND_SETUP_OBJECT Install Manager=[setq(0,create(%1,10))][u(fun_register,%0,%q0)][tel(%q0,%#)][ansi(hc,Created object %0 with DB# %q0.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)]
 
 @@ --------------------------
 @@  FUN_WIPE_COMMANDS
