@@ -12,8 +12,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(COOKIE_CMD,Cookie System,1,0,6.0,Cookies!)
-think install_create(COOKIE_DB,Cookie DB,0,1,6.0,Cookie database storage.)
+think install_create(COOKIE_CMD,Cookie System,1,0,7.0,Cookies!)
+think install_create(COOKIE_DB,Cookie DB,0,1,7.0,Cookie database storage.)
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

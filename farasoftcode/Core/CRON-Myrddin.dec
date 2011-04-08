@@ -10,7 +10,7 @@
 
 @pemit/silent %#=[ansi(hg,Beginning Cron System Installation.   Please wait until the Installation Complete message appears...)]%R
 
-think install_create(CRON_OBJ,CRON - Myrddin's mushcron,1,0,6.0,Cron object.)
+think install_create(CRON_OBJ,CRON - Myrddin's mushcron,1,0,7.0,Cron object.)
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 

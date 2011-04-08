@@ -11,8 +11,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(ALTS_CMD,Alts Commands,1,0,6.0,Alt tracker.)
-think install_create(ALTS_DB,Alts DB,0,1,6.0,Alt database.)
+think install_create(ALTS_CMD,Alts Commands,1,0,7.0,Alt tracker.)
+think install_create(ALTS_DB,Alts DB,0,1,7.0,Alt database.)
 
 
 &HELP_+ALTS Alts Commands=The +alts command lets you record who your alternate characters are.  Alts must be registered so that staff knows who's playing who.  Alt information may only be seen by staff.  If you want people to know your alts, put it in +finger in the PUBLICALTS attribute.%R%R[ansi(h,+alts/register <character>)] - Registers a character as your alt.%R[ansi(h,+alts/unregister <character>)] - Use if a character is no longer your alt.%R%TUsually you'd only use this if your char was @nuked or something.%R%R[ansi(h,+alts/mail)] - Shows if your alts have unread messages.

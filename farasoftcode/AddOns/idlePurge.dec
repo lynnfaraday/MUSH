@@ -12,7 +12,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(IDLE_CMD,Idle Purger,1,0,6.0,Idle purger.)
+think install_create(IDLE_CMD,Idle Purger,1,0,7.0,Idle purger.)
 
 @lock/Use Idle Purger=ISSTAFF/1
 &CMD-+IDLE-CONFIG Idle Purger=$+idle/config:think pemit(%#,[line()]%R[ansi(h,Idle Purger Configuration Options)]%R%R[ansi(hg,IDLETIME:)] [div(v(idletime),86400)] days%R[line()])]

@@ -11,8 +11,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(EVENTS_CMD,Events System,1,0,6.0,Events system.)
-think install_create(EVENTS_DB,Events Database,0,1,6.0,Events data storage.)
+think install_create(EVENTS_CMD,Events System,1,0,7.0,Events system.)
+think install_create(EVENTS_DB,Events Database,0,1,7.0,Events data storage.)
 
 &CMD-+EVENT-ALIAS Events System=$+event *:@fo %#=+events %0
 &CMD-+EVENTS Events System=$+events:think pemit(%#,[line_with_text(Events System)]%R[ansi(h,#%B%B%BEvent[space(40)]Date/Time)]%R[repeat(-,78)][iter(sortby(sortby_events,lattr(#EVENTS_DB/event_*)),[setq(0,switch(u(fun_event_distance,##),<0,hx,n))]%R[ljust(#@.,3)] [padstr(ansi(%q0,u(fun_get_name,##)),45)][ansi(%q0,u(fun_get_datetime,##))])]%R[line_with_text(+help +events)])

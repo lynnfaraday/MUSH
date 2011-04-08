@@ -11,8 +11,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(MAP_CMD,Map Commands,1,0,6.0,Map commands.)
-think install_create(MAP_DB,Map DB,0,1,6.0,Map data storage.)
+think install_create(MAP_CMD,Map Commands,1,0,7.0,Map commands.)
+think install_create(MAP_DB,Map DB,0,1,7.0,Map data storage.)
 
 
 &CMD-+MAP Map Commands=$+map:think pemit(%#,[line_with_text(xget(%l,area))]%r[u(#MAP_DB/map_[xget(%l,area)])][switch(hasattr(#MAP_DB,legend_[xget(%l,area)]),1,%r%rType [ansi(h,+map/legend)] for a legend to the numbers or abbreviations on the map.)]%r[line()])

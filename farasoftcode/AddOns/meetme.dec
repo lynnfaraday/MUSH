@@ -11,7 +11,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(MEETME_CMD,Meetme System,1,0,6.0,Meetme System.)
+think install_create(MEETME_CMD,Meetme System,1,0,7.0,Meetme System.)
 
 &CMD-+MDECLINE Meetme System=$+mdecline:@switch [setq(0,xget(%#,meetme))][t(%q0)]=0,@pemit %#=ansi(hr,No one has invited you to meet them.),{@pemit %q0=ansi(hy,%N has declined your invitation.);@pemit %#=ansi(hy,You decline [name(%q0)]'s invitation.);think set(%#,meetme:)}
 &CMD-+MEETME Meetme System=$+meetme *:think [setq(0,pmatch(%0))]pemit(%#,switch(0,t(%q0),ansi(hr,That is not a valid player.),u(fun_both_ic,%q0,%#),ansi(hr,You cannot invite someone unless you both are IC.),u(FUN_IS_IN_OBJECT,%q0),ansi(hr,You can't invite someone who is inside another object.),ansi(hg,You invite [name(%q0)] to meet you for RP.)[set(%q0,meetme:%#)][pemit(%q0,ansi(hg,<OOC> %N has invited you to meet them for RP at [xget(%l,area)] - [name(%l)].  You can +mjoin to join them, +msummon to bring them to you, or +mdecline to decline the invitation.))]))

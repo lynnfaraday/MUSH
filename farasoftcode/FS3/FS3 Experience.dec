@@ -11,8 +11,8 @@
 
 @pemit/silent %#=%R%R[ansi(hg,Creating objects.)]
 
-think install_create(FS3XP_CMD,FS3 XP Commands,1,0,6.0,FS3 XP Commands.)
-think install_create(FS3XP_DB,FS3 XP Data,0,1,6.0,FS3 XP Data.)
+think install_create(FS3XP_CMD,FS3 XP Commands,1,0,7.0,FS3 XP Commands.)
+think install_create(FS3XP_DB,FS3 XP Data,0,1,7.0,FS3 XP Data.)
 
 @pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
 

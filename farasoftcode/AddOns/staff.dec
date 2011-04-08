@@ -12,7 +12,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(STAFF_CMD,Staff Commands,1,0,6.0,Staff-only commands.)
+think install_create(STAFF_CMD,Staff Commands,1,0,7.0,Staff-only commands.)
 
 @lock/Use Staff Commands=ISSTAFF/1
 @STARTUP Staff Commands=@set me=!no_command

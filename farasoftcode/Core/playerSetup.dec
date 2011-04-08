@@ -12,8 +12,8 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think install_create(SETUP_CMD,Player Setup Object,1,0,6.0,Sets up attributes on new players.)
-think install_create(SETUP_DB,Player Setup Data,1,1,6.0,Stores player setup data.)
+think install_create(SETUP_CMD,Player Setup Object,1,0,7.0,Sets up attributes on new players.)
+think install_create(SETUP_DB,Player Setup Data,1,1,7.0,Stores player setup data.)
 
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R

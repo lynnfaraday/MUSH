@@ -12,10 +12,10 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think install_create(JOBS_CMD,Jobs System,1,0,6.0,Staff jobs system.)
-think install_create(JOBS_FUN,Jobs Functions,1,1,6.0,Staff jobs functions.)
-think install_create(JOBS_DB,Jobs Database,0,1,6.0,Stores staff jobs data.)
-think install_create(JOBS_CMD_REQUEST,Request System,1,0,6.0,Player request system.)
+think install_create(JOBS_CMD,Jobs System,1,0,7.0,Staff jobs system.)
+think install_create(JOBS_FUN,Jobs Functions,1,1,7.0,Staff jobs functions.)
+think install_create(JOBS_DB,Jobs Database,0,1,7.0,Stores staff jobs data.)
+think install_create(JOBS_CMD_REQUEST,Request System,1,0,7.0,Player request system.)
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 

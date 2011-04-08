@@ -11,9 +11,9 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(FINGER_CMD,+finger Commands,1,0,6.0,+finger commands.)
-think install_create(FINGER_FUN,+finger Functions,1,1,6.0,+finger functions.)
-think install_create(FINGER_DB,+finger Database,1,1,6.0,+finger data storage.)
+think install_create(FINGER_CMD,+finger Commands,1,0,7.0,+finger commands.)
+think install_create(FINGER_FUN,+finger Functions,1,1,7.0,+finger functions.)
+think install_create(FINGER_DB,+finger Database,1,1,7.0,+finger data storage.)
 
 &CMD-+FINGER +finger Commands=$+finger *:think pemit(%#,switch(0,t(pmatch(%0)),ansi(hr,There is no such player.),u(#FINGER_FUN/fun_show_finger,pmatch(%0),1)))
 &CMD-+FINGER-BRIEF +finger Commands=$+finger/brief *:think pemit(%#,switch(0,t(pmatch(%0)),ansi(hr,There is no such player.),u(#FINGER_FUN/fun_show_finger,pmatch(%0),0)))
