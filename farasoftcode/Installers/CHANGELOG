@@ -12,6 +12,14 @@ HOWEVER it also means that if you put extra commands on my system
 objects, they'll be wiped out when you upgrade.  I heartily recommend
 you put your own custom commands on separate objects to prevent that.
 
+Jobs
+~~~~~~
+filterable fields
+aliases (Cags)
++jobs/claim
++jobs/mine
++jobs/create with alternate syntax
+
 IC Time
 ~~~~~~~~
 New *Core* module for tracking IC time.  Supports flexible IC/OOC
