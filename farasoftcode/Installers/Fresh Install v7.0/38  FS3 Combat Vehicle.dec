@@ -1,0 +1,76 @@
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://www.wordsmyth.org/aresmush/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Vehicle module.)]
+
+think install_create(FS3COMBAT_CMD_VEH,FS3Combat Vehicle Commands,1,0,7.0,FS3 Vehicle Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
+think install_create(FS3COMBAT_DB_VEH,FS3Combat Vehicle DB,0,1,7.0,FS3Combat Vehicle DB.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+
+
+&VEHICLESTATS FS3Combat vehicle Commands=type notes temp
+
+&CMD-+VEHICLES FS3Combat vehicle Commands=$+vehicles:@pemit %#=[line()]%R[ansi(h,Name)][space(16)][ansi(h,Type)][space(16)]Damage Status[iter(sort(lattr(#FS3COMBAT_DB_VEH/vehicle_*)),[setq(0,after(##,_))]%R[padstr(prettify(lcstr(%q0)),20)][padstr(vehiclestat(%q0,type),20)][u(#FS3COMBAT_CMD_DMG/fun_display_restricted,%q0)])]%R%RUse [ansi(h,+vehicle <name>)] to view details.%R[line()]
+
+&CMD-+VEHICLE FS3Combat vehicle Commands=$+vehicle *:@pemit %#=switch(0,isvehicle(%0),ansi(hr,There is no vehicle by that name.),[setq(0,unprettify(%0))][setq(1,damagemod(%0))][line()]%R[ansi(h,Name:)] [prettify(%0)]%R[ansi(h,Type:)] [vehiclestat(%q0,type)]%R[ansi(h,Damage Modifier:)] %q1 [u(#FS3COMBAT_CMD_DMG/fun_damage_restricted,%q0)]%R[ansi(h,Notes:)]%R[replace_cr(vehiclestat(%q0,notes))]%R[line()]
+
+&CMD-+VEHICLE-CREATE FS3Combat vehicle Commands=$+vehicle/create *=*:@pemit %#=[setq(1,unprettify(%1))]switch(1,isvehicle(%0),ansi(hr,There is already a vehicle by that name.),isplayer(%0),ansi(hr,There is already a player by that name.),isnpc(%0),ansi(hr,There is already a NPC by that name.),gt(words(%0),1),ansi(hr,Vehicle names may only be 1 word.),strmatch(%0,*|*),ansi(hr,Vehicle names may not contain the '|' character.),not(match(vehicletypes(),%q1)),ansi(hr,%1 is not a valid vehicle type.),ansi(hg,You create vehicle %0.)[set(#FS3COMBAT_DB_VEH,vehicle_[unprettify(%0)]:%q1||0)])
+
+&CMD-+VEHICLE-DELETE FS3Combat vehicle Commands=$+vehicle/delete *:@pemit %#=switch(0,isvehicle(%0),ansi(hr,There is no vehicle by that name.),isstaff(%#),ansi(hr,Only staff can delete a vehicle.),ansi(hg,You delete vehicle %0.)[u(fun_delete_vehicle,%0)])
+
+&CMD-+VEHICLE-NOTES FS3Combat vehicle Commands=$+vehicle/notes *=*:@pemit %#=switch(0,isvehicle(%0),ansi(hr,There is no vehicle by that name.),not(match(%1,*|*)),ansi(hr,Notes may not contain the '|' character.),ansi(hg,You change vehicle %0's notes to %1.)[u(FUN_MOD_VEHICLESTAT,%0,notes,escape_cr(%1))])
+
+&CMD-+VEHICLE-ADDNOTE FS3Combat vehicle Commands=$+vehicle/addnote *=*:@pemit %#=switch(0,isvehicle(%0),ansi(hr,There is no vehicle by that name.),not(match(%1,*|*)),ansi(hr,Notes may not contain the '|' character.),ansi(hg,You add a note to vehicle %0.)[u(FUN_MOD_VEHICLESTAT,%0,notes,[vehiclestat(%0,notes)]%R[escape_cr(%1)])])
+
+&CMD-+VEHICLE-PURGETEMP FS3Combat Vehicle Commands=$+vehicle/purgetemp:@pemit %#=ansi(hg,You purge all temporary Vehicles.)[iter(lattr(#FS3COMBAT_DB_VEH/vehicle_*),[setq(0,after(##,_))]switch(vehiclestat(%q0,temp),1,fun_delete_vehicle,%q0)))]
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@  FUN_MOD_VEHICLESTAT
+@@  Modifies a vehicle statistic.
+@@  %0 = vehicle name
+@@  %1 = The stat to set, from vehicleSTATS.
+@@  %2 = The new value.
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_MOD_VEHICLESTAT FS3Combat vehicle Commands=set(#FS3COMBAT_DB_VEH,vehicle_[unprettify(%0)]:[replace(xget(#FS3COMBAT_DB_VEH,vehicle_[unprettify(%0)]),match(v(vehicleSTATS),%1),%2,|)])
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@  FUN_VEHICLESTAT
+@@  Gets a Vehicle stat.
+@@  %0 = Name
+@@  %1 = Stat to get
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_VEHICLESTAT FS3Combat vehicle Commands=extract(xget(#FS3COMBAT_DB_VEH,vehicle_[unprettify(%0)]),match(v(vehiclestats),%1),1,|)
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@  FUN_ISVEHICLE
+@@  Tells if a name is a vehicle.
+@@  %0 = Name
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_ISVEHICLE FS3Combat vehicle Commands=hasattr(#FS3COMBAT_DB_VEH,vehicle_[unprettify(%0)])
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ FUN_RANDOM_VEHICLE
+@@ Makes up a random vehicle of the specified type.  Theoretically if the vehicle already exists
+@@ this will overwrite it, but a) that shouldn't happen often, and b) even if it did, it would
+@@ just end up inheriting the existing vehicle's damage.
+@@ %0 = Type
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_RANDOM_VEHICLE FS3Combat Vehicle Commands=localize([setq(0,[unprettify(%0)])][setq(1,[rjust(rand(99),2,0)][ljust(mod(secs(),99),2,0)][extract(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,mod(secs(),26),1)])][set(#FS3COMBAT_DB_VEH,vehicle_%q0-%q1:%q0||1)]%q0-%q1)
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@  FUN_DELETE_VEHICLE
+@@  Deletes a Vehicle. 
+@@  %0 = Name
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+&FUN_DELETE_VEHICLE FS3Combat Vehicle Commands=switch(0,isvehicle(%0),0|There is no Vehicle by that name.,wipe(#FS3COMBAT_DB_VEH/vehicle_[unprettify(%0)])[u(#FS3COMBAT_CMD_DMG/fun_clear_damage,%0)])
+
+@STARTUP FS3Combat vehicle Commands=@set me=!no_command;@fun vehiclestat=me,FUN_VEHICLESTAT;@fun isvehicle=me,fun_isvehicle
+
+@wait 10=@set me=!quiet
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]

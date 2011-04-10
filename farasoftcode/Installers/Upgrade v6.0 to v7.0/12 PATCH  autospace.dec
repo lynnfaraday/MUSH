@@ -1,0 +1,35 @@
+@@ Faraday's Pose Autospacer System
+@@ Author:  Linda O'Meara
+@@ Website: http://www.wordsmyth.org/aresmush/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Autospacer Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+
+think install_patch(AUTOSPACE_CMD,Pose Autospacer,1,0,7.0,Automatically puts blank lines between poses.)
+
+
+&CMD-+AUTOSPACE Pose Autospacer=$+autospace:think [pemit(%#,switch(xget(%#,autospace),1,ansi(hg,You turn autospacing OFF.),ansi(hg,You turn autospacing ON.)))][set(%#,autospace:[not(xget(%#,autospace))])]
+&HELP_+AUTOSPACE Pose Autospacer=This MUSH is set up to put blank lines before each pose, say or emit automatically. You can turn this on or off using the +autospace command.  Just type [ansi(h,+autospace)] and it will toggle the spaces on and off.
+&LINE_HOOK Pose Autospacer=[iter(lplayers(loc(%#)),switch(xget(##,autospace),0,,pemit(##,%B)))][u([install_aliasdb(FS3COMBAT_INSTANCE)]/POSE_HOOK)]
+@STARTUP Pose Autospacer=@set me=!no_command
+&VATTR_AUTOSPACE Pose Autospacer=1
+
+&HOOK_POSE_AUTOSPACE Pose Autospacer=u(#AUTOSPACE_CMD/LINE_HOOK)
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup AUTOSPACE
+
+@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 10=@set me=!quiet
+
+
+

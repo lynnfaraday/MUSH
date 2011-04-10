@@ -1,0 +1,94 @@
+@@ Faraday's FS3 System
+@@ Author:  Linda O'Meara
+@@ Website: http://www.wordsmyth.org/aresmush/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Installing FS3 Ranks module.  Please wait...)]%R
+
+@pemit/silent %#=%R%R[ansi(hg,Creating objects.)]
+
+think install_create(RANK_CMD,Rank System,1,0,7.0,Chargen rank system.)
+think install_create(RANK_DB,Rank DB,0,0,7.0,Chargen rank system.)
+
+@pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
+
+&CMD-+RANKS Rank System=$+ranks:@pemit %#=[line()]%RThe following rank charts are available:[iter(xget(#RANK_DB,factions),%R##)]%R[line()]
+&CMD-+RANKS-FACTION Rank System=$+ranks *:@pemit %#=[line()]%R[ansi(h,[capstr(%0)] Ranks)]%R%R[ansi(h,[center(Enlisted,25,-)])][space(5)][ansi(h,[center(Officer,25,-)])][iter(lnum(1,9),u(fun_display_rank_num,%0,##))]%R%R[ansi(hx,Gray)] = Rank off-limits to PCs except in special circumstances.%R[line()]
+
+@@ Displays a row of the rank table
+@@ %0 = row #
+@@ %1 = faction
+&FUN_DISPLAY_RANK_NUM Rank System=%R[u(fun_display_one_rank,%0,%1,E,enlisted)][u(fun_display_one_rank,%0,%1,O,officer)]
+
+@@ Displays an officer / enlisted part of a rank row
+@@ %0 = row #
+@@ %1 = faction
+@@ %2 = abbreviation (E/O)
+@@ %3 = rank type (enlisted / officer)
+&FUN_DISPLAY_ONE_RANK Rank System=[ansi(switch(gt(%1,xget(#RANK_DB,MAX_RANK_%3_%0)),1,hx,n),[ljust(\(%2%1\),5)][padstr(extract(xget(#RANK_DB,ranks_%3_%0),%1,1,|),25)])]
+
+@@ Is a valid rank
+@@ %0 = faction
+@@ %1 = rank in question
+&FUN_IS_VALID_RANK Rank System=or(u(fun_is_valid_specific_rank,%0,enlisted,%1),u(fun_is_valid_specific_rank,%0,officer,%1))
+
+@@ Is a valid rank for a particular rank type
+@@ %0 = faction
+@@ %1 = officer or enlisted
+@@ %2 = rank in question
+&FUN_IS_VALID_SPECIFIC_RANK Rank System=switch(u(fun_get_rank_num,%0,%1,%2),0,0,>[xget(#RANK_DB,max_rank_%1_%0)],0,1)
+
+@@ Rank number for a given rank type
+@@ %0 = faction
+@@ %1 = officer or enlisted
+@@ %2 = rank in question
+&FUN_GET_RANK_NUM Rank System=match(xget(#RANK_DB,ranks_%1_%0),%2,|)
+
+
+&FUN_RANK Rank System=xget(%0,rank)
+@STARTUP Rank System=@fun RANK=[num(me)]/FUN_RANK;@fun ISVALIDRANK=[num(me)]/FUN_IS_VALID_RANK
+@set Rank System/STARTUP=no_command prefixmatch
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+&FACTIONS Rank DB=Army Navy
+&MAX_RANK_ENLISTED_ARMY Rank DB=4
+&MAX_RANK_ENLISTED_NAVY Rank DB=4
+&MAX_RANK_OFFICER_ARMY Rank DB=1
+&MAX_RANK_OFFICER_NAVY Rank DB=1
+&RANKS_ENLISTED_ARMY Rank DB=Private|Private|Private First Class|Corporal|Sergeant|Staff Sergeant|Sergeant First Class|Master Sergeant|Sergeant Major
+&RANKS_ENLISTED_NAVY Rank DB=Seaman Recruit|Seaman Apprentice|Seaman|Petty Officer 3rd Class|Petty Officer 2nd Class|Petty Officer 1st Class|Chief Petty Officer|Senior CPO|Master CPO
+&RANKS_OFFICER_ARMY Rank DB=2nd Lieutenant|1st Lieutenant|Captain|Major|Lt. Colonel|Colonel|-|-|-
+&RANKS_OFFICER_NAVY Rank DB=Ensign|Lieutenant JG|Lieutenant|Lt Commander|Commander|Captain|-|-|-
+
+
+@wait 5=+jobs/create CODE=FS3 Ranks Config/Configure FS3 Rank Lists.
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup RANK
+
+@wait 10=@set me=!quiet
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]

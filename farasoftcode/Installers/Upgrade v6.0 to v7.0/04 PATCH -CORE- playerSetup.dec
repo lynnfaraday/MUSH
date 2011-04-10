@@ -1,0 +1,52 @@
+@@ Faraday's Player Setup System
+@@ Author:  Linda O'Meara
+@@ Website: http://www.wordsmyth.org/aresmush/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Player Setup Object Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+
+think install_patch(SETUP_CMD,Player Setup Object,1,0,7.0,Sets up attributes on new players.)
+think install_patch(SETUP_DB,Player Setup Data,1,1,7.0,Stores player setup data.)
+
+
+@pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
+
+@set Player Setup Object = DARK
+@set Player Setup Object = MONITOR
+@startup Player Setup Object = @set me=!NO_COMMAND
+@AHEAR Player Setup Object=@switch 0=hasattr(%#,status),{@tr #SETUP_DB/ADDITIONAL_SETUP=%#;think [iter(lattr(#SETUP_DB/hattr_*),[setq(0,after(##,_))][set(%#,%q0:[u(#SETUP_DB/##,%#)])][set(%#/%q0,mortal_dark)][atrlock(%#/%q0,on)])][iter(lattr(#SETUP_DB/vattr_*),[setq(0,after(##,_))][set(%#,%q0:[u(#SETUP_DB/##,%#)])])]}
+&FUN_SETUP_ATTR Player Setup Object=switch(iswizard(%@),0,#-1 RESTRICTED,switch(%0,h,[set(#SETUP_DB,HATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:[u(#SETUP_DB/HATTR_%1)]))][set(##/%1,mortal_dark)][atrlock(##/%1,on)])][ansi(h,%RYou set up a Hidden Locked attribute named %1)],v,[set(#SETUP_DB,VATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:[u(#SETUP_DB/VATTR_%1)]))])][ansi(h,%RYou set up a Visible Unlocked attribute named %1)],[ansi(hb,%0 is not a valid setting.)]))
+@LISTEN Player Setup Object=* has connected.
+&SHELP_PLAYER_SETUP Player Setup Object=Data is stored on object #SETUP_DB.  See the web page for install instructions.  http://www.wordsmyth.org/aresmush/index.php?title=Player_Setup
+&INSTALL_DESTINATION Player Setup Object=#0
+
+@startup Player Setup Object=@set me=!NO_COMMAND;@fun setup_attr=me/fun_setup_attr
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup SETUP
+
+@wait 5=@pemit/silent %#=[ansi(hg,Moving objects to their appropriate places...)]%R
+
+@wait 6=@tel [install_aliasdb(SETUP_CMD)]=#0
+
+@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 10=@set me=!quiet
+

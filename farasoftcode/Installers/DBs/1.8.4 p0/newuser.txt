@@ -1,5 +1,0 @@
--------------------------------------------------------------------------
-Welcome to TODO MUSH!  Please holler on the newbie channel 
-(+n <message>) if you have any questions.
--------------------------------------------------------------------------
-
