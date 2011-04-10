@@ -21,26 +21,26 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @describe Install Object Storage=Stores Faraday system objects.%R[u(credits)]
 
 &CREDITS Install Manager=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Install Manager=6.0
+&VERSION Install Manager=7.0
 
 &CREDITS Install DB=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Install DB=6.0
+&VERSION Install DB=7.0
 
 &CREDITS Install Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
-&VERSION Install Object Storage=6.0
+&VERSION Install Object Storage=7.0
 
 @set Install Manager = WIZARD
 @set Install Manager = SAFE
 @set Install Manager = !NO_COMMAND
 
-@STARTUP Install Manager=@set me=!no_command;@function INSTALL_CREATE=[num(me)],FUN_INSTALL_CREATE,6,7,admin;@function INSTALL_ALIASDB=[num(me)],FUN_GET_DBREF;@function INSTALL_PATCH=[num(me)],FUN_INSTALL_PATCH,6,7,admin
+@STARTUP Install Manager=@set me=!no_command;@function INSTALL_CREATE=[num(me)]/FUN_INSTALL_CREATE;@function INSTALL_ALIASDB=[num(me)]/FUN_GET_DBREF;@function INSTALL_PATCH=[num(me)]/FUN_INSTALL_PATCH
 
 
 &CMD-+install-update Install Manager=$+install/update *:@switch/first [setq(0,u(fun_get_dbref,%0))]0=[u(fun_is_registered,%0)],@pemit %#=ansi(hr,I can't find a object named %0.),{@pemit %#=ansi(c,Updating database references on object %0.);think switch(u(fun_is_installed_properly,%0),0,pemit(%#,ansi(hr,It appears object %q0 \([name(%q0)]\) may not be properly installed.  Please double-check.)));@dolist [lattr(#INSTALL_DB/obj_*)] ALLDONE=@switch ##=ALLDONE,{@fo %#=+install/finalize %0},{think u(FUN_UPDATE,%q0,#[after(##,_)],xget(#INSTALL_DB,##))}}
 
 &CMD-+install-updategroup Install Manager=$+install/updategroup *:@switch [setq(0,u(fun_get_group_attrs,%0))][words(%q0)]=0,@pemit %#=[ansi(hr,Can't find a system group named %0.  Make sure it's been installed properly.)],@dolist %q0={@fo %#=+install/update [after(##,_)]}
 
-&CMD-+install-finalize Install Manager=$+install/finalize *:think [setq(0,u(fun_get_dbref,%0))];@tr %q0/startup;think pemit(%#,[u(fun_INSTALL_CRON,%q0)]%R[u(fun_INSTALL_HELP,%q0)]);@fo %#=+install/attr %q0;@fo %#={@tel %q0=[u(fun_get_destination,%0)]};@pemit %#=ansi(hc,%0 installed.)
+&CMD-+install-finalize Install Manager=$+install/finalize *:think [setq(0,u(fun_get_dbref,%0))];@tr %q0/startup;think pemit(%#,[u(fun_INSTALL_CRON,%q0)]%R[u(fun_INSTALL_HELP,%q0)]%R[u(fun_INSTALL_HOOK,%q0)]);@fo %#=+install/attr %q0;@fo %#={@tel %q0=[u(fun_get_destination,%0)]};@pemit %#=ansi(hc,%0 installed.)
 
 &CMD-+INSTALL_ATTR Install Manager=$+install/attr *:@dolist lattr(%0/?ATTR_*)=think pemit(%#,setup_attr(mid(##,0,1),after(##,_),{[xget(%0,##)]}))
 
@@ -84,14 +84,14 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @@  %5 = Description
 @@  %6 = Install Destination (may be blank)
 @@ --------------------------
-&FUN_INSTALL_CREATE Install Manager=localize(pemit(%#,[switch(0,orflags(%#,W),ansi(hr,This function is restricted.),[setq(0,u(fun_check_config))][not(t(%q0))],ansi(hr,Installation failed!  Your MUSH is not properly configured.[iter(rest(revwords(%q0,|),|),%R- ##,|)]),u(fun_is_registered,%0),u(fun_create_and_setup_object,%0,%1,%2,%3,%4,%5,%6),[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(hc,Found object %0.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)])]))
+&FUN_INSTALL_CREATE Install Manager=localize(pemit(%#,[switch(0,iswizard(%@),ansi(hr,This function is restricted.),[setq(0,u(fun_check_config))][not(t(%q0))],ansi(hr,Installation failed!  Your MUSH is not properly configured.[iter(rest(revwords(%q0,|),|),%R- ##,|)]),u(fun_is_registered,%0),u(fun_create_and_setup_object,%0,%1,%2,%3,%4,%5,%6),[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(hc,Found object %0.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)])]))
 
 @@ --------------------------
 @@  FUN_INSTALL_PATCH
 @@  Same basic function as install_create but only works for objects that are already installed.
 @@  Same params as FUN_INSTALL_CREATE
 @@ --------------------------
-&FUN_INSTALL_PATCH Install Manager=localize(pemit(%#,[switch(0,orflags(%#,W),ansi(hr,This function is restricted.),[setq(0,u(fun_check_config))][not(t(%q0))],ansi(hr,Installation failed!  Your MUSH is not properly configured.[iter(rest(revwords(%q0,|),|),%R- ##,|)]),u(fun_is_registered,%0),ansi(hR,WARNING!  You're attempting to patch object %0 but it was never installed.  Data on the object has not been set up.  You probably want to run the full installer.)[u(fun_create_and_setup_object,%0,%1,%2,%3,%4,%5,%6)],[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(c,Found object %0.  Updating.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)])]))
+&FUN_INSTALL_PATCH Install Manager=localize(pemit(%#,[switch(0,iswizard(%@),ansi(hr,This function is restricted.),[setq(0,u(fun_check_config))][not(t(%q0))],ansi(hr,Installation failed!  Your MUSH is not properly configured.[iter(rest(revwords(%q0,|),|),%R- ##,|)]),u(fun_is_registered,%0),ansi(hR,WARNING!  You're attempting to patch object %0 but it was never installed.  Data on the object has not been set up.  You probably want to run the full installer.)[u(fun_create_and_setup_object,%0,%1,%2,%3,%4,%5,%6)],[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(c,Found object %0.  Updating.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)])]))
 
 
 @@ --------------------------
@@ -114,7 +114,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @@  Sets up basic object attrs 
 @@  Same params as FUN_INSTALL_CREATE.  Relies on %q0 to be set by caller, so DO NOT LOCALIZE
 @@ --------------------------
-&FUN_SETUP_OBJECT Install Manager=switch(strmatch(name(%q0),%1),0,ansi(hR,Object names do not match!  Install will fail!  Rename the old object to %1 and try again.),[u(fun_wipe_commands,%q0)][set(%q0,SAFE)][switch(%2,1,set(%q0,wizard))][switch(%3,0,[set(%q0,!NO_COMMAND)][set(%q0,startup:@set me=!no_command)],set(%q0,NO_COMMAND))][set(%q0,version:%4)][set(%q0,describe:%5%R\[u(credits)\])][switch(%6,,,set(%q0,install_destination:%6))][set(%q0,credits:[v(credits)])]%R[u(fun_uninstall_cron,%q0)]%R[u(fun_uninstall_help,%q0)])
+&FUN_SETUP_OBJECT Install Manager=switch(strmatch(name(%q0),%1),0,ansi(hR,Object names do not match!  Install will fail!  Rename the old object to %1 and try again.),[u(fun_wipe_commands,%q0)][set(%q0,SAFE)][switch(%2,1,set(%q0,wizard))][switch(%3,0,[set(%q0,!NO_COMMAND)][set(%q0,startup:@set me=!no_command)],set(%q0,NO_COMMAND))][set(%q0,version:%4)][set(%q0,describe:%5%R\[u(credits)\])][switch(%6,,,set(%q0,install_destination:%6))][set(%q0,credits:[v(credits)])]%R[u(fun_uninstall_cron,%q0)]%R[u(fun_uninstall_help,%q0)]%R[u(fun_uninstall_hook,%q0)])
 
 @@ --------------------------
 @@  FUN_CHECK_CONFIG
@@ -147,7 +147,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @@  Uninstalls cron jobs (named CRON*) to the cron system.
 @@  %0 = Object DB#
 @@ --------------------------
-&FUN_UNINSTALL_CRON Install Manager=localize([setq(0,lattr(%0/cron_*))][setq(1,install_aliasdb(CRON_OBJ))][switch(0,not(match(%0,%q1)),ansi(c,Not installing cron jobs from the cron system itself!),words(%q0),,t(%q1),ansi(r,Cron system not installed.  Could not install cron jobs.),squish(iter(lattr(%0/cron_*),wipe(%q1/##)))[ansi(c,Uninstalled CRON jobs for object %0 \([name(%0)]\).)])])
+&FUN_UNINSTALL_CRON Install Manager=localize([setq(0,lattr(%0/cron_*))][setq(1,install_aliasdb(CRON_OBJ))][switch(0,not(match(%0,%q1)),ansi(c,Not installing cron jobs from the cron system itself!),words(%q0),,t(%q1),ansi(r,Cron system not installed.  Could not install cron jobs.),squish(iter(lattr(%0/cron_*),[wipe(%q1/##)][wipe(%0/##)]))[ansi(c,Uninstalled CRON jobs for object %0 \([name(%0)]\).)])])
 
 
 @@ --------------------------
@@ -162,7 +162,22 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @@  Uninstalls help files (named HELP*) to the help system.
 @@  %0 = Object DB#
 @@ --------------------------
-&FUN_UNINSTALL_HELP Install Manager=localize([setq(1,install_aliasdb(HELP_CMD))][setq(2,install_aliasdb(HELP_DB))][setq(0,u(%q1/FUN_FIND_ALL_HELP,%0))][switch(0,not(match(%0,%q2)),ansi(c,Setting up help files on the help object is redundant!),words(%q0),,and(t(%q1),t(%q1)),ansi(r,Help system not installed.  Could not uninstall help files.),ansi(c,Uninstalled help files from object %0 \([name(%0)]\).)[iter(%q0,wipe(%q2/##))])])
+&FUN_UNINSTALL_HELP Install Manager=localize([setq(1,install_aliasdb(HELP_CMD))][setq(2,install_aliasdb(HELP_DB))][setq(0,u(%q1/FUN_FIND_ALL_HELP,%0))][switch(0,not(match(%0,%q2)),ansi(c,Setting up help files on the help object is redundant!),words(%q0),,and(t(%q1),t(%q1)),ansi(r,Help system not installed.  Could not uninstall help files.),ansi(c,Uninstalled help files from object %0 \([name(%0)]\).)[iter(%q0,[wipe(%q2/##)][wipe(%0/##)])])])
+
+
+@@ --------------------------
+@@  FUN_INSTALL_HOOK
+@@  Installs hook triggers (named HOOK_*) to the hook system.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_INSTALL_HOOK Install Manager=localize([setq(0,lattr(%0/hook_*))][setq(1,install_aliasdb(HOOK_OBJ))][switch(0,not(match(%0,%q1)),ansi(c,Not installing hook triggers from the hook system itself!),words(%q0),,t(%q1),ansi(c,Hook system not installed.  Skipping hook installation.),squish(iter(lattr(%0/hook_*),set(%q1,##:[xget(%0,##)])))[ansi(c,Installed @hook triggers from object %0 \([name(%0)]\).)])])
+
+@@ --------------------------
+@@  FUN_UNINSTALL_HOOK
+@@  Uninstalls hook triggers (named HOOK*) to the hook system.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_UNINSTALL_HOOK Install Manager=localize([setq(0,lattr(%0/hook_*))][setq(1,install_aliasdb(HOOK_OBJ))][switch(0,not(match(%0,%q1)),ansi(c,Not installing hook jobs from the hook system itself!),words(%q0),,t(%q1),ansi(r,Hook system not installed.  Could not install @hooks.),squish(iter(lattr(%0/hook_*),[wipe(%q1/##)][wipe(%0/##)]))[ansi(c,Uninstalled @hook triggers for object %0 \([name(%0)]\).)])])
 
 
 @@ --------------------------

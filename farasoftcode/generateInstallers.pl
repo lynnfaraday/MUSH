@@ -5,6 +5,8 @@
 #  Run from the root softcode dir.
 
 use File::Find;
+use File::Copy;
+use File::Path;
 use Cwd;
 use File::stat;
 use Time::localtime;
@@ -15,21 +17,30 @@ if (@ARGV != 2)
 die "Invalid number of arguments.";
 }
 
-my $oldVersion = @ARGV[0];
-my $version = @ARGV[1];
-my $patch = 0;
-my $fileIndex = 0;
+my $_oldVersion = @ARGV[0];
+my $_newVersion = @ARGV[1];
+my $_patch = 0;
+my $_fileIndex = 0;
+my $_upgradeDir = "Installers/Upgrade v$_oldVersion to v$_newVersion";
+my $_freshDir = "Installers/Fresh Install v$_newVersion";
+
+rmtree($_upgradeDir);
+rmtree($_freshDir);
+
+mkdir($_upgradeDir);
+mkdir($_freshDir);
+
 processAllFiles();
 
-$patch = 1;
-$fileIndex = 0;
+$_patch = 1;
+$_fileIndex = 0;
 processAllFiles();
 
 close(OUTFILE);
 
 sub processAllFiles {
 
-if ($patch)
+if ($_patch)
 {
 print OUTFILE "\@pemit %#=ansi(hc,Upgrading all Faraday systems.)";
 }
@@ -46,18 +57,19 @@ processFile("Core/jobs.dec", "-CORE-");
 processFile("Core/faramail.dec", "-CORE-");
 processFile("Core/BBS-Myrddin.dec", "-CORE-");
 processFile("Core/CRON-Myrddin.dec", "-CORE-");
+processFile("Core/hookManager.dec", "-CORE-");
 
 find(\&forEachFile, cwd . "/AddOns/");
-find(\&forEachFile, cwd . "/FUDGE/");
 find(\&forEachFile, cwd . "/FS3/");
 
 processFile("FS3/FS3 Combat Post-Install.dec");
 
-if (!$patch)
+if (!$_patch)
    {
    processFile("FS3/FS3 Chargen.dec");
-   processFile("FUDGE/FUDGE Chargen.dec");
    }
+
+find(\&copyDocs, cwd . "/Docs/FS3.2/");
 }
 
 sub forEachFile{
@@ -67,12 +79,45 @@ sub forEachFile{
         { return; }
     if ($fileName =~ /FS3 Chargen/) 
         { return; }
-    if ($fileName =~ /FUDGE Chargen/) 
-        { return; }
     if ($fileName =~ /FS3 Combat Post-Install/) 
         { return; }
     
     processFile($fileName);    
+}
+
+sub getOutFileName
+{
+    my ($fileName, $prefix) = @_;
+    my $outFileName;
+
+    my ($shortName) = ($fileName =~ /\/([^\/]+$)/);
+    if ($_patch)
+    {
+	$outFileName = "$_upgradeDir/$prefix$shortName";
+    }
+    else
+    {
+	$outFileName = "$_freshDir/$prefix$shortName";
+    }
+    
+# When parsing sub-dirs the script has the CWD as the sub-dir, so we have to go up one to get
+# the installers directory.
+    my $cwd = cwd;
+    if ($cwd !~ /farasoftcode$/)
+    {
+	$outFileName = "../$outFileName";
+    }
+    return $outFileName;
+}
+
+sub copyDocs {
+    my $fileName = $File::Find::name;
+    my $outFileName = getOutFileName($fileName);
+    if ($fileName =~ /\.(pdf|txt)$/) 
+    {
+	copy($fileName, "../$outFileName");
+	print "Copying document $fileName to $outFileName\n";
+    }
 }
 
 sub processFile{
@@ -80,33 +125,25 @@ sub processFile{
 my ($fileName, $prefix) = @_;
 print "Parsing $fileName\n";
 
-$fileIndex++;
+$_fileIndex++;
 
 open(INFILE, "$fileName") or die "Can't open $fileName";
 my @contents = <INFILE>;
 close(INFILE);
 
-my ($shortName) = ($fileName =~ /\/([^\/]+$)/);
+my $indexString = sprintf("%0*d", 2, $_fileIndex);
+my $filePrefix;
 
-my $outFileName;
-my $indexString = sprintf("%0*d", 2, $fileIndex);
-
-if ($patch)
+if ($_patch)
 {
-  $outFileName = "Installers/Upgrade v$oldVersion to v$version/$indexString PATCH $prefix $shortName";
+    $filePrefix = "$indexString PATCH $prefix ";
 }
 else
 {
-  $outFileName = "Installers/Fresh Install v$version/$indexString $prefix $shortName";
+    $filePrefix = "$indexString $prefix ";
 }
 
-# When parsing sub-dirs the script has the CWD as the sub-dir, so we have to go up one to get
-# the installers directory.
-my $cwd = cwd;
-if ($cwd !~ /farasoftcode$/)
-   {
-   $outFileName = "../$outFileName";
-   }
+my $outFileName = getOutFileName($fileName, $filePrefix);
 
 open(OUTFILE, ">$outFileName") or die "Can't open $outFileName $!";
 
@@ -125,11 +162,11 @@ while ($line = shift(@contents))
    $inDataArea = 1;
    }
   
- if ($inDataArea && $patch)
+ if ($inDataArea && $_patch)
    {
    # skip this line for patches because it contains DATA 
    }
- elsif ($patch)
+ elsif ($_patch)
    {
    # replace instances of install_create with install_patch
    # so we don't try to halfway-install objects

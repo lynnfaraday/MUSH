@@ -3,3 +3,4 @@
 @set *GameWiz=wiz
 @power *GameWiz=no_pay
 
+@pcreate Testdummy=test

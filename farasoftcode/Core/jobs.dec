@@ -89,7 +89,7 @@ think install_create(JOBS_CMD_REQUEST,Request System,1,0,7.0,Player request syst
 
 &ISSTAFF Jobs System=isstaff(%#)
 
-@STARTUP Jobs System=@set me=!no_command;@function create_job=#JOBS_FUN,fun_create_job,4,4,admin;@function find_job=#JOBS_FUN,fun_find_job,1,1,admin
+@STARTUP Jobs System=@set me=!no_command;@function create_job=#JOBS_FUN/fun_create_job;@function find_job=#JOBS_FUN/fun_find_job
 
 @@ These helpers are only meant to be called from commands.  They exist to support aliasing.
 
@@ -110,7 +110,7 @@ think install_create(JOBS_CMD_REQUEST,Request System,1,0,7.0,Player request syst
 @@ %2 = character
 &FUN_DISPLAY_JOBS_LIST Jobs Function=localize([line_with_text(%0)]%R[u(#JOBS_FUN/fun_display_header)][iter(u(#JOBS_FUN/fun_get_jobs_list,%1,%2),%R[u(#JOBS_FUN/fun_display_job,##)])])
 
-&FUN_CREATE_JOB Jobs Functions=[setq(j,xget(#JOBS_DB,next_job))][set([xget(#JOBS_DB,cat_[trim(%0)])],job_%qj:%1|[secs()]|[name(%3)]||[add(secs(),xget(#JOBS_DB,DUEDATE_SECS))]|NEW|M|[escape_cr(%2)]||[secs()]||)][set(#JOBS_DB,next_job:[inc(%qj)])][iter(lwho(),switch(isstaff(##),1,pemit(##,ansi(hg,New Job Submitted \(#%qj\): %1))))]
+&FUN_CREATE_JOB Jobs Functions=switch(iswizard(%@),0,#-1 RESTRICTED,[setq(j,xget(#JOBS_DB,next_job))][set([xget(#JOBS_DB,cat_[trim(%0)])],job_%qj:%1|[secs()]|[name(%3)]||[add(secs(),xget(#JOBS_DB,DUEDATE_SECS))]|NEW|M|[escape_cr(%2)]||[secs()]||)][set(#JOBS_DB,next_job:[inc(%qj)])][iter(lwho(),switch(isstaff(##),1,pemit(##,ansi(hg,New Job Submitted \(#%qj\): %1))))])
 
 &FUN_DISPLAY_HEADER Jobs Functions=[ansi(hu,iter(xget(#JOBS_DB,fields),padstr(extract(##,2,1,:),last(##,:))))]
 
@@ -131,7 +131,7 @@ think install_create(JOBS_CMD_REQUEST,Request System,1,0,7.0,Player request syst
 
 &FUN_DISPLAY_JOB_LONG Jobs Functions=[center(~ [u(#JOBS_FUN/fun_extract_data,%2,title)] ~,78)]%R[ansi(h,Category:)]%B%B%B%B%B[ljust(name(%0),20)][center(~~~,10)][ansi(h,Priority:)]%B%B%B[switch(u(#JOBS_FUN/fun_extract_data,%2,priority),H,ansi(hr,HIGH),M,ansi(h,MEDIUM),L,ansi(hg,LOW))]%R[ansi(h,Submitted By:)]%B[padstr(u(#JOBS_FUN/fun_extract_data,%2,submitter),20)][center(~~~,10)][ansi(h,Handled By:)]%B[u(#JOBS_FUN/fun_extract_data,%2,handler)]%R[ansi(h,Submit Date:)]%B%B[timefmt($m/$d/$y,u(#JOBS_FUN/fun_extract_data,%2,submitted))]%R[ansi(h,Due Date:)]%B%B%B%B%B[padstr(u(#JOBS_FUN/fun_format_duedate,u(#JOBS_FUN/fun_extract_data,%2,duedate)),20)][center(~~~,10)][ansi(h,Status:)]%B%B%B%B%B[u(#JOBS_FUN/fun_extract_data,%2,status)]%R%R[ansi(hu,Description:)]%R[replace_cr(u(#JOBS_FUN/fun_extract_data,%2,description))]%R%R[ansi(hu,Comments:)]%R[replace_cr(u(#JOBS_FUN/fun_extract_data,%2,comments))]
 &FUN_EXTRACT_DATA Jobs Functions=extract(%0,match(v(order),%1),1,|)
-&FUN_FIND_JOB Jobs Functions=trim(iter(lattr(#JOBS_DB/cat_*),switch(hasattr([xget(#JOBS_DB,##)],JOB_%0),1,[xget(#JOBS_DB,##)]:JOB_%0)))
+&FUN_FIND_JOB Jobs Functions=switch(iswizard(%@),0,#-1 RESTRICTED,trim(iter(lattr(#JOBS_DB/cat_*),switch(hasattr([xget(#JOBS_DB,##)],JOB_%0),1,[xget(#JOBS_DB,##)]:JOB_%0))))
 
 
 @@ %0 = due date (secs)
@@ -199,7 +199,6 @@ think install_create(JOBS_CMD_REQUEST,Request System,1,0,7.0,Player request syst
 
 
 @wait 10=+jobs/create CODE=Staff Jobs BBS/Set up a Staff Job Notices bbs if you don't have one already.
-@wait 10=+jobs/create CODE=ICTIME/Set up the ICTIME function.
 @wait 10=+jobs/create CODE=Non-Players/Once all non-players (guests, wizzes, etc.) are created, update the NON_PLAYERS attr on the global functions object with a space-separated list of their DB#s.
 
 

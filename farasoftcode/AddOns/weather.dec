@@ -24,7 +24,7 @@ think install_create(WEATHER_FALL,Fall,0,1,7.0,Weather descs.,WEATHER_HOLDER)
 &CMD-+WEATHER-CLEAR Weather Generator=$+weather/clear:think [pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),ansi(hg,You clear the weather override.)[set(me,override:0)][set(me,type:[u(fun_random_type)])][set(me,temp:[u(fun_random_temp)])]))]
 &CMD-+WEATHER-SET Weather Generator=$+weather/set * and *:think [pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),ansi(hg,You set the weather to %0 and %1.)[set(me,override:1)][set(me,type:[lcstr(trim(%1))])][set(me,temp:[lcstr(trim(%0))])]))]
 &FUN_COMPUTE_TIME Weather Generator=switch(first(extract(ictime(),4,1),:),<5,night,<11,morning,<18,day,<21,evening,night)
-&FUN_DETERMINE_SEASON Weather Generator=switch(extract(time(),2,1),Jan,winter,Feb,winter,Mar,switch(extract(time(),3,1),>20,spring,winter),Apr,spring,May,spring,Jun,switch(extract(time(),3,1),>20,summer,spring),Jul,summer,Aug,summer,Sep,switch(extract(time(),3,1),>20,fall,summer),Oct,fall,Nov,fall,Dec,switch(extract(time(),3,1),>20,winter,fall))
+&FUN_DETERMINE_SEASON Weather Generator=switch(extract(ictime(),2,1),Jan,winter,Feb,winter,Mar,switch(extract(ictime(),3,1),>20,spring,winter),Apr,spring,May,spring,Jun,switch(extract(ictime(),3,1),>20,summer,spring),Jul,summer,Aug,summer,Sep,switch(extract(ictime(),3,1),>20,fall,summer),Oct,fall,Nov,fall,Dec,switch(extract(ictime(),3,1),>20,winter,fall))
 
 &FUN_FIND_SEASON Weather Generator=iter(lcon(#WEATHER_HOLDER),switch(name(##),%0,##),,)
 

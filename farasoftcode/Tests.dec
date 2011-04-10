@@ -63,7 +63,7 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_COOKIE_06 Tests=Cookie levels.|+cookie/levels
 &TEST_COOKIE_07 Tests=Fake a cookie.|&COOKIES me=20
 &TEST_COOKIE_08 Tests=Cookie top list.|+cookie/top
-&TEST_COOKIE_09 Tests=Cookie award fun|think u(%#/fun_ASSERT,Copper,cookie_award(name(me)))
+&TEST_COOKIE_09 Tests=Cookie award fun|think u(%#/fun_ASSERT,Copper,cookie_award(*Gamewiz))
 &TEST_COOKIE_10 Tests=Cookie help.|+help cookie
 
 &TEST_DESC_01 Tests=Create Desc|+desc/create test=This is my test.
@@ -84,7 +84,7 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_EVENTS_06 Tests=View events list.|+events
 &TEST_EVENTS_07 Tests=Event help.|+help events
 
-&TEST_FINGER_01 Tests=Finger|+finger Faraday
+&TEST_FINGER_01 Tests=Finger|+finger [name(me)]
 &TEST_FINGER_02 Tests=Finger Help|+help +finger
 
 &TEST_FRIENDS_01 Tests=Add Friend|+friend/add UnitTestDummy
@@ -104,7 +104,6 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 
 
 &TEST_LUCK_01 Tests=View Luck|+luck
-&TEST_LUCK_02 Tests=Luck Info|+luck/info
 &TEST_LUCK_03 Tests=Award Luck|+luck/award [name(me)]=1/Testing
 &TEST_LUCK_04 Tests=Spend Luck|+luck/spend 1=Testing
 &TEST_LUCK_05 Tests=Luck Help|+help luck
@@ -273,7 +272,7 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_FS3SKILL_03 Tests=Limits|+limits
 &TEST_FS3SKILL_04 Tests=Setup Skills|think [set(me,actionskills:Firearms:2 Medicine:3)][set(*UnitTestDummy,actionskills:Firearms:10 Medicine:12)]
 &TEST_FS3SKILL_05 Tests=Simple Roll|+roll Medicine
-&TEST_FS3SKILL_06 Tests=Opposed Roll|+roll Faraday=Firearms vs UnitTestDummy=Firearms
+&TEST_FS3SKILL_06 Tests=Opposed Roll|+roll Gamewiz=Firearms vs UnitTestDummy=Firearms
 
 &TEST_FS3COMBAT_01 Tests=Setup testdummy|&actionskills *UnitTestDummy=Firearms:12
 &TEST_FS3COMBAT_02 Tests=Start a combat|+combat/start mock
@@ -320,57 +319,52 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_FS3CG_12 Tests=Set Position|+position Teacher
 &TEST_FS3CG_13 Tests=Set Bad Org|+org kjkj
 &TEST_FS3CG_14 Tests=Set Org|+org Army
-&TEST_FS3CG_15 Tests=Set Bad Rank|+rank xxx
-&TEST_FS3CG_16 Tests=Set Rank|+rank Captain
-&TEST_FS3CG_17 Tests=Set Sex|@sex me=Female
-&TEST_FS3CG_18 Tests=Advance|N
-&TEST_FS3CG_19 Tests=Reset Skills|+reset
-&TEST_FS3CG_20 Tests=View Points|+points
-&TEST_FS3CG_21 Tests=View Limits|+limits
+&TEST_FS3CG_15 Tests=Fake Faction|&faction me=Army
+&TEST_FS3CG_16 Tests=Set Bad Rank|+rank xxx
+&TEST_FS3CG_17 Tests=Set Rank|+rank 2nd Lieutenant
+&TEST_FS3CG_18 Tests=Set Sex|@sex me=Female
+&TEST_FS3CG_19 Tests=Advance|N
+&TEST_FS3CG_20 Tests=Reset Skills|+reset
+&TEST_FS3CG_21 Tests=View Points|+points
 &TEST_FS3CG_22 Tests=View abiliites|+abilities
-&TEST_FS3CG_23 Tests=Raise Attribute Too High|+raise Academic
-&TEST_FS3CG_24 Tests=Raise Attribute Too High|+raise Academic
-&TEST_FS3CG_25 Tests=Raise Attribute Too High|+raise Academic
-&TEST_FS3CG_26 Tests=Raise Attribute Too High|+raise Academic
-&TEST_FS3CG_27 Tests=Raise Attribute Too High|+raise Academic
-&TEST_FS3CG_28 Tests=Raise Attribute Too High|+raise Academic
-&TEST_FS3CG_29 Tests=Raise Attribute Too High|+ability Academic=12
-&TEST_FS3CG_30 Tests=Raise Attribute Too High|+raise Academic
-&TEST_FS3CG_31 Tests=Raise Another Attribute|+raise Creative
-&TEST_FS3CG_32 Tests=Try to Advance With Too Many Attr Points|N
-&TEST_FS3CG_33 Tests=Lower Attribute|+ability Creative=4
+&TEST_FS3CG_23 Tests=Raise Attribute|+raise Mind
+&TEST_FS3CG_24 Tests=Raise Attribute|+raise Mind
+&TEST_FS3CG_25 Tests=Raise Attribute Too High|+raise Mind
+&TEST_FS3CG_26 Tests=Raise Attribute Too High|+ability Mind=12
+&TEST_FS3CG_28 Tests=Raise Another Attribute|+raise Body
+&TEST_FS3CG_29 Tests=Raise Another Attribute|+raise Body
+&TEST_FS3CG_30 Tests=Raise Another Attribute|+raise Personality
+&TEST_FS3CG_31 Tests=Try to Advance With Too Many Attr Points|N
+&TEST_FS3CG_32 Tests=Lower Attribute|+ability Body=1
+&TEST_FS3CG_33 Tests=Raise Skill|+ability XYZ=8
 &TEST_FS3CG_34 Tests=Raise Skill|+raise Medicine
 &TEST_FS3CG_35 Tests=Raise Skill|+raise Firearms
 &TEST_FS3CG_36 Tests=Raise Skill|+raise Firearms
 &TEST_FS3CG_37 Tests=Raise Skill|+ability Firearms=12
 &TEST_FS3CG_38 Tests=Raise Skill|+raise Firearms
-&TEST_FS3CG_39 Tests=Set Too Many High Skills|+ability bg/Foo=12
-&TEST_FS3CG_40 Tests=Set Too Many High Skills|+ability bg/Bar=12
+&TEST_FS3CG_39 Tests=Set Too Many High Skills|+ability Foo=12
+&TEST_FS3CG_40 Tests=Set Too Many High Skills|+ability Bar=12
 &TEST_FS3CG_41 Tests=Try to Advance With Too Many High Skills|N
-&TEST_FS3CG_42 Tests=Lower Skill|+ability bg/Foo=0
-&TEST_FS3CG_43 Tests=Lower Skill|+ability bg/Bar=0
-&TEST_FS3CG_44 Tests=Raise Skill Too High|+raise Firearms
+&TEST_FS3CG_42 Tests=Lower Skill|+ability Foo=0
+&TEST_FS3CG_43 Tests=Lower Skill|+ability Bar=0
+&TEST_FS3CG_44 Tests=Lower Skill|+ability XYZ=0
 &TEST_FS3CG_45 Tests=Raise Skill Too High|+raise Firearms
-&TEST_FS3CG_46 Tests=Raise Skill Too High|+raise Firearms
-&TEST_FS3CG_47 Tests=Raise Skill Too High|+raise Firearms
-&TEST_FS3CG_48 Tests=Raise Skill Beyond Limits|+ability Drive=13
+&TEST_FS3CG_46 Tests=Raise Skill Beyond Limits|+ability Drive=13
 &TEST_FS3CG_49 Tests=Raise Skill|+ability Drive=5
 &TEST_FS3CG_50 Tests=Raise Skill|+ability Drive=0
-&TEST_FS3CG_51 Tests=Raise Skill|+ability action/Melee=10
-&TEST_FS3CG_52 Tests=Raise Skill|+ability act/Piloting=10
+&TEST_FS3CG_51 Tests=Raise Skill|+ability Melee=10
+&TEST_FS3CG_52 Tests=Raise Skill|+ability Piloting=10
 &TEST_FS3CG_53 Tests=Try to Advance With Too Many Action Skills|N
 &TEST_FS3CG_54 Tests=Set Skill|+ability Piloting=6
-&TEST_FS3CG_55 Tests=Raise BG Skill|+ability bg/Basketweaving=5
-&TEST_FS3CG_56 Tests=Raise Lang Skill|+ability lang/Japanese=2
+&TEST_FS3CG_55 Tests=Raise BG Skill|+ability Basketweaving=5
+&TEST_FS3CG_56 Tests=Raise Lang Skill|+lang/add Japanese
 &TEST_FS3CG_57 Tests=Try to Advance With Only One BG Skill|N
-&TEST_FS3CG_58 Tests=Raise BG Skill|+raise bg/Oil Painting
-&TEST_FS3CG_59 Tests=Raise BG Skill|+raise bg/Oil Painting
-&TEST_FS3CG_60 Tests=Raise BG Skill|+raise bg/Oil Painting
-&TEST_FS3CG_61 Tests=Raise BG Skill|+raise bg/Oil Painting
-&TEST_FS3CG_62 Tests=Raise BG Skill|+raise bg/Oil Painting
-&TEST_FS3CG_63 Tests=Raise BG Skill|+raise bg/Oil Painting
+&TEST_FS3CG_58 Tests=Raise BG Skill|+ability Oil Painting=3
+&TEST_FS3CG_59 Tests=Raise BG Skill|+raise Watercolors
+&TEST_FS3CG_60 Tests=Add Language|+lang/add French
+&TEST_FS3CG_61 Tests=Remove Language|+lang/delete French
 &TEST_FS3CG_64 Tests=Try to Advance With Too Many Skill Points|N
-&TEST_FS3CG_65 Tests=Lower BG Skill|+lower bg/Oil Painting
+&TEST_FS3CG_65 Tests=Lower BG Skill|+lower Oil Painting
 &TEST_FS3CG_66 Tests=Try to Advance With No Quirks|N
 &TEST_FS3CG_67 Tests=Add Quirk|+quirk/add Goofy
 &TEST_FS3CG_68 Tests=Add Too Many Quirks|+quirk/add Quirk1
@@ -379,9 +373,8 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_FS3CG_71 Tests=Add Too Many Quirks|+quirk/add Quirk4
 &TEST_FS3CG_72 Tests=Try to Advance With Too Many Quirks|N
 &TEST_FS3CG_73 Tests=Remove Quirk|+quirk/delete Quirk4
-&TEST_FS3CG_74 Tests=Set Ruling Attr|+rulingattr Basketweaving=Creative
+&TEST_FS3CG_74 Tests=Set Ruling Attr|+rulingattr Basketweaving=Body
 &TEST_FS3CG_75 Tests=View Ruling Attrs|+rulingattr
-&TEST_FS3CG_76 Tests=Bad Action Skill|+ability act/XKJF=4
 &TEST_FS3CG_77 Tests=Advance|N
 &TEST_FS3CG_78 Tests=Try to Advance With No BG|N
 &TEST_FS3CG_79 Tests=Set BG|&BG me=This is my BG.
@@ -402,94 +395,13 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_FS3XP_02 Tests=XP Costs|+xp/costs
 &TEST_FS3XP_03 Tests=XP Costs|+xp/cost bg/Foo
 &TEST_FS3XP_04 Tests=Spend XP Without Any|+xp/raise bg/Foo
-&TEST_FS3XP_05 Tests=Award XP|+xp/award Faraday=1/Test
+&TEST_FS3XP_05 Tests=Award XP|+xp/award Gamewiz=1/Test
 &TEST_FS3XP_06 Tests=Spend XP|+xp/raise bg/Foo
-&TEST_FS3XP_07 Tests=Check XP|think switch(ability_level(*Faraday,Foo),1,ansi(hg,OK - skill raised to 1),ansi(hr,FAIL - skill wasn't raised))
+&TEST_FS3XP_07 Tests=Check XP|think switch(ability_level(*Gamewiz,Foo),1,ansi(hg,OK - skill raised to 1),ansi(hr,FAIL - skill wasn't raised))
 &TEST_FS3XP_08 Tests=Global XP Award|@tr [install_aliasdb(FS3XP_CMD)]/TR-AWARDXP
 &TEST_FS3XP_09 Tests=Wait|think Waiting...
-&TEST_FS3XP_10 Tests=XP Awarded|think switch(xget(*Faraday,XP),1,ansi(hg,OK - XP raised to 1),ansi(hr,FAIL - XP wasn't raised))
+&TEST_FS3XP_10 Tests=XP Awarded|think switch(xget(*Gamewiz,XP),1,ansi(hg,OK - XP raised to 1),ansi(hr,FAIL - XP wasn't raised))
 &TEST_FS3XP_11 Tests=Raise before time|+xp/raise bg/Foo
-
-
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ FUDGE
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-&TEST_FUDGE_01 Tests=Sheet|+sheet
-&TEST_FUDGE_02 Tests=Skill Setup|think [set(me,skills:Firearms:5)][set(*unittestdummy,skills:Firearms:1)]
-&TEST_FUDGE_03 Tests=Roll|+roll Firearms
-&TEST_FUDGE_04 Tests=Opposed Roll|+roll [name(me)]/Firearms=UnitTestDummy/Firearms
-&TEST_FUDGE_05 Tests=FUDGE Help|+help FUDGE
-
-&TEST_FUDGECG_01 Tests=Hop to chargen|+hop Chargen
-&TEST_FUDGECG_02 Tests=Reset|think [iter(height weight skin hair eyes hand faction position org birthdate sex fullname actionskills bgskills langskills attributes quirks bg approval_job,wipe(me/##))][set(me,sex:Female)][set(me,unregistered)]
-&TEST_FUDGECG_03 Tests=Go inside|N
-&TEST_FUDGECG_04 Tests=Set Height|+height 6'0"
-&TEST_FUDGECG_05 Tests=Try to Advance Without Profile|N
-&TEST_FUDGECG_06 Tests=Set Weight|+weight 50kg
-&TEST_FUDGECG_07 Tests=Set Skin|+skin Blue
-&TEST_FUDGECG_08 Tests=Set Hair|+hair Red
-&TEST_FUDGECG_09 Tests=Set Eyes|+eyes Green
-&TEST_FUDGECG_10 Tests=Set Hand|+hand Right
-&TEST_FUDGECG_11 Tests=Advance|N
-&TEST_FUDGECG_12 Tests=Set Fullname|+fullname Test Person
-&TEST_FUDGECG_13 Tests=Set Bad Age|+age 987
-&TEST_FUDGECG_14 Tests=Set Age|+age 25
-&TEST_FUDGECG_15 Tests=Set Bad Faction|+faction DKJX 
-&TEST_FUDGECG_16 Tests=Try to Advance Without Demographics|N
-&TEST_FUDGECG_17 Tests=Set Faction|+faction Red
-&TEST_FUDGECG_18 Tests=Set Bad Position|+position XKJKJ
-&TEST_FUDGECG_19 Tests=Set Position|+position Teacher
-&TEST_FUDGECG_20 Tests=Set Bad Org|+org kjkj
-&TEST_FUDGECG_21 Tests=Set Org|+org Army
-&TEST_FUDGECG_22 Tests=Advance|N
-&TEST_FUDGECG_23 Tests=Start Skills|+start
-&TEST_FUDGECG_24 Tests=Try to Raise Too High|+raise Firearms
-&TEST_FUDGECG_25 Tests=Try to Raise Too High|+raise Firearms
-&TEST_FUDGECG_26 Tests=Try to Raise Too High|+raise Firearms
-&TEST_FUDGECG_27 Tests=Try to Raise Too High|+raise Firearms
-&TEST_FUDGECG_28 Tests=Try to Raise Too High|+raise Firearms
-&TEST_FUDGECG_29 Tests=Try to Raise Too High|+raise Firearms
-&TEST_FUDGECG_30 Tests=Try to Raise Too High|+raise Firearms
-&TEST_FUDGECG_31 Tests=Raise Another One|+raise Medicine
-&TEST_FUDGECG_32 Tests=Raise Another One|+raise Medicine
-&TEST_FUDGECG_33 Tests=Raise Another One|+raise Medicine
-&TEST_FUDGECG_34 Tests=Raise Another One|+raise Medicine
-&TEST_FUDGECG_35 Tests=Raise Another One|+raise Medicine
-&TEST_FUDGECG_36 Tests=Raise Another One|+raise Medicine
-&TEST_FUDGECG_37 Tests=Raise One So Too Many Are High|+raise Mechanics
-&TEST_FUDGECG_38 Tests=Raise One So Too Many Are High|+raise Mechanics
-&TEST_FUDGECG_39 Tests=Raise One So Too Many Are High|+raise Mechanics
-&TEST_FUDGECG_40 Tests=Raise One So Too Many Are High|+raise Mechanics
-&TEST_FUDGECG_41 Tests=Raise One So Too Many Are High|+raise Mechanics
-&TEST_FUDGECG_42 Tests=Raise One So Too Many Are High|+raise Mechanics
-&TEST_FUDGECG_43 Tests=Try to Advance With Too Many High Skills|N
-&TEST_FUDGECG_44 Tests=Lower One|+lower Mechanics
-&TEST_FUDGECG_45 Tests=Lower One|+lower Mechanics
-&TEST_FUDGECG_46 Tests=Lower Another So Not Too Many High Skills|+lower Medicine
-&TEST_FUDGECG_47 Tests=Raise Attr Too High|+raise Willpower
-&TEST_FUDGECG_48 Tests=Raise Attr Too High|+raise Willpower
-&TEST_FUDGECG_49 Tests=Raise Attr Too High|+raise Willpower
-&TEST_FUDGECG_50 Tests=Raise Attr Too High|+raise Willpower
-&TEST_FUDGECG_51 Tests=Lower Attr Too High|+lower Strength
-&TEST_FUDGECG_52 Tests=Lower Attr Too High|+lower Strength
-&TEST_FUDGECG_53 Tests=Lower Attr Too High|+lower Strength
-&TEST_FUDGECG_54 Tests=Lower Attr Too High|+lower Strength
-&TEST_FUDGECG_55 Tests=Raise Attr|+raise Agility
-&TEST_FUDGECG_56 Tests=Raise Attr|+raise Agility
-&TEST_FUDGECG_57 Tests=Raise Attr|+raise Agility
-&TEST_FUDGECG_58 Tests=Try to Advance With Too Many High Attrs|N
-&TEST_FUDGECG_59 Tests=Lower Attr|+lower Agility
-&TEST_FUDGECG_60 Tests=Lower Attr|+lower Agility
-&TEST_FUDGECG_61 Tests=Advance|N
-&TEST_FUDGECG_62 Tests=Try to Advance With No BG|N
-&TEST_FUDGECG_63 Tests=Set BG|&BG me=This is my BG.
-&TEST_FUDGECG_64 Tests=Advance|N
-&TEST_FUDGECG_65 Tests=Try to Advance Without Submitting|D
-&TEST_FUDGECG_66 Tests=Submit BG|+bg/submit
-&TEST_FUDGECG_67 Tests=Advance|D
-&TEST_FUDGECG_68 Tests=Unsubmit BG|+bg/unsubmit
-&TEST_FUDGECG_69 Tests=Sheet|+sheet
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -499,7 +411,7 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_RANKS_01 Tests=Show Rank Factions|+ranks
 &TEST_RANKS_02 Tests=Army Ranks|+ranks Army
 &TEST_RANKS_03 Tests=Set Rank|&Rank me=Private
-&TEST_RANKS_04 Tests=Rank Function|think rank(*Faraday)
+&TEST_RANKS_04 Tests=Rank Function|think rank(*Gamewiz)
 
 
 

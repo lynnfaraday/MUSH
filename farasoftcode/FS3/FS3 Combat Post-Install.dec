@@ -20,7 +20,6 @@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 @wait 5=+jobs/create CODE=FS3 Combat Config/Configure FS3Combat.  See the configuration text file that accompanied the installation.
-@wait 5=+jobs/create CODE=FS3 Combat Pose Hook/If you're not using the autospace module, configure an @hook for pose/say/semipose/emit to trigger the POSE_HOOK attribute on the FS3Combat Instance Parent object.  Otherwise your combat pose tracking will not work.
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -1,0 +1,29 @@
+@dig/teleport TP Hub=TP;tp hub,O;out
+@DESCRIBE here=There will be times when a plot requires rooms that don't already exist on the grid.  Tinyplot Rooms (TP Rooms) are for just such a purpose.  You can grab one any time you need and even put on your own custom description.  See [ansi(h,+help TP_ROOMS)] for more details.%R%R[u(fun_avail_rooms)]
+
+@dig TP Room 1=1;tp1,O;out
+@dig TP Room 2=2;tp2,O;out
+@dig TP Room 3=3;tp3,O;out
+
+@lock 1=islocked/0
+@lock 2=islocked/0
+@lock 3=islocked/0
+
+&islocked 1=0
+&islocked 2=0
+&islocked 3=0
+
+@fail 1=That room is in use.
+@fail 2=That room is in use.
+@fail 3=That room is in use.
+
+@fo me=&ROOM_EXITS here=[num(1)] [num(2)] [num(3)]
+
+@fo me=@parent here=[install_aliasdb(ROOM_TPROOM_FOYER)]
+
+@desc here=There will be times when a plot requires rooms that don't already exist on the grid.  Tinyplot Rooms (TP Rooms) are for just such a purpose.  You can grab one any time you need and even put on your own custom description.  See [ansi(h,+help TP_ROOMS)] for more details.%R%R[u(fun_avail_rooms)]
+
+think [setq(0,search(all,eroom,\[strmatch(name(##),TP Room 1)\]))][parent(%q0,install_aliasdb(ROOM_TPROOM_PARENT))][set(%q0,my_exit:[num(1)])][set(%q0,desc2:default)]
+think [setq(0,search(all,eroom,\[strmatch(name(##),TP Room 2)\]))][parent(%q0,install_aliasdb(ROOM_TPROOM_PARENT))][set(%q0,my_exit:[num(2)])][set(%q0,desc2:default)]
+think [setq(0,search(all,eroom,\[strmatch(name(##),TP Room 3)\]))][parent(%q0,install_aliasdb(ROOM_TPROOM_PARENT))][set(%q0,my_exit:[num(3)])][set(%q0,desc2:default)]
+

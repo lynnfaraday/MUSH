@@ -115,7 +115,7 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,7.0,+mail mailing lists.)
 
 @STARTUP FaraMail Commands=@set me=!no_command
 
-@startup FaraMail Functions=@fun send_mail=[num(me)],fun_send_msg,5,5,admin;@fun unread_mail=[num(me)],fun_total_unread,1,1,admin;@fun total_mail=[num(me)],fun_total_mail,1,1,admin
+@startup FaraMail Functions=@fun send_mail=[num(me)]/fun_send_msg;@fun unread_mail=[num(me)]/fun_total_unread;@fun total_mail=[num(me)]/fun_total_mail
 
 
 &FUN_EXPANDED_TO_LIST FaraMail Functions=[squish([setq(9,)][iter(%0,switch(1,match(##,friends),friends(%#),t(pmatch(##)),setq(9,%q9##%B),t(match(lattr(%1/list_*),LIST_##)),setq(9,%q1[xget(%1,list_##)]%B),t(match(lattr(#MAIL_LIST/list_*),LIST_##)),setq(9,%q9[xget(#MAIL_LIST,list_##)]%B),pemit(%#,ansi(hr,WARNING!  ## is an invalid player or list, mail not deliverable to that person!))))][setunion(capstr_all(%q9),)])]
@@ -170,7 +170,7 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,7.0,+mail mailing lists.)
 
 &FUN_NUM_UNREAD FaraMail Functions=[words(iter(u(fun_messages_in_folder,%0,%1),switch(u(fun_get_status_flag,xget(%0,##)),U,##)))]
 
-&FUN_SEND_MSG FaraMail Functions=[setq(7,u(#MAIL_FUN/fun_expanded_to_list,%1[switch(xget(xget(%0,mail_object),sent_mail),1,%B[name(%0)])],xget(%0,mail_object)))][iter(%q7,[u(#MAIL_FUN/fun_send_msg_to_player,pmatch(##),%0,MSG_[xget(#MAIL_FUN,next_message)],%q7|[name(%0)]|[switch(##,name(%0),-,U)]|-|-|[secs()]|[switch(%2,#-1,xget(#MAIL_FUN,next_message),,xget(#MAIL_FUN,next_message),%2)]|[escape_cr(%3)]|[escape_cr(%4)][switch(isplayer(%0),1,xget(xget(%0,mail_object),sig))])][pemit(pmatch(##),<MAIL> You have a new message from [name(%0)].)])][set(#MAIL_FUN,next_message:[inc(xget(#MAIL_FUN,next_message))])]
+&FUN_SEND_MSG FaraMail Functions=switch(iswizard(%@),0,#-1 RESTRICTED,[setq(7,u(#MAIL_FUN/fun_expanded_to_list,%1[switch(xget(xget(%0,mail_object),sent_mail),1,%B[name(%0)])],xget(%0,mail_object)))][iter(%q7,[u(#MAIL_FUN/fun_send_msg_to_player,pmatch(##),%0,MSG_[xget(#MAIL_FUN,next_message)],%q7|[name(%0)]|[switch(##,name(%0),-,U)]|-|-|[secs()]|[switch(%2,#-1,xget(#MAIL_FUN,next_message),,xget(#MAIL_FUN,next_message),%2)]|[escape_cr(%3)]|[escape_cr(%4)][switch(isplayer(%0),1,xget(xget(%0,mail_object),sig))])][pemit(pmatch(##),<MAIL> You have a new message from [name(%0)].)])][set(#MAIL_FUN,next_message:[inc(xget(#MAIL_FUN,next_message))])])
 
 &FUN_SEND_MSG_TO_PLAYER FaraMail Functions=[setq(9,xget(%0,mail_object))][setq(8,switch(hasattr(%q9,route_from_[name(%1)]),1,xget(%q9,route_from_[name(%1)]),0))][set(%q9,%2:%3)][set(%q9,folder_%q8:[xget(%q9,folder_%q8)] %2)]
 
@@ -245,7 +245,6 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,7.0,+mail mailing lists.)
 +jobs/create CODE=Postmaster/Change the postmaster password.
 +jobs/create CODE=Mailing Lists/Set up +mail lists.  See +shelp +list
 +jobs/create CODE=Disable @mail/Disable @mail in the server-side config.
-+jobs/create CODE=Mail Purge/Set up the MAILING_LIST_OBJECT on the Idle Purger so nuked players are removed from mailing lists.
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

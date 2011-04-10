@@ -294,9 +294,10 @@ A few other miscellaneous things to configure:
   &JURYRIG_SKILL FS3Combat Preferences=Repair
   &REPAIR_SKILL FS3Combat Preferences=Repair
 
-* Toughness ability - Configure the ability that is used for KO rolls.  
+* Toughness and initiative ability - Configure the ability that is used for KO and initiative rolls.  
   
   &TOUGHNESS_SKILL FS3Combat Preferences=Athletic
+  &INITIATIVE_ABILITY FS3Combat Preferences=Reactive
 
 * Delay between combat poses, in seconds.  You can tune this to give people more or less time to read. 
   &COMBAT_DELAY FS3Combat Preferences=3

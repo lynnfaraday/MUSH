@@ -184,7 +184,6 @@ think install_create(BBS_POCKET,bbpocket,0,0,7.0,BBS Storage.,BBS_CMD)
 &FUN_FIND_ALTS bbpocket=iter(alts(%0),pmatch(##))
 &NXT_MESS bbpocket=1
 &CONFIG_TIMEOUT bbpocket=2592000
-@fo %#=+jobs/create CODE=BBS Config/Create and lock a staff jobs BBS.
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -22,10 +22,10 @@ think install_create(FRIENDS_CMD,Friends System,1,0,7.0,Friends tracker.)
 &FUN_FORMAT_LAST_TIME Friends System=timefmt($x - $X,convtime(%0))
 &FUN_NOTIFY_CONNECT Friends System=switch(1,t(match(xget(%0,list_friends),%1)),pemit(%0,[ansi(hb,<FRIENDS>)] %1 has connected.))
 &FUN_NOTIFY_DISCONNECT Friends System=switch(1,t(match(xget(%0,list_friends),%1)),pemit(%0,[ansi(hb,<FRIENDS>)] %1 has disconnected.))
-&FUN_FRIENDS Friends System=xget(%0,list_friends)
+&FUN_FRIENDS Friends System=switch(iswizard(%@),0,#-1 RESTRICTED,xget(%0,list_friends))
 
 &HELP_+FRIENDS Friends System=The +friends command lets you keep track of your friends.  It will tell you when they log in and out, and you can see a list of their locations and last connection times.%R%R[ansi(h,+friend/add <player>)] - Add a friend.%R[ansi(h,+friend/remove <player>)] - Remove a friend.%R[ansi(h,+friends)] - Show a list of your friends.%R%RYou can also use the +mail system to send a mail to all your friends.  Just use [ansi(h,+mail friends=<subject>/<message>)].
-@STARTUP Friends System=@set me=!no_command;@fun FRIENDS=me,FUN_FRIENDS,1,1,admin
+@STARTUP Friends System=@set me=!no_command;@fun FRIENDS=me,FUN_FRIENDS
 
 
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R

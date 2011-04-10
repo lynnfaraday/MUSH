@@ -646,7 +646,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,7.0,FS3Com
 @@ %1 = defender
 @@ Attack mods include:
 @@ - Damage modifier
-@@ - Suppression value x 5
+@@ - Suppression value
 @@ - Weapon accuracy
 @@ - Special modifiers
 @@ - Aim modifier (3)
@@ -655,7 +655,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,7.0,FS3Com
 @@ - Melee modifier (3)
 @@ --------------------------
 
-&FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[mul(u(fun_combatstat,%0,suppress),5)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mod),switch(u(fun_combatstat,%0,lastaim),%1,3,0),u(fun_stance_mod,%0,attacker),u(fun_luck_mod,%0,attack),switch(u(fun_weaponstat,%0,wpntype),Melee,3,0))
+&FUN_ATTACK_MODS FS3Combat Instance Parent=add(-[u(fun_damagemod,%0)],-[u(fun_combatstat,%0,suppress)],u(fun_weaponstat,%0,accuracy),u(fun_combatstat,%0,mod),switch(u(fun_combatstat,%0,lastaim),%1,3,0),u(fun_stance_mod,%0,attacker),u(fun_luck_mod,%0,attack),switch(u(fun_weaponstat,%0,wpntype),Melee,3,0))
 
 
 @@ --------------------------
@@ -800,6 +800,8 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,7.0,FS3Com
 @@ This can be installed as an @hook after pose/say/semipose/emit to trigger combat notification when all actors have posed.
 @@ --------------------------
 
+&HOOK_COMBAT FS3Combat Instance Parent=u(#FS3COMBAT_INSTANCE/POSE_HOOK)
+
 &POSE_HOOK FS3Combat Instance Parent=[setq(c,xget(%#,combat))][switch(t(%qc),1,[set(%qc,posed:[setdiff([xget(%qc,posed)] %N,)])][u(%qc/fun_pose_trigger)])]
 
 &FUN_POSE_TRIGGER FS3Combat Instance Parent=switch(1,v(allposed),,u(FUN_EVERYONE_POSED),u(fun_org_msg,ansi(hc,Everyone has posed.))[set(me,allposed:1)])
@@ -879,7 +881,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,7.0,FS3Com
 @@ %0 = name
 @@ --------------------------
 
-&FUN_INITIATIVE FS3Combat Instance Parent=iter(revwords(sort(iter(u(fun_combatants),[roll_ability(pmatch(##),Reactive,u(fun_luck_mod,##,initiative))]:##),n)),after(##,:))
+&FUN_INITIATIVE FS3Combat Instance Parent=iter(revwords(sort(iter(u(fun_combatants),[roll_ability(pmatch(##),xget(#FS3COMBAT_PREFS,initiative_ability),u(fun_luck_mod,##,initiative))]:##),n)),after(##,:))
 
 @@ --------------------------
 @@ FUN_UNTARGET

@@ -22,12 +22,12 @@ think install_create(SETUP_DB,Player Setup Data,1,1,7.0,Stores player setup data
 @set Player Setup Object = MONITOR
 @startup Player Setup Object = @set me=!NO_COMMAND
 @AHEAR Player Setup Object=@switch 0=hasattr(%#,status),{@tr #SETUP_DB/ADDITIONAL_SETUP=%#;think [iter(lattr(#SETUP_DB/hattr_*),[setq(0,after(##,_))][set(%#,%q0:[u(#SETUP_DB/##,%#)])][set(%#/%q0,mortal_dark)][atrlock(%#/%q0,on)])][iter(lattr(#SETUP_DB/vattr_*),[setq(0,after(##,_))][set(%#,%q0:[u(#SETUP_DB/##,%#)])])]}
-&FUN_SETUP_ATTR Player Setup Object=switch(isstaff(%#),0,ansi(hr,This command is for staff only.),switch(%0,h,[set(#SETUP_DB,HATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:[u(#SETUP_DB/HATTR_%1)]))][set(##/%1,mortal_dark)][atrlock(##/%1,on)])][ansi(h,%RYou set up a Hidden Locked attribute named %1)],v,[set(#SETUP_DB,VATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:[u(#SETUP_DB/VATTR_%1)]))])][ansi(h,%RYou set up a Visible Unlocked attribute named %1)],[ansi(hb,%0 is not a valid setting.)]))
+&FUN_SETUP_ATTR Player Setup Object=switch(iswizard(%@),0,#-1 RESTRICTED,switch(%0,h,[set(#SETUP_DB,HATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:[u(#SETUP_DB/HATTR_%1)]))][set(##/%1,mortal_dark)][atrlock(##/%1,on)])][ansi(h,%RYou set up a Hidden Locked attribute named %1)],v,[set(#SETUP_DB,VATTR_%1:%2)][iter(lsearch(all,type,player),[switch(hasattr(##,%1),0,set(##,%1:[u(#SETUP_DB/VATTR_%1)]))])][ansi(h,%RYou set up a Visible Unlocked attribute named %1)],[ansi(hb,%0 is not a valid setting.)]))
 @LISTEN Player Setup Object=* has connected.
 &SHELP_PLAYER_SETUP Player Setup Object=Data is stored on object #SETUP_DB.  See the web page for install instructions.  http://www.wordsmyth.org/aresmush/index.php?title=Player_Setup
 &INSTALL_DESTINATION Player Setup Object=#0
 
-@startup Player Setup Object=@set me=!NO_COMMAND;@fun setup_attr=me,fun_setup_attr,3,3,admin
+@startup Player Setup Object=@set me=!NO_COMMAND;@fun setup_attr=me/fun_setup_attr
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
