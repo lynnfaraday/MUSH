@@ -639,9 +639,9 @@ think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,7.0,FS3Combat Pre
 
 &REPAIR_SKILL FS3Combat Preferences=Repair
 
-&TOUGHNESS_SKILL FS3Combat Preferences=Body
+&TOUGHNESS_SKILL FS3Combat Preferences=Body+Body
 
-&INITATIVE_ABILITY FS3Combat Preferences=Reaction
+&INITATIVE_ABILITY FS3Combat Preferences=Reaction+Reaction
 
 &HOSPITALS FS3Combat Preferences=#-1
 

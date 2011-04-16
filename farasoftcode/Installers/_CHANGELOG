@@ -3,63 +3,65 @@
 Version 7.0 (in progress)
 ----------------------------------------------------------------
 
-** NOTE **
-When you patch a system, the installer will wipe out any existing
-commands or help files on that object.  This is a feature to prevent
-obsolete commands from lingering on the objects.  
-
-HOWEVER it also means that if you put extra commands on my system 
-objects, they'll be wiped out when you upgrade.  I heartily recommend
-you put your own custom commands on separate objects to prevent that.
-
 Jobs
 ~~~~~~
-filterable fields
-aliases (Cags)
+- You can now customize which fields show up on your jobs list.  See the wiki for details.
+
+- Various job commands now have aliases for those who may be used to other systems.  (Suggested by Caggles@Pioneer)
 +jobs/claim
 +jobs/mine
-+jobs/create with alternate syntax
+Multiple syntaxes for +jobs/create
 
 IC Time
 ~~~~~~~~
-New *Core* module for tracking IC time.  Supports flexible IC/OOC
-time ratios.  Your ictime() function will need to be modified.
+New module for tracking IC time.  Supports flexible IC/OOC
+time ratios.  This replaces the old ictime() function from the Global Functions system.
+
+Global Functions
+~~~~~~~~~~~~~~~~
+Remove ictime().  You should either move your ictime() function to your own object or use the new IC Time module.
 
 Install Manager
 ~~~~~~~~~~~~~~~
-Was uninstalling the HELP files but not all the extra help MORE_HELP, SHELP, etc.
+Now supports the @hook module.
+Fixed a bug with uninstalling old help files.
 
 Autospacer
 ~~~~~~~~~~~
-Now triggers the combat pose tracking @hook.  This was necessary to
-do here because there can be only one @hook for a command.
+Uses the new @hook manager.
 
 Globals
 ~~~~~~~
-+time moved to IC Time system
-
-Idle timer now only runs once an hour and only boots people who have been idle for 6 hours or more.
+- +time moved to IC Time system
+- Idle timer now only runs once an hour and only boots people who have been idle for 6 hours or more.
 
 Cookies / Luck
 ~~~~~~~~~~~~~~
-* Luck is now its own module, separate from cookies.  it's nominally considered part of the FS3 system, but you can still install it separately if you want to use luck without FS3.
+- Luck is now its own module, separate from cookies.  It's nominally considered part of the FS3 system, but you can still install it separately if you want to use luck without FS3.
 
-FS3 Skills / Chargen
+FS3
 ~~~~~~~~~~~~~~~~~~~~~
+Major Skill Changes
+--------------------
 FS3 skill rolls now use a brand new dice mechanic, similar to New WoD and Shadowrun.  Rolls are attribute+skill using d8's, counting successes.  Modifiers give more/fewer dice to roll.
 
-Attributes are now rated from 1-4.  This hopefully avoids confusion, since everyone kept thinking they were equivalent to skills, and fits better with the new dice mechanic.
+Attributes are now rated from 1-4 to fit better with the new dice mechanic.
 
-Action and Background skill ratings have different names to hopefully avoid confusion.  
-	1-3 is still for students/hobbyists ("Novice")
-	4-6 is still a typical professional level ("Proficient")
-	7-9 is for very experienced/talented folks ("Veteran") 
-	10-12 is for experts ("Master").   
-
-True "Rookies", who are fully trained but still at the beginning of their experience (such as a first-year doctor or pilot) could be at the 3-4 rating depending on their talent.
+Action and Background skill ratings have different names to hopefully avoid confusion: Novice / Proficient / Veteran / Master 
 
 Language skills no longer have ratings.  This is intended to simplify chargen, and de-emphasize languages.   Being multi-lingual was crazy expensive under the old system.
 
+Major Combat Changes
+--------------------
+Damage modifiers for small wounds (light/moderate) are much much less.  You will never be KO'd by a single light or moderate wound.
+
+Removed the 'fit for duty' and similar status displays.  They never really fit the wound modifiers in the way I intended them to, and made even less sense after tweaking the wound modifiers this time around.
+
++treat no longer exists.  You cannot use first aid outside of combat.  It was causing too much confusion with people using the wrong command.
+
+
+Other Sundry Changes
+--------------------
 Since language skills don't have ratings, the chargen ability room commands are greatly simplified.
 
 Removed +roll/casual because it was confusing and useless.  
@@ -68,27 +70,21 @@ Age/birthdate functions moved to IC Time system.
 
 Setting your age in chargen now works as you'd expect, and the min/max ages are configurable.
 
-FS3 Combat
-~~~~~~~~~~~~~~~~~~~~~
-*** Damage modifiers for small wounds (light/moderate) are much much less.  This effectively means you will never be KO'd by a single light or moderate wound.
+Range is simplified; you now just specify short, medium or long rather than a distance.
 
-*** +treat no longer exists.  You cannot use first aid outside of combat.  It was causing too much confusion with people using the wrong command when they were in combat, and it really isn't necessary if you're not using +combat.
+KO rolls are now an ability roll not a flat percentage
 
-*** Removed the 'fit for duty' and similar status displays.  They never really fit the wound modifiers in the way I intended them to, and made even less sense after tweaking the wound modifiers this time around.
+Hero factor has been removed; it never really worked as intended
 
-*** Range is simplified; you now just specify short, medium or long.  The range listed in the weapon stats is just a guide to help you figure out what the range bracket should be.
+Chance of crew being hit on low-severity vehicle wounds is lessened.
 
-* KO rolls are now an ability roll not a flat percentage
+Luck modifiers were too high.  Now they mirror what's described in +luck
 
-* Hero factor has been removed; it never really worked as intended
+Defensive weapons are now called Suppressive weapons.
 
-* Chance of crew being hit on low-severity vehicle wounds is lessened.
+The pose hook is now installed automatically.
 
-* Luck modifiers were too high.  Now they mirror what's described in +luck
-
-* Defensive weapons are now called Suppressive weapons.
-
-* Put in a +job so you'd know to configure the pose hook to enable pose tracking.  The autospacer module will do this for you, though.
+The ability used for initiative rolls is now configurable.
 
 
 ================================================================

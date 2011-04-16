@@ -164,7 +164,7 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,7.0,FS3Comba
 @@     %q4 = healing points required for the wound to heal 1 lvl
 @@     %q5 = current sev
 @@     %q6 = 1 if a wound was totally healed, 0 otherwise.  used to cut down on iterations
-&TR_HEAL_ATTR_GROUP FS3Combat Damage Commands=@dolist %0=think [setq(5,u(fun_dmgstat,##,currsev))][switch(%q5,H,,[setq(0,edit(before(after(##,_),_),.,_))][setq(1,switch(1,isplayer(%q0),ability_level(pmatch(%q0),xget(#FS3COMBAT_PREFS,toughness_skill)),isnpc(%q0),npcstat(%q0,skill),5))][setq(2,u(fun_dmgstat,##,healing))][setq(3,add(%q2,switch(roll_ability(NoPlayer,%q1),>0,2,1),switch(0,match(xget(#FS3COMBAT_PREFS,hospitals),loc(pmatch(%q0))),0,0.5)))][setq(4,u(FUN_HEALPOINTS_WOUND,##))][u(fun_mod_dmgstat,##,healing,%q3)][setq(6,0)][switch(gte(%q3,%q4),1,[u(fun_mod_dmgstat,##,currsev,switch(%q5,C,S,S,M,M,L,L,H[setq(6,1)]))][u(fun_mod_dmgstat,##,healing,sub(%q3,%q4))][switch(%q6,1,[switch(words(u(fun_healable_wounds,%q0)),0,u(fun_clear_healing,%q0))][switch(isplayer(%q0),0,wipe(#FS3COMBAT_DB_DMG/##))])])][u(fun_healing_log,%q0 healed ##: sev:%q5 old:%q2 new:%q3 healedDown:[gte(%q3,%q4)] healedCompletely:%q6)]
+&TR_HEAL_ATTR_GROUP FS3Combat Damage Commands=@dolist %0=think [setq(5,u(fun_dmgstat,##,currsev))][switch(%q5,H,,[setq(0,edit(before(after(##,_),_),.,_))][setq(1,u(fun_toughness_ability,##))][setq(2,u(fun_dmgstat,##,healing))][setq(3,add(%q2,switch(roll_ability(NoPlayer,%q1),>0,2,1),switch(0,match(xget(#FS3COMBAT_PREFS,hospitals),loc(pmatch(%q0))),0,0.5)))][setq(4,u(FUN_HEALPOINTS_WOUND,##))][u(fun_mod_dmgstat,##,healing,%q3)][setq(6,0)][switch(gte(%q3,%q4),1,[u(fun_mod_dmgstat,##,currsev,switch(%q5,C,S,S,M,M,L,L,H[setq(6,1)]))][u(fun_mod_dmgstat,##,healing,sub(%q3,%q4))][switch(%q6,1,[switch(words(u(fun_healable_wounds,%q0)),0,u(fun_clear_healing,%q0))][switch(isplayer(%q0),0,wipe(#FS3COMBAT_DB_DMG/##))])])][u(fun_healing_log,%q0 healed ##: sev:%q5 old:%q2 new:%q3 healedDown:[gte(%q3,%q4)] healedCompletely:%q6)]
 
 
 @@  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -447,22 +447,28 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,7.0,FS3Comba
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_CHECK_KO
-@@  Determines if someone should be ko'd by rolling a random # and comparing to their wound
-@@  level.  They get a bonus/penalty based on their 'toughness' stat.  
-@@ 
-@@  They must roll OVER the specified target number, which will never be lower than 2 
-@@  or higher than 95.  Thus there's always a chance of getting KO'd or staying OK no
-@@  matter how hurt you are.
+@@  Determines if someone should be ko'd by making a toughness roll. 
 @@
 @@  Returns 1 if they FAIL their KO check.
 @@  %0 = name
 @@  %1 = combat #
 @@
-@@ %q0=damagemod    %q1=ability level  %q2=random roll  %q4=ability mod
-@@ %q5=roll target  %q6=result
+@@ %q0=damagemod    %q1=ability level  %q2=random roll  
+@@ %q6=result
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&FUN_CHECK_KO FS3Combat Damage Commands=localize([setq(0,damagemod(%0))][setq(1,switch(1,isnpc(%0),npcstat(%0,skill),isvehicle(%0),vehtypestat(vehiclestat(%0,type),toughness),isplayer(%0),ability_level(pmatch(%0),xget(#FS3COMBAT_PREFS,toughness_skill)),2))][setq(2,roll_ability(NoPlayer,%q1,%q0,xget(#FS3COMBAT_PREFS,toughness_skill)))][setq(6,switch(%q2,>0,0,1))][u(%1/fun_combat_log,%0 checking KO : dmgmod=%q0 toughness=%q1 toughmod=%q4 roll=%q2 rolltarget=%q5%B%BKOd:%q6)]%q6)
+&FUN_CHECK_KO FS3Combat Damage Commands=localize([setq(0,damagemod(%0))][setq(1,u(fun_toughness_ability,%0))][setq(2,roll_ability(%0,%q1,%q0))][setq(6,switch(%q2,>0,0,1))][u(%1/fun_combat_log,%0 checking KO : dmgmod=%q0 toughness=%q1 roll=%q2 KOd:%q6)]%q6)
+
+
+@@ --------------------------
+@@ FUN_TOUGHNESS_ABILITY
+@@ Determines toughness ability rating.
+@@ Note: The configured ability on the preferences object may be in the form 
+@@       ability+ability
+@@ %0 = name
+@@ --------------------------
+
+&FUN_TOUGHNESS_ABILITY FS3Combat Damage Commands=localize([setq(0,xget(#FS3COMBAT_PREFS,toughness_skill))]switch(1,isnpc(%0),npcstat(%0,skill),isvehicle(%0),vehtypestat(vehiclestat(%0,type),toughness),isplayer(%0),add(ability_level(pmatch(%0),before(%q0,+)),ability_level(pmatch(%0),after(%q0,+))),4))
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

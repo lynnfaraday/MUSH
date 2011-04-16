@@ -83,8 +83,6 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit pa
 
 &CREDITS FS3 Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
-
-
 @startup FS3 Skill Functions=@function ability_level=me/fun_ability_level;@function roll_ability=me/fun_roll_ability;@function opposed_result=me/fun_get_opposed_result;@function pretty_opposed_result=me/fun_pretty_opposed_result
 
 
@@ -129,15 +127,15 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit pa
 @@ %q1 = total modifier
 @@ --------------------------
 
-&FUN_RULING_ATTR_MOD FS3 Skill Functions=localize([setq(0,switch(t(%2),1,%2,u(fun_ruling_attr,%0,%1)))][ability_level(%0,%q0)])
+&FUN_RULING_ATTR_MOD FS3 Skill Functions=localize(switch(1,isnum(%1),0,[setq(0,switch(t(%2),1,%2,u(fun_ruling_attr,%0,%1)))][ability_level(%0,%q0)]))
 
 
 @@ --------------------------
 @@ FUN_ROLL_DICE
 @@ Performs the raw die rolls for an ability roll.
-@@ %0 = number of dice
+@@ %0 = number of dice (rounded off and chopped between 1 and 20)
 @@ --------------------------
-&FUN_ROLL_DICE FS3 Skill Functions=switch(%0,0,1,die(%0,8,1))
+&FUN_ROLL_DICE FS3 Skill Functions=localize([setq(1,max(min(round(%0,0),20),1))]setq(0,switch(%0,0,1,die(%q1,8,1)))%q0)
 
 @@ --------------------------
 @@ FUN_ROLL_RESULT
@@ -154,17 +152,26 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit pa
 @@ --------------------------
 @@ FUN_ABILITY_LEVEL
 @@ Gets ability level.
-@@ - If player doesn't exist, assumes a NPC and returns '2'
 @@ - If ability is a number, just returns that number
-@@ - If player does not have the ability, returns '0'
+@@ - If NPC, returns NPC stat (only works if FS3 NPC system or substitute is installed)
+@@ - If player return ability level or 0
+@@ - Otherwise returns 2
 @@
 @@ %0 = player (if no player, assumes a NPC and returns 2)
 @@ %1 = ability (may be a number, which is simply returned)
 @@
+@@ %q0 = player DB#
+@@ --------------------------
+&FUN_ABILITY_LEVEL FS3 Skill Functions=localize([setq(0,pmatch(%0))][switch(1,not(iswizard(%@)),#-1 RESTRICTED,isnum(%1),%1,u(fun_is_npc,%0),npcstat(%0,skill,%1),not(%q0),2,u(fun_read_ability_from_attrs,%q0,%1))])
+
+@@ %0 = db#
+@@ %1 = ability
 @@ %q0 = found ability rating
 @@ %q1 = unpretty ability name
-@@ --------------------------
-&FUN_ABILITY_LEVEL FS3 Skill Functions=localize([switch(1,not(iswizard(%@)),#-1 RESTRICTED,isnum(%1),%1,not(pmatch(%0)),2,[setq(0,0)][setq(1,unprettify(%1))][iter(attributes actionskills bgskills,switch(t(grab(xget(%0,##),%q1:*)),1,setq(0,after(grab(xget(%0,##),%q1:*),:))),,)]%q0)])
+&FUN_READ_ABILITY_FROM_ATTRS FS3 Skill Functions=localize([setq(0,0)][setq(1,unprettify(%1))][iter(attributes actionskills bgskills,switch(t(grab(xget(%0,##),%q1:*)),1,setq(0,after(grab(xget(%0,##),%q1:*),:))),,)]%q0)
+
+@@ Wrapper for the isnpc() function in case it's not installed.
+&FUN_IS_NPC FS3 Skill Functions=switch(isnpc(%0),1,1,0)
 
 @@ --------------------------
 @@ FUN_ABILITY_TYPE
@@ -296,7 +303,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit pa
 @@ %0 = rating
 @@ %1 = ability type
 @@ --------------------------
-&FUN_PRINT_LEVEL FS3 Skill Functions=switch(%0,0,,[ljust([u(fun_level_bracket_abbrev,%0,%1)],4)] [iter(lnum(1,%0),[ansi(switch(%1,attribute,g,switch(#@,<4,g,<7,y,<10,r,b)),@)],,)])
+&FUN_PRINT_LEVEL FS3 Skill Functions=switch(%0,0,,[ljust([u(fun_level_bracket_abbrev,%0,%1)],4)] [iter(lnum(1,%0),[ansi(switch(%1,attribute,switch(#@,<2,g,<3,y,<4,r,b),switch(#@,<4,g,<7,y,<10,r,b)),@)],,)])
 
 @@ --------------------------
 @@ FUN_PRINT_LEVEL
@@ -342,7 +349,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit pa
 @@
 @@ %q0 = unpretty ability name
 @@ --------------------------
-&FUN_RULING_ATTR FS3 Skill Functions=localize([setq(0,unprettify(%1))]switch(u(fun_ability_type,%0,%1),attribute,%1,action,after(grab(xget(#FS3SKILL_DB,ruling_attr),%q0:*),:),switch(match(xget(%0,ruling_attr),%q0:*),0,xget(#FS3SKILL_DB,ruling_attr_bg),after(grab(xget(%0,ruling_attr),%q0:*),:))))
+&FUN_RULING_ATTR FS3 Skill Functions=localize([setq(0,unprettify(%1))]switch(u(fun_ability_type,%0,%1),attribute,0,action,after(grab(xget(#FS3SKILL_DB,ruling_attr),%q0:*),:),switch(match(xget(%0,ruling_attr),%q0:*),0,xget(#FS3SKILL_DB,ruling_attr_bg),after(grab(xget(%0,ruling_attr),%q0:*),:))))
  
  
 @@ --------------------------
@@ -418,7 +425,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit pa
 @@
 @@ Returns 1 or 0|error message
 @@ --------------------------
-&FUN_SET_ABILITY FS3 Skill Functions=localize([setq(0,ability_level(%0,%2))][setq(1,add(%q0,%3))][setq(2,switch(%1,attribute,attributes,attr,attributes,action,actionskills,act,actionskills,bg,bgskills,background,bgskills))][setq(3,u(FUN_MAP_ABILITY_ABBR,%1))][setq(4,unprettify(%2))][switch(0,t(pmatch(%0)),0|That is not a valid player.,match(v(ability_types),%1),0|That is not a valid type.  Use one of these: [v(ability_types)].,u(#FS3SKILL_FUN/fun_is_valid_%q3,%q4),0|That is not a valid ability name for a %q3 ability.,gte(%q1,0),0|You cannot lower an ability below 0.,lte(%q1,switch(%q2,attributes,4,12)),0|You cannot raise that ability that high.,not(and(match(%q2,attributes),eq(%q1,0))),0|You cannot lower an attribute below 1.,not(and(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q4),not(match(%q2,attributes)))),0|%2 is an attribute.  You can't take it as a skill.,not(and(u(#FS3SKILL_FUN/FUN_IS_VALID_ACTION,%q4),not(match(%q2,actionskills)))),0|%2 is an action skill.  You can't take it as a %q3.,1[switch(%q1,0,set(%0,%q2:[squish(find_and_replace(xget(%0,%q2),%q4:*,))]),switch(t(grab(xget(%0,%q2),%q4:*)),1,set(%0,%q2:[find_and_replace(xget(%0,%q2),%q4:*,%q4:%q1)]),set(%0,%q2:[squish([xget(%0,%q2)]%B%q4:%q1)])))])
+&FUN_SET_ABILITY FS3 Skill Functions=localize([setq(0,ability_level(%0,%2))][setq(1,add(%q0,%3))][setq(2,switch(%1,attribute,attributes,attr,attributes,action,actionskills,act,actionskills,bg,bgskills,background,bgskills))][setq(3,u(FUN_MAP_ABILITY_ABBR,%1))][setq(4,unprettify(%2))][switch(0,t(pmatch(%0)),0|That is not a valid player.,not(strmatch(%2,*\[*)),0|Ability names may not contain the \[ character.,match(v(ability_types),%1),0|That is not a valid type.  Use one of these: [v(ability_types)].,u(#FS3SKILL_FUN/fun_is_valid_%q3,%q4),0|That is not a valid ability name for a %q3 ability.,gte(%q1,0),0|You cannot lower an ability below 0.,lte(%q1,switch(%q2,attributes,4,12)),0|You cannot raise that ability that high.,not(and(match(%q2,attributes),eq(%q1,0))),0|You cannot lower an attribute below 1.,not(and(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q4),not(match(%q2,attributes)))),0|%2 is an attribute.  You can't take it as a skill.,not(and(u(#FS3SKILL_FUN/FUN_IS_VALID_ACTION,%q4),not(match(%q2,actionskills)))),0|%2 is an action skill.  You can't take it as a %q3.,1[switch(%q1,0,set(%0,%q2:[squish(find_and_replace(xget(%0,%q2),%q4:*,))]),switch(t(grab(xget(%0,%q2),%q4:*)),1,set(%0,%q2:[find_and_replace(xget(%0,%q2),%q4:*,%q4:%q1)]),set(%0,%q2:[squish([xget(%0,%q2)]%B%q4:%q1)])))])
 
 &ABILITY_TYPES FS3 Skill Functions=attribute action background language attr act prof bg lang
 
@@ -476,7 +483,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit pa
 @describe FS3 Chargen Commands=Commands for setting up abilities in Chargen using the FS3 system.  See the FS3 skills command object for important copyright/license information.
 @set FS3 Chargen Commands = DARK
 
-&CMD-+ABILITY FS3 Chargen Commands=$+ability *=*:think pemit(%#,switch(isnum(%1),0,ansi(hr,That is not a valid rating.),u(fun_set,[trim(%0)],sub(%1,ability_level(%#,%0)))))
+&CMD-+ABILITY FS3 Chargen Commands=$+ability *=*:think pemit(%#,switch(0,isnum(%1),ansi(hr,That is not a valid rating.),u(fun_set,[trim(%0)],sub(%1,ability_level(%#,%0)))))
 
 &CMD-+LOWER FS3 Chargen Commands=$+lower *:think pemit(%#,u(fun_set,[trim(%0)],-1))
 
@@ -647,7 +654,7 @@ think iter([lattr(FS3 Skill Data/ACTIONSKILL_*)] [lattr(FS3 Skill Data/ATTRIBUTE
 &BACKGROUND_SKILLS FS3 Skill Data=A science - astronomy, biology, chemistry, geology, mathematics, physics, etc.|A humanity - history, literature, psychology, philosophy, poetry, etc.|A profession or trade - cook, waitress, bartender, accountant, programmer, carpenter, brewer, blacksmith, etc.|A game - chess, roleplaying, poker, etc.|An art - sculpting, painting, sketching, photography, etc.|A form of expression - acting, singing, dancing, playing an instrument, writing|A sport - baseball, football, gymnastics, etc.|A craft or hobby - gardening, basketweaving, knitting, etc.|An unusual interest - detective novels, game show hosts, etc. |
 &PLAYER_VISIBLE_SHEETS FS3 Skill Data=1
 &RULING_ATTR FS3 Skill Data=Alertness:Reaction Demolitions:Mind  ECM:Mind Firearms:Reaction First_Aid:Mind Gunnery:Reaction Medicine:Mind Melee:Body Piloting:Reaction Repair:Mind Stealth:Body
-&RULING_ATTR_BG FS3 Skill Data=Body
+&RULING_ATTR_BG FS3 Skill Data=Mind
 
 &MAX_BONUS_POINTS_REQUEST Skill Data=0
 
@@ -656,11 +663,11 @@ think iter([lattr(FS3 Skill Data/ACTIONSKILL_*)] [lattr(FS3 Skill Data/ATTRIBUTE
 
 &MAX_HIGH_ABILITIES FS3 Skill Data=3
 &MAX_POINTS_ACTION FS3 Skill Data=32
-&MAX_POINTS_ATTRIBUTES FS3 Skill Data=11
-&STARTING_POINTS FS3 Skill Data=80
+&MAX_POINTS_ATTRIBUTES FS3 Skill Data=12
+&STARTING_POINTS FS3 Skill Data=60
 &HIGH_ABILITY_LEVEL FS3 Skill Data=7
 &MAX_QUIRKS FS3 Skill Data=4
-&MIN_QUIRKS FS3 Skill Data=1
+&MIN_QUIRKS FS3 Skill Data=2
 &MIN_BGSKILLS FS3 Skill Data=3
 
 &MAX_AGE Demographic Commands=75

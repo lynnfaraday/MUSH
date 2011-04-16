@@ -302,7 +302,7 @@ active_queue_chunk 1
 function_recursion_limit 50
 
 # the maximum number of functions that can be invoked
-function_invocation_limit 25000
+function_invocation_limit 50000
 
 # the maximum depth we're allowed to recursively call the parser
 # for a single expression. This limits how much the stack size can increase,
@@ -703,7 +703,7 @@ tiny_trim_fun yes
 tiny_math yes
 
 # should @pemit default to @pemit/silent, like TinyMUSH?
-silent_pemit no
+silent_pemit yes
 
 ###
 ### Attributes

@@ -295,8 +295,10 @@ A few other miscellaneous things to configure:
   &REPAIR_SKILL FS3Combat Preferences=Repair
 
 * Toughness and initiative ability - Configure the ability that is used for KO and initiative rolls.  
+  Because these are typically attributes, you may want to provide a modifier to the roll or all them
+  to roll double the number of dice.  You can do this by specifying X+Y as the ability.
   
-  &TOUGHNESS_SKILL FS3Combat Preferences=Athletic
+  &TOUGHNESS_SKILL FS3Combat Preferences=Athletic+Athletic
   &INITIATIVE_ABILITY FS3Combat Preferences=Reactive
 
 * Delay between combat poses, in seconds.  You can tune this to give people more or less time to read. 
@@ -327,4 +329,61 @@ A few other miscellaneous things to configure:
          NOTE: For pilots and passengers, specify the *person's* hit location table (usually "soldier") 
          *not* the vehicle's.
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+=Functions=
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+The following global functions are provided:
+Chargen Info Module
+
+RANK(<db#>) - Gets the rank set in Chargen.
+
+Skills Module
+
+ROLL_ABILITY(<player DB#, #-1 for NPC>,<ability name>,<modifier, may be blank>,<ruling attr, may be blank>) - Rolls an ability.
+
+ABILITY_LEVEL(<player DB#>,<ability>) - Staffonly function to get ability level.
+
+OPPOSED_RESULT(<result for char A>,<result for char B>) - Gives a code for two roll results.
+
+PRETTY_OPPOSED_RESULT(<name for char A>,<name for char B>,<return value from opposed result>) - Returns a pretty version of the win or lose text for an opposed roll. "Bob wins big!"
+
+Note that the opposed functions need to be called in sequence:
+
+    Call roll_ability() for A
+    Call roll_ability() for B
+    Call opposed_result() to get the result code
+    Call pretty_opposed_result() to get the pretty text version 
+
+I know this is annoying and will probably make it better in a future version.
+
+Damage Module
+
+DAMAGEMOD(<name>) - Gets someone's total damage modifier.
+
+Equipment Module
+
+WEAPONS() - Lists weapons
+
+ARMOR() - Lists armor
+
+VEHICLETYPES() - List vehicle types (as opposed to /specific/ vehicles)
+
+WEAPONSTAT(<weapon>,<statname>) - Gets a weapon statistic
+
+VEHTYPESTAT(<vehicle type>,<statname>) - Gets a vehicle type statistic
+
+ARMORSTAT(<armor>,<statname>) - Gets an armor statistic
+
+NPC Module
+
+ISNPC(<name>) - Returns 1 if they're a registered NPC
+
+NPCSTAT(<name>,<stat>) - Staff-only function to get a NPC's statistic.
+Vehicle Module
+
+ISVEHICLE(<name>) - Returns 1 if the name is a registered vehicle.
+
+VEHICLESTAT(<name>) - Gets a vehicle statistic. 

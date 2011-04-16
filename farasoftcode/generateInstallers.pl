@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Usage:  generateInstallers.pl <old version#> <new version #>
+# Usage:  generateInstallers.pl <old version#> <new version #> <wipe?>
 #  Directories must already exist in the Installer directory - one for upgrade and one for fresh install
 #  Run from the root softcode dir.
 
@@ -12,23 +12,33 @@ use File::stat;
 use Time::localtime;
 use strict;
 
-if (@ARGV != 2)
+if (@ARGV < 2)
 {
 die "Invalid number of arguments.";
 }
 
 my $_oldVersion = @ARGV[0];
 my $_newVersion = @ARGV[1];
+my $_wipe = @ARGV[2];
 my $_patch = 0;
 my $_fileIndex = 0;
 my $_upgradeDir = "Installers/Upgrade v$_oldVersion to v$_newVersion";
 my $_freshDir = "Installers/Fresh Install v$_newVersion";
 
+if ($_wipe)
+{
+print "***Removing old installers.\n";
 rmtree($_upgradeDir);
 rmtree($_freshDir);
 
 mkdir($_upgradeDir);
 mkdir($_freshDir);
+}
+
+copy("Installers/_LICENSE", $_freshDir);
+copy("Installers/_LICENSE", $_upgradeDir);
+copy("Installers/_CHANGELOG", $_freshDir);
+copy("Installers/_CHANGELOG", $_upgradeDir);
 
 processAllFiles();
 
@@ -38,15 +48,26 @@ processAllFiles();
 
 close(OUTFILE);
 
+my $freshZip = "Releases/FaraMUSHCode-v$_newVersion.zip";
+my $upgradeZip = "Releases/FaraMUSHCode Upgrade v$_oldVersion to v$_newVersion.zip";
+
+unlink $freshZip;
+unlink $upgradeZip;
+
+print "*** Creating ZIP files\n";
+
+system("zip -jr \"$freshZip\" \"$_freshDir\"");
+system("zip -jr \"$upgradeZip\" \"$_upgradeDir\"");
+
 sub processAllFiles {
 
 if ($_patch)
 {
-print OUTFILE "\@pemit %#=ansi(hc,Upgrading all Faraday systems.)";
+print "***Creating patch files\n";
 }
 else
 {
-print OUTFILE "\@pemit %#=ansi(hc,Installing all Faraday systems.)";
+print "***Creating fresh install files\n";
 }
 
 processFile("Core/installManager.dec", "-CORE-");
@@ -116,7 +137,7 @@ sub copyDocs {
     if ($fileName =~ /\.(pdf|txt)$/) 
     {
 	copy($fileName, "../$outFileName");
-	print "Copying document $fileName to $outFileName\n";
+	print "Copying document $fileName\n";
     }
 }
 

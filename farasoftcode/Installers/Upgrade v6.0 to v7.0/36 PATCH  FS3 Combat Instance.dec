@@ -881,7 +881,17 @@ think install_patch(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,7.0,FS3Comb
 @@ %0 = name
 @@ --------------------------
 
-&FUN_INITIATIVE FS3Combat Instance Parent=iter(revwords(sort(iter(u(fun_combatants),[roll_ability(pmatch(##),xget(#FS3COMBAT_PREFS,initiative_ability),u(fun_luck_mod,##,initiative))]:##),n)),after(##,:))
+&FUN_INITIATIVE FS3Combat Instance Parent=iter(revwords(sort(iter(u(fun_combatants),[roll_ability(pmatch(##),u(fun_initiative_ability,##),u(fun_luck_mod,##,initiative))]:##),n)),after(##,:))
+
+@@ --------------------------
+@@ FUN_INITIATIVE_ABILITY
+@@ Determines initiative ability rating.
+@@ Note: The configured ability on the preferences object may be in the form 
+@@       ability+ability
+@@ %0 = name
+@@ --------------------------
+
+&FUN_INITIATIVE_ABILITY FS3Combat Instance Parent=localize([setq(0,xget(#FS3COMBAT_PREFS,initiative_ability))]switch(1,isnpc(%0),npcstat(%0,skill),isplayer(%0),add(ability_level(pmatch(%0),before(%q0,+)),ability_level(pmatch(%0),after(%q0,+))),4))
 
 @@ --------------------------
 @@ FUN_UNTARGET
