@@ -647,7 +647,7 @@ think iter([lattr(FS3 Skill Data/ACTIONSKILL_*)] [lattr(FS3 Skill Data/ATTRIBUTE
 &ATTRIBUTE_MIND FS3 Skill Data=Mental fitness - Intelligence and Creativity
 &ATTRIBUTE_BODY FS3 Skill Data=Physical fitness - Strength, Constitution and Agility
 &ATTRIBUTE_REACTION FS3 Skill Data=Reflexes - Dexterity, Hand-Eye Coordination and Wits
-&ATTRIBUTE_PERSONALITY FS3 Skill Data=Presence - Charisma and Will
+&ATTRIBUTE_PRESENCE FS3 Skill Data=Personality - Charisma and Will
 
 &DEFAULT_LANG FS3 Skill Data=English
 &LANGUAGE_SKILLS FS3 Skill Data=English

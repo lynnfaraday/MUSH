@@ -333,7 +333,7 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_FS3CG_26 Tests=Raise Attribute Too High|+ability Mind=12
 &TEST_FS3CG_28 Tests=Raise Another Attribute|+raise Body
 &TEST_FS3CG_29 Tests=Raise Another Attribute|+raise Body
-&TEST_FS3CG_30 Tests=Raise Another Attribute|+raise Personality
+&TEST_FS3CG_30 Tests=Raise Another Attribute|+raise Presence
 &TEST_FS3CG_31 Tests=Try to Advance With Too Many Attr Points|N
 &TEST_FS3CG_32 Tests=Lower Attribute|+ability Body=1
 &TEST_FS3CG_33 Tests=Raise Skill|+ability XYZ=8
