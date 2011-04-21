@@ -110,11 +110,24 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit pa
 @@ %2 = modifier
 @@ %3 = attribute (may be blank)
 @@
-@@ %q0 = ruling attr rating
-@@ %q1 = ability rating
 @@ %q2 = die roll
 @@ --------------------------
-&FUN_ROLL_ABILITY FS3 Skill Functions=localize([setq(0,u(fun_ruling_attr_mod,%0,%1,%3))][setq(1,ability_level(%0,%1))][setq(2,u(FUN_ROLL_DICE,add(%q0,%q1,%2)))][u(fun_roll_result,%q2,%q0)])
+&FUN_ROLL_ABILITY FS3 Skill Functions=localize([setq(0,u(FUN_NUM_DICE_TO_ROLL,%0,%1,%2,%3))][setq(2,u(FUN_ROLL_DICE,%q0))][u(fun_roll_result,%q2,%q0)])
+
+
+@@ --------------------------
+@@ FUN_NUM_DICE_TO_ROLL
+@@ %0 = player DB
+@@ %1 = skill
+@@ %2 = modifier
+@@ %3 = ruling attr (may be blank)
+@@
+@@ %q0 = ruling attr rating
+@@ %q1 = ability rating (skill, or attr if skill was not specified)
+@@ --------------------------
+
+&FUN_NUM_DICE_TO_ROLL FS3 Skill Functions=localize([setq(0,u(fun_ruling_attr_mod,%0,%1,%3))][setq(1,switch(%1,0,ability_level(%0,%3),ability_level(%0,%1)))][add(%q0,%q1,%2)])
+
 
 @@ --------------------------
 @@ FUN_RULING_ATTR_MOD

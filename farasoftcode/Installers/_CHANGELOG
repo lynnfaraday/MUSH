@@ -19,7 +19,8 @@ time ratios.  This replaces the old ictime() function from the Global Functions 
 
 Global Functions
 ~~~~~~~~~~~~~~~~
-Remove ictime().  You should either move your ictime() function to your own object or use the new IC Time module.
+- Removed ictime().  You should either move your ictime() function to your own object or use the new IC Time module.
+- parse_pose() now uses | for emits rather than . to avoid people making ÉOoops!  +ooc mistakes.
 
 Install Manager
 ~~~~~~~~~~~~~~~
