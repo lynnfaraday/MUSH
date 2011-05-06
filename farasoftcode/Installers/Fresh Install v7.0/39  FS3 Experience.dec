@@ -18,8 +18,8 @@ think install_create(FS3XP_DB,FS3 XP Data,0,1,7.0,FS3 XP Data.)
 
 &CMD-+XP-COST FS3 XP Commands=$+xp/cost *:think pemit(%#,[setq(0,u(fun_xp_cost,%#,%0))][switch(%q0,1|*,ansi(hg,It will cost [after(%q0,|)] XP to raise [prettify(%0)].),ansi(hr,after(%q0,|)))])
 &CMD-+XP-COSTS FS3 XP Commands=$+xp/costs:@pemit %#=[line()]%R[ansi(h,Current Level%B%B%B%BXP To Next Level)][iter(lnum(0,11),%R[ljust(##,17)][after(grab(xget(#FS3XP_DB,xp_per_level),##:*),:)])]%R%RNote:%R- Background and Language skills are 1/2 the listed cost%R- Attributes cannot be raised, only skills.%R- The max XP you can save up is [ansi(hg,xget(#FS3XP_DB,MAX_XP_HOARD))]%R- You can raise one skill every [ansi(hg,div(xget(#FS3XP_DB,TIME_BETWEEN_RAISES),3600))] hours.%R[line()]
-&CMD-+XP-RAISE FS3 XP Commands=$+xp/raise */*:think u(fun_do_raise,%0,%1)
-&CMD-+XP-RAISE-NOTYPE FS3 XP Commands=$+xp/raise *:@switch %0=*/*,,{@switch [u(#FS3SKILL_FUN/fun_ability_type,%#,%0)]=background,@pemit %#=ansi(hr,You must specify an ability type.),think u(FUN_DO_RAISE,[u(#FS3SKILL_FUN/fun_ability_type,%#,%0)],%0)}
+&CMD-+XP-LANG FS3 XP Commands=$+xp/lang *:@pemit %#=[setq(0,xget(#FS3XP_DB,xp_per_lang))][setq(1,xget(%#,xp))]switch(0, not(u(#79/fun_has_language,%#,%0)), ansi(hr,You already have that language.), gte(%q1,%q0), ansi(hr,Learning %0 costs %q0 XP.  You only have %q1.), ansi(hg,You spend %q0 XP to learn %0.)[set(%#,xp:[sub(%q1,%q0)])][set(%#,langskills:[xget(%#,langskills)]|%0)])
+&CMD-+XP-RAISE-NOTYPE FS3 XP Commands=$+xp/raise *:think u(FUN_DO_RAISE,[u(#FS3SKILL_FUN/fun_ability_type,%#,%0)],%0)
 &CMD-+XP-AWARD FS3 XP Commands=$+xp/award *=*/*:@pemit %#=[setq(0,pmatch(%0))]switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t(%q0),ansi(hr,%0 is not a valid player.),isnum(%1),ansi(hr,%1 is not a valid number of XP.),ansi(hg,You award %1 XP to %0.)[set(%q0,xp:[add(xget(%q0,xp),%1)])][create_job(RP,XP Award to [name(%q0)],%N has awarded %1 XP to [name(%q0)] for {%2}.,%#)])
 &CRON_JOB_FS3XP FS3 XP Commands=@tr #FS3XP_CMD/TR-AWARDXP
 &CRON_TIME_FS3XP FS3 XP Commands=||Sun|23|59|
@@ -29,7 +29,7 @@ think install_create(FS3XP_DB,FS3 XP Data,0,1,7.0,FS3 XP Data.)
 @STARTUP FS3 XP Commands=@set me=!no_command
 &TR-AWARDXP FS3 XP Commands=@dolist real_players()=think set(##,xp:[min(xget(#FS3XP_DB,MAX_XP_HOARD),add(xget(##,xp),xget(#FS3XP_DB,XP_PER_WEEK)))])
 
-&HELP_FS3_XP XP Commands=FS3 uses a very simple experience point system.  Players each receive 1 XP per week.  XP is an IC award, not an OOC one, and reflects your character's time learning/practicing/gaining experience.%R%RYou can spend XP to raise skills but not attributes.  Attributes reflect natural innate ability so you can't intentionally change them.%R%R[ansi(h,+xp/costs)] - Shows the general cost table and limits on XP spending.%R[ansi(h,+xp/cost <skill>)] - Shows the cost to learn or raise one of your skills.%R[ansi(h,+xp/raise <type>/<skill>)] - Spends XP to raise a skill.%R%TYou must specify the type (language, background) for non-action skills.  For action skills, this paramter can be omitted.
+&HELP_FS3_XP XP Commands=FS3 uses a very simple experience point system.  Players each receive XP each week.  XP is an IC award, not an OOC one, and reflects your character's time learning/practicing/gaining experience.%R%RYou can spend XP to raise skills but not attributes.  Attributes reflect natural innate ability so you can't intentionally change them.%R%R[ansi(h,+xp/costs)] - Shows the general cost table and limits on XP spending.%R[ansi(h,+xp/cost <skill>)] - Shows the cost to learn or raise one of your skills.%R[ansi(h,+xp/raise <skill>)] - Spends XP to raise a skill.%R[ansi(h,+xp/lang <language>)] - Spends XP to learn a language.
 &SHELP_FS3_XP XP Commands=[ansi(h,+xp/award <name>=<# of XP>/<reason>)]
 
 &HATTR_LAST_XP_RAISE FS3 XP Commands=
@@ -44,6 +44,7 @@ think install_create(FS3XP_DB,FS3 XP Data,0,1,7.0,FS3 XP Data.)
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+&XP_PER_LANG FS3 XP Data=3
 &MAX_XP_HOARD FS3 XP Data=16
 &TIME_BETWEEN_RAISES FS3 XP Data=259200
 &XP_PER_LEVEL FS3 XP Data=0:1 1:2 2:2 3:4 4:4 5:4 6:8 7:8 8:8 9:12 10:12 11:12

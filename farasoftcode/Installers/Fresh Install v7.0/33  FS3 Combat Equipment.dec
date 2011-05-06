@@ -98,7 +98,7 @@ think install_create(FS3COMBAT_DB_EQUIP,FS3Combat Equipment Stats,0,1,7.0,FS3Com
 &WEAPON_KEW FS3Combat Equipment Stats=KEW Assault Cannon|Gunnery|Piloting|0|20|Ranged|Vehicle|0|0|0|500|0|Physical|0|0|0
 &WEAPON_MISSILE_AA  FS3Combat Equipment Stats=Anti-Aircraft Missile|Gunnery|ECM|75|20|Ranged|Vehicle|0|0|0|10000|0|Physical|0|0|0
 &WEAPON_MISSILE_AP FS3Combat Equipment Stats=Armor Piercing Anti-Tank Missile|Gunnery|Piloting|75|70|Ranged|Vehicle|0|0|0|5000|0|Physical|0|0|0
-&WEAPON_HMG FS3Combat Equipment Stats=Heavy machinegun.  Assumes tripod.|Firearms|Piloting|-10|8|Ranged|Vehicle|1|100|1|2000|0|Physical|0|0|0
+&WEAPON_HMG FS3Combat Equipment Stats=Heavy machinegun.  Assumes tripod.|Firearms|Piloting|0|8|Ranged|Vehicle|1|100|1|2000|0|Physical|0|0|0
 &WEAPON_NUKE  FS3Combat Equipment Stats=Nuclear Missile|Gunnery|ECM|100|250|Explosive|Vehicle|0|0|0|10000|10|Physical|0|0|0
 &WEAPON_ECM FS3Combat Equipment Stats=ECM Package|ECM|ECM|0|0|Suppressive|Vehicle|0|0|0|10000|0|Physical|0|0|0
 
