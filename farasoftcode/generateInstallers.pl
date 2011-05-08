@@ -79,6 +79,7 @@ processFile("Core/faramail.dec", "-CORE-");
 processFile("Core/BBS-Myrddin.dec", "-CORE-");
 processFile("Core/CRON-Myrddin.dec", "-CORE-");
 processFile("Core/hookManager.dec", "-CORE-");
+processFile("Core/IC Time.dec", "-CORE-");
 
 find(\&forEachFile, cwd . "/AddOns/");
 find(\&forEachFile, cwd . "/FS3/");
