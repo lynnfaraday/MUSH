@@ -1,6 +1,16 @@
+================================================================
+New Version (in progress)
+
+Rooms & Globals:  +sceneset command
+Rooms: Alternate code for separating cardinal exits or listing visible players with their shortdescs (pilfered from Pioneer)
+Idle: Wasn't nuking mail objects
+Mail: Add error message if someone tries @mail
+FS3 Combat: Add reload time.  Fix KO.
+
+
 
 ================================================================
-Version 7.0 (in progress)
+Version 7.0 (5/8/2011)
 ----------------------------------------------------------------
 
 Jobs

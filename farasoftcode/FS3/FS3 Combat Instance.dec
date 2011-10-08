@@ -331,7 +331,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,7.0,FS3Com
 @@ %2 = action options
 @@ --------------------------
 
-&FUN_ACTION_RELOAD FS3Combat Instance Parent=[u(fun_combat_msg,[prettify(lcstr(%0))] reloads.)][u(fun_mod_combatstat,%0,ammo,u(fun_weaponstat,%0,ammo))]
+&FUN_ACTION_RELOAD FS3Combat Instance Parent=localize([setq(0,u(fun_combatstat,%0,reloadtime))][setq(1,u(fun_weaponstat,%0,reloadtime))][switch(0,gte(inc(%q0),%q1),[u(fun_combat_msg,[prettify(lcstr(%0))] reloads.)][u(fun_mod_combatstat,%0,reloadtime,inc(%q0))],[u(fun_combat_msg,[prettify(lcstr(%0))] finishes reloading.)][u(fun_mod_combatstat,%0,reloadtime,0)][u(fun_mod_combatstat,%0,ammo,u(fun_weaponstat,%0,ammo))])])
 
 @@ --------------------------
 @@ FUN_ACTION_ATTACK

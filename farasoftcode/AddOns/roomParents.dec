@@ -68,9 +68,21 @@ think install_create(ROOM_PLACES_PARENT,Max's Table Code Parent,0,0,7.0,Places p
 @adisconnect Max's Table Code Parent=think u(fun_cleanup)
 
 
-@CONFORMAT Room Parent=[switch(u(me/whichplace,me,%#),>0,%R%R[u(getinfo,me,[u(me/whichplace,me,%#)],name)]:%B[u(getinfo,me,[u(me/whichplace,me,%#)],desc)]%R)][ansi(v(room_color),repeat(-,78))]%R[ansi(v(room_color),Contents:)][space(5)][wrap(iter(revwords(sort(u(visible_contents),a,|),|),[switch(mod(#@,2),1,[ansi(h,##)]%B,##%B)],|),61,61,%R[space(14)])]%R
+@CONFORMAT Room Parent=[switch(u(me/whichplace,me,%#),>0,%R%R[u(getinfo,me,[u(me/whichplace,me,%#)],name)]:%B[u(getinfo,me,[u(me/whichplace,me,%#)],desc)]%R)][switch(v(sceneset),,,%R[line2()]%R[after(u(sceneset),|)]%R[line2()]%R)][ansi(v(room_color),repeat(-,78))]%R[ansi(v(room_color),Contents:)][space(5)][wrap(iter(revwords(sort(u(visible_contents),a,|),|),[switch(mod(#@,2),1,[ansi(h,##)]%B,##%B)],|),61,61,%R[space(14)])]%R
+
+@@ Alternate format for room contents list using shortdesc
+@@ [iter(sort_names(u(fun_visible_players)),%R%B%B%B[ansi(h,name(##))] - [shortdesc(pmatch(##))])][iter(sort_names(u(fun_visible_objects)),%R%B%B%B[ansi(h,name(##))])]
+
 @DESCRIBE Room Parent=This is a temporary description.
 @EXITFORMAT Room Parent=[ansi(v(room_color),Exits:)][iter(sortby(sort_regular_exits,setdiff(lexits(me),trim([u(find_dark_exits,num(me))]%B[u(find_rooms,num(me))]))),[switch(#@,1,[space(8)],switch(mod(#@,2),1,%R[space(14)]))][ljust(\[[ansi(h,name(##))]\],5)]%B[padstr( [switch(loc(##),#-1,Nowhere,[name(loc(##))])],27)])][switch(words(u(find_rooms,num(me))),>0,%R%R[ansi(v(room_color),Rooms:)][space(8)][wrap(iter(u(find_rooms,num(me) ),\[[ansi(h,name(##))]\]),61,61,%R[space(14)])])][u(format_special)]%R[ansi(v(room_color),line_no_color())]
+
+@@ Alternate exit format for separating cardinal and non-cardinal exits
+@@ localize([setq(0,u(fun_non_cardinal_exits))][ansi(v(room_color),Exits:)][iter(%q0,[switch(#@,1,[space(7)],switch(mod(#@,2),1,%R[space(13)]))][ljust(\[[ansi(h,name(##))]\],5)]%B[padstr( [switch(loc(##),#-1,Nowhere,[name(loc(##))])],26)])][iter(u(fun_cardinal_exits),[switch(#@,1,switch(words(%q0),0,[space(7)],%R%R[space(13)]),switch(mod(#@,2),1,%R[space(13)]))][ljust(\[[ansi(h,name(##))]\],5)]%B[padstr( [switch(loc(##),#-1,Nowhere,[name(loc(##))])],26)])] [u(format_special)]%R[ansi(v(room_color),line_no_color())])
+
+&CARDINAL_EXITS Room Parent=N S E W NE SE SW NW
+&FUN_CARDINAL_EXITS Room Parent=sortby(sort_cardinal_exits,squish(iter(lexits(me),switch(t(match(v(cardinal_exits),name(##))),1,##))))
+&FUN_NON_CARDINAL_EXITS Room Parent=sortby(sort_regular_exits,squish(iter(lexits(me),switch(t(match(v(cardinal_exits),name(##))),0,##))))
+&SORT_CARDINAL_EXITS Room Parent=comp(match(v(cardinal_exits),name(%0)),match(v(cardinal_exits),name(%1)),N)
 &FIND_DARK_EXITS Room Parent=iter(lexits(%0),switch(hasflag(##,dark),1,##,))
 &FIND_ROOMS Room Parent=switch(xget(%0,show_rooms),0,,iter(lattr(%0/room*),extract(xget(%0,##),3,1,|)))
 &fun_specials Room Parent=[switch(words(u(fun_lhelp_files)),>0,LHELP)]%B[switch(gt(words(lattr(me/msg_*)),0),1,MSG)]%B[switch(hasattr(%l,combat),1,COMBAT)]%B[switch(words(lattr(%l/detail_*)),>0,DETAIL)]%B[switch(xget(%l,PLACESMAX),>0,PLACES)]

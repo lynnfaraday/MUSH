@@ -292,7 +292,7 @@ think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,7.0,FS3Combat Pre
 @@ %q0 = combat num (from fun_can_act)
 @@ --------------------------
 
-&FUN_ACTION_RELOAD FS3Combat Action Commands=switch(0,u(fun_can_act,%0,reload),u(fun_cant_act_msg,%0),u(%q0/fun_weaponstat,%0,reloadable),ansi(hr,%0's weapon can't be reloaded.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,reload,,)])
+&FUN_ACTION_RELOAD FS3Combat Action Commands=switch(0,u(fun_can_act,%0,reload),u(fun_cant_act_msg,%0),u(%q0/fun_weaponstat,%0,reloadtime),ansi(hr,%0's weapon can't be reloaded.),You set [switch(%N,%0,your,%0's)] action.[u(%q0/FUN_SET_ACTION,%0,reload,,)])
 
 
 @@ ---------------   Escape -----------------

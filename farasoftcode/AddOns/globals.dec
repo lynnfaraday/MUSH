@@ -32,6 +32,8 @@ think install_create(GLOBALS_DB,Misc Globals Data,0,1,7.0,Data storage for the m
 &CMD-+KNOCK Misc Globals=$+knock *:think [setq(0,iter(lexits(%l),switch(strmatch(fullname(##),*%0*),1,##),,))][pemit(%#,switch(%q0,,ansi(hr,I don't see an exit with that name.),*#*#*,ansi(hr,I can't tell which exit you mean.  Be more specific.),[ansi(hg,You knock on the door to [name(%q0)].)][remit(loc(%q0),ansi(hg,Someone is knocking at the door.))]))]
 &CMD-+KNOCK-EMIT Misc Globals=$+knock/emit *=*:think [setq(0,iter(lexits(%l),switch(strmatch(fullname(##),*%0*),1,##),,))][pemit(%#,switch(%q0,,ansi(hr,I don't see an exit with that name.),*#*#*,ansi(hr,I can't tell which exit you mean.  Be more specific.),[remit(%l,[ansi(hg,To [name(loc(%q0))]:)]%R%1)][remit(loc(%q0),[ansi(hg,From [name(%l)]:)]%R%1)]))]
 &CMD-+KNOCK-LOOK Misc Globals=$+knock/look *:think [setq(0,iter(lexits(%l),switch(strmatch(fullname(##),*%0*),1,##),,))][pemit(%#,switch(%q0,,ansi(hr,I don't see an exit with that name.),*#*#*,ansi(hr,I can't tell which exit you mean.  Be more specific.),[ansi(hg,You see: [iter(lcon(loc(%q0)),switch(1,and(isplayer(##),conn(##)),name(##)))])]))]
+&CMD-+SCENESET Misc Globals=$+sceneset *:think pemit(%#,ansi(hg,You set a special scene description on this room.))[set(%l,sceneset:%#|%0)]
+
 @STARTUP Misc Globals=@set me=!no_COMMAND
 @ADISCONNECT Misc Globals=+rpsearch/off
 
@@ -50,10 +52,13 @@ think install_create(GLOBALS_DB,Misc Globals Data,0,1,7.0,Data storage for the m
 &SHELP_GLOBALS Misc Globals Functions=Object #GLOBALS_DB stores miscellaneous data used by the globals.  Things you may want to edit:%R%R[ansi(h,IDLE_LOUNGE)] - DB# of the room where idle players go.%R[ansi(h,OOC_CENTER)] - DB# of the OOC room.%R[ansi(h,IC_STARTING_LOC)] - Default starting location for +IC
 &HELP_+KNOCK Misc Globals Functions=The +knock command lets you knock on a door.  Anyone in the room on the other side will see the knocking, but not who it came from.%R%R[ansi(h,+knock <exit name>)] - Knocks on the door.%R[ansi(h,+knock/emit <exit name>)] - Emits through an exit, to pose opening the door.%R[ansi(h,+knock/look <exit name>)] - Looks through a peephole.%R%RNOTE: Not all MUSH exits are doors, so please use these commands only when it is ICly appropriate to do so.
 &HELP_+GLANCE Misc Globals Functions=This command shows you a quick summary of the players in the room.  Bear in mind that some information (like their exact age and full name) may not be known to you ICly.  You can set the description that shows up on +glance by creating a 'short' +desc, or a DESC_SHORT attribute.%R%R[ansi(h,+glance)] - Views nearby players.
+&HELP_+SCENESET Misc Globals Functions=This command lets you set a temporary description at the bottom of the room desc to make scenesets easier.  Scenesets are cleared out nightly. %RUsage: [ansi(h,+sceneset <description>)]
 
 &CRON_JOB_FORCEIDLE Misc Globals Functions=@dolist lwho()=@switch [and(gt(idlesecs(##),21600),match(xget(##,status),IC))]=1,{@pemit ##=[ansi(hr,You've been idle for a really long time so we're sending you AFK.)];@fo ##=+afk}
 &CRON_TIME_FORCEIDLE Misc Globals Functions=||||00|
 
+&CRON_JOB_CLEARSCENESET Misc Globals Functions=@dolist iter(lsearch(all,type,room),wipe(##/sceneset))
+&CRON_TIME_CLEARSCENESET Misc Globals Functions=|||03||
 
 &FUN_DETAIL Misc Globals Functions=[switch(words(lattr(%0/detail_*)),>0,%r[padstr([switch(hastype(%0,room),1,Here,name(%0))],20)]%b%b[iter(lattr(%0/detail_*),after(##,_))])]
 
