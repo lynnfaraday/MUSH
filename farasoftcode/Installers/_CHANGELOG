@@ -7,7 +7,7 @@ Idle: Wasn't nuking mail objects
 Mail: Add error message if someone tries @mail
 FS3 Combat: Add reload time.  Fix KO.
 BG: Allow public BGs via a config toggle.
-Census: +census/position works even with variable positions
+Census: +census/position works even with variable position list
 
 
 ================================================================
