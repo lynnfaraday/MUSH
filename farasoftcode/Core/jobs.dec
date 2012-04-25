@@ -196,6 +196,7 @@ think install_create(JOBS_CMD_REQUEST,Request System,1,0,7.0,Player request syst
 @wait 8=@fo %#=+jobs/newcat CODE
 @wait 8=@fo %#=+jobs/newcat BUILD
 @wait 8=@fo %#=+jobs/newcat REQ
+@wait 8=@fo %#=+jobs/newcat ADMIN
 
 
 @wait 10=+jobs/create CODE=Staff Jobs BBS/Set up a Staff Job Notices bbs if you don't have one already.

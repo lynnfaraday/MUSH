@@ -35,7 +35,7 @@ think install_create(GLOBALS_DB,Misc Globals Data,0,1,7.0,Data storage for the m
 &CMD-+SCENESET Misc Globals=$+sceneset *:think pemit(%#,ansi(hg,You set a special scene description on this room.))[set(%l,sceneset:%#|%0)]
 
 @STARTUP Misc Globals=@set me=!no_COMMAND
-@ADISCONNECT Misc Globals=+rpsearch/off
+@ADISCONNECT Misc Globals=@fo %#={+rpsearch/off};@switch haspower(%#,guest)=1,{@tel %#=#0}
 
 
 &HELP_+DETAIL Misc Globals Functions=Sometimes you'll want to add special details about a room, an object, or your  own character without cluttering up the main description. The +detail command  allows you to do this without having to create a bunch of objects to carry  around. It is perfect for jewelry, tattoos, or other aspects of your  character that are worth describing, but only if someone makes a point of  looking at them.%R%RRooms will automatically alert you to details by having +detail in the special notes section of the room description. It is suggested that if you have details on your character, you put (+detail) at the end of your  description to let other players know.  The +desc command will do this for you automatically.%R%R[ansi(h,+detail)] - Lists available details in the room and everything (and everyone) in it.%R[ansi(h,+detail <object>/<detail name>)] - views a detail.       <object> must be enough of a name to identify the player or object. Use "here" to view details in a room.%R[ansi(h,&detail_<name> <object>=<detail text>)] - Sets a detail view on yourself  or one of your objects. To set one on another player's object (like a public room), contact staff.

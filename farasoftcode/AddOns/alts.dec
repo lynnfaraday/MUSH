@@ -38,6 +38,8 @@ think install_create(ALTS_DB,Alts DB,0,1,7.0,Alt database.)
 &FUN_ALTS Alts Commands=switch(iswizard(%@),0,#-1 RESTRICTED,remove(u(FUN_FIND_ALTS,name(pmatch(%0))),name(pmatch(%0))))
 @startup Alts Commands=@set me=!NO_COMMAND;@fun alts=me/FUN_ALTS
 
+&TR_PLAYER_NAME_CHANGE Alts Commands=@dolist lattr(#ALTS_DB/ALTS_*)=think switch(1,t(match(xget(#ALTS_DB,##),%0)),set(#ALTS_DB,##:[find_and_replace(xget(#ALTS_DB,##),%0,%1)]))
+
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

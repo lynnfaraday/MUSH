@@ -33,6 +33,8 @@ think install_create(ACTORS_DB,Actor DB,0,1,7.0,Actor database.)
 &HATTR_ACTOR Actor Commands=
 @STARTUP Actor Commands=@set me=!no_command;@function actor=[num(me)],FUN_GET_ACTOR
 
+&TR_PLAYER_NAME_CHANGE Actor Commands=@dolist lattr(#ACTORS_DB/ACTOR_*)=think switch(before(xget(#ACTORS_DB,##),|),%0,set(#ACTORS_DB,##:%1|[after(xget(#ACTORS_DB,##),|)]))
+
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -34,8 +34,9 @@ think install_create(CRON_OBJ,CRON - Myrddin's mushcron,1,0,7.0,Cron object.)
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&CRON_JOB_MONTHLY CRON - Myrddin's mushcron=think create_job(REQ,Monthly Maintenance,Suggested monthly maintenance -%R- Purge idle players.%R- Sweep TP Rooms for folks lingering there.%R- Prune BBS.,%#)
-&CRON_TIME_MONTHLY CRON - Myrddin's mushcron=|01||01|30|
+
+&CRON_JOB_PRUNEBBS CRON - Myrddin's mushcron=think create_job(ADMIN,Prune BBS,Prune BBS.,%#)
+&CRON_TIME_PRUNEBBS CRON - Myrddin's mushcron=|01||01|30|
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

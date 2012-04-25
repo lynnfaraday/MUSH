@@ -107,6 +107,8 @@ think install_create(BBS_POCKET,bbpocket,0,0,7.0,BBS Storage.,BBS_CMD)
 
 &CMD-+BBARCHIVE BBS - Myrddin's Global BBS=$+bbarchive */*:@switch 0=member(u(#BBS_POCKET/valid_groups,%#,read),setr(0,u(#BBS_POCKET/get_group,%0))),{@pemit/silent %#=[switch(%q0,#-2,That Group name is not specific enough.,You do not subscribe to that Group.)]},member(v(archive_formats),%1),@pemit/silent %#={That is not a valid archive option.  Use one of these:  [v(archive_formats)].},{@pemit/silent %#=[u(fun_archive_header_[trim(%1)],%q0)];@dolist [xget(%q0,mess_lst)]=@wait add(#@,3)=@pemit/silent %#=[u(fun_archive_msg_[trim(%1)],%q0,##)]}
 
+&TR_PLAYER_NAME_CHANGE BBS - Myrddin's Global BBS=@dolist xget(#BBS_POCKET,groups)=@tr me/TR_PLAYER_NAME_CHANGE_ON_GROUP=##,%0,%1
+&TR_PLAYER_NAME_CHANGE_ON_GROUP BBS - Myrddin's Global BBS=@dolist lattr(%0/HDR_*)=think switch(extract(xget(%0,##),3,1,|),%1,set(%0,##:[replace(xget(%0,##),3,%2,|)]))
 
 &ARCHIVE_FORMATS BBS - Myrddin's Global BBS=wiki html plain
 &FUN_ARCHIVE_HEADER_wiki BBS - Myrddin's Global BBS===[name(%0)] \([time()]\)==%R[iter(xget(%0,mess_lst),%R* [extract(xget(%0,hdr_##),1,1,|)]<BR>)]%R

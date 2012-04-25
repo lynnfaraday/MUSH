@@ -11,14 +11,17 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-
-think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\(INSTALL_MGR\),Install Manager created: DB# [create(Install Manager,10)].%RInstall DB created: DB# [create(Install DB,10)].%RInstall Object Storage created: DB# [create(Install Object Storage,10)],[ansi(c,Install Manager already exists.  Updating.[setq(1,install_aliasdb(INSTALL_STORAGE))][setq(2,install_aliasdb(INSTALL_DB))][tel(%q0,%#)][tel(%q1,%#)][tel(%q2,%#)])])]
+think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\(INSTALL_MGR\),Install Manager created: DB# [create(Install Manager,10)].%RInstall DB created: DB# [create(Install DB,10)].%RInstall Object Storage created: DB# [create(Install Object Storage,10)]%RInstall Globals created: DB# [create(Install Globals,10)],[ansi(c,Install Manager already exists.  Updating.[setq(1,install_aliasdb(INSTALL_STORAGE))][setq(2,install_aliasdb(INSTALL_DB))][setq(3,install_aliasdb(INSTALL_GLOBS))][tel(%q0,%#)][tel(%q1,%#)][tel(%q2,%#)][tel(%q3,%#)])])]
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 
+@describe Install Globals=Manages Faraday system objects.%R[u(credits)]
 @describe Install Manager=Manages Faraday system objects.%R[u(credits)]
 @describe Install DB=Manages Faraday system objects.%R[u(credits)]
 @describe Install Object Storage=Stores Faraday system objects.%R[u(credits)]
+
+&CREDITS Install Globals=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&VERSION Install Globals=7.0
 
 &CREDITS Install Manager=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 &VERSION Install Manager=7.0
@@ -28,6 +31,13 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 
 &CREDITS Install Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
 &VERSION Install Object Storage=7.0
+
+@set Install Globals = WIZARD
+@set Install Globals = SAFE
+@set Install Globals = !NO_COMMAND
+@STARTUP Install Manager=@set me=!no_command
+@lock/use Install Globals=isstaff/1
+&ISSTAFF Install Globals=isstaff(%#)
 
 @set Install Manager = WIZARD
 @set Install Manager = SAFE
@@ -50,9 +60,9 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 
 &CMD-+INSTALL-FIND-AND-REGISTER Install Manager=$+install/findreg *=*:@pemit %#=[setq(0,lsearch(all,eobjects,\[strmatch(name(##),%0)\]))][switch(words(%q0),>1,[ansi(hR,More than one object found with name %0.  Picking the first one.)][setq(0,first(%q0))])][switch(%q0,,ansi(hr,Cannot find object %0.  Perhaps it's been renamed or was never installed.),ansi(c,Object %0 found and registered as %1.)[u(fun_register,%1,%q0)])]
 
-&CMD-+INSTALL-DIR Install Manager=$+install/dir:@pemit %#=[line()]%R[ansi(h,Installed Systems)]%R[iter(lattr(#INSTALL_DB/OBJ_*),setq(0,%q0 [extract(##,2,1,_)]),,)][table(iter(setunion(%q0,),[capstr(lcstr(##))]..v[xget(install_aliasdb(after(first(lattr(#INSTALL_DB/OBJ_##*)),_)),version)]),20,78)]%R%R[ansi(h,Use +install/dir <name> for more info about a system.)]%R[line()]
+&CMD-+INSTALL-DIR Install Globals=$+install/dir:@pemit %#=[line()]%R[ansi(h,Installed Systems)]%R[iter(lattr(#INSTALL_DB/OBJ_*),setq(0,%q0 [extract(##,2,1,_)]),,)][table(iter(setunion(%q0,),[capstr(lcstr(##))]..v[xget(install_aliasdb(after(first(lattr(#INSTALL_DB/OBJ_##*)),_)),version)]),20,78)]%R%R[ansi(h,Use +install/dir <name> for more info about a system.)]%R[line()]
 
-&CMD-+INSTALL-DIR-SYSTEM Install Manager=$+install/dir *:@pemit %#=[setq(0,lattr(#INSTALL_DB/OBJ_[trim(%0)]_*))][switch(words(%q0),0,ansi(hr,Can't find a system named %0.),[line()]%R[ansi(h,[capstr(lcstr(%0))] System Information)]%R%R[ansi(c,Object[space(19)]DB#[space(7)]Version)][iter(sort(%q0),%R[setq(1,install_aliasdb(after(##,_)))][padstr(after(##,_),25)][ljust(%q1,10)][xget(%q1,version)])]%R[line()])]
+&CMD-+INSTALL-DIR-SYSTEM Install Globals=$+install/dir *:@pemit %#=[setq(0,lattr(#INSTALL_DB/OBJ_[trim(%0)]_*))][switch(words(%q0),0,ansi(hr,Can't find a system named %0.),[line()]%R[ansi(h,[capstr(lcstr(%0))] System Information)]%R%R[ansi(c,Object[space(19)]DB#[space(7)]Version)][iter(sort(%q0),%R[setq(1,install_aliasdb(after(##,_)))][padstr(after(##,_),25)][ljust(%q1,10)][xget(%q1,version)])]%R[line()])]
 
 @@ --------------------------
 @@  FUN_GET_DESTINATION
@@ -219,8 +229,10 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 &FUN_GET_DBREF Install Manager=switch(u(fun_is_registered,%0),0,#-1,xget(#INSTALL_DB,OBJ_[trim(%0)]))
 
 
+
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 @wait 2=@fo me=@edit Install Manager/*=#INSTALL_DB,[num(Install DB)]
+@wait 2=@fo me=@edit Install Globals/*=#INSTALL_DB,[num(Install DB)]
 @wait 2=@fo me=@edit Install Manager/*=#INSTALL_STORAGE,[num(Install Object Storage)]
 
 @wait 4=@tr Install Manager/Startup
@@ -228,7 +240,9 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @wait 5=@fo me=+install/findreg Install DB=INSTALL_DB
 @wait 5=@fo me=+install/findreg Install Manager=INSTALL_MGR
 @wait 5=@fo me=+install/findreg Install Object Storage=INSTALL_STORAGE
+@wait 5=@fo me=+install/findreg Install Globals=INSTALL_GLOBS
 @wait 5=@tel Install DB=Install Object Storage
+@wait 2=@tel Install Globals=#2
 
 @wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R
 

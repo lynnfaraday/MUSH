@@ -47,7 +47,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit pa
 @@ %q2=ruling attr or blank 
 @@ %q3=modifier or 0 
 @@ %q4=roll result
-&CMD-+ROLL FS3 Skill System=$^\+roll ([^\+-=]+)([\+-][^\+-]+)?([\+-].+)?$:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%1,%2,%3))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid skill rating.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),not(isnum(%q3)),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(rest(%0))]: [u(#FS3SKILL_FUN/fun_pretty_success_level,%q4)].))])
+&CMD-+ROLL FS3 Skill System=$^\+roll ([^-=\+]+)([\+-][^\+-]+)?([\+-].+)?$:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%1,%2,%3))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid skill rating.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),not(isnum(%q3)),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(rest(%0))]: [u(#FS3SKILL_FUN/fun_pretty_success_level,%q4)].))])
 
 @set FS3 Skill System/CMD-+ROLL=regex
 
