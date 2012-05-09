@@ -11,6 +11,9 @@ Census: +census/position works even with variable position list
 Cookies: New config option to say whether you want noisy cookies (Faraday gave you a cookie!)  Configurable with the NOISY_COOKIES option.  Defaults to on for new installs, and off for existing installs.
 Events: Auto-posts to an Events BBS if there is one.
 Friends: Fixed a bug in the list and made it more robust to orphaned char objects.
+Install:  Made install/dir global
+
+*** requires special pre-req install
 
 todo: name change -- come back to mail
 
