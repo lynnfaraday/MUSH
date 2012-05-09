@@ -1,6 +1,5 @@
 @@ Faraday's FS3 System
-@@ Author:  Linda O'Meara
-@@ Website: http://www.wordsmyth.org/aresmush/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -26,7 +25,7 @@ think install_patch(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit par
 @pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
 
 
-&CREDITS FS3 Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
+&CREDITS FS3 Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
 &CMD-+SUCCESSCHART FS3 Skill System=$+successchart *:@pemit %#=[space(5)]-1%B%B[iter(lnum(0,10),ljust(itext(0),3))];@dolist lnum(1,16)={@wait #@={@pemit %#=[setq(0,iter(lnum(1,300),roll_ability(min(##,%0),max(0,sub(##,%0)))))][setq(2,0)][ljust(##,2)] : [iter(-1 [lnum(0,10)],ljust([setq(1,u(#FS3SKILL_FUN/fun_successchart,%q0,itext(0)))][switch(itext(0),-1,ansi(hm,%q1),0,ansi(hr,%q1),[ansi(hg,%q1)][setq(2,add(%q2,%q1))])],3))]%B[ansi(hc,%q2)]}}
 
@@ -81,7 +80,7 @@ think install_patch(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit par
 
 @startup FS3 Skill System=@set me=!no_command
 
-&CREDITS FS3 Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
+&CREDITS FS3 Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
 @startup FS3 Skill Functions=@function ability_level=me/fun_ability_level;@function roll_ability=me/fun_roll_ability;@function opposed_result=me/fun_get_opposed_result;@function pretty_opposed_result=me/fun_pretty_opposed_result
 
@@ -470,7 +469,7 @@ think install_patch(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,7.0,Chargen exit par
 
 &MORE_HELP_+ABILITIES FS3 Skill Help=This game uses the [ansi(hg,FS3 Skills System)] by Faraday.%R%RThe [ansi(h,+abilities)] command lists possible Abilities, including Attributes, Action Skills, Background Skills, Language Skills and Quirks.%R%RFor more information, see also: [ansi(h,+help FS3)].
 
-&MORE_HELP_FS3 FS3 Skill Help=This game uses the [ansi(hg,FS3 Skills System)] by Faraday.%R%RHelp Topics%R==========%R[ansi(h,FS3_Abilities)]%TSkills, Attributes and Quirks%R[ansi(h,FS3_Ratings)]%TWhat the numbers mean%R[ansi(h,FS3_Rolls)]%THow skill rolls work%R[ansi(h,FS3_Experience)]%TLearning and improving skills.%R[ansi(h,FS3_Copyright)]%TCopyright info%R%R%RCommands%R===========%R+abilities%R+roll%R+sheet%R+rulingattr%R%RSee +help <topic> for more info on a given topic.  You can also read all about FS3 on the web at http://wordsmyth.org/aresmush/index.php?title=FS3
+&MORE_HELP_FS3 FS3 Skill Help=This game uses the [ansi(hg,FS3 Skills System)] by Faraday.%R%RHelp Topics%R==========%R[ansi(h,FS3_Abilities)]%TSkills, Attributes and Quirks%R[ansi(h,FS3_Ratings)]%TWhat the numbers mean%R[ansi(h,FS3_Rolls)]%THow skill rolls work%R[ansi(h,FS3_Experience)]%TLearning and improving skills.%R[ansi(h,FS3_Copyright)]%TCopyright info%R%R%RCommands%R===========%R+abilities%R+roll%R+sheet%R+rulingattr%R%RSee +help <topic> for more info on a given topic.  You can also read all about FS3 on the web at http://www.aresmush.com
 
 &MORE_HELP_FS3_ABILITIES FS3 Skill Help=Each character in FS3 has a number of abilities:%R%R* [ansi(hg,Attributes)] represent natural talent.%R* [ansi(hg,Action Skills)] are those skills relevant to the game's 'action', whatever that might be.%R* [ansi(hg,Background Skills)] are other non-action skills your character may have.%R* [ansi(hg,Language Skills)] are hopefully self-explanatory.%R* [ansi(hg,Quirks)] are little things that make your character unique.%R%RAttributes and Action Skills are limited, so you can only select from a fixed list.  Background Skills, Language Skills and Quirks are freeform, meaning you can pick any one you want.  See [ansi(h,+abilities)] for a list of abilities.%R%RSee also [ansi(h,+help FS3_Ratings)] for info about how abilities are rated.
 

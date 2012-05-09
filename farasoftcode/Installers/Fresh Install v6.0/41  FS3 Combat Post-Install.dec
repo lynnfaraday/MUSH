@@ -1,6 +1,5 @@
 @@ Faraday's FS3 System
-@@ Author:  Linda O'Meara
-@@ Website: http://www.wordsmyth.org/aresmush/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -19,7 +18,7 @@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-@wait 5=+jobs/create CODE=FS3 Combat Config/Configure FS3Combat.  See guide here: http://wordsmyth.org/aresmush/index.php?title=FS3_Configuration
+@wait 5=+jobs/create CODE=FS3 Combat Config/Configure FS3Combat.  See guide here: http://www.aresmush.com_Configuration
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -1,6 +1,5 @@
 @@ Faraday's Who System
-@@ Author:  Linda O'Meara
-@@ Website: http://www.wordsmyth.org/aresmush/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -26,7 +25,7 @@ think install_patch(WHO_DB,Who Data,1,1,7.0,Data storage for the Who system.)
 
 &HELP_+WHERE Who Functions=[ansi(h,+where)] is a general command to list connected players.  It shows their current locations, idle time, and whether they are available for RP. Information on player locations is only to be used OOCly. Do not go  somewhere unless your character has a reason to go there, no matter who might be at that location. Even if your character does have a reason to wander by, be courteous and ask the other players in a location if they mind you joining  in.  You can hide your location in +who by typing @set me=Unfindable.
 &HELP_+WHO Who Functions=[ansi(h,+who)] is a general command to list connected players and their positions.%R%RIn addition to showing who's currently online, the +who command keeps track of the MUSH's oldest players (those who have been playing the longest).  You can view this through the [ansi(h,+who/age)] command.
-&SHELP_+WHO Who Functions=There is a lot to configure in the who system.  See the wiki for details:  http://www.wordsmyth.org/aresmush/	
+&SHELP_+WHO Who Functions=There is a lot to configure in the who system.  See the wiki for details:  http://www.aresmush.com/	
 
 @@ --------------------------
 @@ FUN_FOLD_RPOK

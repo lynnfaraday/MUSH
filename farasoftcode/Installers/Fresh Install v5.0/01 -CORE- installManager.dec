@@ -1,6 +1,5 @@
 @@ Faraday's Install Manager
-@@ Author:  Linda O'Meara
-@@ Website: http://code.google.com/p/faramushcode/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -20,13 +19,13 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @describe Install DB=Manages Faraday system objects.%R[u(credits)]
 @describe Install Object Storage=Stores Faraday system objects.%R[u(credits)]
 
-&CREDITS Install Manager=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&CREDITS Install Manager=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
 &VERSION Install Manager=5.0
 
-&CREDITS Install DB=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&CREDITS Install DB=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
 &VERSION Install DB=5.0
 
-&CREDITS Install Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&CREDITS Install Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
 &VERSION Install Object Storage=5.0
 
 @set Install Manager = WIZARD

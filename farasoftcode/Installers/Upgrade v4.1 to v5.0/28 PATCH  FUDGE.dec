@@ -1,6 +1,5 @@
 @@ Faraday's FUDGE Skills/Chargen System
-@@ Author:  Linda O'Meara
-@@ Website: http://code.google.com/p/faramushcode/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -38,7 +37,7 @@ think install_patch(FUDGE_CGEXIT,Chargen Exit Parent,0,0,5.0,Chargen exit parent
 &CMD-+SKILLS-CAT FUDGE Skill System=$+skills/cat:think pemit(%#,[line()]%R[ansi(h,Skills By Category)][iter(lattr(#FUDGE_DB/skill_cat_*),%R%R[ansi(hr,last(##,_))]%R[table(xget(#FUDGE_DB,##),25,78)])]%R[line()])
 &CMD-+SKILLS-DESC FUDGE Skill System=$+skills *:think pemit(%#,switch(0,u(#FUDGE_FUN/fun_is_valid_skill,%0),ansi(hr,That is not a valid skill.),[line()]%R[ansi(hm,capstr_all(%0))]%R[line2()]%R[u(#FUDGE_DB/skill_desc_[trim(%0)])]%R[line()]))
 @DESCRIBE FUDGE Skill System=These are the commands for the FUDGE skills system.%R%R[u(Credits)]
-&CREDITS FUDGE Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%RBased on FUDGE rules by Steffan O'Sullivan.  See +help FUDGE.
+&CREDITS FUDGE Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com%RBased on FUDGE rules by Steffan O'Sullivan.  See +help FUDGE.
 &CMD-+SKILLCENSUS FUDGE Skill System=$+skillcensus *=*:think pemit(%#,switch(0,or(isstaff(%#),xget(#FUDGE_DB,PLAYER_VISIBLE_SHEETS)),ansi(hr,That command is restricted to staff.),u(#FUDGE_FUN/fun_is_valid_skill,%0),ansi(hr,That's not a valid skill.),u(#FUDGE_FUN/fun_is_valid_level_name,%1),ansi(hr,That's not a valid level.),[line()]%RCharacters with %0 at %1 or higher%R[iter(u(#FUDGE_FUN/fun_skill_census,%0,%1),%R[padstr(name(after(##,:)),15)][u(#FUDGE_FUN/fun_level_name,before(##,:))])]%R[line()]))
 &CMD-+SKILLCENSUS-GENERAL FUDGE Skill System=$+skillcensus *:think switch(%0,*=*,,pemit(%#,switch(0,or(isstaff(%#),xget(#FUDGE_DB,PLAYER_VISIBLE_SHEETS)),ansi(hr,That command is restricted to staff.),u(#FUDGE_FUN/fun_is_valid_skill,%0),ansi(hr,That is not a valid skill.),not(match(%0,*=*)),,[line()]%RCharacters with [capstr(%0)]%R[iter(u(#FUDGE_FUN/fun_skill_census,%0,Poor),%R[padstr(name(after(##,:)),15)][u(#FUDGE_FUN/fun_level_name,before(##,:))])]%R[line()])))
 

@@ -1,6 +1,5 @@
 @@ Faraday's MUSH Postmaster System
-@@ Author:  Linda O'Meara
-@@ Website: http://code.google.com/p/faramushcode/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -33,7 +32,7 @@
 &CMD-+MAIL-SEND MUSH Postmaster=$+mail/send:@fo %#=@mail [setq(0,u(#MAILFUN/fun_build_to_list,xget(%#,mailto),%#))]%q0=[xget(%#,mailsub)]/{[ansi(h,Sent To:)] [iter(%q0,capstr(##))]%R%R[edit(u(%#/mailbody),\;,\\\;)]};@dolist mailto mailsub mailbody=@wipe %#/##
 &CMD-+MAIL-START MUSH Postmaster=$+mail/start *=*:think switch(1,hasattr(%#,mailto),pemit(%#,You are already composing a mail message.),match(%1,*/*),pemit(%#,You can't use a '/' in your subject.),pemit(%#,%r[line()]%rYou begin composing your mail message to %0 with subject %1. Use -<text> to add text to your mail message.[set(%#,mailto:%0)][set(%#,mailsub:%1)]%r%RUse +mail/send to send your message.%R[line()]))
 &CMD-+MAIL2 MUSH Postmaster=$+mail *=*:@switch %0=*/*,@fo %#={+mail [before(%0,/)]=[after(%0,/)]/[edit(%1,\;,\\\;)]},{@switch %1=*/*,,@fo %#=+mail/start %0=%1}
-&CREDITS MUSH Postmaster=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&CREDITS MUSH Postmaster=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
 @DESCRIBE MUSH Postmaster=Mailing list and mail composition wrapper.%R[u(credits)]
 @set MUSH Postmaster/DESCRIBE=no_command visual prefixmatch public nearby
 @STARTUP MUSH Postmaster=@set me=!no_command

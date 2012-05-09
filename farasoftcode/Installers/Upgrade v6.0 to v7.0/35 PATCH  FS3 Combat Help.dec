@@ -1,6 +1,5 @@
 @@ Faraday's FS3 System
-@@ Author:  Linda O'Meara
-@@ Website: http://www.wordsmyth.org/aresmush/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -10,7 +9,7 @@
 
 think install_patch(FS3COMBAT_HELP,FS3Combat Help,0,1,7.0,FS3Combat Help.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
-&MORE_HELP_FS3Combat_Header FS3Combat Help=[ansi(hb,This help file is a quick reference for the FS3 Combat System. %RFor more details, see http://www.wordsmyth.org/aresmush/index.php?title=FS3_Combat)]
+&MORE_HELP_FS3Combat_Header FS3Combat Help=[ansi(hb,This help file is a quick reference for the FS3 Combat System. %RFor more details, see http://www.aresmush.com/index.php?title=FS3_Combat)]
 
 &MORE_HELP_+GEAR FS3Combat Help=[u(more_help_fs3combat_header)]%R%R[ansi(h,Gear Commands)]%R%b +gear/weapons - Lists weapon stats%r%b%b+gear/armor - Lists armor stats%r%b%b+gear/vehicles - Lists vehicle stats
 

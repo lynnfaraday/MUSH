@@ -1,6 +1,6 @@
 @@ Faraday's Awards System
-@@ Coded by Linda Naughton O'Meara 
-@@ http://www.wordsmyth.org/faraday
+@@ Coded by Faraday 
+@@ http://www.aresmush.com
 @@
 @@ ===================
 @@ OVERVIEW
@@ -103,7 +103,7 @@
 &CMD-+VOTE-ME Awards System=$+vote/me:think switch(0,v(dat_allow_me),pemit(%#,ansi(hr,Sorry but the staff has disabled this command.)),pemit(%#,[line_with_text(Awards System)]%R[ansi(hm,Vote Comments You Have Received:)][iter(lattr(%#/votedetails-*),%R%R[ansi(r,after(##,-))][u(fun_get_vote_comments,%#,after(##,-))])]%R[line_with_text(+vote/help)]))
 &CMD-+VOTE-RESET Awards System=$+vote/reset *:think [setq(0,pmatch(%0))]switch(0,isstaff(%#),pemit(%#,ansi(hr,This command is restricted to staff only.)),t(%q0),pemit(%#,ansi(hr,That is not a valid player.)),pemit(%#,ansi(hg,You reset %0's votes.))[u(fun_setup_attrs,%q0)])
 &CMD-+VOTE-SHOW Awards System=$+vote/show *=*:think [setq(0,pmatch(%0))]switch(0,isstaff(%#),pemit(%#,ansi(hr,This command is restricted to staff only.)),t(%q0),pemit(%#,ansi(hr,That is not a valid player.)),match(v(dat_award_types),%1),pemit(%#,ansi(hr,That is not a valid award type.)),pemit(%#,[line_with_text(Awards System)]%R[ansi(hg,Votes for [name(%q0)] for [u(fun_next_award_level,%q0,trim(ucstr(%1)))]:)][iter(rest(revwords(xget(%q0,votedetails-[trim(ucstr(%1))]),|),|),%r-+- ##,|)]%R%R[ansi(h,[u(fun_num_votes,%q0,trim(%1))] votes counted -- [u(fun_votes_for_level,u(fun_next_award_num,%q0,trim(%1)))] needed for next level)]%R[line_with_text(+vote/help)]))
-&cmd-+vote-credits Awards System=$+vote/credits:think pemit(%#,[line()]%RAwards System Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R[line()])
+&cmd-+vote-credits Awards System=$+vote/credits:think pemit(%#,[line()]%RAwards System Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com%R[line()])
 &CMD-+VOTE-STAFFHELP Awards System=$+vote/staffhelp:think pemit(%#,[line_with_text(Awards System)]%R[u(help_awards_staff)]%R[line_with_text(+vote/help)])
 &DAT_ALLOW_ME Awards System=1
 &DAT_AWARD_COSTS Awards System=5 10 15 20 25 30 35 40 45 50 55 60
@@ -149,7 +149,7 @@
 
 @wait 6=@tel Awards System=#2
 
-@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!  Please read the important setup information on the web page http://www.wordsmyth.org/faraday/awards.shtml)]%R
+@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!  Please read the important setup information on the web page http://www.aresmush.com/awards.shtml)]%R
 
 @wait 10=@set me=!quiet
 

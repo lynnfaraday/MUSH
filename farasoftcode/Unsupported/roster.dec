@@ -30,7 +30,7 @@
 &ROSTER_DB Roster System=
 &FUN_DISPLAY_SHEET Roster System=ansi(hr,Character Sheet Not Implemented)
 &VERSION Roster System=4.0
-&CREDITS Roster System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&CREDITS Roster System=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
 @DESCRIBE Roster System=Commands for a basic character roster.%R%R[u(credits)]
 
 @wait 2=@pemit/silent %#=[ansi(hr,Setting up database numbers...)]%R

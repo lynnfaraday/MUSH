@@ -1,6 +1,6 @@
 @@ Faraday's Version of Shofari's Idle Purger
 @@ Author:  Shofari@B5MUSH (original), Linda O'Meara (modifications)
-@@ Website: http://www.wordsmyth.org/aresmush/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -29,7 +29,7 @@ think install_patch(IDLE_CMD,Idle Purger,1,0,6.0,Idle purger.)
 &CMD-+PURGE Idle Purger=$+purge *:think [setq(0,pmatch(%0))][setq(1,name(pmatch(%0)))];@switch [t(%q0)]=0,@pemit %#=ansi(hr,No such player.),{@tr me/PLAYER_PURGE_ACTIONS=%q0,%#}
 &IDLEQUEUE Idle Purger=
 &IDLETEMP Idle Purger=
-&CREDITS Idle Purger=Originally coded by Shofari@B5MUSH.  Modified and maintained by Faraday (http://www.wordsmyth.org/faraday).
+&CREDITS Idle Purger=Originally coded by Shofari@B5MUSH.  Modified and maintained by Faraday (http://www.aresmush.com).
 
 &SHELP_+IDLE Idle Purger=[ansi(hg,Originally Coded by Shofari@B5MUSH.  Modified by Faraday.)]%R%RThe idle purger will nuke old characters that have idled out due to inactivity.  You can also use it as a means to cleanly nuke other players and in the process clean up their objects, mailing lists, etc.  The idle purger does not run automatically.  You execute it at will, and you get to review the list of idle characters before they're nuked.  The general process is:%R%R[ansi(h,+idle/start)] - Checks for idle players%R[ansi(h,+idle/queue)] - Checks the queue of people to be idle-nuked.%R[ansi(h,+idle/remove <name>)] - Removes someone who shouldn't be nuked.%R[ansi(h,+idle/add <name>)] - Adds someone who should be nuked%R[ansi(h,+idle/queue)] - ALWAYS double-check the queue before purging!%R[ansi(h,+idle/purge)] - Executes the purge of everyone in the queue.  [ansi(hr,MAKE ABSOLUTELY SURE BEFORE DOING THIS!)]%R%RNote:  You can also purge players independent of the idle purger simply by using the +purge command.%R%RAlso see +shelp +idle_config for important configuration information.%R%R[ansi(hr,ALWAYS USE +PURGE RATHER THAN @NUKE TO NUKE PLAYERS)]
 

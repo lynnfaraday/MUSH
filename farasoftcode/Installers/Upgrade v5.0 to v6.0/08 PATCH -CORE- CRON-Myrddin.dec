@@ -1,6 +1,6 @@
 @@ Faraday's Version of Myrddin's Cron System
 @@ Author:  Myrddin (original), Linda O'Meara (modifications)
-@@ Website: http://www.wordsmyth.org/aresmush/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -14,7 +14,7 @@ think install_patch(CRON_OBJ,CRON - Myrddin's mushcron,1,0,6.0,Cron object.)
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 
-&CREDITS CRON - Myrddin's mushcron=mushcron was coded by Myrddin (merlin@firstmagic.com) originally and then modified by Faraday (http://www.wordsmyth.org/faraday).  Permission is granted to distribute the code freely as long as the initial CREDIT attribute is kept intact.  The original code is located at www.firstmagic.com/~merlin/mushcode.   The branched version can be found at http://www.wordsmyth.org/aresmush/
+&CREDITS CRON - Myrddin's mushcron=mushcron was coded by Myrddin (merlin@firstmagic.com) originally and then modified by Faraday (http://www.aresmush.com).  Permission is granted to distribute the code freely as long as the initial CREDIT attribute is kept intact.  The original code is located at www.firstmagic.com/~merlin/mushcode.   The branched version can be found at http://www.aresmush.com/
 &CRON CRON - Myrddin's mushcron=@trigger me/cronjobs; @wait 60={@trigger me/cron}
 &CRONJOBS CRON - Myrddin's mushcron=@dolist [setq(8,time())][setq(1,extract(%q8,2,1))][setq(2,extract(%q8,3,1))][setq(3,extract(%q8,1,1))][setq(4,extract(extract(%q8,4,1),1,1,:))][setq(5,extract(time(),2,1,:))][lattr(me/cron_time_*)]={@switch and(or(member(extract([setq(0,v(##))]%q0,1,1,|),%q1),not(strlen(extract(%q0,1,1,|)))), or(member(extract(%q0,2,1,|),%q2), not(strlen(extract(%q0,2,1,|)))), or(member(extract(%q0,3,1,|),%q3), not(strlen(extract(%q0,3,1,|)))), or(member(extract(%q0,4,1,|),%q4), not(strlen(extract(%q0,4,1,|)))), or(member(extract(%q0,5,1,|),%q5), not(strlen(extract(%q0,5,1,|)))))=1,{@pemit #1=Triggering CRON_JOB_[extract(##,3,1,_)]; @trigger me/cron_job_[extract(##,3,1,_)]=[last(%q0,|)]}}
 @DESCRIBE CRON - Myrddin's mushcron=[repeat(=,78)]%r%b[iter(lattr(me/cron_time_*),[ljust(rest(rest(##,_),_),25)][v(##)]%r)][repeat(-,78)]%rPattern of CRON_TIME_* attributes:%r%t<month>|<date>|<day of week>|<hour>|<minute>|<args>%r(ex. Mar||Sun|04|54| would trigger a cron job at 4:54am every sunday in the month of march)%r[repeat(=,78)]%R[u(credits)]

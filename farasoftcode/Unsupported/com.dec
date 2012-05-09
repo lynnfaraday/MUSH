@@ -1,5 +1,5 @@
 @@ Faraday's IC Com System
-@@ Coded by Linda Naughton O'Meara
+@@ Coded by Faraday
 @@
 @@ Requires: Global Functions, Job System
 @@
@@ -46,7 +46,7 @@
 &CMD-+LINK-NUM Com System=$+link/num:think switch(u(#COMMFUN/fun_is_valid_comcode,u(#COMMFUN/fun_get_comcode,%#)),0,pemit(%#,ansi(hr,You do not have a commlink.)),pemit(%#,[u(#COMMDB/Com_header)]%r[ansi(hr,Your Commlink's Comcode:)] [u(#COMMFUN/fun_get_comcode,%#)]%R[u(#COMMDB/bottom_line)])))
 &CMD-+LINK-TALK Com System=$+link *:think switch(0,u(#COMMFUN/fun_is_call_est,%#),pemit(%#,ansi(hr,There is no call established!)),[u(#COMMFUN/fun_com_message,%#,[parse_pose(%0,%N)])][u(#COMMFUN/fun_com_message,[u(#COMMFUN/fun_find_target,%#,est)],[parse_pose(%0,%N)])])
 @STARTUP Com System=@set me=!no_command
-&CREDITS Com System=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&CREDITS Com System=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
 &VERSION Com System=4.0
 
 

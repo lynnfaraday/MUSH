@@ -1,6 +1,5 @@
 @@ Faraday's FS3 System
-@@ Author:  Linda O'Meara
-@@ Website: http://www.wordsmyth.org/aresmush/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -13,7 +12,7 @@ think install_create(FS3COMBAT_CMD_ACTIONS,FS3Combat Action Commands,1,0,7.0,The
 
 think install_create(FS3COMBAT_PREFS,FS3Combat Preferences,0,1,7.0,FS3Combat Preferences.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
-&CREDITS FS3Combat Action Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
+&CREDITS FS3Combat Action Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
 @set FS3Combat Preferences = !NO_COMMAND
 

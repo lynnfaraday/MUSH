@@ -1,6 +1,6 @@
 @@ Faraday's Version of Shofari's Idle Purger
 @@ Author:  Shofari@B5MUSH (original), Linda O'Meara (modifications)
-@@ Website: http://www.wordsmyth.org/aresmush/
+@@ Website: http://www.aresmush.com/
 @@
 @@ Visit the website for documentation, installation instructions, bug reports,
 @@ and more.
@@ -29,7 +29,7 @@ think install_create(IDLE_CMD,Idle Purger,1,0,7.0,Idle purger.)
 &CMD-+PURGE Idle Purger=$+purge *:think [setq(0,pmatch(%0))][setq(1,name(pmatch(%0)))];@switch [t(%q0)]=0,@pemit %#=ansi(hr,No such player.),{@tr me/PLAYER_PURGE_ACTIONS=%q0,%#}
 &IDLEQUEUE Idle Purger=
 &IDLETEMP Idle Purger=
-&CREDITS Idle Purger=Originally coded by Shofari@B5MUSH.  Modified and maintained by Faraday (http://www.wordsmyth.org/faraday).
+&CREDITS Idle Purger=Originally coded by Shofari@B5MUSH.  Modified and maintained by Faraday (http://www.aresmush.com).
 
 @@ Returns true if the player is already marked as 'gone'
 &FUN_IS_GONE Idle Purger=or(xget(pmatch(%0),left),xget(pmatch(%0),dead),xget(pmatch(%0),roster))
