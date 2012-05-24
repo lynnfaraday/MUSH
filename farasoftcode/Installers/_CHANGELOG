@@ -12,6 +12,7 @@ Cookies: New config option to say whether you want noisy cookies (Faraday gave y
 Events: Auto-posts to an Events BBS if there is one.
 Friends: Fixed a bug in the list and made it more robust to orphaned char objects.
 Install:  Made install/dir global
+Actors: Staff command to clear someone's actor.
 
 *** requires special pre-req install
 

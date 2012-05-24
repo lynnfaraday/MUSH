@@ -21,6 +21,7 @@ think install_create(ACTORS_DB,Actor DB,0,1,7.0,Actor database.)
 &CMD-+ACTOR-NPC Actor Commands=$+actor/npc *=*:think pemit(%#,switch(1,t(u(fun_find_actors,%1)),ansi(hr,That actor is already taken.),pmatch(%0),ansi(hr,%0 is a player.  Use the +actor command instead.),ansi(hg,You set %0's actor to %1.)[u(fun_set_actor,trim(capstr(%0)),%1)])))
 &CMD-+ACTORS-SEARCH Actor Commands=$+actors *:think pemit(%#,[line()]%R[ansi(h,Characters with Actors Matching "[capstr(%0)]")]%R[iter(sortby(fun_sort_actors,u(fun_find_actors,%0)),%R[ljust(before(xget(#ACTORS_DB,##),|),30)][after(xget(#ACTORS_DB,##),|)])]%R[line()])
 &CMD-+ACTORS-SEARCH2 Actor Commands=$+actor *:@fo %#=+actors %0
+&cmd-+actor-clear-player Actor Commands=$+actor/clear *:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),t([setq(0,u(fun_find_players,name(pmatch(%0))))]%q0),ansi(hr,Can't find that player in the actor system.),ansi(hg,You clear %0's actor.)[wipe(#ACTORS_DB/%q0)])))
 @STARTUP Actor Commands=@set me=!no_command
 @set Actor Commands/STARTUP=no_command
 &FUN_SORT_ACTORS Actor Commands=comp(before(xget(#ACTORS_DB,%0),|),before(xget(#ACTORS_DB,%1),|))
