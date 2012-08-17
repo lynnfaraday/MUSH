@@ -49,9 +49,9 @@ think install_create(STAFF_CMD,Staff Commands,1,0,7.0,Staff-only commands.)
 &cmd-+grep Staff Commands=$+grep *:@pemit %#=iter(lsearch(all,type,object),switch(words(grep(##,*,%0)),>0,%R##: [grep(##,*,%0)]))
 &SHELP_+GREP Staff Commands=Searches for a string on all objects in the database.  Warning: Computationally expensive.  Use with discretion.%R%R[ansi(h,+grep <string to search>)]
 
+&CMD-+UPDATENAME Staff Commands=$+updatename *=*:@dolist lattr([INSTALL_ALIASDB(INSTALL_DB)]/obj*)=@tr [xget([INSTALL_ALIASDB(INSTALL_DB)],##)]/TR_PLAYER_NAME_CHANGE=%0,%1
 
-
-
+&SHELP_+UPDATENAME Staff Commands=This command updates a player's name in the various MUSH objects (mail, friends, etc.) after a name change.%R%RUsage: +updatename <oldname>=<newname>
 
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 

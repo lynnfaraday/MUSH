@@ -118,7 +118,7 @@ think install_create(MAIL_LIST,FaraMail Lists,0,1,7.0,+mail mailing lists.)
 @startup FaraMail Functions=@fun send_mail=[num(me)]/fun_send_msg;@fun unread_mail=[num(me)]/fun_total_unread;@fun total_mail=[num(me)]/fun_total_mail
 
 &TR_PLAYER_NAME_CHANGE FaraMail Commands=@dolist lcon(#MAIL_OBJECTS)=@tr me/TR_PLAYER_NAME_CHANGE_ON_MAIL_OBJECT=##,%0,%1
-&TR_PLAYER_NAME_CHANGE_ON_MAIL_OBJECT FaraMail Commands=@dolist lattr(%0/MSG_*)=[setq(0,xget(%0,##))][setq(1,first(%q0,|))][setq(2,find_and_replace(extract(%q0,2,1,|),%1,%2))][replace(replace(%q0,1,switch(%q1,%1,%2,%q1)),2,%q2)]
+&TR_PLAYER_NAME_CHANGE_ON_MAIL_OBJECT FaraMail Commands=@dolist lattr(%0/MSG_*)=@wait [div(#@,10)]={think [setq(0,xget(%0,##))][setq(1,first(%q0,|))][setq(2,find_and_replace(extract(%q0,2,1,|),%1,%2))][setq(0,replace(%q0,1,switch(%q1,%1,%2,%q1),|))][setq(0,replace(%q0,2,%q2,|))][set(%0,##:%q0)]}
 
 &FUN_EXPANDED_TO_LIST FaraMail Functions=[squish([setq(9,)][iter(%0,switch(1,match(##,friends),friends(%#),t(pmatch(##)),setq(9,%q9##%B),t(match(lattr(%1/list_*),LIST_##)),setq(9,%q1[xget(%1,list_##)]%B),t(match(lattr(#MAIL_LIST/list_*),LIST_##)),setq(9,%q9[xget(#MAIL_LIST,list_##)]%B),pemit(%#,ansi(hr,WARNING!  ## is an invalid player or list, mail not deliverable to that person!))))][setunion(capstr_all(%q9),)])]
 

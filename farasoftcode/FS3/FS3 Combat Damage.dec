@@ -408,7 +408,7 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,7.0,FS3Comba
 @@  happen at the same moment.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&FUN_RAND_SECOND FS3Combat Damage Commands=[setq(0,xget(#FS3COMBAT_DB_DMG,randsec_[secs()]))][wipe(#FS3COMBAT_DB_DMG/randsec_*)][set(#FS3COMBAT_DB_DMG,randsec_[secs()]:[inc(%q0)])][switch(%q0,,0,%q0)]
+&FUN_RAND_SECOND FS3Combat Damage Commands=[setq(0,xget(#FS3COMBAT_DB_DMG,randsec_[secs()]))][iter(lattr(#FS3COMBAT_DB_DMG/randsec_*),wipe(#FS3COMBAT_DB_DMG/##))][set(#FS3COMBAT_DB_DMG,randsec_[secs()]:[inc(%q0)])][switch(%q0,,0,%q0)]
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_HEALPOINTS_WOUND
@@ -477,6 +477,17 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,7.0,FS3Comba
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 &FUN_TIME_TO_HEAL FS3Combat Damage Commands=max(round(sub(u(FUN_HEALPOINTS_TOTAL,%0),u(fun_dmgstat,%0,healing)),0),0)
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@  TR_PLAYER_NAME_CHANGE
+@@  Triggers a name change.
+@@  %0 = old name
+@@  %1 = new name
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+&TR_PLAYER_NAME_CHANGE FS3Combat Damage Commands=@dolist lattr(#FS3COMBAT_DB_DMG/DMG_*)=@switch ##=DMG_[ucstr(%0)]_*,@mvattr #FS3COMBAT_DB_DMG/##=#FS3COMBAT_DB_DMG/[edit(##,[ucstr(%0)],[ucstr(%1)])]
+
+
 
 @STARTUP FS3Combat Damage Commands=@set me=!no_command;@fun damagemod=me,fun_dmgmod_total
 
