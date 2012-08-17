@@ -15,6 +15,7 @@ Install:  Made install/dir global
 Actors: Staff command to clear someone's actor.
 Roster: New system
 Staff:  Update after name change command -- actors, alts, events, friends, bbs, jobs, ookies, damage, mail
+Channel Alias:  New system
 
 *** requires special pre-req install
 
