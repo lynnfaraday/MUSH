@@ -18,6 +18,7 @@ Staff:  Update after name change command -- actors, alts, events, friends, bbs, 
 Channel Alias:  New system
 +finger: Shows alts by default
 BG: BGs public by default
++home: New system
 
 *** requires special pre-req install
 
