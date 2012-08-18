@@ -17,6 +17,7 @@ Roster: New system
 Staff:  Update after name change command -- actors, alts, events, friends, bbs, jobs, ookies, damage, mail
 Channel Alias:  New system
 +finger: Shows alts by default
+BG: BGs public by default
 
 *** requires special pre-req install
 

@@ -44,7 +44,7 @@ think install_create(BG_APP,BG Approval,1,0,7.x,Background approval actions.)
 &REJECTION_MSG BG Approval =We're sorry, but your character could not be approved at the present time for the reasons described below.  You may make changes to your background and re-submit when you are ready. Please contact the staff member listed above if you have any questions.%R%R[ansi(h,Reason for Rejection:)]%R%R%0
 &APPROVAL_ACTIONS BG Approval=@set %0=!UNREGISTERED;&status %0=OOC
 &REJECTION_ACTIONS BG Approval=@set %0=UNREGISTERED
-&PUBLIC_BGS BG Approval=0
+&PUBLIC_BGS BG Approval=1
 
 @wait 6=+jobs/create CODE=Approval Actions/Configure the actions to be taken and mail to be sent when character BGs are approved and rejected.  See +shelp BG for details.
 
