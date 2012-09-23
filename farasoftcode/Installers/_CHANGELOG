@@ -1,16 +1,23 @@
 ================================================================
 New Version (in progress)
 
+BUGS
+FS3 Combat: Add reload time.  Fix KO.   Fix +roll of just a skill #
+Idle: Wasn't nuking mail objects
+Global Funcs:  Change default isstaff to Wr instead of WrJ -- this fixes +bg/unsubmit
+Friends: Fixed a bug in the list and made it more robust to orphaned char objects.
+
+
+FEATURES
+
 Rooms & Globals:  +sceneset command; Guests go home
 Rooms: Alternate code for separating cardinal exits or listing visible players with their shortdescs (pilfered from Pioneer)
-Idle: Wasn't nuking mail objects
 Mail: Add error message if someone tries @mail; mail/scan on aconnect
-FS3 Combat: Add reload time.  Fix KO.   Fix +roll of just a skill #
+FS3 Combat: Add reload time.  
 BG: Allow public BGs via a config toggle.
 Census: +census/position works even with variable position list
 Cookies: New config option to say whether you want noisy cookies (Faraday gave you a cookie!)  Configurable with the NOISY_COOKIES option.  Defaults to on for new installs, and off for existing installs.
 Events: Auto-posts to an Events BBS if there is one.
-Friends: Fixed a bug in the list and made it more robust to orphaned char objects.
 Install:  Made install/dir global
 Actors: Staff command to clear someone's actor.
 Roster: New system
@@ -23,7 +30,6 @@ Wiki: New system
 
 *** requires special pre-req install
 
-todo: name change -- come back to mail
 
 
 ================================================================

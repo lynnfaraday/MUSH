@@ -10,9 +10,9 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(GLOBALS_CMD,Misc Globals,1,0,7.0,Miscellaneous global functions.)
-think install_create(GLOBALS_FUN,Misc Globals Functions,1,1,7.0,Functions for the misc globals.)
-think install_create(GLOBALS_DB,Misc Globals Data,0,1,7.0,Data storage for the misc globals.)
+think install_create(GLOBALS_CMD,Misc Globals,1,0,7.x,Miscellaneous global functions.)
+think install_create(GLOBALS_FUN,Misc Globals Functions,1,1,7.x,Functions for the misc globals.)
+think install_create(GLOBALS_DB,Misc Globals Data,0,1,7.x,Data storage for the misc globals.)
 
 @pemit/silent %#=[ansi(hg,Setting Up Object Attributes...)]%R
 
