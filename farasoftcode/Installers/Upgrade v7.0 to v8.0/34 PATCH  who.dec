@@ -1,0 +1,110 @@
+@@ Faraday's Who System
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=QUIET
+
+@pemit/silent %#=[ansi(hg,Beginning Who System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_patch(WHO_CMD,Who Commands,1,0,8.0,Configurable Who system.)
+think install_patch(WHO_FUN,Who Functions,1,1,8.0,Functions for the Who system.)
+think install_patch(WHO_DB,Who Data,1,1,8.0,Data storage for the Who system.)
+
+@pemit/silent %#=[ansi(hg,Setting Up Object Attributes...)]%R
+
+&CMD-+WHO Who Commands=$+who:think pemit(%#,u(#WHO_FUN/fun_who,who))
+&CMD-WHO Who Commands=$who:think pemit(%#,u(#WHO_FUN/fun_who,who))
+&CMD-+WHERE Who Commands=$+where:think pemit(%#,u(#WHO_FUN/fun_who,where))
+&CMD-+WHO-AGE Who Commands=$+who/age:think pemit(%#,[line()]%R[ansi(h,Top 25 Oldest Characters)]%R[setq(0,extract(sort(iter(real_players(),switch(hasflag(##,?),1,%q0,%q0 [convtime(ctime(##))]:##))),1,25))][iter(%q0,%R[ljust(#@.,3)] [name(after(##,:))] - [convsecs(before(##,:))])]%R[line()])
+@aconnect Who Commands=think [switch(gt(words(mwho()),xget(#WHO_DB,who_record)),1,[set(#WHO_DB,who_record:[words(mwho())])][pemit(lwho(),[ansi(h[rand_color()],<OOC> New Online Record - [words(mwho())] players!)])])]
+
+
+&HELP_+WHERE Who Functions=[ansi(h,+where)] is a general command to list connected players.  It shows their current locations, idle time, and whether they are available for RP. Information on player locations is only to be used OOCly. Do not go  somewhere unless your character has a reason to go there, no matter who might be at that location. Even if your character does have a reason to wander by, be courteous and ask the other players in a location if they mind you joining  in.  You can hide your location in +who by typing @set me=Unfindable.
+&HELP_+WHO Who Functions=[ansi(h,+who)] is a general command to list connected players and their positions.%R%RIn addition to showing who's currently online, the +who command keeps track of the MUSH's oldest players (those who have been playing the longest).  You can view this through the [ansi(h,+who/age)] command.
+&SHELP_+WHO Who Functions=There is a lot to configure in the who system.  See the wiki for details:  http://www.aresmush.com/	
+
+@@ --------------------------
+@@ FUN_FOLD_RPOK
+@@ Intended to be called via fold() to count the number of players who are RPOK
+@@ %0 = running count of RPOK peeps
+@@ %1 = the next person to check if they're RPOK
+@@ --------------------------
+&FUN_FOLD_RPOK Who Functions=add(%0,u(FUN_IS_IC,%1))
+
+@@ --------------------------
+@@ FUN_SORT_AGE
+@@ Sortby function to sort people by created time.
+@@ %0/%1 = Two players to compare
+@@ --------------------------
+&FUN_SORT_AGE Who Functions=switch(1,eq(convtime(ctime(%0)),convtime(ctime(%1))),0,gt(convtime(ctime(%0)),convtime(ctime(%1))),1,-1)
+
+@@ --------------------------
+@@ FUN_WHO
+@@ Master function for displaying +who/+where
+@@ %0 = who or where
+@@ --------------------------
+&FUN_WHO Who Functions=[u(#WHO_DB/TOP_LINE)]%R[u(#WHO_DB/HEADER)][u(FUN_TITLES,%0)]%R[u(#WHO_DB/SEPARATOR_LINE)][iter(sortby(#WHO_DB/FUN_SORT_%0,u(FUN_VISIBLE_PLAYERS)),u(FUN_WHO_LINE,%0,##))]%R[u(#WHO_DB/SEPARATOR_LINE)]%R[u(#WHO_DB/FOOTER)]%R[u(#WHO_DB/BOTTOM_LINE)]
+
+@@ --------------------------
+@@ FUN_WHO_LINE
+@@ Displays a single player entry for +who/+where
+@@ %0 = who or where
+@@ %1 = the current player
+@@ --------------------------
+&FUN_WHO_LINE Who Functions=%R[u(#WHO_DB/left_border)]%B[iter(xget(#WHO_DB,%0_FIELDS),padstr(u(#WHO_DB/[before(##,:)],%1),after(##,:)))]%B[u(#WHO_DB/right_border)]
+
+@@ --------------------------
+@@ FUN_TITLES
+@@ Displays the titles for the columns, if they've been configured.
+@@ %0 = who or where
+@@ --------------------------
+&FUN_TITLES Who Functions=[switch(t(xget(#WHO_DB,%0_TITLES)),0,,%R[u(#WHO_DB/left_border)]%B[ansi(h,iter(xget(#WHO_DB,%0_FIELDS),padstr(extract(xget(#WHO_DB,%0_TITLES),#@,1,|),after(##,:))))]%B[u(#WHO_DB/right_border)])
+
+@@ --------------------------
+@@ FUN_ONLINE_SUMMARY
+@@ Displays a summary of folks online, RPOK and the Who record
+@@ %0 = available space.  Divided into 3 equal columns, which are then centered into the total available space.
+@@ --------------------------
+&FUN_ONLINE_SUMMARY Who Functions=center([ljust(ansi(m,%B[words(u(FUN_VISIBLE_PLAYERS))] Online),div(%0,3))][center(ansi(r,[fold(FUN_FOLD_RPOK,mwho(),0)] IC),div(%0,3))][rjust(ansi(g,[xget(#WHO_DB,who_record)] Record%B),div(%0,3))],%0)
+
+@@ --------------------------
+@@ FUN_VISIBLE_PLAYERS
+@@ Uses lwho or mwho depending on whether the enactor is staff/mortal
+@@ --------------------------
+&FUN_VISIBLE_PLAYERS Who Functions=switch(isstaff(%#),1,lwho(),mwho()
+
+@@ --------------------------
+@@ FUN_IS_IN_TPROOM
+@@ Is the player in a TP Room.
+@@ %0 = player
+@@ --------------------------
+&FUN_IS_IN_TPROOM Who Functions=switch(xget(#WHO_DB,TP_ROOM_PARENT),#-1,0,match(parent(loc(%0)),xget(#WHO_DB,TP_ROOM_PARENT)))
+
+@@ --------------------------
+@@ FUN_IS_IC
+@@ Player is IC if they're status is IC or they're in a TP Room
+@@ %0 = player
+@@ --------------------------
+&FUN_IS_IC Who Functions=or(switch(xget(%0,status),IC,1,0),u(FUN_IS_IN_TPROOM,%0))
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup WHO
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 5=@set me=!quiet
+

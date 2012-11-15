@@ -24,7 +24,7 @@ STANCEMOD_DEFENDER: normal:0 reserve:0 aggressive:-3 defensive:+3 mounted:0 form
 &COVER_SOFA FS3Combat Equipment Stats=1
 &COVER_SOLID_WOOD FS3Combat Equipment Stats=3
 &COVER_STEEL_DOOR FS3Combat Equipment Stats=6
-&CREDITS FS3Combat Equipment Stats=Version [v(version)]%R%RCoded by Faraday ~ http://www.wordsmyth.org/faraday
+&CREDITS FS3Combat Equipment Stats=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
 @set FS3Combat Equipment Stats=DESCRIBE:FS3Combat Equipment Stats. See the FS3Combat Action Commands object for important copyright/license information.%r\[u\(credits\)\]
 @set FS3Combat Equipment Stats/DESCRIBE=no_command visual prefixmatch public nearby
 &INSTALL_DESTINATION FS3Combat Equipment Stats=FS3_STORAGE

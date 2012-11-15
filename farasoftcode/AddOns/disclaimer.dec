@@ -11,7 +11,7 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think install_create(DISCLAIM_CMD,Disclaimer System,1,0,7.0,Disclaimer system.)
+think install_create(DISCLAIM_CMD,Disclaimer System,1,0,8.0,Disclaimer system.)
 
 &HATTR_ACCEPTED_DISCLAIMER Disclaimer System=0
 &INSTALL_DESTINATION Disclaimer System=CREATOR
@@ -27,7 +27,30 @@ think install_create(DISCLAIM_CMD,Disclaimer System,1,0,7.0,Disclaimer system.)
 
 @wait 2=+install/updategroup DISCLAIM
 
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
 @wait 5=+jobs/create CODE=Disclaimer/1. Create a disclaimer room with your policies and lock the exit to players having an ACCEPTED_DISCLAIMER attribute of 1. %R%R2. Drop the disclaimer system in that room.
+
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 
 @wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
 

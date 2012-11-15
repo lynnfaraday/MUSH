@@ -1,0 +1,47 @@
+@@ Faraday's Channel Alias System
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Channel Alias Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_create(CHAN_CMD,Channel Alias Commands,1,0,8.0,Somewhat hacky way to do channel aliases.)
+
+&CMD-NEW Channel Alias Commands=$nn *:@cemit newbie=<[ansi(hg,Newbie)]> [parse_pose(%0,%N)]
+&CMD-PUB Channel Alias Commands=$pub *:@cemit public=<[ansi(hy,Public)]> [parse_pose(%0,%N)]
+&CMD-_NEW Channel Alias Commands=$=new *:@cemit newbie=<[ansi(hg,Newbie)]> [parse_pose(%0,%N)]
+&CMD-_PUB Channel Alias Commands=$=pub *:@cemit public=<[ansi(hy,Public)]> [parse_pose(%0,%N)]
+
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@wait 2=+jobs/create CODE=Channel Alias/The default channel alias config comes with "nn" and "=new" as aliases for the newbie chan, and "pub" and "=pub" as aliases for the public channel.  You can code more or change them if you like.
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@wait 2=+install/updategroup CHAN
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 5=@set me=!quiet

@@ -1,3 +1,0 @@
-think [setq(0,install_aliasdb(INSTALL_MGR))][wipe(%q0/CMD-+INSTALL-DIR)][wipe(%q0/CMD-+INSTALL-DIR-SYSTEM)]
-@create Install Globals
-@fo me=+install/findreg Install Globals=INSTALL_GLOBS

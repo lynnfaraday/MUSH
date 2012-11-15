@@ -10,7 +10,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(CHAN_CMD,Channel Alias Commands,1,0,7.0,Somewhat hacky way to do channel aliases.)
+think install_create(CHAN_CMD,Channel Alias Commands,1,0,8.0,Somewhat hacky way to do channel aliases.)
 
 &CMD-NEW Channel Alias Commands=$nn *:@cemit newbie=<[ansi(hg,Newbie)]> [parse_pose(%0,%N)]
 &CMD-PUB Channel Alias Commands=$pub *:@cemit public=<[ansi(hy,Public)]> [parse_pose(%0,%N)]
