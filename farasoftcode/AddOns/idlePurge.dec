@@ -70,8 +70,8 @@ think install_create(IDLE_CMD,Idle Purger,1,0,8.0,Idle purger.)
 &MAILING_LIST_OBJECT Idle Purger=#-1
 &PLAYER_PURGE_ACTIONS Idle Purger=@fo %1=+actor/clear %0;@tr me/TR_CLEAR_MAIL=%0;@tr me/TR_REMOVE_ALT=%0;@tr me/TR_REMOVE_FRIENDS=%0;@dolist lsearch(%0,type,room)={@chown ##=*Builder};@dolist lsearch(%0,type,exit)={@chown ##=*Builder};@fo %1=@nuke %0
 
-&CRON_JOB_IDLEPURGE CRON - Myrddin's mushcron=think create_job(ADMIN,Idle Purge,Purge idle players.,%#)
-&CRON_TIME_IDLEPURGE CRON - Myrddin's mushcron=|01 15||01|30|
+&CRON_JOB_IDLEPURGE Idle Purger=think create_job(ADMIN,Idle Purge,Purge idle players.,%#)
+&CRON_TIME_IDLEPURGE Idle Purger=|01 15||01|30|
 
 
 @wait 5=+jobs/create CODE=Idle Purge Protection/Add builders and other potentially-idle staff characters to the protected list so they don't get nuked by the idle purger.  See +shelp +idle.
