@@ -31,7 +31,7 @@ think install_create(IDLE_CMD,Idle Purger,1,0,8.0,Idle purger.)
 &CMD-+IDLE-UNWARN Idle Purger=$+idle/unwarn *:think [setq(0,[pmatch(%0)])][pemit(%#,switch(t(%q0),0,ansi(hr,That is not a valid player.),[name(%q0)] has been marked as newly idle. [set(%q0,idlewarn:0)]))]
 &CMD-+IDLE-WARN Idle Purger=$+idle/warn *:think [setq(0,[pmatch(%0)])][pemit(%#,switch(t(%q0),0,ansi(hr,That is not a valid player.),[name(%q0)] has been marked as idle-warned. [set(%q0,idlewarn:1)]))]
 &CMD-+PURGE Idle Purger=$+purge *:think [setq(0,pmatch(%0))][setq(1,name(pmatch(%0)))];@switch [t(%q0)]=0,@pemit %#=ansi(hr,No such player.),{@tr me/PLAYER_PURGE_ACTIONS=%q0,%#}
-&CREDITS Idle Purger=Originally coded by Shofari@B5MUSH.  Modified and maintained by Faraday (http://www.wordsmyth.org/faraday).
+&CREDITS Idle Purger=Originally coded by Shofari@B5MUSH.  Modified and maintained by Faraday (http://www.aresmush.com).
 @set Idle Purger=DESCRIBE:Idle purger.%r\[u\(credits\)\]
 &FUN_IS_GONE Idle Purger=words(xget(%0,gone))
 &FUN_NEWLY_IDLE Idle Purger=and(not(hasflag(%0,unregistered)),not(xget(%0,idlewarn)))
