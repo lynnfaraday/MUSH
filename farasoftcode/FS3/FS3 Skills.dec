@@ -18,7 +18,7 @@ think install_create(FS3SKILL_FUN,FS3 Skill Functions,1,1,8.0,Stores FS3 skill f
 think install_create(FS3SKILL_DB,FS3 Skill Data,1,1,8.0,Stores FS3 skill data.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
 
 think install_create(FS3SKILL_CGINFO,Chargen Info Functions,1,1,8.0,Functions related to chargen but also useful outside of it.,FS3_STORAGE)
-think install_create(FS3SKILL_CGDEMO,Demographic Commands,1,0,8.0,Chargen Demographic Commands,CREATOR)
+think install_create(FS3SKILL_CGDEMO,Demographic Commands,1,0,8.1,Chargen Demographic Commands,CREATOR)
 think install_create(FS3SKILL_CGABILITY,FS3 Chargen Commands,1,0,8.0,FS3 Chargen Commands.  See the FS3 Skill System object for important copyright/license information.,CREATOR)
 think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.0,Chargen exit parent.,FS3_STORAGE)
 
@@ -622,7 +622,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.0,Chargen exit pa
 &CMD-+RANK Demographic Commands=$+rank *:think pemit(%#,switch(0,isvalidrank(xget(%#,faction),%0),ansi(hr,That is not a valid rank for your faction.),ansi(hg,You set your rank to [prettify(%0)].)[set(%#,rank:[prettify(%0)])]))
 @DESCRIBE Demographic Commands=Chargen commands for setting demographic information.
 @STARTUP Demographic Commands=@set me=!no_command
-&FUN_RANDOM_BIRTHDATE Demographic Commands=rest(icconvsecs(ictimeoffset(secs(),-[mul(86400,add(mul(365,%0),rand(1,364)))])))
+&FUN_RANDOM_BIRTHDATE Demographic Commands=[set(%#,birthdate:[random_bday()])]
 
 &FUN_IS_VALID_FACTION Chargen Info Functions=t(match(factions(),%0))
 &FUN_IS_VALID_ORG Chargen Info Functions=t(match(orgs(),%0))
@@ -686,6 +686,10 @@ think iter([lattr(FS3 Skill Data/ACTIONSKILL_*)] [lattr(FS3 Skill Data/ATTRIBUTE
 &MIN_AGE Demographic Commands=11
 
 @wait 5=+jobs/create CODE=FS3 Skills Config/Configure FS3Skills.  See the configuration text file that accompanied the installation.
+
+@wait 5=+jobs/create CODE=FS3 Channel/The FS3 channel exists so that people in different rooms can see each others' skill check results.  You probably want to have all staff join this channel.
+
+@chan/add FS3
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
