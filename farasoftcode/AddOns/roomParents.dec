@@ -12,7 +12,7 @@
 
 think install_create(ROOM_HOLDER,Room Parent Holder,0,1,8.0,Container for the room parent objects.)
 think install_create(ROOM_EXIT_PARENT,Exit Parent,0,0,8.0,Exit parent.,ROOM_HOLDER)
-think install_create(ROOM_PARENT,Room Parent,1,0,8.0,Room parent.,ROOM_HOLDER)
+think install_create(ROOM_PARENT,Room Parent,1,0,8.1,Room parent.,ROOM_HOLDER)
 think install_create(ROOM_TPROOM_PARENT,TP Room Parent,1,0,8.0,Tinyplot Room parent.,ROOM_HOLDER)
 think install_create(ROOM_TPROOM_FOYER,TP Room Foyer,0,0,8.0,Foyer room for the TP room area.,ROOM_HOLDER)
 think install_create(ROOM_PLACES_PARENT,Max's Table Code Parent,0,0,8.0,Places parent.,ROOM_HOLDER)
@@ -92,6 +92,8 @@ think install_create(ROOM_PLACES_PARENT,Max's Table Code Parent,0,0,8.0,Places p
 @STARTUP Room Parent=@set me=!no_command
 &VISIBLE_CONTENTS Room Parent=[iter(lcon(me),[switch(1,and(hastype(##,thing),not(hasflag(##,dark))),[name(##)]|)][switch(1,hastype(##,player),switch(1,hidden(##),,not(match(lwho(),##)),,[name(##)]|))])]
 &FUN_LHELP_FILES Room Parent=[lattr(me/lhelp_*)][switch(t(parent(me)),1,%B[lattr([parent(me)]/lhelp_*)])]
+&FUN_VISIBLE_OBJECTS Room Parent=iter(lcon(me),[switch(1,and(hastype(##,thing),not(hasflag(##,dark))),##)],)
+&FUN_VISIBLE_PLAYERS Room Parent=iter(lcon(me),[switch(1,hastype(##,player),switch(1,hidden(##),,not(match(mwho(),##)),,##))],)
 
 @set TP Room Parent = VISUAL
 &CMD-DESC-CREATE TP Room Parent=$desc/create *=*:think switch(1,hasattr(me,tpdesc_[edit(%0,%b,-)]),pemit(%#,ansi(hr,There is already a desc with that name.)),t(match(%1,*\[*)),pemit(%#,ansi(hr,Sorry - your request could not be completed.  Do not use MUSH function calls in your descriptions.  Contact staff to request a special exception.)),pemit(%#,ansi(hc,You create a desc entited "[edit(%0,%b,-)]".))[set(#ROOM_TPROOM_PARENT,tpdesc_[edit(%0,%b,-)]:%1)])
