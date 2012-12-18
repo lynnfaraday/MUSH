@@ -53,7 +53,7 @@ N
 @lock N=ISDONE/1
 @power Next = See_All
 &OTHER_CHECKS Next=switch(match(xget(%#,faction),Military),1,t(words(rank(%#))),1)
-&OTHER_ERRORS Next=Military characters must have a rank.
+&OTHER_ERRORS Next=switch(and(match(xget(%#,faction),Military),not(words(rank(%#)))),1,Military characters must have a rank.)
 &REQUIRED_ATTRS Next=faction org position birthdate fullname sex
 
 
