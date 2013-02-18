@@ -54,10 +54,6 @@ think install_patch(IDLE_CMD,Idle Purger,1,0,8.0,Idle purger.)
 &DO_IDLE_BBPOST Idle Purger=@fo %#={+bbpost Announcements/Idle-Out Notice=%R%R\[ansi(hx,----- Barely Knew You -----)\]%RThe following folks barely hit the grid, so their characters have been recycled and actors freed up.%R[iter(%2,%R[ljust(name(##),15,.)][actor(name(##))])]%R%R\[ansi(hr,----- Idled Out -----)\]%RThe following folks have idled out.%R[iter(%1,%R[ljust(name(##),15,.)][switch(xget(##,gone),npc,\[ansi(c,Background NPC)\] - [xget(##,gone_note)],left,\[ansi(m,Left Town)\] - [xget(##,gone_note)],dead,\[ansi(r,Dead)\] - [xget(##,gone_note)],roster,\[ansi(g,NPC'd and placed on +roster)\])])]%R%R\[ansi(hy,----- Idle Warning -----)\]%RThe following folks are in danger of idling out.  If you know them from ElseMU, please tell them we miss them and hope that they will return!  If they fail to return by the next idle cycle, they will idle out and staff will decide what to do with them.  This could include NPC-rostering them, killing them off, or having them leave town.  If you have a preference on this matter, let staff know.%R[iter(%0,%R[name(##)])]}
 
 
-think set(Idle Purger,OLD_PLAYER_PURGE_ACTIONS:[xget(Idle Purger,PLAYER_PURGE_ACTIONS)])
-
-+jobs/create CODE/Idle Purge Actions=The idle purge actions were reset due to some bugfixes.  Your old ones are on OLD_PLAYER_PURGE_ACTIONS.  Check to see if you need to fix them.
-
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -65,8 +61,6 @@ think set(Idle Purger,OLD_PLAYER_PURGE_ACTIONS:[xget(Idle Purger,PLAYER_PURGE_AC
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-&PLAYER_PURGE_ACTIONS Idle Purger=@fo %1=+actor/clear %0;@tr me/TR_CLEAR_MAIL=%0;@tr me/TR_REMOVE_ALT=%0;@tr me/TR_REMOVE_FRIENDS=%0;@dolist lsearch(%0,type,room)={@chown ##=*Builder};@dolist lsearch(%0,type,exit)={@chown ##=*Builder};@fo %1=@nuke %0
 
 
 

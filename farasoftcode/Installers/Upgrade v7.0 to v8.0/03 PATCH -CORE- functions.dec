@@ -97,7 +97,6 @@ think install_patch(GLOBFUN_DB,Global Utility Function Data,1,1,8.0,Customizable
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 think [setq(0,install_aliasdb(GLOBFUN_DB))][set(%q0,fun_isstaff:[edit(xget(%q0,fun_isstaff),WrJ,Wr)])]
-think ansi(hr,*** Patched global functions DB to change isstaff to Wr instead of WrJ.  This means Judges are not staff.  If you actually use the Judge flag, this may cause issues for you.  See the 8.0 release notes for more information.)
 
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 

@@ -10,7 +10,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(WIKI_CMD,Wiki System,1,0,8.0,Wiki generation system.)
+think install_patch(WIKI_CMD,Wiki System,1,0,8.0,Wiki generation system.)
 
 &CMD-+WIKI Wiki System=$+wiki *:think u(fun_wiki,pmatch(%0))
 &CMD-+WIKI-ME Wiki System=$+wiki:think u(fun_wiki,%#)
@@ -29,16 +29,6 @@ think install_create(WIKI_CMD,Wiki System,1,0,8.0,Wiki generation system.)
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-
-@wait 2=+jobs/create CODE=+Wiki Config/Tweak the appearance of +wiki to suit your game.
-
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@    *****       END DATA SECTION      *****
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 @wait 2=+install/updategroup WIKI
 

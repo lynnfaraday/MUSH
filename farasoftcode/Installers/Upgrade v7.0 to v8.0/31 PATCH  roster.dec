@@ -10,7 +10,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(ROSTER_CMD,Roster System,1,0,8.0,Character roster.)
+think install_patch(ROSTER_CMD,Roster System,1,0,8.0,Character roster.)
 
 @pemit/silent %#=[ansi(hg,Setting Up Object Attributes...)]%R
 
@@ -37,25 +37,6 @@ think install_create(ROSTER_CMD,Roster System,1,0,8.0,Character roster.)
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-&ROSTER_APPROVED Roster System=switch(hasflag(%0,unregistered),1,[ansi(r,NO)],[ansi(hg,YES)])
-&ROSTER_FACTION Roster System=xget(%0,faction)
-&ROSTER_FIELDS Roster System=name:30 approved:10 position:35
-&ROSTER_NAME Roster System=[ansi(hc,name(%0))] \([xget(%0,fullname)]\)
-&ROSTER_POSITION Roster System=xget(%0,position)
-&WIKI_PAGE Roster System=http://sweetwatercrossingmush.wikidot.com/%0
-&WIKI_RP_LOGS Roster System=http://sweetwatercrossingmush.wikidot.com/system:page-tags/tag/%0#pages
-@wait 6=+jobs/create CODE=Roster/Set up the wiki links and roster fields.  See +shelp roster
-&ROSTER_WELCOME_MSG Roster System=Welcome!  You have selected a character off the roster.  It's possible that character has already been played in the past, so you should check out the wiki for past RP logs or character connections.
-
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@    *****       END DATA SECTION      *****
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
 
 @pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
 
