@@ -854,8 +854,8 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,8.0,FS3Com
 @@ %0 = name
 @@ --------------------------
 &FUN_CHECK_FOR_KO FS3Combat Instance Parent=switch(1,u(fun_combatstat,%0,hitthisturn),switch(1,match(u(fun_combatstat,%0,type),pilot),[u(fun_check_person_ko,%0)][u(fun_check_vehicle_ko,u(fun_combatstat,%0,vehicle))],u(fun_check_person_ko,%0)))
-&FUN_CHECK_PERSON_KO FS3Combat Instance Parent=switch(1,eq(damagemod(%0),0),,u(#FS3COMBAT_CMD_DMG/fun_check_ko,%0,num(me)),[u(fun_ko,%0)])
-&FUN_CHECK_VEHICLE_KO FS3Combat Instance Parent=switch(1,eq(damagemod(%0),0),,u(#FS3COMBAT_CMD_DMG/fun_check_ko,%0,num(me)),[u(fun_combat_msg,[ansi(m,prettify(lcstr(%0)))] has been [ansi(hr,**KO'd**)]!)][iter(v(vehicle_[unprettify(%0)]),u(fun_ko,##))]
+&FUN_CHECK_PERSON_KO FS3Combat Instance Parent=switch(1,lt(damagemod(%0),1),,u(#FS3COMBAT_CMD_DMG/fun_check_ko,%0,num(me)),[u(fun_ko,%0)])
+&FUN_CHECK_VEHICLE_KO FS3Combat Instance Parent=switch(1,lt(damagemod(%0),1),,u(#FS3COMBAT_CMD_DMG/fun_check_ko,%0,num(me)),[u(fun_combat_msg,[ansi(m,prettify(lcstr(%0)))] has been [ansi(hr,**KO'd**)]!)][iter(v(vehicle_[unprettify(%0)]),u(fun_ko,##))]
 
 &FUN_REDUCE_SUPPRESS FS3Combat Instance Parent=u(fun_mod_combatstat,%0,suppress,max(min(sub(u(fun_combatstat,%0,suppress),2),5),0))
 
