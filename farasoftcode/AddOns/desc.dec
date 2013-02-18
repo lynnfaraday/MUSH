@@ -11,10 +11,10 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(DESC_CMD,Multi-Descer,1,0,8.0,Multi-Descer.)
-think install_create(DESC_DB,Pre-Made Descs,0,1,8.0,Multi-Desc Storage.)
+think install_create(DESC_CMD,Multi-Descer,1,0,8.1,Multi-Descer.)
+think install_create(DESC_DB,Pre-Made Descs,0,1,8.1,Multi-Desc Storage.)
 
-@startup multi-descer=@set me=!no_command
+@startup multi-descer=@set me=!no_command;@fun shortdesc=me/fun_shortdesc
 &CMD-+DESC Multi-Descer=$+desc:think pemit(%#,[u(top_line)]%r[center(Your Descs,78)]%r[iter(lattr(%#/desc_*),[switch(mod(#@,5),1,%r)][u(padstr,after(##,_),15)])]%r%R[center(Pre-Made Descs,78)]%r[iter(lattr(#DESC_DB/desc_*),[switch(mod(#@,5),1,%r)][u(padstr,after(##,_),15)])]%r[u(bottom_line)])
 &CMD-+DESC-CREATE Multi-Descer=$+desc/create *=*:think switch(words(trim(%0)),1,pemit(%#,ansi(hg,You create a desc entitled "%0".))[set(%#,desc_[trim(%0)]:[u(escape_cr,%1)])],pemit(%#,ansi(hr,Please do not use spaces in your description title.)))
 &CMD-+DESC-DELETE Multi-Descer=$+desc/delete *:think switch(0,hasattr(%#,desc_[trim(%0)]),pemit(%#,ansi(hr,You don't have a desc entitled "%0".)),pemit(%#,ansi(hg,You delete desc "%0".))[wipe(%#/desc_[trim(%0)])])
@@ -32,6 +32,7 @@ think install_create(DESC_DB,Pre-Made Descs,0,1,8.0,Multi-Desc Storage.)
 &SHELP_+DESC Multi-Descer=You can set up global pre-made descriptions just by adding attributes to the Multi-Descer object.  Then players can use it as if it were their own desc.%R%R%T&DESC_<TITLE> #DESC_DB=<DESC>
 &BOTTOM_LINE Multi-Descer=ansi(h,[repeat(=,78)])
 &TOP_LINE Multi-Descer=ansi(h,[repeat(=,29)] Multi-Desc System [repeat(=,30)])
+&FUN_SHORTDESC Multi-Descer=xget(%0,shortdesc)
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
