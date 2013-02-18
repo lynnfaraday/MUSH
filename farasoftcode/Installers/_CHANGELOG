@@ -1,4 +1,18 @@
 ================================================================
+UPCOMING VERSION (8.1)
+
+Mail:  +mail/scan wasn't using the right color.
+FS3 Chargen/Skills:  Made it agnostic to IC time system.   Fixed bug in the default demographics error checking.
+IC Time:  Epic FAIL
+FS3 Skills:  FS3 skill roll channel became a weirdly undocumented feature
+
+
+
+FS3 XP ->  FS3 Skill Funcs (ability raising)
+
+Cron -> Everything that crons
+Hook -> Everything that hooks
+Help -> Everything that has help refs
 
 ================================================================
 Version 8.0 (11/14/2012)
