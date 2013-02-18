@@ -241,7 +241,7 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @wait 5=@fo me=+install/findreg Install Object Storage=INSTALL_STORAGE
 @wait 5=@fo me=+install/findreg Install Globals=INSTALL_GLOBS
 @wait 5=@tel Install DB=Install Object Storage
-@wait 2=@tel Install Globals=#2
+@wait 5=@tel Install Globals=#2
 
 @wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R
 
