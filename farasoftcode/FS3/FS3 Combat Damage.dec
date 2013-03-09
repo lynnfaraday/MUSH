@@ -7,8 +7,8 @@
 @set me=quiet
 @pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Damage module.)] [ansi(hc,NOTE: This may take a minute.)]
 
-think install_create(FS3COMBAT_CMD_DMG,FS3Combat Damage Commands,1,0,8.0,FS3 Damage Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
-think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,8.0,FS3Combat Damage Database. See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3COMBAT_CMD_DMG,FS3Combat Damage Commands,1,0,8.1,FS3 Damage Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
+think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,8.1,FS3Combat Damage Database. See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
 @@  @@@@@@@@@@@@@@@@@@@@@@
 @@  @ DAMAGE VIEW COMMANDS
@@ -368,7 +368,7 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,8.0,FS3Comba
 @@  %0 = Damage attr
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&WOUND_DMGMOD FS3Combat Damage Commands=L:0.25 M:0.5 S:2 C:4
+&WOUND_DMGMOD FS3Combat Damage Commands=L:0.25 M:0.9 S:2 C:4
 
 &FUN_DMGMOD_WOUND FS3Combat Damage Commands=localize([setq(0,after(grab(v(WOUND_DMGMOD),[u(FUN_DMGSTAT,%0,currsev)]:*),:))][switch(u(FUN_DMGSTAT,%0,healing),>0,setq(0,div(%q0,2)))]%q0)
 
