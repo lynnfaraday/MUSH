@@ -11,8 +11,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(BG_CMD,BG System,1,0,8.0,Background system.)
-think install_create(BG_APP,BG Approval,1,0,8.0,Background approval actions.)
+think install_create(BG_CMD,BG System,1,0,8.1,Background system.)
+think install_create(BG_APP,BG Approval,1,0,8.1,Background approval actions.)
 
 &CMD-+BG BG System=$+bg:think pemit(%#,[line_with_text(Background System)]%r[ansi(h,Background Sections Available:)]%r[iter(u(FUN_BG_SECTIONS,%#),%r[padstr(#@.,5)][padstr(##,10)][switch(1,hasflag(%#/##,wiz),APPROVED,atrlock(%#/##),SUBMITTED BUT NOT APPROVED,UNSUBMITTED)])]%r%r[ansi(h,Type +bg <#> to view a section of your bg.)]%r[line()])
 &CMD-+BG-APPROVE BG System=$+bg/approve *:@switch [setq(0,pmatch(%0))][setq(1,find_job(xget(%q0,APPROVAL_JOB)))][setq(2,xget(%q0,APPROVAL_JOB))]0=orflags(%#,WrJ),@pemit %#=This command is restricted to admin.,t(%q0),@pemit %#=There is no such player.,{@pemit %#=You approve %0's background.[iter(u(FUN_BG_SECTIONS,%q0),set(%q0/##,wiz))][set(%q0,approval_job:)];@switch words(%q1)=0,@pemit %#=ansi(hr,Can't find app job for %0.),@tr #BG_APP/APPROVAL_ACTIONS=%q0;@fo %#=+jobs/close %q2=[u(#BG_APP/APPROVAL_MSG,%q0)]}

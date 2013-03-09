@@ -10,8 +10,8 @@
 
 @pemit/silent %#=%R%R[ansi(hg,Creating objects.)]
 
-think install_create(RANK_CMD,Rank System,1,0,8.0,Chargen rank system.)
-think install_create(RANK_DB,Rank DB,0,0,8.0,Chargen rank system.)
+think install_create(RANK_CMD,Rank System,1,0,8.1,Chargen rank system.)
+think install_create(RANK_DB,Rank DB,0,0,8.1,Chargen rank system.)
 
 @pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
 

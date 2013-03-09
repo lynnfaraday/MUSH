@@ -10,7 +10,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(ROSTER_CMD,Roster System,1,0,8.0,Character roster.)
+think install_create(ROSTER_CMD,Roster System,1,0,8.1,Character roster.)
 
 @pemit/silent %#=[ansi(hg,Setting Up Object Attributes...)]%R
 

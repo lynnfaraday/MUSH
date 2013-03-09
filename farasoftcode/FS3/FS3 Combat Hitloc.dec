@@ -7,7 +7,7 @@
 @set me=quiet
 @pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Hit Locations module.)]
 
-think install_create(FS3COMBAT_HITLOC,FS3Combat Hit Locations,0,1,8.0,FS3Combat Hit Locations. See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3COMBAT_HITLOC,FS3Combat Hit Locations,0,1,8.1,FS3Combat Hit Locations. See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

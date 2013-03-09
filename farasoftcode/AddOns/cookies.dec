@@ -11,8 +11,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(COOKIE_CMD,Cookie System,1,0,8.0,Cookies!)
-think install_create(COOKIE_DB,Cookie DB,0,1,8.0,Cookie database storage.)
+think install_create(COOKIE_CMD,Cookie System,1,0,8.1,Cookies!)
+think install_create(COOKIE_DB,Cookie DB,0,1,8.1,Cookie database storage.)
 
 
 &CMD-+COOKIE Cookie System=$+cookie *:think switch(words(%0),1,[setq(0,pmatch(%0))][pemit(%#,switch(0,t(%q0),ansi(hr,That is not a valid player.),not(match(%#,%q0)),ansi(hr,You can't give yourself a cookie!),not(match(xget(%#,cookies_given),[name(%q0)])),ansi(hr,You have already given %0 a cookie this week.),not(match(xget(%#,alts),%q0)),ansi(hr,You can't give your alt a cookie!),ansi(hg,<OOC> You give [name(%q0)] a cookie.)[switch(xget(#COOKIE_DB,NOISY_COOKIES),1,pemit(%q0,ansi(hg,<OOC> %N gives you a cookie.)))][set(%#,cookies_given:[xget(%#,cookies_given)][name(%q0)]%B)][set(%q0,cookies_received:[xget(%q0,cookies_received)]%N%B)]))])

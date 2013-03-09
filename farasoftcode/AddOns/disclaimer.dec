@@ -11,7 +11,7 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think install_create(DISCLAIM_CMD,Disclaimer System,1,0,8.0,Disclaimer system.)
+think install_create(DISCLAIM_CMD,Disclaimer System,1,0,8.1,Disclaimer system.)
 
 &HATTR_ACCEPTED_DISCLAIMER Disclaimer System=0
 &INSTALL_DESTINATION Disclaimer System=CREATOR

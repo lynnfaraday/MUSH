@@ -12,7 +12,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(IDLE_CMD,Idle Purger,1,0,8.0,Idle purger.)
+think install_create(IDLE_CMD,Idle Purger,1,0,8.1,Idle purger.)
 
 @lock/Use Idle Purger=ISSTAFF/1
 
@@ -49,7 +49,7 @@ think install_create(IDLE_CMD,Idle Purger,1,0,8.0,Idle purger.)
 &TR_CLEAR_MAIL Idle Purger=@dolist lattr([v(mailing_list_object)]/list_*)={think set([v(mailing_list_object)],##:[remove(xget([v(mailing_list_object)],##),name(%0))])};@fo %#=@nuke [xget(%0,mail_object)]
 &TR_REMOVE_ALT Idle Purger=@fo %0=+alts/unregister [name(%0)]
 &TR_REMOVE_FRIENDS Idle Purger=@dolist real_players()=think set(##,list_friends:[remove(xget(##,list_friends),[name(%0)])])
-&VERSION Idle Purger=8.0
+&VERSION Idle Purger=8.1
 
 
 

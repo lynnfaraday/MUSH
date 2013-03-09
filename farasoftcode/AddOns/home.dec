@@ -10,7 +10,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(HOME_CMD,Home System,1,0,8.0,Home command.)
+think install_create(HOME_CMD,Home System,1,0,8.1,Home command.)
 
 @pemit/silent %#=[ansi(hg,Setting Up Object Attributes...)]%R
 

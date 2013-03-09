@@ -8,7 +8,7 @@
 
 @pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Instance module.)] [ansi(hc,NOTE: This may take a minute.)]
 
-think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,8.0,FS3Combat Instance Parent.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,8.1,FS3Combat Instance Parent.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
 &TR-UNINSTALL FS3Combat Instance Parent=@dolist children(me)={@fo %#=+combat/stop ##}
 

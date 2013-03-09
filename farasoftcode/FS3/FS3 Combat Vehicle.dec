@@ -7,8 +7,8 @@
 @set me=quiet
 @pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Vehicle module.)]
 
-think install_create(FS3COMBAT_CMD_VEH,FS3Combat Vehicle Commands,1,0,8.0,FS3 Vehicle Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
-think install_create(FS3COMBAT_DB_VEH,FS3Combat Vehicle DB,0,1,8.0,FS3Combat Vehicle DB.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3COMBAT_CMD_VEH,FS3Combat Vehicle Commands,1,0,8.1,FS3 Vehicle Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
+think install_create(FS3COMBAT_DB_VEH,FS3Combat Vehicle DB,0,1,8.1,FS3Combat Vehicle DB.  See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
 
 
 &VEHICLESTATS FS3Combat vehicle Commands=type notes temp

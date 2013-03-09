@@ -10,8 +10,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(CENSUS_CMD,Census Commands,1,0,8.0,Census system.)
-think install_create(CENSUS_DB,Census DB,1,1,8.0,Census system data.)
+think install_create(CENSUS_CMD,Census Commands,1,0,8.1,Census system.)
+think install_create(CENSUS_DB,Census DB,1,1,8.1,Census system data.)
 
 &CMD-+CENSUS-POS Census Commands=$+census/position:think [setq(9,iter(real_players(),xget(##,position),,|))]pemit(%#,[line()]%R[ansi(hb,Census Breakdown By Position)]%R[iter(sort(setdiff(%q9,,|),a,|),switch(##,,,%R[ljust(prettify(##),30)] [words(graball(%q9,##,|),|)]),|)]%R%RSee [ansi(h,+help +census)] for other census commands.%R[line()])
 &CMD-+CENSUS Census Commands=$+census*:think pemit(%#,switch(%0,*/*,,[setq(0,switch(1,match(%0,),1,not(isnum(%0)),1,%0))][setq(1,sort_names(real_players()))][setq(2,extract(%q1,add(1,mul(sub(%q0,1),20)),20))][line()]%R[ansi(hr,Complete Census)]%R%R[u(#CENSUS_DB/FUN_CENSUS_TITLE)][iter(%q2,%R[u(#CENSUS_DB/FUN_CENSUS_DATA,##)],,)]%R%R[ansi(hx,Gray)] characters are not yet approved.[switch(gt(words(%q1),mul(20,%q0)),1,%RSee [ansi(h,+census[add(%q0,1)])] for the next page.)]%RSee [ansi(h,+help +census)] for other census commands.%R[line()]))

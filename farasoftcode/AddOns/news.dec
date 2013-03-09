@@ -11,8 +11,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(NEWS_CMD,+news Commands,1,0,8.0,Softcoded news system.)
-think install_create(NEWS_DB,+news DB,0,1,8.0,Data storage for news system.)
+think install_create(NEWS_CMD,+news Commands,1,0,8.1,Softcoded news system.)
+think install_create(NEWS_DB,+news DB,0,1,8.1,Data storage for news system.)
 
 
 &CMD-+NEWS +news Commands=$+news:think [pemit(%#,[line_with_text(+NEWS)]%R[u(fun_format_for_mush,u(#NEWS_DB/news_index))]%R[line()])][set(%#,last_news:INDEX)]

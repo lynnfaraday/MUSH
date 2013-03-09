@@ -10,7 +10,7 @@
 @pemit/silent %#=[ansi(hg,Beginning +help Installation.   Please wait until the Installation Complete message appears...)]%R
 
 think install_create(BBS_CMD,BBS - Myrddin's Global BBS,1,0,x.x,Global BBS System.)
-think install_create(BBS_POCKET,bbpocket,0,0,8.0,BBS Storage.,BBS_CMD)
+think install_create(BBS_POCKET,bbpocket,0,0,8.1,BBS Storage.,BBS_CMD)
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 
