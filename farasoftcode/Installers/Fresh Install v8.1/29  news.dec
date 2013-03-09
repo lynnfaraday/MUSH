@@ -1,0 +1,66 @@
+@@ Faraday's +news System
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning News System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_create(NEWS_CMD,+news Commands,1,0,8.1,Softcoded news system.)
+think install_create(NEWS_DB,+news DB,0,1,8.1,Data storage for news system.)
+
+
+&CMD-+NEWS +news Commands=$+news:think [pemit(%#,[line_with_text(+NEWS)]%R[u(fun_format_for_mush,u(#NEWS_DB/news_index))]%R[line()])][set(%#,last_news:INDEX)]
+&CMD-+NEWS-wiki +news Commands=$+news/wiki *:@switch [isstaff(%#)]=0,@pemit %#=ansi(hr,This command is restricted to staff.),@pemit %#=[u(fun_format_for_wiki,xget(#NEWS_DB,news_%0))]
+&CMD-+NEWS-html +news Commands=$+news/html:@switch [setq(0,NEWS_INDEX [sort(remove(lattr(#NEWS_DB/NEWS_*),NEWS_INDEX))])][setq(1,iter(%q0,after(##,_)))][isstaff(%#)]=0,@pemit %#=ansi(hr,This command is restricted to staff.),@pemit %#=<h2>News Topics</h2>%R<UL>[iter(%q1,%R<LI><a href="[ljust(#,1)]{##}">##</a>)]%R</UL>%R<BR><BR><HR><BR><BR>;@wait 2=@dolist %q0={@wait #@=@pemit %#=%R%R<a name="[after(##,_)]">%R<h1>[after(##,_)]</h1>%R[u(fun_format_for_html,xget(#NEWS_DB,##))]%R<BR><BR><HR><BR><BR>};@wait [add(words(%q0),5)]={@pemit %#=%R%R[ansi(hg,End of News Files)]}
+&CMD-+NEWS-NEXT +news Commands=$+news/next:think [setq(0,INDEX [iter(remove(sort(lattr(#NEWS_DB/NEWS_*)),NEWS_INDEX),after(##,_))])][setq(1,add(1,match(%q0,xget(%#,last_news))))][setq(2,extract(%q0,%q1,1))][switch(%q2,,setq(2,INDEX))][set(%#,last_news:%q2)];@fo %#=+news %q2
+&CMD-+NEWS-SEARCH +news Commands=$+news/search *:think pemit(%#,[line()]%R[center(ansi(h,+news files containing %0),78)]%R[iter([grepi(#NEWS_DB,news_*,%0)]%B[grepi(#NEWS_DB,more_news_*,%0)],[switch(mod(#@,3),1,%R)][ljust(last(##,_),25)])]%R[line()])
+&CMD-+NEWS-TOPIC +news Commands=$+news *:think [setq(0,#-1)][pemit(%#,[switch(1,hasattr(#NEWS_DB,news_[trim(%0)]),setq(0,[trim(ucstr(%0))]),hasattr(#NEWS_DB,alias_[trim(%0)]),setq(0,[xget(#NEWS_DB,alias_[trim(%0)])]))][switch(%q0,#-1,ansi(hr,There is no such news entry.),[set(%#,last_news:[trim(%0)])][line()]%R[center(ansi(h,+news %q0),78)]%R[u(fun_format_for_mush,u(#NEWS_DB/news_[trim(%q0)]))]%R[line()])])]
+&FUN_FORMAT_FOR_HTML +news Commands=localize([setq(9,%0)][setq(9,regeditalli(%q9,\%B,&nbsp\;))][setq(9,regeditalli(%q9,\%T,repeat(&nbsp\;,5)))][setq(9,regeditalli(%q9,<c>(\[^<\]+)</c>,[setq(8,$1)]<a href="#[ucstr(%q8)]">%q8</a>))][setq(9,regeditalli(%q9,<a>(\[^<\]+)</a>,[setq(8,$1)]<a href="%q8">%q8</a>))]%q9)
+&FUN_FORMAT_FOR_MUSH +news Commands=[localize([setq(9,%0[u(#NEWS_DB/bottom_text)])][setq(9,regeditalli(%q9,<b>(\[^<\]+)</b>,[setq(8,$1)][ansi(h,%q8)]))][setq(9,regeditalli(%q9,<u>(\[^<\]+)</u>,[setq(8,$1)][ansi(u,%q8)]))][setq(9,regeditalli(%q9,<h1>(\[^<\]+)</h1>,[setq(8,$1)][ansi(hB,%q8)]))][setq(9,regeditalli(%q9,<a>(\[^<\]+)</a>,[setq(8,$1)][ansi(hg,%q8)]))][setq(9,regeditalli(%q9,<c>(\[^<\]+)</c>,[setq(8,$1)][ansi(hr,+news %q8)]))][setq(9,edit(%q9,<BR>,%R))][setq(9,edit(%q9,<br>,%R))][setq(9,edit(%q9,<P>,%R%R))][setq(9,edit(%q9,<p>,%R%R))]%q9)]
+@set +news Commands/FUN_FORMAT_FOR_MUSH=regexp
+&FUN_FORMAT_FOR_WIKI +news Commands=localize([setq(9,%0)][setq(9,regeditalli(%q9,\%B,&nbsp\;))][setq(9,regeditalli(%q9,<BR>,%R%R))][setq(9,regeditalli(%q9,<P>,%R%R%R%R))][setq(9,regeditalli(%q9,\%T,repeat(&nbsp\;,5)))][setq(9,regeditalli(%q9,<c>(\[^<\]+)</c>,[setq(8,$1)]\[\[[capstr(lcstr(%q8))]\]\]))][setq(9,regeditalli(%q9,<a>(\[^<\]+)</a>,[setq(8,$1)]\[%q8 %q8\]))][setq(9,regeditalli(%q9,<b>(\[^<\]+)</b>,[setq(8,$1)]'''%q8'''))][setq(9,regeditalli(%q9,<u>(\[^<\]+)</u>,[setq(8,$1)]''%q8''))][setq(9,regeditalli(%q9,<h1>(\[^<\]+)</h1>,[setq(8,$1)]==%q8==))]%q9)
+@STARTUP +news Commands=@set me=!no_command
+
+&HELP_+NEWS +news Commands=The [ansi(h,+news)] command is a substitute for the traditional MUSH NEWS files.  It contains important information about game theme and policies.%R%R[ansi(h,+news)] - Show the index of news files.%R[ansi(h,+news <topic>)] - Views a news topic.%R[ansi(h,+news/search <search term>)] - Searches the news files.%R[ansi(h,+news/next)] - Reads the news files one by one, in alphabetical order.  This may not be the 'best' order to read them in, but it's easiest and you'll be sure to cover all of them.
+&SHELP_+NEWS +news Commands=News files are stored on object #NEWS_DB in regular attributes named [ansi(h,NEWS_<TOPICNAME>)].  %R%RThe news files should use a HTML-like formatting, but only a couple of tags are supported:%R%T<P> - Paragraph break (two line breaks - Don't use \%Rs)%R%T<BR> - Line break (Don't use \%Rs)%R%T<B>bold text</b> - Shows up as [ansi(h,highlighted)]%R%T<u>underscored text</i> - Shows up as [ansi(u,underlined)]%R%T<h1>heading title</h1> - Shows up like [ansi(hB,This)]%R%T<a>link</a> - Shows up as [ansi(hg,link)]%R%T%TUse this for EXTERNAL web links.%R%T<c>cross-ref</c> - Shows up as [ansi(hm,cross-ref)]%R%T%TUse this for INTERNAL links to other news files.%R%R%TYou can use \%B's and \%T's for spacing, but%R%Tdon't use other MUSH formatting like the space() function or \%Rs.%R%TThey will work okay on the MUSH itself but won't be archived properly.%R%RSee +shelp +news2
+&MORE_SHELP_+NEWS2 +news Commands=You can archive the news to an HTML file.  Just start a log in your MUSH client and execute the [ansi(h,+news/html)] command.  This is very spammy, so be prepared!  :)%R%RYou can also archive a particular entry in a wiki-friendly format (though it may need some formatting tweaks).  Use [ansi(h,+news/wiki <topic>)].
+
+&HATTR_LAST_NEWS +news Commands=index
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+&NEWS_INDEX +news DB=This is the news index.<P>%TTOPIC1%T%TSample topic
+&NEWS_TOPIC1 +news DB=This is a sample topic. See how you can do a cross-reference:  See also <c>Topic2</c><BR>See how you can do <b>Bold text</b><BR>There are lots of other formatting options too.  See +shelp +news<P>Remember not to use percent-R's for line breaks.
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup NEWS
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 5=@set me=!quiet
+

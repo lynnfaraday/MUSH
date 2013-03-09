@@ -1,0 +1,63 @@
+@@ Faraday's Misc Staff Commands
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Staff Command System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_create(STAFF_CMD,Staff Commands,1,0,8.1,Staff-only commands.)
+
+@lock/Use Staff Commands=ISSTAFF/1
+@STARTUP Staff Commands=@set me=!no_command
+&ISSTAFF Staff Commands=isstaff(%#)
+
+&CMD-+FINDSITE Staff Commands=$+findsite *:think pemit(%#,[setq(0,switch(t(pmatch(%0)),1,xget(pmatch(%0),lastsite),%0))][setq(1,mid(%q0,0,4))][squish(iter(lsearch(all,type,player),switch(1,strmatch(xget(##,lastsite),*%q0*),setq(2,%q2##%B),strmatch(xget(##,lastsite),*%q1*),setq(3,%q3##%B))))][line()]%R[ansi(hr,Search String:  %q0%R)]%R[ansi(hg,Exact Matches:)][iter(%q2,%R[name(##)] - [xget(##,lastsite)])]%R%R[ansi(hb,Partial Matches:)][iter(%q3,%R[name(##)] - [xget(##,lastsite)])]%R[line()]
+&FUN_FINDSITE Staff Commands=[setq(0,switch(t(pmatch(%0)),1,xget(pmatch(%0),lastsite),%0))][iter(lsearch(all,type,player),switch(strmatch(xget(##,lastsite),*%q0*),1,%R[name(##)] - [xget(##,lastsite)]))]
+&SHELP_+FINDSITE Staff Commands=The findsite command is used to find people who may be playing multiple characters.  If you give it a player name, it will find any other players who login from the same site.  If you give it a site name (or part of a name), it will find any other players whose site matches.  It will identify exact matches and also partial matches (which is important since many ISPs change IP addresses).%R%R +findsite <player name or site name>
+
+&CMD-+HOP Staff Commands=$+hop *:think [setq(0,lsearch(all,type,room))][setq(1,1)][squish(iter(%q0,switch(and(strmatch(name(##),*%0*),%q1),1,[setq(1,0)][tel(%#,##)])))][switch(%q1,1,pemit(%#,ansi(hr,That is not a valid location))]
+&CMD-+HOP-DIR Staff Commands=$+hop/dir:think [setq(0,lsearch(all,type,room))][setq(0,sort_names(%q0))]pemit(%#,iter(%q0,[switch(mod(#@,2),1,%R,space(5))][ljust(##,4)] - [ljust([name(##)],28)]))
+&CMD-+HOP-DIR-SEARCH Staff Commands=$+hop/dir *:think [setq(0,lsearch(all,eroom,\[strmatch(name(##),*%0*)\]))][setq(0,sort_names(%q0))]pemit(%#,iter(%q0,[switch(mod(#@,2),1,%R,space(5))][ljust(##,4)] - [ljust([name(##)],28)]))
+&SHELP_+HOP Staff Commands=The +hop command is used to teleport easily to a particular room on the MUSH.  Instead of having to search for the DB#, you just give it the name and it does the searching.%R%RLimitations:  If two rooms have similar names, it will jump you to the first one that matches.   If your MUSH has too many rooms, you may need to increase your function invocation limit to make the command work.%R%R+hop <location name>%R+hop/dir - shows all locations and their DB#s.%R+hop/dir <search> - searches the +hop directory
+
+&CMD-+JOIN Staff Commands=$+join *:@remit loc(pmatch(%0))=[ansi(h,<OOC> %N is about to join your location.)];@wait 5={@fo %#=@tel loc(pmatch(%0));@remit loc(pmatch(%0))=[ansi(h,<OOC> %N hops into the room.)]}
+&SHELP_+JOIN Staff Commands=The +join command will @tel you to a player's location.  There is an OOC warning to the room you're jumping to and a 5 second delay.%R%R+join <playername> - Joins a player
+
+&CMD-+SUMMON Staff Commands=$+summon *:@switch [setq(0,pmatch(%0))][t(%q0)]=0,{@pemit %#=ansi(hr,There is no such player.)},{@remit [loc(%q0)]=[ansi(h,<OOC> [name(%q0)] is being summoned away.)];@pemit %#=[ansi(h,You summon %0)];@switch [xget(%q0,status)]=IC,{&ICLOC %q0=[loc(%q0)];&STATUS %q0=OOC;@tel %q0=%l},{@tel %q0=%l}
+&SHELP_SUMMON Staff Commands=The +summon command will teleport a player to your location.  It will set them OOC so that they can return to where they were by going IC.%R%R+summon <playername> - Summons a player.
+
+
+&cmd-+send Staff Commands=$+send *=*:think [setq(0,lsearch(all,type,room))][setq(1,0)][squish(iter(%q0,switch(and(strmatch(name(##),*%1*),not(%q1)),1,[setq(1,##)])))][switch(%q1,0,pemit(%#,ansi(hr,That is not a valid location.)),iter(%0,[setq(2,pmatch(##))][pemit(%#,[switch(0,t(%q2),ansi(hr,That is not a valid player.),match(xget(%q2,STATUS),IC),ansi(hr,## is not IC.),[ansi(hg,You send [name(%q2)] to [name(%q1)].)][remit(loc(%q2),[ansi(hy,<OOC> %N whisks [name(%q2)] away.)])][tel(%q2,%q1)])]))]
+&SHELP_+SEND Staff Commands=The +send command is a people-mover for teleporting a bunch of folks to a specific room.  Like +hop, it will attempt to find the first matching room name for what you give it.  If your MUSH has too many rooms, you may need to increase your function invocation limit to make the command work.%R%R+send <list of players>=<room name>
+
+
+&CMD-+chown Staff Commands=$+chown *=*:think setq(0,hasflag(%0,wizard));@fo %#=@chown %0=%1;@fo %#=@set %0=!halt;@switch %q0=1,{@fo switch(%1,me,%#,pmatch(%1))=@set %0=wiz};@fo %#=@tr %0/startup
+
+&CMD-+MASSCHOWN me=$+masschown *=*:@fo %#={@dolist %0=+chown ##=%1}
+&SHELP_+CHOWN Staff Commands=+chown is a softcoded version of @chown that will change the owner, carry over the wizard flag (normally it's reset when you @chown a wizard object), set the object !halt (normally it's halted after you @chown it) and re-trigger its @startup.%R%R[ansi(h,+chown <object db#>=<new owner>)]%R[ansi(h,+masschown <list of Db#s>=<new owner>)] - Does a +chown on many objects
+
+
+&CMD-NUKE-OVERRIDE Staff Commands=$+nuke/o *:@set %0=!safe;@fo %#=@nuke %0
+&SHELP_+NUKE Staff Commands=Shortcut for setting an object !safe and then nuking it.%R%R[ansi(h,+nuke/o <db#>)]
+
+&cmd-+grep Staff Commands=$+grep *:@pemit %#=iter(lsearch(all,type,object),switch(words(grep(##,*,%0)),>0,%R##: [grep(##,*,%0)]))
+&SHELP_+GREP Staff Commands=Searches for a string on all objects in the database.  Warning: Computationally expensive.  Use with discretion.%R%R[ansi(h,+grep <string to search>)]
+
+&CMD-+UPDATENAME Staff Commands=$+updatename *=*:@switch [t(pmatch(%1))]=0,@pemit %#=ansi(hr,Can't find that player.  You need to change their name first with @name before using this command.),{@pemit %#=ansi(hg,You initiate a name update.  This may take several minutes to complete.  You can check the progress using @ps/all.);@dolist lattr([INSTALL_ALIASDB(INSTALL_DB)]/obj*)=@tr [xget([INSTALL_ALIASDB(INSTALL_DB)],##)]/TR_PLAYER_NAME_CHANGE=%0,%1}}
+
+&SHELP_+UPDATENAME Staff Commands=This command updates a player's name in the various MUSH objects (mail, friends, etc.) **after** a name change.   You have to actually use the @name command first; this ensures that the rename was successful before you attempt to update all the other objects.%R%RUsage: +updatename <oldname>=<newname>
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup STAFF
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 5=@set me=!quiet
+

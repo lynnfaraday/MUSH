@@ -1,0 +1,148 @@
+@@ Faraday's Room Parents
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Room Parents Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_patch(ROOM_HOLDER,Room Parent Holder,0,1,8.1,Container for the room parent objects.)
+think install_patch(ROOM_EXIT_PARENT,Exit Parent,0,0,8.1,Exit parent.,ROOM_HOLDER)
+think install_patch(ROOM_PARENT,Room Parent,1,0,8.1,Room parent.,ROOM_HOLDER)
+think install_patch(ROOM_TPROOM_PARENT,TP Room Parent,1,0,8.1,Tinyplot Room parent.,ROOM_HOLDER)
+think install_patch(ROOM_TPROOM_FOYER,TP Room Foyer,0,0,8.1,Foyer room for the TP room area.,ROOM_HOLDER)
+think install_patch(ROOM_PLACES_PARENT,Max's Table Code Parent,0,0,8.1,Places parent.,ROOM_HOLDER)
+
+@set Exit Parent = LINK_OK
+@STARTUP Exit Parent=@set me=!NO_COMMAND
+@DESCRIBE Exit Parent=An exit leading towards the [name(loc(me))].
+@ODROP Exit Parent=arrives from the [name(home(me))].
+@OSUCCESS Exit Parent=leaves, heading towards the [name(loc(me))] \[[name(me)]\].
+@SUCCESS Exit Parent=You head towards [ansi(hc,[name([loc(me)])])]
+
+@set Max's Table Code Parent = VISUAL
+&ATPLACE Max's Table Code Parent=[extract(get(%0/PLACENUMS), %1, 1, |)]
+&CMD-PLACEHELP Max's Table Code Parent=$placehelp:think [pemit(%#,[u(me/help_places)])]
+&CMD-PLACESHELP Max's Table Code Parent=$placeshelp:think [pemit(%#,[get_eval(me/help_places)])]
+&CONFIGHELP Max's Table Code Parent=$confighelp:think [pemit(%#,[get_eval(me/help_places_config)])]
+&CREDITS Max's Table Code Parent=This code is provided courtesy of Deirdre, Meg, and Osric of AmberMUSH. Thanks to them, and to Maximillian@B5MUSH for converting it for use on PennMUSH. Modifications to the original design (for overhearing places talk and having places descriptions) added by Faraday.
+&DO_CONFIGURE Max's Table Code Parent=$configure * places: @switch/first [controls(%#,%l)]:[isnum(%0)]:%0=0:*:*, {@pemit %#=You do not control [name(%l)].},*:0:*, {@pemit %#=The number of places needs to be a number!},*:*:0, {@dolist rest(lnum(add(get(%l/PLACESMAX),1)))={@unlock %l/PLACE##; &PLACE## %l}; @unlock %l/PLACESCLEANUP1; @unlock %l/PLACESCLEANUP2; @unlock %l/PLACESMAX; @pemit %#=Places removed from [name(%l)].}, {&PLACESMAX %l=%0; @dolist rest(lnum(add(%0,1)))={@unlock %l/PLACE##; &PLACE## %l=u(SETUP_FN,##,add(rand(9),1))}; @unlock %l/PLACESMAX;&PLACENUMS %l=[repeat(|,%0)];@pemit %#=Configuration for %0 places complete.}
+&DO_DEPART Max's Table Code Parent=$stand:think [u(fun_cleanup)][setq(1, U(WHICHPLACE, %l, %#))][setq(0,U(GETINFO,%l,%q1,NAME))][pemit(%#,[switch(0,%q1,You aren't placed anywhere.,[set(%l,PLACENUMS:[replace(get(%l/PLACENUMS), %q1, [remove(extract(get(%l/PLACENUMS), %q1, 1, |), %#)], |)])][U(GETINFO, %l, %q1, DEPART)] %q0[oemit(%#,%N [U(GETINFO, %l, %q1, ODEPART)] %q0.)])])]
+&do_JOIN Max's Table Code Parent=$join *: @switch/first [u(fun_cleanup)][not(u(WHICHPLACE,%l,%#))] [lcstr(%0)]=0 *, think [pemit(%#,Don't you think you should 'stand' first?)],1 at #*, think [u(PLACEFUNCTION,%l,%#,[delete(rest(%0),0,1)])],1 at *,think [pemit(%#,That's not a table number.%rThe correct format is join at #<table number>)],1 #*,think [u(PLACEFUNCTION,%l,%#,[delete(%0,0,1)])],1 with *,think [setq(1,[pmatch([first(rest(%0))])])])][setq(0,u(WHICHPLACE,%l,%q1))][pemit(%#,[switch(%q0,0,There isn't anyone named '[capstr(rest(%0))]' at a special place.,You go over to join [name(%q1)].)])][u([switch(%q0,0,-,PLACEFUNCTION)],%l,%#,%q0)], think [u(PLACEFUNCTION,%l,%#,[match(iter(rest(lnum(add(get(%l/PLACESMAX),1))),[u(GETINFO,%l,##,NAME)]|),*%0*,|)])]
+&DO_MOVE Max's Table Code Parent=$mv from * to *: @switch/first [u(fun_cleanup)]0=and(gt(%0,0),lte(%0,get(%l/PLACESMAX))), {@pemit %#='%0' is not a valid place number.},and(gt(%1,0),lte(%1,get(%l/PLACESMAX))), {@pemit %#='%1' is not a vaild place number.},not(words(u(GETINFO,%l,%0,FIXED))), {@pemit %#=u(GETINFO,%l,%0,FIXED)},not(words(u(GETINFO,%l,%1,FIXED))), {@pemit %#=u(GETINFO,%l,%1,FIXED)},sub(u(GETINFO,%l,%0,CURPLACES),words(extract(get(%l/PLACENUMS),%0,1,|))), {@pemit %#=u(GETINFO,%l,%0,EMPTY)},neq(u(GETINFO,%l,%1,CURPLACES),u(GETINFO,%l,%1,MAXPLACES)), {@pemit %#=u(GETINFO,%l,%1,FULL)}, {@unlock %l/PLACE%0; @unlock %l/PLACE%1; &PLACE%0 %l=u(UPDATEINFO,%l,%0,CURPLACES,sub(u(GETINFO,%l,%0,CURPLACES),1)); &PLACE%1 %l=u(UPDATEINFO,%l,%1,CURPLACES,add(u(GETINFO,%l,%1,CURPLACES),1)); @pemit %#=You move a place from [u(GETINFO,%l,%0,NAME)] to [u(GETINFO,%l,%1,NAME)].}
+&DO_PLACE Max's Table Code Parent=$place *: think [u(fun_cleanup)][pemit(%#,[switch(get(%l/PLACESMAX),,There are no special places here.,0,There are no special places here.,[switch(isnum(%0),0,%0 is not a number.  Please choose a number from 1 to [get(%l/PLACESMAX)].,map(PLACES_FN,edit(%0,#,)))])])]
+&DO_PLACES Max's Table Code Parent=$places: think [u(fun_cleanup)][pemit(%#,[switch(get(%l/PLACESMAX),,There are no special places here.,0,There are no special places here.,map(PLACES_FN,rest(lnum(add(get(%l/PLACESMAX),1)))))])]
+&DO_PLOOK Max's Table Code Parent=$plook:@pemit %#=[u(fun_cleanup)][setq(0,edit(get(%l/PLACENUMS),|,))][fold(PLOOK_FOLD_FN,rest(lnum(add(get(%l/PLACESMAX),1))),-----)]%rNo place [space(3)] [setq(3,setdiff(setinter(lcon(%l),lwho()),r(0)))][rjust([words(r(3))] at no places,15)] [space(3)] [setq(4,sort(iter(r(3),name(##))))][ljust(mid(extract(r(4),1,1),0,14),14)] [ljust(mid(extract(r(4),2,1),0,14),14)] [ljust(mid(extract(r(4),3,1),0,14),14)][switch(gt(words(r(4)),3),1,u(NAME_3COL_FN,extract(r(4),4,3999)))]%r-----
+&DO_TT Max's Table Code Parent=$tt *: think [u(fun_cleanup)][setq(0,u(WHICHPLACE,%l,%#))][iter([switch(%q0,0,%#[setq(1,Please join a place first.)],[extract(get(%l/PLACENUMS),%q0,1,|)][setq(1,[u(GETINFO,%l,%q0,PREFIX)]\, [switch(%0,:*,%N [delete(%0,0,1)],\;*,%N[delete(%0,0,1)],"*,%N says "[delete(%0,0,1)]",|*,delete(%0,0,1),%N says\, "%0")])])],[pemit(##,%q1)])][iter(switch(%q0,0,,lcon(%l)),switch(match(extract(get(%l/PLACENUMS),%q0,1,|),##),0,switch(rand(20),1,pemit(##,You overhear (from [u(GETINFO,%l,%q0,NAME)]): [switch(%0,:*,%N [delete(%0,0,1)],\;*,%N[delete(%0,0,1)],"*,%N says\,  "[u(fun_scramble,after(%0,"),##)]",|*,delete(%0,0,1),%N says "[u(fun_scramble,%0,##)]")])])]))]
+&DO_TTE Max's Table Code Parent=$tte *: think [u(fun_cleanup)][setq(0,u(WHICHPLACE,%l,%#))][iter([switch(%q0,0,%#[setq(1,Please join a place first.)],[extract(get(%l/PLACENUMS),%q0,1,|)][setq(1,[u(GETINFO,%l,%q0,PREFIX)]\, %0)])],[pemit(##,%q1)])][iter(switch(%q0,0,,lcon(%l)),switch(match(extract(get(%l/PLACENUMS),%q0,1,|),##),0,switch(rand(20),1,pemit(##,You overhear (from [u(GETINFO,%l,%q0,NAME)]): [u(fun_scramble,%0,##)]))))]
+&DO_UPDATE Max's Table Code Parent=$update */*=*: @switch/first [controls(%#,%l)]:[and(isnum(%0),lte(%0,get(%l/PLACESMAX)))]:[member(NAME MAXPLACES CURPLACES FIXED FULL EMPTY JOIN OJOIN DEPART ODEPART PREFIX DESC,ucstr(%1))]=0:*:*, {@pemit %#=Permission denied.},*:0:*, {@pemit %#=I'm sorry, but '%0' isn't a valid place number.},*:*:0, {@pemit %#=I'm sorry, but '%1' isn't a valid configuration option.}, {@unlock %l/PLACE%0; &PLACE%0 %l=u(UPDATEINFO,%l,%0,%1,%2); @pemit %#=The %1 for [u(GETINFO,%l,%0,NAME)] is now set to:%r[space(5)][u(GETINFO,%l,%0,%1)]}
+&FUNC_ATPLACE Max's Table Code Parent=[switch(or(controls(%#,%0),match(rloc(%l,100),rloc(%0,100))),1,extract(get(%0/PLACENUMS), %1, 1, |),PERMISSION DENIED)]
+&FUNC_PLACEINFO Max's Table Code Parent=[switch(or(controls(%#,%0),match(rloc(%l,100),rloc(%0,100))),1,switch(%2,DESC,switch(extract(get(%0/place%1),12,1,|),,A nondescript table with room for [u(getinfo,%0,%1,maxplaces)] chairs.,extract(get(%0/place%1),12,1,|)),extract(get(%0/PLACE%1),match(NAME MAXPLACES CURPLACES FIXED FULL EMPTY JOIN OJOIN DEPART ODEPART PREFIX DESC,%2),1,|)),PERMISSION DENIED)]
+&FUNC_WHICHPLACE Max's Table Code Parent=[switch(or(controls(%#,%0),match(rloc(%l,100),rloc(%0,100))),1,match(get(%0/PLACENUMS), *%1%b*, |),PERMISSION DENIED)]
+&fun_cleanup Max's Table Code Parent=iter(edit(v(placenums),|,%B),switch(and(match(lcon(num(me)),##),gt(conn(##),0)),0,u(placescleanupcmd,num(me),##)),,)
+&FUN_SCRAMBLE Max's Table Code Parent=iter(%0,switch(lte(rand(10),5),1,##,...))
+&GETINFO Max's Table Code Parent=[switch(%2,DESC,switch(extract(get_eval(%0/place%1),12,1,|),,A nondescript table with room for [u(getinfo,%0,%1,maxplaces)] chairs.,extract(get_eval(%0/place%1),12,1,|)),extract(get_eval(%0/PLACE%1),match(NAME MAXPLACES CURPLACES FIXED FULL EMPTY JOIN OJOIN DEPART ODEPART PREFIX DESC,%2),1,|))]
+&NAME_3AUX_FN Max's Table Code Parent=%0[switch(mod(words(%0),4),0,%r[space(33)][ljust(mid(%1,0,14),15)],[ljust(mid(%1,0,14),15)])]
+&NAME_3COL_FN Max's Table Code Parent=[fold(NAME_3AUX_FN,rest(%0),%r[space(33)][ljust(mid(first(%0),0,14),15)])]
+&OPTIONHELP Max's Table Code Parent=$optionhelp:think [pemit(%#,[get_eval(me/help_places_options)])]
+&PLACE1 Max's Table Code Parent=Table 1|2|2||I'm sorry, there's no room to add a place there.|I'm sorry, there's on place to move there.|You sit down at|sits down at|You stand and leave|stands and leaves|At your table
+&PLACE2 Max's Table Code Parent=Table 2|3|2||I'm sorry, there's no room to add a place there.|I'm sorry, there's on place to move there.|You sit down at|sits down at|You stand and leave|stands and leaves|At your table
+&PLACEFUNCTION Max's Table Code Parent=[pemit(%1,[switch(0,[lte(%2, get(%0/PLACESMAX))],Invalid Place Number '%2'.,[setq(1, extract(get(%0/PLACENUMS),%2,1,|))][gt(u(GETINFO,%0,%2,CURPLACES),words(%q1))],There aren't any free spaces there.,[setq(0,u(getinfo,%0,%2,NAME))][U(GETINFO, %l, %2, JOIN)] %q0[oemit(%1,[name(%1)] [U(GETINFO,%l,%2,OJOIN)] %q0.)][set(%0,PLACENUMS:[replace(get(%0/PLACENUMS),%2,%q1%1%b,|)])])])]
+&PLACESCLEANUPCMD Max's Table Code Parent=[setq(0,u(WHICHPLACE,%0,%1))][switch([or([lte(%q0,0)],[gt(%q0,[get(%0/PLACESMAX)])])],1,,[set(%0,PLACENUMS:[replace(get(%0/PLACENUMS),%q0,[remove(extract(get(%0/PLACENUMS),%q0,1,|),%1)],|)])])]
+&PLACESMAX Max's Table Code Parent=0
+&PLACES_FN Max's Table Code Parent=%r%R[setq(0,u(GETINFO,%l,%0,CURPLACES))][setq(1,extract(get(%l/PLACENUMS),%0,1,|))][capstr(u(GETINFO,%l,%0,NAME))] (#%0) has [setq(2,sub(%q0,words(%q1)))][switch(%q2,0,no empty places,1,1 empty place,%q2 empty places)].%R%T[u(getinfo,%l,%0,desc)][switch(words(%q1),0,,1,%r%tPresent is: %b[name(first(%q1))].,%r%tPresent are: %b[u(PLACE_LOOK,%q1)].)]
+&PLACE_LOOK Max's Table Code Parent=[setq(9,words(%0))][switch(%q9,0,,1,name(%0),2, [name(first(%0))] and [name(rest(%0))],[iter(extract(%0,1,sub(%q9,1)),{name(##),})] and [name(extract(%0,%q9,1))])]
+&PLOOK_FOLD_FN Max's Table Code Parent=%0%r[setq(1,extract(get(%l/PLACENUMS),%1,1,|))]Place #[ljust(%1,5)] [rjust([sub(u(GETINFO,%l,%1,CURPLACES),words(%q1))] empty places,15)] [space(3)] [setq(2,sort(iter(%q1,name(##))))][ljust(mid(extract(%q2,1,1),0,14),14)] [ljust(mid(extract(%q2,2,1),0,14),14)] [ljust(mid(extract(%q2,3,1),0,14),14)][switch(gt(words(%q2),3),1,u(NAME_3COL_FN,extract(%q2,4,3999)))][space(5)][u(getinfo,%l,%1,desc)]
+&SETUP_FN Max's Table Code Parent=Table %0|%1|[add(rand(%1),1)]||I'm sorry, there's no room to add a place there.|I'm sorry, there's no places to move from there.|You sit down at|sits down at|You stand and leave|stands and leaves|At your table|
+@STARTUP Max's Table Code Parent=@set me=!no_command
+&TABLEHELP Max's Table Code Parent=$tablehelp:[pemit(%#,[get_eval(me/help_places)])]
+&UPDATEINFO Max's Table Code Parent=[replace(get(%0/PLACE%1),match(NAME MAXPLACES CURPLACES FIXED FULL EMPTY JOIN OJOIN DEPART ODEPART PREFIX DESC,%2),%3,|)]
+&WHICHPLACE Max's Table Code Parent=[match(get(%0/PLACENUMS),*%1%b*,|)]
+&VERSION Max's Table Code Parent=3.0
+@aleave Max's Table Code Parent=think u(fun_cleanup)
+@adisconnect Max's Table Code Parent=think u(fun_cleanup)
+
+
+@CONFORMAT Room Parent=[switch(u(me/whichplace,me,%#),>0,%R%R[u(getinfo,me,[u(me/whichplace,me,%#)],name)]:%B[u(getinfo,me,[u(me/whichplace,me,%#)],desc)]%R)][switch(v(sceneset),,,%R[line2()]%R[after(u(sceneset),|)]%R[line2()]%R)][ansi(v(room_color),repeat(-,78))]%R[ansi(v(room_color),Contents:)][iter(sort_names(u(fun_visible_players)),%R%B%B%B[ansi(h,name(##))] - [shortdesc(pmatch(##))])][iter(sort_names(u(fun_visible_objects)),%R%B%B%B[ansi(h,name(##))])]
+
+&OLD_CONFORMAT Room Parent=[switch(u(me/whichplace,me,%#),>0,%R%R[u(getinfo,me,[u(me/whichplace,me,%#)],name)]:%B[u(getinfo,me,[u(me/whichplace,me,%#)],desc)]%R)][switch(v(sceneset),,,%R[line2()]%R[after(u(sceneset),|)]%R[line2()]%R)][ansi(v(room_color),repeat(-,78))]%R[ansi(v(room_color),Contents:)][space(5)][wrap(iter(revwords(sort(u(visible_contents),a,|),|),[switch(mod(#@,2),1,[ansi(h,##)]%B,##%B)],|),61,61,%R[space(14)])]%R
+
+
+@DESCRIBE Room Parent=This is a temporary description.
+&OLD_EXITFORMAT Room Parent=[ansi(v(room_color),Exits:)][iter(sortby(sort_regular_exits,setdiff(lvexits(me),trim([u(find_rooms,num(me))]))),[switch(#@,1,[space(8)],switch(mod(#@,2),1,%R[space(14)]))][ljust(\[[ansi(h,name(##))]\],5)]%B[padstr( [switch(loc(##),#-1,Nowhere,[name(loc(##))])],27)])][switch(words(u(find_rooms,num(me))),>0,%R%R[ansi(v(room_color),Rooms:)][space(8)][wrap(iter(u(find_rooms,num(me) ),\[[ansi(h,name(##))]\]),61,61,%R[space(14)])])][u(format_special)]%R[ansi(v(room_color),line_no_color())]
+
+@EXITFORMAT Room Parent=localize([setq(0,u(fun_non_cardinal_exits))][ansi(v(room_color),Exits:)][iter(%q0,[switch(#@,1,[space(7)],switch(mod(#@,2),1,%R[space(13)]))][ljust(\[[ansi(h,name(##))]\],5)]%B[padstr( [switch(loc(##),#-1,Nowhere,[name(loc(##))])],26)])][iter(u(fun_cardinal_exits),[switch(#@,1,switch(words(%q0),0,[space(7)],%R%R[space(13)]),switch(mod(#@,2),1,%R[space(13)]))][ljust(\[[ansi(h,name(##))]\],5)]%B[padstr( [switch(loc(##),#-1,Nowhere,[name(loc(##))])],26)])] [u(format_special)]%R[ansi(v(room_color),line_no_color())])
+
+
+&CARDINAL_EXITS Room Parent=N S E W NE SE SW NW
+&FUN_CARDINAL_EXITS Room Parent=sortby(sort_cardinal_exits,squish(iter(lvexits(me),switch(t(match(v(cardinal_exits),name(##))),1,##))))
+&FUN_NON_CARDINAL_EXITS Room Parent=sortby(sort_regular_exits,squish(iter(lvexits(me),switch(t(match(v(cardinal_exits),name(##))),0,##))))
+&SORT_CARDINAL_EXITS Room Parent=comp(match(v(cardinal_exits),name(%0)),match(v(cardinal_exits),name(%1)),N)
+&FIND_ROOMS Room Parent=switch(xget(%0,show_rooms),0,,iter(lattr(%0/room*),extract(xget(%0,##),3,1,|)))
+&fun_specials Room Parent=[switch(words(u(fun_lhelp_files)),>0,LHELP)]%B[switch(gt(words(lattr(me/msg_*)),0),1,MSG)]%B[switch(hasattr(%l,combat),1,COMBAT)]%B[switch(words(lattr(%l/detail_*)),>0,DETAIL)]%B[switch(xget(%l,PLACESMAX),>0,PLACES)]
+&FORMAT_SPECIAL Room Parent=[iter(u(fun_specials),[switch(#@,1,%R%R[ansi(v(room_color),Special:)][space(6)][switch(##,LHELP,[ansi(h,+lhelp)] - Local Help Available,MSG,[ansi(h,+com/msg)] - Answering Machine Blinking,COMBAT,[ansi(h,+combat)] - Combat In Progress please join in!,DETAIL,[ansi(h,+detail)] - Details available,PLACES,[ansi(h,places)] - Special Places Available)],%R[space(14)][switch(##,LHELP,[ansi(h,+lhelp)] - Local Help Available,MSG,[ansi(h,+com/msg)] - Answering Machine Blinking,COMBAT,[ansi(h,+combat)] - Combat In Progress please join in,DETAIL,[ansi(h,+detail)] - Details available,PLACES,[ansi(h,places)] - Special Places Available)])])]
+&AREA Room Parent=Nowhere
+@NAMEFORMAT Room Parent=[ansi(v(room_color),line_no_color())]%R[ljust(ansi(h,[name(%0)]%B[switch(or(orflags(%#,WrJ),match(%#,owner(me))),1,\(%0[flags(%0)]\))]),50)][rjust(ansi(h,xget(%0,area)),28)] %R[center(ansi(v(room_color),u(room_date)),78)]%r[ansi(v(room_color),repeat(-,78))]
+&SHOW_OCCUPANTS Room Parent=[table(iter(lcon(me),switch(1,hastype(##,player),switch(1,hasflag(##,dark),,not(match(lwho(),##)),,[name(##)]))),20,78,,)]
+&SORT_REGULAR_EXITS Room Parent=comp(name(%0),name(%1))
+@STARTUP Room Parent=@set me=!no_command
+&VISIBLE_CONTENTS Room Parent=[iter(lcon(me),[switch(1,and(hastype(##,thing),not(hasflag(##,dark))),[name(##)]|)][switch(1,hastype(##,player),switch(1,hidden(##),,not(match(lwho(),##)),,[name(##)]|))])]
+&FUN_LHELP_FILES Room Parent=[lattr(me/lhelp_*)][switch(t(parent(me)),1,%B[lattr([parent(me)]/lhelp_*)])]
+&FUN_VISIBLE_OBJECTS Room Parent=iter(lcon(me),[switch(1,and(hastype(##,thing),not(hasflag(##,dark))),##)],)
+&FUN_VISIBLE_PLAYERS Room Parent=iter(lcon(me),[switch(1,hastype(##,player),switch(1,hidden(##),,not(match(mwho(),##)),,##))],)
+
+@set TP Room Parent = VISUAL
+&CMD-DESC-CREATE TP Room Parent=$desc/create *=*:think switch(1,hasattr(me,tpdesc_[edit(%0,%b,-)]),pemit(%#,ansi(hr,There is already a desc with that name.)),t(match(%1,*\[*)),pemit(%#,ansi(hr,Sorry - your request could not be completed.  Do not use MUSH function calls in your descriptions.  Contact staff to request a special exception.)),pemit(%#,ansi(hc,You create a desc entited "[edit(%0,%b,-)]".))[set(#ROOM_TPROOM_PARENT,tpdesc_[edit(%0,%b,-)]:%1)])
+&CMD-DESC-DELETE TP Room Parent=$desc/delete *:think switch(hasattr(#ROOM_TPROOM_PARENT,tpdesc_[trim(%0)]),0,pemit(%#,ansi(hr,There is no desc by that name.)),pemit(%#,ansi(hg,You delete desc [trim(%0)].))[set(#ROOM_TPROOM_PARENT,old_[trim(%0)]:[xget(#ROOM_TPROOM_PARENT,tpdesc_[trim(%0)])])][wipe(#ROOM_TPROOM_PARENT/tpdesc_[trim(%0)])])
+&CMD-DESC-LIST TP Room Parent=$desc/list:think pemit(%#,[line()]%R[ansi(h,Available TP Room Descriptions)]%R[iter(lattr(#ROOM_TPROOM_PARENT/tpdesc_*),%R[capstr(lcstr(after(##,_)))])]%R[line()])
+&CMD-DESC-SET TP Room Parent=$desc/set *:think switch(hasattr(#ROOM_TPROOM_PARENT,tpdesc_[trim(%0)]),0,pemit(%#,ansi(hr,Sorry there is no desc by that name.)),pemit(%#,ansi(hy,You set the room's description to [trim(%0)].))[set(%l,desc2:[trim(%0)])])
+&CMD-DESC-VIEW TP Room Parent=$desc/view *:think pemit(%#,switch(hasattr(#ROOM_TPROOM_PARENT,tpdesc_[trim(%0)]),0,ansi(hr,There is no such desc.),[line()]%R[xget(#ROOM_TPROOM_PARENT,tpdesc_[trim(%0)])]%R[line()]))
+&CMD-LOCK TP Room Parent=$lock/*:think switch(%0,on,pemit(%#,ansi(hg,You lock the room, ensuring your privacy.  Please remember to unlock the room when you leave.))[set(v(my_exit),islocked:1)],off,pemit(%#,ansi(hg,You unlock the room.))[set(v(my_exit),islocked:0)],pemit(%#,ansi(hr,That is not a valid option.)))
+&DESC2 TP Room Parent=The walls of the room shimmer.  They are shapeless, malleable, almost waiting to be given form.  With a little imagination, the room can become anything, from an abandoned mining tunnel to an ornate ballroom.%R%RThis is a [ansi(hg,TinyPlot Room)] which you can use to simulate any room not actually coded on the MUSH.  The room's commands allow you to change the description to suit your needs, even storing multiple descs if you so desire.  You can also lock the room for privacy, and request that it be linked to the IC world for special TPs.
+@ADISCONNECT TP Room Parent=@tr me/cleanup
+@ALEAVE TP Room Parent=@tr me/cleanup
+&CLEANUP TP Room Parent=think localize([setq(0,0)][iter(lcon(me),switch(conn(##),>0,setq(0,1)))][switch(%q0,0,[set(v(my_exit),islocked:0)][set(me,desc2:[v(default_desc)])])])
+@DESCRIBE TP Room Parent=[u(TPDESC_[v(desc2)])]%R%RThis room is currently [switch(xget(v(my_exit),islocked),1,[ansi(hc,LOCKED)],[ansi(hy,UNLOCKED)])].%R%RSee [ansi(h,+lhelp)] for local help files.
+&lhelp_setup TP Room Parent=To set up a new TP room, you need to do a few things:%R%R1.  Dig the room as normal.%R%R2.  @parent the room to #ROOM_TPROOM_PARENT.%R%R3. Set a MY_EXIT attribute on the new room equal to the DB# of the exit leading INTO the room (from the outside).  This will enable the locks to work.%R%R4. Lock the exit leading INTO the room to islocked/0 (go outside to do this).  For example: @lock Room1=islocked/0%R%R5. Set an @fail on the exit saying that the room is in use.%R%R6. If you want the room to default to a certain tpdesc when everyone's done using it, set the &DEFAULT_DESC attribute to the NAME of the tpdesc you want it to use.
+&lHELP_DESC TP Room Parent=This command allows you to create and store descriptions for use in the TP Rooms.%R%R[ansi(hg,Usage:)]  [ansi(h,desc/list)] - Lists existing descs%R[space(7)][ansi(h,desc/view <descname>)] - Views an existing desc.%R[space(7)][ansi(h,desc/set <descname>)] - Sets the room desc to an existing desc%R[space(7)][ansi(h,desc/delete <descname>)] - Deletes an existing desc%R[space(32)]Please do not delete other people's descs.%R[space(7)][ansi(h,desc/create <descname>=<description>)] - Creates a new desc
+&lHELP_LINKING TP Room Parent=It is possible for TP Rooms to be linked to the IC World.  To request this, simply +mail staff.
+&lHELP_LOCK TP Room Parent=For private scenes, it is possible to lock the door to prevent anyone from entering the room and disturbing you.  Just please remember to unlock the door when you're finished.%R%R[ansi(hg,Usage:)] lock/on or lock/off to lock or unlock the door
+@STARTUP TP Room Parent=@set me=!no_command
+@set TP Room Parent/STARTUP=no_command prefixmatch
+&DEFAULT_DESC TP Room Parent=default
+&TPDESC_DEFAULT TP Room Parent=The walls of the room shimmer.  They are shapeless, malleable, almost waiting to be given form.  With a little imagination, the room can become anything, from an abandoned mining tunnel to an ornate ballroom.%R%RThis is a [ansi(hg,TinyPlot Room)] which you can use to simulate any room not actually coded on the MUSH.  The room's commands allow you to change the description to suit your needs, even storing multiple descs if you so desire.  You can also lock the room for privacy, and request that it be linked to the IC world for special TPs.
+
+&SHELP_TP_ROOMS TP Room Parent=To set up a Tinyplot room, dig a room as normal and parent it to #ROOM_TPROOM_PARENT.  Then go to the room and examine [ansi(h,+lhelp setup)] for more setup info.%R%RYou may wish to parent the TP room parent object to your global room parent.
+&SHELP_ROOM_PARENTS TP Room Parent=Room parent: #ROOM_PARENT%RExit parent: #ROOM_EXIT_PARENT%R%RAlso remember to set the AREA attribute on the rooms for the zone/area.%R%RThe room parent will display the exits as <first part of exit name> Destination.  So for example: <F> Forward.
+&HELP_TP_ROOMS TP Room Parent=There will be times when a plot requires rooms that don't already exist on %rthe MUSH. The MUSH has a few rooms in the OOC area set aside for use in such situations. These TP Rooms have a command to change their description so that you can make them into an evil mastermind's hideout, a seedy Waycross nightclub, or an ornate ballroom... whatever you need for your plot. They can even be locked, for private scenes.%R%RWith advanced notice, the staff can link TP rooms to regular rooms in the MUSH so players have easy access to them. However, even without notice you can always go to the OOC area and roleplay in one of the TP Rooms.
+&HELP_PLACES Max's Table Code Parent=%rPlaces are virtual places to sit, stand or occupy. You remain in the same%rroom, but join a group of people within that room who may or may not be%rhaving a quiet conversation only with others placed with them.%r%r%b%bCommands:%r%b%b---------%r%b%b[ljust(Mv from <#> to <#>,28)]Moves a vacancy from one place to another.%r%b%b[ljust(Join <place name>,28)]Puts you at <place name>%r%b%b[ljust(Join at #<num>,28)]Puts you at place #<num>.%r%b%b[ljust(Join with <name>,28)]Puts you at the place with <name>.%r%b%b[ljust(Stand,28)]Removes you from your place.%r%b%b[ljust(Places,28)]Lists who's present at all places.%r%b%b[ljust(Place <num>,28)]Lists who's present at place <num>.%r%b%b[ljust(Plook,28)]Lists in column format everyone around the room.%r%b%b[ljust(tt <message>,28)](Tete a tete) Relays a message%r[space(30)]to all those at your place. This command takes%r[space(30)]the usual say/pose tokens, and TT |<message> or %r[space(30)]TTE <message> will emit.%r%b%b[ljust(Update <#>/<Option>=<text>,28)]Type 'optionhelp'%r%rFor installation help, type 'confighelp'. This code is provided courtesy of Deirdre, Meg, and Osric of AmberMUSH.  Thanks to them, and to Maximillian@B5MUSH for converting it for use on PennMUSH.  Modifications to the original design (for overhearing places talk and having places descriptions) added by Faraday.
+&SHELP_PLACES TP Room Parent=All rooms come equipped with the potential for 'places'.  All you have to do is set them up.  See also:%R%T+shelp places_config - Setting up places%R%T+shelp places_options - More about place options
+&MORE_SHELP_PLACES_CONFIG TP Room Parent=%rPLACES configuration:%r%b%bConfigure <num> places%r%b%bUnconfigure places%r%r%b%bNotes: A null fixed message means vacancies can be moved freely to and from the place. % This does not make sense for things like couches and rugs. % Set it to something like "That makes no sense." if you are using such a place.%r%b%b(O)Join and (O)depart messages take like this: %%%%N. All Join and Depart messages are appended with the place name.%r%rUnlike older versions of the places system, this one cleans up without needing an object listening in the room.%r%rFunctions:%r%b%bWHICHPLACE(<loc num>,<dbnum>) gives the number of a place where <dbnum> is.%r%b%bATPLACE(<loc num>,<place num>) gives you a list of things at a place.%r%b%bPLACEINFO(<loc num>,<place num>,<option>) gives the value of <option> at place.%r%r
+&MORE_SHELP_PLACES_OPTIONS TP Room Parent=%b%bUpdate <Place #>/<Option>=<Configuration Text>%r%r%b%bOption Description%t<Option>%tDefault Configuration Text%r%b%b------------------%t--------%t--------------------------%r%b%bPlace Name%t%tNAME%t%tTable x%r%b%bMaximum # of places%tMAXPLACES%tRandom%r%b%bCurrent # of places%tCURPLACES%tRandom (1 >= # >= MAXPLACES)%r%b%bFixed fail message%tFIXED%t%t<NULL>%r%b%bFull fail message%tFULL%t%tThat table has no more room.%r%b%bJoin message%t%tJOIN%t%tYou sit down at <place>.%r%b%bOjoin message%t%tOJOIN%t%tsits down at <place>.%r%b%bDepart message%tDEPART%t%tYou stand and leave <place>.%r%b%bOdepart message%tODEPART%t%tstands and leaves <place>.%r%b%bSay prefix%t%tPREFIX%t%tAt your table%r%B%BLocal Description%B%B%B%B%BDESC[space(12)]Table x is a nondescript table%R[space(40)]with room for MAXPLACES seats.
+
+
+&fun_avail_rooms TP Room Foyer=[center([ansi(h,Room Availability)],78)][iter(sort_names(v(room_exits)),[switch(mod(#@,3),1,%R%T)][padstr([last(name(##))]: [switch(1,xget(##,islocked),ansi(hr,Locked),t(lvplayers(loc(##))),[ansi(hr,Occupied)],t(lplayers(loc(##))),[ansi(hy,Available*)],[ansi(hg,Available)])],18)])]
+&ROOM_EXITS TP Room Foyer=
+
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 10=+install/updategroup ROOM
+
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 10=@set me=!quiet
+
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

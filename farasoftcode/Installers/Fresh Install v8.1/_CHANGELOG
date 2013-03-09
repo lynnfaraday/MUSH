@@ -1,38 +1,10 @@
 ================================================================
-Version 8.1 (03/09/2013)
-----------------------------------------------------------------
+UPCOMING VERSION (8.1)
 
-Issue numbers refer to github issues:  https://github.com/lynnfaraday/MUSH/issues
-
-6	(Bug)	Can't Be Over 40 in +age
-7	(Bug)	IC Time Has Limited Range
-26	(New feature)	Simple IC Time
-IC Time had some fundamental flaws and has been replaced by a new IC time with a simple year offset.  
-
-13	(Bug)	Install Manager Gets Halted
-There was an important bug in the installer that affected small databases.  It was fixed by making the install manager smarter.
-
-27	(Bug)	Moderate Wound Modifier Too Low
-The moderate wound modifier has been raised, so you shouldn't be seeing people take 5-6 moderate wounds and keep on ticking (unless they're -really- lucky). 
-
-25	(Bug)	Small Wounds Shouldn't KO
-It was previously promised that a single light or moderate wound wouldn't KO you, but now it's actually true!
-
-11	(Bug)	Typo in BBS Help
-12	(Bug)	+mail/scan doesn't use color
-16	(Bug)	+xp/lang doesn't check if you have the language already
-20	(Bug)	Misleading error on demographics exit
-28	(Bug)	+combat/spar doesn't work for non-staff
-31	(Bug)	OOC and Idle Lounge Descriptions Backwards
-18	(Bug)	FS3 Channel Not Created By Default
-17	(Bug)	Room Parent Format Functions Missing
-19	(Bug)	Idle Purge Cron Job Not Installed
-23	(Bug)	Shortdesc Function Not Installed
-29	(Bug)	Double Cookies and XP awards +jobs posting
-9	(New feature) 	One-Stop DB Doesn't Have Guests
-14	(New feature)	+Updatename should actually change the name
-21	(New feature)	FS3 XP Log Gets Full Quickly
-Miscellaneous features and bugs.
+Mail:  +mail/scan wasn't using the right color.
+FS3 Chargen/Skills:  Made it agnostic to IC time system.   Fixed bug in the default demographics error checking.
+IC Time:  Epic FAIL
+FS3 Skills:  FS3 skill roll channel became a weirdly undocumented feature
 
 ================================================================
 Version 8.0 (11/14/2012)

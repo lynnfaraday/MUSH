@@ -1,0 +1,222 @@
+@@ Faraday's Jobs System
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Jobs System Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+
+think install_create(JOBS_CMD,Jobs System,1,0,8.1,Staff jobs system.)
+think install_create(JOBS_FUN,Jobs Functions,1,1,8.1,Staff jobs functions.)
+think install_create(JOBS_DB,Jobs Database,0,1,8.1,Stores staff jobs data.)
+think install_create(JOBS_CMD_REQUEST,Request System,1,0,8.1,Player request system.)
+
+@pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
+
+@lock/Use Jobs System=ISSTAFF/1
+
+@ACONNECT Jobs System=@switch isstaff(%#)=1,{@fo %#=+jobs}
+
+&CMD-+JOBS Jobs System=$+jobs:think pemit(%#,[setq(0,switch(hasattr(%#,jobs_filter),1,xget(%#,jobs_filter),all))][line_with_text(Filtered Jobs - %q0)]%R[u(#JOBS_FUN/fun_display_header)][iter(u(#JOBS_FUN/fun_get_jobs_list,%q0,%#),%R[u(#JOBS_FUN/fun_display_job,##)])]%R[line()])
+
+&CMD-+JOBS-ALIAS Jobs System=$+job*:@switch %0=s*,,@fo %#=+jobs%0
+
+&CMD-+JOBS-ALL Jobs System=$+jobs/all:think pemit(%#,[line_with_text(All Jobs)]%R[u(#JOBS_FUN/fun_display_header)][iter(u(#JOBS_FUN/fun_get_jobs_list,all,%#),%R[u(#JOBS_FUN/fun_display_job,##)])]%R[line()])
+
+&CMD-+JOBS-ASSIGN Jobs System=$+jobs/assign *=*:think [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid job number.),t(pmatch(%1)),ansi(hr,That is not a valid player.),ansi(hg,You assign Job %0 to %1.[set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),handler,name(pmatch(%1)))])][set(%q1,%q2:[u(#JOBS_FUN/fun_update_activity,xget(%q1,%q2),%#)])]))
+
+&CMD-+JOBS-AVAIL Jobs System=$+jobs/avail:think pemit(%#,[line_with_text(New Jobs)]%R[u(#JOBS_FUN/fun_display_header)][iter(u(#JOBS_FUN/fun_get_jobs_list,avail,%#),%R[u(#JOBS_FUN/fun_display_job,##)])]%R[line()])
+
+&CMD-+JOBS-CATCHUP Jobs System=$+jobs/catchup:@pemit %#=ansi(hg,You mark all jobs as read.) [iter(u(#JOBS_FUN/fun_get_jobs_list,new,%#),[setq(0,before(##,:))][setq(1,after(##,:))][set(%q0,%q1:[u(#JOBS_FUN/fun_update_activity,xget(%q0,%q1),%#)])])]
+
+&CMD-+JOBS-CAT Jobs System=$+jobs/*:think switch(1,hasattr(#JOBS_DB,cat_%0),pemit(%#,[line_with_text([ucstr(%0)] Jobs)]%R[u(#JOBS_FUN/fun_display_header)][iter(u(#JOBS_FUN/fun_get_jobs_list,%0,%#),%R[u(#JOBS_FUN/fun_display_job,##)])]%R[line()]),hasattr(me,cmd-+jobs-[before(%0,%B)]),,pemit(%#,ansi(hr,Unknown jobs command.)))
+
+&CMD-+JOBS-CATLIST Jobs System=$+jobs/catlist:think pemit(%#,[line_with_text(Job Categories)][iter(lattr(#JOBS_DB/cat_*),%R[after(##,_)])]%R[line()]
+
+&CMD-+JOBS-CHANGECAT Jobs System=$+jobs/cat *=*:think [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid job number.),hasattr(#JOBS_DB,cat_%1),ansi(hr,That is not a valid category.),ansi(hg,You change the category of Job %0 to %1.[set(xget(#JOBS_DB,cat_%1),%q2:[xget(%q1,%q2)])][wipe(%q1/%q2)]))
+
+&CMD-+JOBS-CLEAR Jobs System=$+jobs/clear *:think [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))][pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid job number.),ansi(hg,You clear the comments on Job %0.[set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),comments,)])][set(%q1,%q2:[u(#JOBS_FUN/fun_update_activity,xget(%q1,%q2),%#)])])))]
+
+&CMD-+JOBS-CLOSE Jobs System=$+jobs/close *:@switch %0=*=*,,{@switch [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]0=words(%q0),@pemit %#=ansi(hr,That is not a valid job number.),{@pemit %#=ansi(hg,You close Job %0.);@fo %#=+mail [u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),submitter)]=Job [u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),submitter)] \([u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),title)]\)/%N has closed your job %0.%R%R[edit(u(#JOBS_FUN/fun_display_job_long,%q1,%q2,xget(%q1,%q2)),\;,\\\;)];@fo %#=+bbpost Staff Job Notices/J%0 - [u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),title)]=[edit(u(#JOBS_FUN/fun_display_job_long,%q1,%q2,xget(%q1,%q2)),\;,\\\;)];@wait 4=think [wipe(%q1/%q2)]}}
+
+&CMD-+JOBS-CLOSE-COMMENT Jobs System=$+jobs/close *=*:@switch [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]0=words(%q0),@pemit %#=ansi(hr,That is not a valid job number.),{@pemit %#=[ansi(hg,You close Job %0 with comment %1.)][set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),comments,[u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),comments)]\\\%R\\\%R\[%N - [time()]\]\\\%R[escape_cr(%1)])])];@fo %#=+mail [u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),submitter)]=Job Closed - %0 \([u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),title)]\)/%N has closed your job %0.%R%R[edit(u(#JOBS_FUN/fun_display_job_long,%q1,%q2,xget(%q1,%q2)),\;,\\\;)];@fo %#=+bbpost Staff Job Notices/J%0 - [u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),title)]=[edit(u(#JOBS_FUN/fun_display_job_long,%q1,%q2,xget(%q1,%q2)),\;,\\\;)];@wait 4=think [wipe(%q1/%q2)]}
+
+&cmd-+jobs-collapse Jobs System=$+jobs/collapse:think [setq(0,u(#JOBS_FUN/fun_get_jobs_list,all))][setq(1,words(%q0))][iter(%q0,[setq(2,xget(before(##,:),after(##,:)))][wipe([before(##,:)]/[after(##,:)])][set(before(##,:),JOB_#@:%q2)][switch(name(before(##,:)),APP,set(pmatch(u(#JOBS_FUN/fun_extract_data,%q2,submitter)),APPROVAL_JOB:#@))])][set(#JOBS_DB,next_job:[inc(%q1)])][pemit(%#,ansi(hg,You collapse the job numbers.))]  
+
+&CMD-+JOBS-COMMENT Jobs System=$+jobs/comment *=*:think [u(#JOBS_FUN/fun_do_comment,%0,%1)]
+&CMD-+JOBS-ADD Jobs System=$+jobs/add *=*:think [u(#JOBS_FUN/fun_do_comment,%0,%1)]
+
+&CMD-+JOBS-CREATE Jobs System=$+jobs/create *=*/*:think u(#JOBS_FUN/fun_do_create,%0,%1,%2)
+&CMD-+JOBS-CREATE2 Jobs System=$+jobs/create */*=*:think u(#JOBS_FUN/fun_do_create,%0,%1,%2)
+&CMD-+JOBS-CREATE3 Jobs System=$+jobs/create *=*:think switch(1,strmatch(%0,*/*),,strmatch(%1,*/*),,u(#JOBS_FUN/fun_do_create,REQ,%0,%1))
+
+
+&CMD-+JOBS-DELCAT Jobs System=$+jobs/delcat *:think [setq(1,#-1)][setq(0,trim(%0))]pemit(%#,switch(0,hasattr(#JOBS_DB,cat_%q0),ansi(hr,There is no category with that name.),[ansi(hg,You delete category %q0.)][setq(1,xget(#JOBS_DB,cat_%q0))][wipe(#JOBS_DB/cat_%q0)]));@switch %q1=#-1,,@nuke %q1
+
+&CMD-+JOBS-DUE Jobs System=$+jobs/due *=*:think [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))][setq(4,[extract(%1,1,1,switch(1,strmatch(%1,*/*),/,))])][setq(5,[extract(%1,3,1,switch(1,strmatch(%1,*/*),/,))])][switch(strlen(%q5),2,setq(5,20%q5))][setq(3,convtime(Mon [switch(isnum(%q4),1,monthname(%q4),%q4)] [extract(%1,2,1,switch(1,strmatch(%1,*/*),/,))] 01:00:00 %q5))]pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid job number.),gt(%q3,0),ansi(hr,That is an invalid date format. Use "Month Day Year" or "mm/dd/yy".),ansi(hg,You set the due date Job %0 to %1.[set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),duedate,%q3)])][set(%q1,%q2:[u(#JOBS_FUN/fun_update_activity,xget(%q1,%q2),%#)])]))
+
+&CMD-+JOBS-FILTER Jobs System=$+jobs/filter *:think pemit(%#,[setq(0,1)][trim(iter(%0,switch(##,me,,all,,new,,switch(1,hasattr(#JOBS_DB,cat_##),,setq(0,0)[ansi(hr,## is an invalid filter setting.)]))))][switch(%q0,1,ansi(hg,You set your jobs filter to %0.)[set(%#,jobs_filter:%0)])]
+
+&CMD-+JOBS-HANDLE Jobs System=$+jobs/handle *:think u(#JOBS_FUN/fun_do_handle,%0)
+&CMD-+JOBS-CLAIM Jobs System=$+jobs/claim *:think u(#JOBS_FUN/fun_do_handle,%0)
+
+&CMD-+JOBS-MAIL Jobs System=$+jobs/mail *=*/*:@switch [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]0=words(%q0),@pemit %#=ansi(hr,That is not a valid job number.),{@pemit %#=ansi(hg,You add a comment to Job %0.)[set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),comments,[u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),comments)]\\\%R\\\%R\[%N - [time()]\]\\\%R\(Mailed to %1\)%R[escape_cr(%2)])])][set(%q1,%q2:[u(#JOBS_FUN/fun_update_activity,xget(%q1,%q2),%#)])];@fo %#=+mail %1=[u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),title)]/%N has added the following comment to the job "[u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),title)]":%R%R[edit(%2,\;,\\\;)]}
+
+&CMD-+JOBS-ME Jobs System=$+jobs/me:think pemit(%#,[u(#JOBS_FUN/fun_display_jobs_list,My Jobs,me,%#)]%R[line()])
+&CMD-+JOBS-MINE Jobs System=$+jobs/mine:think pemit(%#,[u(#JOBS_FUN/fun_display_jobs_list,My Jobs,me,%#)]%R[line()])
+
+&CMD-+JOBS-NEW Jobs System=$+jobs/new:think switch(%0,*-*,,[setq(0,first(u(#JOBS_FUN/fun_get_jobs_list,new,%#)))][setq(7,before(%q0,:))][setq(8,after(%q0,:))][setq(9,xget(%q7,%q8))]pemit(%#,switch(%q0,,ansi(hr,There are no more jobs to read.),[line_with_text(Job [after(%q8,_)])]%R[u(#JOBS_FUN/fun_display_job_long,%q7,%q8,%q9)][set(%q7,%q8:[u(#JOBS_FUN/fun_update_activity,%q9,%#)])]%R[line()]))
+
+&CMD-+JOBS-NEWCAT Jobs System=$+jobs/newcat *:think [setq(0,trim(%0))]pemit(%#,switch(1,hasattr(#JOBS_DB,cat_%q0),ansi(hr,There is already a category with that name.),gt(words(%q0),1),ansi(hr,Too many words in category name.),gt(strlen(%q0),5),ansi(hr,Category name too long.),[ansi(hg,You create category %q0.)][setq(1,create(ucstr(%q0),10))][set(%q1,describe:Stores jobs in the %q0 category.)][tel(%q1,#JOBS_DB)][set(#JOBS_DB,cat_%q0:%q1)]))
+
+&TR-UNINSTALL Jobs System=@dolist lcon(#JOBS_DB)={@set ##=!safe;@nuke ##}
+
+&CMD-+JOBS-PRI Jobs System=$+jobs/pri *=*:think [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid job number.),member(HIGH MEDIUM LOW,ucstr(%1)),ansi(hr,That is not a valid priority.),ansi(hg,You set the priority of Job %0 to %1.[set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),priority,switch(%1,high,H,medium,M,low,L))])][set(%q1,%q2:[u(#JOBS_FUN/fun_update_activity,xget(%q1,%q2),%#)])]))
+
+&CMD-+JOBS-STATUS Jobs System=$+jobs/status *=*:think [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid job number.),member(xget(#JOBS_DB,status_vals),ucstr(%1)),ansi(hr,That is not a valid status.  Use one of: [xget(#JOBS_DB,status_vals)].),ansi(hg,You set the status of Job %0 to %1.[set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),status,switch(isnum(%1),1,%1\%,ucstr(%1)))])][set(%q1,%q2:[u(#JOBS_FUN/fun_update_activity,xget(%q1,%q2),%#)])]))
+
+&CMD-+JOBS-TITLE Jobs System=$+jobs/title *=*:think [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid job number.),ansi(hg,You set the title of Job %0 to %1.[set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),title,%1)])][set(%q1,%q2:[u(#JOBS_FUN/fun_update_activity,xget(%q1,%q2),%#)])]))
+
+&CMD-+JOBS-VIEW Jobs System=$+jobs *:think switch(%0,*-*,,[setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(7,before(%q0,:))][setq(8,after(%q0,:))][setq(9,xget(%q7,%q8))]pemit(%#,switch(%q0,,ansi(hr,That is not a valid job.),[line_with_text(Job %0)]%R[u(#JOBS_FUN/fun_display_job_long,%q7,%q8,%q9)][set(%q7,%q8:[u(#JOBS_FUN/fun_update_activity,%q9,%#)])]%R[line()]))
+
+&cmd-+jobs-viewmany Jobs System=$+jobs *-*:@switch/first 0=[isnum(%0)],@pemit %#=ansi(hr,%0 is not a number.),[isnum(%1)],@pemit %#=ansi(hr,%1 is not a number.),{@dolist [lnum(%0,%1)]=think [setq(0,u(#JOBS_FUN/fun_find_job,##))][setq(7,before(%q0,:))][setq(8,after(%q0,:))][setq(9,xget(%q7,%q8))][pemit(%#,switch(%q0,,ansi(hr,That is not a valid job.),[line_with_text(Job ##)]%R[u(#JOBS_FUN/fun_display_job_long,%q7,%q8,%q9)][set(%q7,%q8:[u(#JOBS_FUN/fun_update_activity,%q9,%#)])]%R[line()]))]}
+
+&ISSTAFF Jobs System=isstaff(%#)
+
+@STARTUP Jobs System=@set me=!no_command;@function create_job=#JOBS_FUN/fun_create_job;@function find_job=#JOBS_FUN/fun_find_job
+
+@@ These helpers are only meant to be called from commands.  They exist to support aliasing.
+
+@@ %0 = #, %1 = comment
+&FUN_DO_COMMENT Jobs Functions=localize([setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))][pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid job number.),ansi(hg,You add a comment to Job %0.[set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),comments,[u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),comments)]\\\%R\\\%R\[%N - [time()]\]\\\%R[escape_cr(%1)])])][set(%q1,%q2:[u(#JOBS_FUN/fun_update_activity,xget(%q1,%q2),%#)])][iter(lwho(),switch(1,isstaff(##),pemit(##,ansi(hg,<OOC> %N has commented on job %0))))])))])
+
+@@ %0 = #
+&FUN_DO_HANDLE Jobs Function=localize([setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid job number.),ansi(hg,You assign Job %0 to yourself.[set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),handler,%N)])][set(%q1,%q2:[u(#JOBS_FUN/fun_update_activity,xget(%q1,%q2),%#)])])))
+
+@@ %0 = category, %1 = title, %2 = text
+&FUN_DO_CREATE Jobs Function=localize([setq(0,)][pemit(%#,switch(0,hasattr(#JOBS_DB,cat_%0),ansi(hr,That is not a valid job category.  Try one of these: [iter(lattr(#JOBS_DB/cat_*),after(##,_))]),ansi(hg,You submit a new job.)[u(#JOBS_FUN/fun_create_job,%0,%1,%2,%#)][setq(0,u(#JOBS_FUN/fun_find_job,%qj))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]))])
+
+
+
+
+@@ %0 = title
+@@ %1 = job filter
+@@ %2 = character
+&FUN_DISPLAY_JOBS_LIST Jobs Function=localize([line_with_text(%0)]%R[u(#JOBS_FUN/fun_display_header)][iter(u(#JOBS_FUN/fun_get_jobs_list,%1,%2),%R[u(#JOBS_FUN/fun_display_job,##)])])
+
+&FUN_CREATE_JOB Jobs Functions=switch(iswizard(%@),0,#-1 RESTRICTED,[setq(j,xget(#JOBS_DB,next_job))][set([xget(#JOBS_DB,cat_[trim(%0)])],job_%qj:%1|[secs()]|[name(%3)]||[add(secs(),xget(#JOBS_DB,DUEDATE_SECS))]|NEW|M|[escape_cr(%2)]||[secs()]||)][set(#JOBS_DB,next_job:[inc(%qj)])][iter(lwho(),switch(isstaff(##),1,pemit(##,ansi(hg,New Job Submitted \(#%qj\): %1))))])
+
+&FUN_DISPLAY_HEADER Jobs Functions=[ansi(hu,iter(xget(#JOBS_DB,fields),padstr(extract(##,2,1,:),last(##,:))))]
+
+&FUN_DISPLAY_JOB Jobs Functions=[setq(7,before(%0,:))][setq(8,after(%0,:))][setq(9,xget(%q7,%q8))][iter(xget(#JOBS_DB,fields),padstr(u(FIELD_[first(##,:)],after(%q8,_),%q9,name(%q7)),last(##,:)))]
+
+@@ Params for all of these fields:
+@@ %0 = Job number
+@@ %1 = Job data
+@@ %2 = Category
+&FIELD_NUMBER Jobs Functions=%0[switch(u(fun_has_new_activity,%1,%#),1,[ansi(B,*)])]
+&FIELD_CATEGORY Jobs Functions=ansi(switch(u(fun_extract_data,%1,priority),H,hR,M,h,L,g),%2)
+&FIELD_TITLE Jobs Functions=u(fun_extract_data,%1,title)
+&FIELD_SUBMITTER Jobs Functions=u(fun_extract_data,%1,submitter)
+&FIELD_HANDLER Jobs Functions=switch(u(fun_extract_data,%1,handler),,------,u(fun_extract_data,%1,handler))
+&FIELD_DUEDATE Jobs Functions=u(fun_format_duedate,u(fun_extract_data,%1,duedate),u(fun_extract_data,%1,status))
+&FIELD_STATUS Jobs Functions=u(fun_extract_data,%1,status)
+&FIELD_OVERDUE Jobs Functions=ansi(switch(u(fun_due_status,u(fun_extract_data,%1,duedate),u(fun_extract_data,%1,status)),overdue,hR,nearlydue,hY,g),***)
+
+&FUN_DISPLAY_JOB_LONG Jobs Functions=[center(~ [u(#JOBS_FUN/fun_extract_data,%2,title)] ~,78)]%R[ansi(h,Category:)]%B%B%B%B%B[ljust(name(%0),20)][center(~~~,10)][ansi(h,Priority:)]%B%B%B[switch(u(#JOBS_FUN/fun_extract_data,%2,priority),H,ansi(hr,HIGH),M,ansi(h,MEDIUM),L,ansi(hg,LOW))]%R[ansi(h,Submitted By:)]%B[padstr(u(#JOBS_FUN/fun_extract_data,%2,submitter),20)][center(~~~,10)][ansi(h,Handled By:)]%B[u(#JOBS_FUN/fun_extract_data,%2,handler)]%R[ansi(h,Submit Date:)]%B%B[timefmt($m/$d/$y,u(#JOBS_FUN/fun_extract_data,%2,submitted))]%R[ansi(h,Due Date:)]%B%B%B%B%B[padstr(u(#JOBS_FUN/fun_format_duedate,u(#JOBS_FUN/fun_extract_data,%2,duedate)),20)][center(~~~,10)][ansi(h,Status:)]%B%B%B%B%B[u(#JOBS_FUN/fun_extract_data,%2,status)]%R%R[ansi(hu,Description:)]%R[replace_cr(u(#JOBS_FUN/fun_extract_data,%2,description))]%R%R[ansi(hu,Comments:)]%R[replace_cr(u(#JOBS_FUN/fun_extract_data,%2,comments))]
+&FUN_EXTRACT_DATA Jobs Functions=extract(%0,match(v(order),%1),1,|)
+&FUN_FIND_JOB Jobs Functions=switch(iswizard(%@),0,#-1 RESTRICTED,trim(iter(lattr(#JOBS_DB/cat_*),switch(hasattr([xget(#JOBS_DB,##)],JOB_%0),1,[xget(#JOBS_DB,##)]:JOB_%0))))
+
+
+@@ %0 = due date (secs)
+@@ %1 = job status
+&FUN_FORMAT_DUEDATE Jobs Functions=switch(%0,,None Set,ansi(switch(u(fun_due_status,%0,%1),deferred,b,overdue,ri,nearlydue,yi,n),timefmt($m/$d/$y,%0)))
+
+@@ %0 = due date (secs)
+@@ %1 = job status
+@@ Returns: overdue nearlydue deferred none
+&FUN_DUE_STATUS Jobs Functions=switch(%1,DEFER,deferred,switch(sub(%0,secs()),<0,overdue,<86400,nearlydue,normal)
+
+&FUN_FORMAT_SUBMITDATE Jobs Functions=switch(%0,,None Set,ansi(switch(sub(secs(),%0),>1209600,ri,>604800,yi,>259200,gi,n),timefmt($m/$d/$y,%0)))
+&FUN_GET_JOBS_LIST Jobs Functions=sort_oldest(trim(squish(iter(lattr(#JOBS_DB/cat_*),iter(lattr([xget(#JOBS_DB,##)]/JOB*),switch(1,u(#JOBS_FUN/fun_matches_filter,%0,%1,[xget(#JOBS_DB,##)],[itext(0)]),[xget(#JOBS_DB,##)]:[itext(0)])))))
+&FUN_HAS_NEW_ACTIVITY Jobs Functions=localize([setq(9,[after(grab(u(fun_extract_data,%0,lastviewed),%1:*),:)])][switch(%q9,,setq(9,0))][gt([u(fun_extract_data,%0,lastactivity)],%q9)])
+&FUN_MATCHES_FILTER Jobs Functions=[trim([setq(9,0)][setq(8,xget(%2,%3))][iter(%0,switch(##,all,setq(9,1),me,switch(u(#JOBS_FUN/fun_extract_data,%q8,handler),name(%1),setq(9,1)),submit,switch(u(#JOBS_FUN/fun_extract_data,%q8,submitter),name(%1),setq(9,1)),avail,switch(u(#JOBS_FUN/fun_extract_data,%q8,handler),,setq(9,1)),new,switch(u(#JOBS_FUN/fun_has_new_activity,%q8,%1),1,setq(9,1)),switch(name(%2),##,setq(9,1))))]%q9)]
+&FUN_REPLACE_DATA Jobs Functions=replace(replace(%0,match(v(order),%1),%2,|),match(v(order),lastactivity),[secs()],|)
+&FUN_UPDATE_ACTIVITY Jobs Functions=localize([setq(9,match(v(order),lastviewed))][setq(8,extract(%0,%q9,1,|))][replace(%0,%q9,[switch(1,t(match(%q8,%1:*)),find_and_replace(%q8,%1:*,%1:[secs()]),%q8%B%1:[secs()])],|)])
+
+
+&SHELP_+JOBS Jobs Functions=think The Jobs system allows you to track staff work assignments.%b%r%r[ansi(hw,+jobs)][ansi(n,%b- Lists jobs%r)][ansi(hw,+jobs <#>)][ansi(n,%bor%b)][ansi(hw,+jobs <#>-<#>)][ansi(n,%b- Views job details. %r)]%r[ansi(hw,+jobs/create <category>=<title>/<description>)][ansi(n,%b- Creates a new job)][ansi(hw,%r%b%b)][ansi(n,also)][ansi(hw,%b+jobs/create <category>/<title>=<description>%r%b%b)][ansi(n,also)][ansi(hw,%b+jobs/create <title>=<description>%b)][ansi(n,\(defaults to REQ type\))]%r[ansi(hw,+jobs/assign <#>=<player>)][ansi(n,%b- Assigns a job%r)][ansi(hw,+jobs/handle <#>)][ansi(n,%b)]- Assigns a job to yourself%r%r[ansi(hw,+jobs/comment <#>=<comment>)][ansi(n,%b- Adds a comment to a job.%r)]%b[space(7)]Note that all comments will be sent to the submitter%r%b[space(7)]when the job is closed.%b So be careful what you discuss.%r[ansi(hw,+jobs/mail <#>=<to-list>/<comment>)][ansi(n,%b- Adds a comment to a job and%r)]%b[space(7)]sends a mail to the people on 'to-list'%r[ansi(hw,+jobs/close <#>)][ansi(n,%b- Closes a job.%r)]%b[space(7)]A copy will be posted to the Staff Jobs BBS%r%b[space(7)]Another copy will be sent to the original submitter.%r[ansi(hw,+jobs/close <#>=<comment>)][ansi(n,%b- Closes WITH a comment\, one stop shopping.)]%r%rSee also:%r%b%b%b%b%b%b%b%b[ansi(hw,jobs_display)][ansi(n,%b- Advanced job list and display options%r)]%b%b%b%b%b%b%b%b[ansi(hw,jobs_status)][ansi(n,%b- Change job status fields%r)]%b%b%b%b%b%b%b%b[ansi(hw,jobs_setup)][ansi(n,%b- Setup and management commands)]
+&MORE_SHELP_+JOBS_DISPLAY Jobs Functions=The basic jobs command (+jobs) defaults to showing you all jobs.  However, you can configure what jobs this shows by setting up a job filter.  The filter can have multiple entries.  For example, if you're the leader of a sphere, you might want to see all jobs assigned to you AND all jobs in your sphere.%R%RThe filter accepts keywords for each category, and also special keywords:  [ansi(hg,all)] (All jobs), [ansi(hg,me)] (Jobs assigned to you), [ansi(hg,new)] (Jobs with activity since you last looked at them), [ansi(hg,avail)] (Jobs that are unhandled - i.e. available)%R%RIf you want to search for only certain jobs, without changing your filter, there are a number of extra commands you can use.%R%R[ansi(h,+jobs/all)] - Shows all jobs%R[ansi(h,+jobs/me )] - Shows jobs assigned to you%R[ansi(h,+jobs/avail)] - Shows available (unhandled) jobs.%R[ansi(h,+jobs/<cat> )] - Shows jobs in the given category%R%R[ansi(h,+jobs/filter <list> )] - Sets up filter for the regular +jobs command%R%T"list" can be a space-separated list to use multiple filters%R%TFor example: +jobs/filter code me%R%R%R[ansi(h,+jobs/new )] - Reads the next new job.%R[ansi(h,+jobs/catchup)] - Marks all jobs as read.
+&MORE_SHELP_+JOBS_SETUP Jobs Functions=When you first setup the job system, there are a few default categories.  You should create the ones you want (for example:  CODE, BUILD, TP, etc.) after installing the system.%R%R[ansi(h,+jobs/catlist)] - Shows a list of categories you've created%R[ansi(h,+jobs/newcat <catname>)] - Creates new category.%R%TThe name must be less than 6 characters long%R[ansi(h,+jobs/delcat <catname>)] - Deletes a category AND ALL JOBS WITHIN IT.%R[ansi(h,+jobs/collapse)] - Renumbers the jobs starting with '1'.%R%TUse this if your job numbers are getting too big.%R%RYou can integrate the jobs system with other coded systems using the create_job function.  The syntax is: create_job(CATEGORY,TITLE,TEXT,SUBMITTER DB#) For example:%R%Tcreate_job(BG,BG Submittal,\%N has submitted a background.,\%#)%R%RNOTE: This will use register 'j' to store the job number.  You can access that with \%qj.
+&MORE_SHELP_+JOBS_STATUS Jobs Functions=The basic job commands allow you to assign and add comments to jobs.  However, the jobs system also has a few advanced features.  You can edit a job's priority, set a due date, and change some of its attributes.  You can also indicate its completion status.  Typically this will be a percent complete, but there are a few special states.  "WORK" just means you're working on it but don't have an actual percent done.  "PEND" can be used if you're waiting on something.  "DEFER" can be used if you don't want to do it now (but may do it eventually).%R%R[ansi(h,+jobs/pri <#>=<high, medium, low> )] - Changes priority%R%TThe system will show the priorities in different colors.%R[ansi(h,+jobs/due <#>=<date>)] -  Sets due date%R%TFormat: Mon Day Year or mm/dd/yy, For example: Jan 01 2004 or 1/1/04%R%TThe system will show overdue jobs, and jobs due soon%R%T with different colors.%R[ansi(h,+jobs/status <#>=<status>)] - Changes job status%R%T[xget(#JOBS_DB,status_vals)]%R[ansi(h,+jobs/title <#>=<title> )] - Changes job title%R[ansi(h,+jobs/cat <#>=<new cat> )] - Changes a job category.
+&HELP_+REQUEST Jobs Functions=The +request system is used to submit requests to staff.  You must provide a title for your request (please, keep these somewhat short) and a full-length description.  You can track the status of your request, as well as who it's assigned to and when it's due.%R%R[ansi(h,+request <title>=<description>)] - Submits a request%R[ansi(h,+request)] - Views your open requests%R[ansi(h,+request <#>)] - Views details of an open request.%R[ansi(h,+request/comment <#>=<comment>)] - Adds a comment to a +request.
+&ORDER Jobs Functions=Title Submitted Submitter Handler DueDate Status Priority Description Comments LastActivity LastViewed
+
+&TR_PLAYER_NAME_CHANGE Jobs Functions=@dolist lattr(#JOBS_DB/CAT_*)=@tr me/TR_PLAYER_NAME_CHANGE_ON_CAT=[xget(#JOBS_DB,##)],%0,%1
+&TR_PLAYER_NAME_CHANGE_ON_CAT Jobs Functions=@dolist lattr(%0/JOB_*)=switch(u(fun_extract_data,xget(%0,##),submitter),%1,set(%0,##:[u(fun_replace_data,xget(%0,##),submitter,%2)]))
+
+
+&CMD-+REQUEST-COMMENT Request System=$+request/comment *=*:think [setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(1,before(%q0,:))][setq(2,after(%q0,:))][pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid request number.),t(match(u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),submitter),%N)),ansi(hr,That is not one of your requests.),ansi(hg,You add a comment to request %0.[set(%q1,%q2:[u(#JOBS_FUN/fun_replace_data,xget(%q1,%q2),comments,[u(#JOBS_FUN/fun_extract_data,xget(%q1,%q2),comments)]\\\%R\\\%R\[%N - [time()]\]\\\%R[escape_cr(%1)])])][iter(lwho(),switch(1,isstaff(##),pemit(##,ansi(hg,<OOC> %N has commented on job %0))))])))]
+&CMD-+REQUEST-LIST Request System=$+request:think pemit(%#,[line_with_text(Open Requests - %q0)]%R[u(#JOBS_FUN/fun_display_header)][iter(u(#JOBS_FUN/fun_get_jobs_list,submit,%#),%R[u(#JOBS_FUN/fun_display_job,##)])]%R[line_with_text(+help +request)])
+&CMD-+REQUEST-SUBMIT Request System=$+request *=*:think [setq(0,0)]pemit(%#,switch(1,or(match(%0,*|*),match(%0,*/*),match(%1,*|*)),ansi(hr,Don't include the | or / character in your request.),ansi(hg,You submit a new request.)[create_job(REQ,{%0},{%1},%#)][setq(0,u(#JOBS_FUN/fun_find_job,%qj))][setq(1,before(%q0,:))][setq(2,after(%q0,:))]));@switch %qj=>0,{+mail %N=Job %qj - {%0}/You have submitted the following request:%R%R{%1}%R%R[line2()]%RYou can use +request to see the status of your jobs.
+&CMD-+REQUEST-VIEW Request System=$+request *:think switch(%0,*=*,,[setq(0,u(#JOBS_FUN/fun_find_job,%0))][setq(7,before(%q0,:))][setq(8,after(%q0,:))][setq(9,xget(%q7,%q8))]pemit(%#,switch(0,words(%q0),ansi(hr,That is not a valid request.),t(match(u(#JOBS_FUN/fun_extract_data,%q9,submitter),%N)),ansi(hr,That is not one of your requests.),[line_with_text(Request %0)]%R[u(#JOBS_FUN/fun_display_job_long,%q7,%q8,%q9)]%R[line_with_text(+help +request)]))
+
+@STARTUP Request System=@set me=!no_command
+
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup JOBS
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+&DUEDATE_SECS Jobs Data=432000
+&NEXT_JOB Jobs Data=1
+&STATUS_VALS Jobs Data=NEW DEFER PEND WORK 25 50 75
+@set Jobs Data/STATUS_VALS=VISUAL
+
+&FIELDS Jobs Data=Number:#:5 Category:Cat:5 Title:Title:20 Submitter:Submitter:10 Handler:Handler:10 DueDate:Due:10 Status:Status:10
+
+
+@wait 8=@pemit/silent %#=[ansi(hg,Creating default categories...)]%R
+
+@wait 8=@fo %#=+jobs/newcat APP
+@wait 8=@fo %#=+jobs/newcat RP
+@wait 8=@fo %#=+jobs/newcat CODE
+@wait 8=@fo %#=+jobs/newcat BUILD
+@wait 8=@fo %#=+jobs/newcat REQ
+@wait 8=@fo %#=+jobs/newcat ADMIN
+
+
+@wait 10=+jobs/create CODE=Staff Jobs BBS/Set up a Staff Job Notices bbs if you don't have one already.
+@wait 10=+jobs/create CODE=Non-Players/Once all non-players (guests, wizzes, etc.) are created, update the NON_PLAYERS attr on the global functions object with a space-separated list of their DB#s.
+
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 10=@set me=!quiet
+
+

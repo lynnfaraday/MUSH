@@ -1,0 +1,66 @@
+@@ Faraday's Disclaimer System
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Disclaimer System Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+
+think install_create(DISCLAIM_CMD,Disclaimer System,1,0,8.1,Disclaimer system.)
+
+&HATTR_ACCEPTED_DISCLAIMER Disclaimer System=0
+&INSTALL_DESTINATION Disclaimer System=CREATOR
+
+&CMD-+ACCEPT Disclaimer System=$+accept:think pemit(%#,Thank you for acknowledging the policies.  You may proceed.)[set(%#,accepted_disclaimer:1)]
+
+@set Disclaimer System=DARK
+@lock Disclaimer System=me
+
+@pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup DISCLAIM
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@wait 5=+jobs/create CODE=Disclaimer/1. Create a disclaimer room with your policies and lock the exit to players having an ACCEPTED_DISCLAIMER attribute of 1. %R%R2. Drop the disclaimer system in that room.
+
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 5=@set me=!quiet
+
+
+@@ Here's a sample exit for the disclaimer room.
+@@ @open O;out;onward;ou
+@@ @link O = #0
+@@ @lock/Basic O=ACCEPTED/1
+@@ @power O = See_All
+@@ &ACCEPTED O=xget(%#,accepted_disclaimer)
+@@ @FAILURE O=ansi(hr,You must accept the policies before you can proceed.)
