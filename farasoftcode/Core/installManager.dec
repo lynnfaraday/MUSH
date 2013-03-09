@@ -20,16 +20,16 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @describe Install Object Storage=Stores Faraday system objects.%R[u(credits)]
 
 &CREDITS Install Globals=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
-&VERSION Install Globals=8.0
+&VERSION Install Globals=8.1
 
 &CREDITS Install Manager=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
-&VERSION Install Manager=8.0
+&VERSION Install Manager=8.1
 
 &CREDITS Install DB=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
-&VERSION Install DB=8.0
+&VERSION Install DB=8.1
 
 &CREDITS Install Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
-&VERSION Install Object Storage=8.0
+&VERSION Install Object Storage=8.1
 
 @set Install Globals = WIZARD
 @set Install Globals = SAFE
@@ -45,11 +45,11 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @STARTUP Install Manager=@set me=!no_command;@function INSTALL_CREATE=[num(me)]/FUN_INSTALL_CREATE;@function INSTALL_ALIASDB=[num(me)]/FUN_GET_DBREF;@function INSTALL_PATCH=[num(me)]/FUN_INSTALL_PATCH
 
 
-&CMD-+install-update Install Manager=$+install/update *:@switch/first [setq(0,u(fun_get_dbref,%0))]0=[u(fun_is_registered,%0)],@pemit %#=ansi(hr,I can't find a object named %0.),{@pemit %#=ansi(c,Updating database references on object %0.);think switch(u(fun_is_installed_properly,%0),0,pemit(%#,ansi(hr,It appears object %q0 \([name(%q0)]\) may not be properly installed.  Please double-check.)));@dolist [lattr(#INSTALL_DB/obj_*)] ALLDONE=@switch ##=ALLDONE,{@fo %#=+install/finalize %0},{think u(FUN_UPDATE,%q0,#[after(##,_)],xget(#INSTALL_DB,##))}}
+&CMD-+install-update Install Manager=$+install/update *:@switch/first [setq(0,u(fun_get_dbref,%0))]0=[u(fun_is_registered,%0)],@pemit %#=ansi(hr,I can't find a object named %0.),{@pemit %#=ansi(c,Updating database references on object %0.);think switch(u(fun_is_installed_properly,%0),0,pemit(%#,ansi(hr,It appears object %q0 \([name(%q0)]\) may not be properly installed.  Please double-check.)));@dolist [u(FUN_DEPENDENCIES,%q0)] ALLDONE=@switch ##=ALLDONE,{@fo %#=+install/finalize %0},{think u(FUN_UPDATE,%q0,#{##},xget(#INSTALL_DB,OBJ_##))}}
 
 &CMD-+install-updategroup Install Manager=$+install/updategroup *:@switch [setq(0,u(fun_get_group_attrs,%0))][words(%q0)]=0,@pemit %#=[ansi(hr,Can't find a system group named %0.  Make sure it's been installed properly.)],@dolist %q0={@fo %#=+install/update [after(##,_)]}
 
-&CMD-+install-finalize Install Manager=$+install/finalize *:think [setq(0,u(fun_get_dbref,%0))];@tr %q0/startup;think pemit(%#,[u(fun_INSTALL_CRON,%q0)]%R[u(fun_INSTALL_HELP,%q0)]%R[u(fun_INSTALL_HOOK,%q0)]);@fo %#=+install/attr %q0;@fo %#={@tel %q0=[u(fun_get_destination,%0)]};@pemit %#=ansi(hc,%0 installed.)
+&CMD-+install-finalize Install Manager=$+install/finalize *:think [setq(0,u(fun_get_dbref,%0))];@restart %q0;think pemit(%#,[u(fun_INSTALL_CRON,%q0)]%R[u(fun_INSTALL_HELP,%q0)]%R[u(fun_INSTALL_HOOK,%q0)]);@fo %#=+install/attr %q0;@fo %#={@tel %q0=[u(fun_get_destination,%0)]};@pemit %#=ansi(hc,%0 installed.)
 
 &CMD-+INSTALL_ATTR Install Manager=$+install/attr *:@dolist lattr(%0/?ATTR_*)=think pemit(%#,setup_attr(mid(##,0,1),after(##,_),{[xget(%0,##)]}))
 
@@ -74,6 +74,14 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @@ --------------------------
 
 &FUN_GET_DESTINATION Install Manager=localize([setq(0,u(fun_get_dbref,%0))][setq(1,xget(%q0,install_destination))]switch(1,hasattr(%q0,install_destination),switch(%q1,CREATOR,%#,MASTER_ROOM,v(MASTER_ROOM),#*,%q1,u(fun_get_dbref,%q1)),match(extract(%0,2,1,_),CMD),v(MASTER_ROOM),#INSTALL_STORAGE)
+
+@@ --------------------------
+@@  FUN_DEPENDENCIES
+@@  Determines which installed system objects a given object is dependent on.
+@@  Only works BEFORE database substitutions are performed.
+@@  %0 = Object to check dependencies for.
+@@ --------------------------
+&FUN_DEPENDENCIES Install Manager=localize(squish([setq(0,iter(lattr(#INSTALL_DB/obj_*),after(##,_)))][iter(%q0,switch(words(grepi(%0,*,##)),>0,##))]))
 
 @@ --------------------------
 @@  FUN_GET_GROUP_ATTRS
