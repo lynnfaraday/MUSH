@@ -31,7 +31,8 @@ think install_create(ICTIME_CMD,IC Time,1,0,8.1,IC time system.)
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&FUN_ICTIME IC Time=time()
+&FUN_ICTIME IC Time=[timefmt($a $b $d)]\, [sub(last(time()),v(YEAR_OFFSET))]
+&YEAR_OFFSET IC Time=100
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

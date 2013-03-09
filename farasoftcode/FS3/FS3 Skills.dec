@@ -10,17 +10,17 @@
 
 @pemit/silent %#=%R%R[ansi(hg,Creating objects.)]
 
-think install_create(FS3_STORAGE,FS3 Object Storage,0,1,8.0,Stores FS3 objects.)
-think install_create(FS3SKILL_CMD,FS3 Skill System,1,0,8.0,These are the commands for the FS3 skills system.)
+think install_create(FS3_STORAGE,FS3 Object Storage,0,1,8.1,Stores FS3 objects.)
+think install_create(FS3SKILL_CMD,FS3 Skill System,1,0,8.1,These are the commands for the FS3 skills system.)
 
-think install_create(FS3SKILL_HELP,FS3 Skill Help,0,1,8.0,FS3 Help Files.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
-think install_create(FS3SKILL_FUN,FS3 Skill Functions,1,1,8.0,Stores FS3 skill functions.    See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
-think install_create(FS3SKILL_DB,FS3 Skill Data,1,1,8.0,Stores FS3 skill data.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3SKILL_HELP,FS3 Skill Help,0,1,8.1,FS3 Help Files.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3SKILL_FUN,FS3 Skill Functions,1,1,8.1,Stores FS3 skill functions.    See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3SKILL_DB,FS3 Skill Data,1,1,8.1,Stores FS3 skill data.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
 
-think install_create(FS3SKILL_CGINFO,Chargen Info Functions,1,1,8.0,Functions related to chargen but also useful outside of it.,FS3_STORAGE)
+think install_create(FS3SKILL_CGINFO,Chargen Info Functions,1,1,8.1,Functions related to chargen but also useful outside of it.,FS3_STORAGE)
 think install_create(FS3SKILL_CGDEMO,Demographic Commands,1,0,8.1,Chargen Demographic Commands,CREATOR)
-think install_create(FS3SKILL_CGABILITY,FS3 Chargen Commands,1,0,8.0,FS3 Chargen Commands.  See the FS3 Skill System object for important copyright/license information.,CREATOR)
-think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.0,Chargen exit parent.,FS3_STORAGE)
+think install_create(FS3SKILL_CGABILITY,FS3 Chargen Commands,1,0,8.1,FS3 Chargen Commands.  See the FS3 Skill System object for important copyright/license information.,CREATOR)
+think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.1,Chargen exit parent.,FS3_STORAGE)
 
 @pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
 
@@ -614,7 +614,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.0,Chargen exit pa
 @lock Demographic Commands=me
 @set Demographic Commands = DARK
 
-&CMD-+AGE Demographic Commands=$+age *:think pemit(%#,switch(0,isnum(%0),ansi(hr,Your age must be a number.),lte(%0,v(max_age)),ansi(hr,You cannot be that old without special staff permission. Contact a member of staff.),gte(%0,v(min_age)),ansi(hr,You cannot be that young without special staff permission.  Contact a member of staff.),[set(%#,birthdate:[u(fun_random_birthdate,%0)])][ansi(hg,You set your age to %0.%RYour birthdate has been randomly set to: [xget(%#,birthdate)].%RIf you would like a different random birthday you can use the command again. %RIf you would like a specific birthday, +request.)]))
+&CMD-+AGE Demographic Commands=$+age *:think pemit(%#,switch(0,isnum(%0),ansi(hr,Your age must be a number.),lte(%0,v(max_age)),ansi(hr,You cannot be that old without special staff permission. Contact a member of staff.),gte(%0,v(min_age)),ansi(hr,You cannot be that young without special staff permission.  Contact a member of staff.),[set(%#,birthdate:[RANDOM_BDAY(%0)])][ansi(hg,You set your age to %0.%RYour birthdate has been randomly set to: [birthdate(%#)].%RIf you would like a different random birthday you can use the command again. %RIf you would like a specific birthday, +request.)]))
 &CMD-+FACTION Demographic Commands=$+faction *:think pemit(%#,switch(0,t(match(factions(),%0)),ansi(hr,That is not a valid faction.  Use one of: [factions()].),ansi(hg,You set your faction to %0.)[set(%#,rank:)][set(%#,faction:[trim(capstr(%0))])]))
 &CMD-+FULLNAME Demographic Commands=$+fullname *:think pemit(%#,ansi(hg,You set your full name to %0.))[set(%#,fullname:%0)]
 &CMD-+ORG Demographic Commands=$+org *:think pemit(%#,switch(0,u(#FS3SKILL_CGINFO/fun_is_valid_org,%0),ansi(hr,That is not a valid org. Use one of: [orgs()].),ansi(hg,You set your organization to %0.)[set(%#,org:[trim(capstr(%0))])]))
@@ -622,7 +622,6 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.0,Chargen exit pa
 &CMD-+RANK Demographic Commands=$+rank *:think pemit(%#,switch(0,isvalidrank(xget(%#,faction),%0),ansi(hr,That is not a valid rank for your faction.),ansi(hg,You set your rank to [prettify(%0)].)[set(%#,rank:[prettify(%0)])]))
 @DESCRIBE Demographic Commands=Chargen commands for setting demographic information.
 @STARTUP Demographic Commands=@set me=!no_command
-&FUN_RANDOM_BIRTHDATE Demographic Commands=[set(%#,birthdate:[random_bday()])]
 
 &FUN_IS_VALID_FACTION Chargen Info Functions=t(match(factions(),%0))
 &FUN_IS_VALID_ORG Chargen Info Functions=t(match(orgs(),%0))
