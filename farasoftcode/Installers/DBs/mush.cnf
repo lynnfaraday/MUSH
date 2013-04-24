@@ -14,20 +14,23 @@
 # Name of your MUSH. Please change this.
 mud_name PennMUSH
 
-# The web address of your MUSH. If this is nonempty, then all login
-# screens will be prefixed with <!--  and suffixed with -->
-# Any HTTP clients trying to access it will be redirected to this url.
+# The web address of your MUSH. If this is nonempty, people attemping to
+# connect to your MUSH with a web browser will be redirected to this
+# URL. Set to the address of a web client, or your MUSH's website.
 # mud_url http://www.pennmush.org
-mud_url 
+mud_url
 
 # The port it's running on. See also ssl_port, later.
 port 4201
 
 # Should we listen only on a specific IP address? If your host has
-# multiple IP addresses, put the ip address to listen on here
-# Example: ip_addr 128.32.243.78
+# multiple IP addresses, put the ip address to listen on here.
+# Example:
+# ip_addr 128.32.243.78
+# If you want to force only IPv4 addresses but  don't want to limit to
+# just one, use '0.0.0.0'. Similiarly, to force IPv6, use '::'.
 # Otherwise, just leave it blank.
-ip_addr 
+ip_addr
 
 # Should the MUSH attempt to resolve IP numbers to hostnames?
 # If yes, you'll see hostnames on the wizard WHO. If no, IP numbers.
@@ -138,7 +141,7 @@ access_file access.cnf
 # 'Lessa', 'Dracula', 'Hercules', 'Scooby', 'Nancy Drew', etc,
 # depending on what type of MUSH you are running
 names_file names.cnf
-
+  
 ###
 ### Attribute (chunk) cache
 ###
@@ -190,7 +193,7 @@ ssl_port 0
 # If your host has multiple IP addresses, put the ip address to 
 # listen on here. Otherwise, leave it blank to listen on all
 # addresses if SSL is in use.
-ssl_ip_addr 
+ssl_ip_addr
 
 # The file containing the MUSH server's certificate and private key,
 # concatenated together, and with no password on the private key.
@@ -198,7 +201,7 @@ ssl_ip_addr
 # owner. If this is commented out, the server will not present a
 # certificate, so clients that attempt to authenticate the server
 # will fail.
-ssl_private_key_file server-key.crt
+ssl_private_key_file  server-key.crt
 
 # The file containing one or more certificates of certifying authorities
 # that the server should trust to certify clients who connect and
@@ -210,6 +213,10 @@ ssl_ca_file /usr/share/ssl/certs/ca-bundle.crt
 # Are clients *required* to present a valid certificate in order to
 # make an SSL connection?
 ssl_require_client_cert no
+
+# Filename to use as a unix-domain socket for talking to the ssl
+# slave
+socket_file data/netmush.sock
 
 ###
 ### Limits, costs, and other constants
@@ -321,6 +328,13 @@ call_limit 100
 # idea. Remember there are 1000 milliseconds in a second.
 queue_entry_cpu_time 1500
 
+# The maximum number of Q registers one level of qregs can have. That is:
+# each localize(), ulocal(), etc will allow <max_named_qregs> to be set.
+# This is in addition to the default 36 of a-z and 0-9. For old behavior,
+# use 0. A very high limit will let an abusive player suck up quite a lot
+# of RAM.
+max_named_qregs 50
+
 # How many channels total can be created?
 # This doesn't allocate memory, it just sets a maximum.
 max_channels 200
@@ -345,7 +359,7 @@ chan_cost 1000
 # How likely should it be that noisy whispers are noticed by other
 # players in the room? (Others see: John whispers to Mary.)
 # Use a number from 0 to 100
-whisper_loudness 100
+whisper_loudness	100
 
 # the highest allowable dbref -- you can't build more than this
 # many objects. if you don't want such a limit, leave this set
@@ -398,7 +412,7 @@ exit_cost 1
 purge_interval 10m1s
 
 # How often should we run a dbck to check db consistency? (seconds)
-dbck_interval 9m59s
+dbck_interval  9m59s
 
 # How often should we perform topology warning checks?
 # Default is 1 hour. If you set this to 0, timed MUSH-wide checks 
@@ -422,7 +436,7 @@ player_name_len 16
 # The maximum number of aliases a player may have simultaneously.
 # Setting this to 0 disables aliases. To allow an unlimited number
 # of aliases, set this to 4000 or so.
-max_aliases 3
+max_aliases	3
 
 # Limit the number of objects players can own.
 use_quota yes
@@ -458,18 +472,23 @@ dump_warning_5min
 dump_warning_1min 
 dump_message 
 dump_complete 
+# dump_warning_5min GAME: Database save in 5 minutes.
+# dump_warning_1min GAME: Database save in 1 minute.
+# dump_message GAME: Saving database. Game may freeze for a few moments.
+# dump_complete GAME: Save complete. 
 
 
 ### 
 ### Filenames
 ###
 
-# Text files shown on connection, as message of the day,
-# as wizard message of the day, on quit, to newly created players,
-# when logins are disabled, when player creation is disabled,
-# and when a guest logs in. These must either be the path to
-# a text file, or a #dbref/attrname to be evaluated and shown.
-# dbref/attrs are passed the port/descriptor as %0.
+# Text files shown on connection, as message of the day, as wizard
+# message of the day, on quit, to newly created players, when logins
+# are disabled, when player creation is disabled, and when a guest
+# logs in. These must either be the path to a text file, or a
+# #dbref/attrname to be evaluated and shown.  dbref/attrs are passed
+# the port/descriptor as %0. If it's a message shown to a connected
+# player, their dbref is also passed as %1.
 connect_file txt/connect.txt
 motd_file txt/motd.txt
 wizmotd_file txt/wizmotd.txt
@@ -479,6 +498,13 @@ down_file txt/down.txt
 register_create_file txt/register.txt
 guest_file txt/guest.txt
 full_file txt/full.txt
+
+# Text file shown when someone uses WHO/DOING/SESSION at the login
+# screen. If empty, the default WHO output is shown. If an obj/attr
+# is given, you can use a softcoded WHO at the login screen. %2 will
+# be the arg given (for 'WHO foo').
+# OPTIONAL
+# who_file
 
 # The equivalent files in html, shown to Pueblo clients.
 connect_html_file txt/connect.html
@@ -490,6 +516,8 @@ down_html_file txt/down.html
 register_create_html_file txt/register.html
 guest_html_file txt/guest.html
 full_html_file txt/full.html
+# OPTIONAL
+# who_html_file
 
 # The big text files. New ones can be added by setting up
 # a new subdirectory of game/txt as described in game/txt/README,
@@ -504,19 +532,10 @@ full_html_file txt/full.html
 help_command help txt/help.txt
 help_command news txt/news.txt
 ahelp_command ahelp txt/help.txt
-ahelp_command anews txt/news.txt
 restrict_command ahelp admin
+ahelp_command anews txt/news.txt
 restrict_command anews admin
 
-### Config directive for IDENT.
-### If you want to do ident (RFC1143) lookups, set use_ident to "yes"
-### and select an ident_timeout to determine how long the MUSH
-### should wait for a response, in seconds. If you're using
-### INFO_SLAVE (in options.h), this is how long the info_slave waits.
-# Changing this while using info_slave requires a @shutdown/reboot
-# to make it take effect.
-use_ident yes
-ident_timeout 5s
 
 ###
 ### Logging
@@ -529,7 +548,7 @@ ident_timeout 5s
 ###
 
 # Filename to log important messages (startups, errors, shutdowns)
-error_log log/netmush.log
+error_log  log/netmush.log
 
 # Filename to log connections to
 connect_log log/connect.log
@@ -578,12 +597,10 @@ guests yes
 # or disable creation but enable registration for everyone.
 player_creation yes
 
-# If you use the shs password system, and your database was created
-# on a little-endian hardware architecture (such as an intel PC),
-# set this to 'yes'. If your database was created on a big-endian
-# hardware architecture (most non-intel systems), set this to 'no'.
-# If you port a db with shs passwords between systems, and the
-# passwords don't work, try changing this setting.
+# For 1.8.3p9 and later, this option is used to indicate the endianess
+# of the host system for password upgrades. If people aren't able to
+# log in with it set to yes, try changing to no. If that doesn't work,
+# just use @newpassword.
 reverse_shs yes
 
 # trigger @aconnect/@adisconnect in a connecting player's location
@@ -649,10 +666,16 @@ really_safe yes
 # Highly recomended.
 zone_control_zmp_only yes
 
-# When a player is nuked, his SAFE objects are @chowned to God.
-# If this is set to "yes", his non-safe objects are destroyed
-# If this is set to "no", they are chowned to God
+# When a player is nuked, his SAFE objects are @chowned to a player
+# dbref controlled by the probate_judge option.  If this is set to
+# "yes", his non-safe objects are destroyed If this is set to "no",
+# they are chowned to probate_judge
 destroy_possessions yes
+
+# This is the dbref of the player that objects and channels belonging
+# to a nuked player are chowned to. If this is an invalid or
+# non-player dbref, GOD is used. See destroy_posessions.
+probate_judge 1
 
 # Can we @link to an object?
 link_to_object yes
@@ -679,7 +702,7 @@ empty_attrs yes
 ###
 
 # Should we treat a missing number as 0 in things like add(3,)?
-# For TinyMUSH compatibility, the answer is 'no'.
+# For MUX compatibility, the answer is 'yes'.
 null_eq_zero yes
 
 # In PennMUSH, strings and db#s larger than #0 have traditionally
@@ -762,7 +785,7 @@ exits_connect_rooms no
 # wall_prefix Announcement:
 
 # Should we announce connections/disconnections to rooms and on channels?
-# If this is disabled, only MONITOR players will see connect/disconnect.
+# If this is disabled, only HEAR_CONNECT players will see connect/disconnect.
 # @aconnect/@adisconnect, however, are still triggered, so you can
 # softcode whatever connection monitor you like. Players will probably
 # object if you don't at least show them when someone connects in 
@@ -788,13 +811,6 @@ page_aliases no
 # "hi!", or not (producing <whatever> X says, ""hi!"). This also affects
 # the @*wall and say commands.
 chat_strip_quote yes
-
-
-# Should strlen(%r) be 1 or 2? Turning this option on will allow %r to be
-# used as a list delimiter, but might break formatting softcode that depends
-# on its length being 2.
-newline_one_char yes
-
 
 # Should object names be restricted to just ascii characters, or can
 # non-ascii (Accented letters, for example) be used as well if the
@@ -836,21 +852,23 @@ exit_flags
 #   Making this a default may speed up your server somewhat. This is
 #   definitely a good idea for rooms and players, and, depending on
 #   the compostion of your database, probably a good idea for things.
-# room_flags no_command
+room_flags no_command
 
 # -- Default flags for players
 
 # Players who are ENTER_OK can be given stuff.
 player_flags enter_ok
-# Players who are ANSI see attribute names hilighted.
-player_flags ansi
-# See the explanation for rooms and no_command.
-player_flags no_command
-player_flags unregistered
+
 # Players who are INHERIT allow all their objects to control them.
 # player_flags inherit
 
+# Players who are ANSI see attribute names hilighted.
+player_flags ansi
+player_flags color
 
+# See the explanation for rooms and no_command.
+player_flags no_command
+player_flags unregistered
 
 # -- Default flags for things
 
@@ -876,39 +894,16 @@ channel_flags player
 # mssp contact/you@yourgame.com
 # mssp hiring coders/1
 mssp ansi/1
+mssp XTERM 256 COLORS/1
 
 ###
 ### Reserved command names, and command and function aliases are in
 ### alias.cnf
 ###
 include alias.cnf
+
 ###
 ### Restrictions on command usage are in restrict.cnf
 ###
 include restrict.cnf
 
-
-# name of the monetary units. Uncomment before changing. By leaving it
-# commented, the translated value will be used.
-# OPTIONAL
-# money_singular Penny
-# money_plural Pennies
-# If you're not forking, you get a bunch of messages that you
-# can set to warn players when the dump is 5 minutes away,
-# 1 minute away, in progress, and finished. You can 
-# leave messages you don't want blank, but don't comment
-# them out or remove them from the file or you'll get the
-# default messages.
-# Leaving these undefined lets the game use the default, translated
-# messages.
-# OPTIONAL
-# dump_warning_5min GAME: Database save in 5 minutes.
-# dump_warning_1min GAME: Database save in 1 minute.
-# dump_message GAME: Saving database. Game may freeze for a few moments.
-# dump_complete GAME: Save complete. 
-# Prefixes for various broadcast messages
-# Leaving these commented lets the game use the translated default messages.
-# OPTIONAL
-# wizwall_prefix Broadcast:
-# rwall_prefix Admin:
-# wall_prefix Announcement:
