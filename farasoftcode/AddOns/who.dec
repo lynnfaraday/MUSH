@@ -75,7 +75,7 @@ think install_create(WHO_DB,Who Data,1,1,8.1,Data storage for the Who system.)
 @@ FUN_VISIBLE_PLAYERS
 @@ Uses lwho or mwho depending on whether the enactor is staff/mortal
 @@ --------------------------
-&FUN_VISIBLE_PLAYERS Who Functions=switch(isstaff(%#),1,lwho(),mwho()
+&FUN_VISIBLE_PLAYERS Who Functions=switch(isstaff(%#),1,lwho(),mwho())
 
 @@ --------------------------
 @@ FUN_IS_IN_TPROOM
@@ -139,7 +139,7 @@ think install_create(WHO_DB,Who Data,1,1,8.1,Data storage for the Who system.)
 @@ --------------------------
 
 @@ IC/OOC/AFK/NEW/STF status
-&STATUS Who Data=switch(1,match(loc(%0),v(IDLE_LOUNGE)),[ansi(hx,AFK)],isstaff(%0),[ansi(hb,STF)],u(#WHO_FUN,FUN_IS_IN_TPROOM,%0),[ansi(hm,IC)]%B,match(xget(%0,status),NEW),[ansi(hg,NEW)],match(xget(%0,status),IC),switch(xget(%0,rpsearch),1,[ansi(hR,IC)]%B,[ansi(hr,IC)]%B),[ansi(h,OOC)])
+&STATUS Who Data=switch(1,match(loc(%0),v(IDLE_LOUNGE)),[ansi(hx,AFK)],isstaff(%0),[ansi(hb,STF)],u(#WHO_FUN/FUN_IS_IN_TPROOM,%0),[ansi(hm,IC)]%B,match(xget(%0,status),NEW),[ansi(hg,NEW)],match(xget(%0,status),IC),switch(xget(%0,rpsearch),1,[ansi(hR,IC)]%B,[ansi(hr,IC)]%B),[ansi(h,OOC)])
 
 &NAME Who Data=name(%0)
 
