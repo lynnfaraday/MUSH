@@ -502,7 +502,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,8.1,FS3Com
 @@ --------------------------
 
 
-&FUN_DO_HIT FS3Combat Instance Parent=[setq(s,0)][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][switch(weaponstat(%qw,wpntype),explosive,setq(h,[xget(#FS3COMBAT_HITLOC,concuss_[u(fun_hitloc_type,%1)])]:Critical))][u(fun_combat_log,LETHAL:  weapon=[weaponstat(%qw,lethality)] special=%4 mod=[u(fun_combatstat,%0,lethal)])][setq(l,add(weaponstat(%qw,lethality),%4,u(fun_combatstat,%0,lethal)))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))]- [switch(1,match(%qh,MISS*),NEAR MISS!,gte(%qc,100),COVER stops the attack.[setq(s,1)],gte(%qr,100),ARMOR on [prettify(before(%qh,:))] stops the attack![setq(s,1)],[switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[setq(s,1)][u(fun_mod_combatstat,%qt,hitthisturn,1)][u(#FS3COMBAT_CMD_DMG/fun_do_damage,%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz)])]
+&FUN_DO_HIT FS3Combat Instance Parent=[setq(s,0)][setq(h,u(FUN_RANDOM_HITLOC,%1,sub(%qa,%qd),%2))][u(fun_combat_log,LETHAL:  weapon=[weaponstat(%qw,lethality)] special=%4 mod=[u(fun_combatstat,%0,lethal)])][setq(l,add(weaponstat(%qw,lethality),%4,u(fun_combatstat,%0,lethal)))][setq(c,u(FUN_COVER_MOD,%qt,%qa,%qw))][setq(r,u(FUN_ARMOR_MOD,%1,before(%qh,:),%qw))][setq(z,u(fun_random_damage,after(%qh,:),%ql,%qc,%qr))]- [switch(1,match(%qh,MISS*),NEAR MISS!,gte(%qc,100),COVER stops the attack.[setq(s,1)],gte(%qr,100),ARMOR on [prettify(before(%qh,:))] stops the attack![setq(s,1)],[switch(%qz,C,[ansi(hr,Critical)],S,[ansi(hy,Serious)],M,[ansi(hb,Moderate)],[ansi(hg,Light)])][switch(weaponstat(%qw,dmgtype),Stun,%B[ansi(h,Stun)])] wound to [prettify(before(%qh,:))][switch(%qc,>0,%B\(Reduced by Cover\))][switch(%qr,>0,%B\(Reduced by Armor\))].[setq(s,1)][u(fun_mod_combatstat,%qt,hitthisturn,1)][u(#FS3COMBAT_CMD_DMG/fun_do_damage,%1,v(real),[before(%qh,:)],%qw,weaponstat(%qw,dmgtype),%qz)])]
 
 @@ --------------------------
 @@ FUN_AUTO_ATTACK
@@ -539,10 +539,8 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,8.1,FS3Com
 @@   %qz = damage (set by FUN_DO_HIT)
 @@
 @@   %qe = explosive zone, modified by attack/def roll.
-@@  Note: Must reduce the lethality modifier for the concussion roll since
-@@  that's automatically to the head and a +80 lethality is a bit much :)
 @@ --------------------------
-&FUN_EXPLOSIVE_ATTACK FS3Combat Instance Parent=[setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][setq(e,switch(%qa,>0,%2,sub(%2,%qa)))][setq(e,switch(%qd,>%qa,add(%qe,sub(%qd,%qa)),%qe))][u(fun_combat_log,EXPLODE: target=%1 initzone=%2 finalzone=%qe)][u(fun_combat_msg,EXPLOSION!  [switch(%qe,0,[ansi(hr,Right Next To)],1,[ansi(hy,Pretty Close To)],2,[ansi(hg,Close To)],3,[ansi(hg,Far From)],[ansi(hg,Very Far From)])] [prettify(lcstr(%1))] [u(fun_auto_attack,%1,%qw,sub(u(fun_lethal_mod_for_zone,%qe),20))])][switch(and(%qs,weaponstat(%qw,shrapnel)),1,u(fun_do_shrapnel,%1,%qe))][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))]
+&FUN_EXPLOSIVE_ATTACK FS3Combat Instance Parent=[setq(t,switch(isvehicle(%1),1,u(fun_find_pilot,%1),%1))][setq(a,u(fun_roll_attack,%0,%qt,%3))][setq(d,u(fun_roll_defense,%0,%qt))][setq(w,u(fun_combatstat,%0,weapon))][setq(e,switch(%qa,>0,%2,sub(%2,%qa)))][setq(e,switch(%qd,>%qa,add(%qe,sub(%qd,%qa)),%qe))][u(fun_combat_log,EXPLODE: target=%1 initzone=%2 finalzone=%qe)][u(fun_combat_msg,EXPLOSION!  [switch(%qe,0,[ansi(hr,Right Next To)],1,[ansi(hy,Pretty Close To)],2,[ansi(hg,Close To)],3,[ansi(hg,Far From)],[ansi(hg,Very Far From)])] [prettify(lcstr(%1))] [u(fun_auto_attack,%1,%qw,u(fun_lethal_mod_for_zone,%qe)))])][switch(and(%qs,weaponstat(%qw,shrapnel)),1,u(fun_do_shrapnel,%1,%qe))][switch(and(%qs,isvehicle(%1)),1,u(fun_do_crew_damage,%1,%qz,before(%qh,:)))]
 
 @@ --------------------------
 @@ FUN_DO_SHRAPNEL
@@ -568,7 +566,7 @@ think install_create(FS3COMBAT_INSTANCE,FS3Combat Instance Parent,1,0,8.1,FS3Com
 @@ Determines the lethality modifier based on the explosive zone (0=close, 2+=far)
 @@ %0 = zone number
 @@ --------------------------
-&FUN_LETHAL_MOD_FOR_ZONE FS3Combat Instance Parent=switch(%0,0,50,1,0,2,-25,3,-50,-100)
+&FUN_LETHAL_MOD_FOR_ZONE FS3Combat Instance Parent=switch(%0,0,30,1,0,2,-25,3,-50,-100)
 
 @@ --------------------------
 @@ FUN_VALID_HITLOCS

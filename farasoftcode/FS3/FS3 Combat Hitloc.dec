@@ -42,7 +42,6 @@ think install_create(FS3COMBAT_HITLOC,FS3Combat Hit Locations,0,1,8.1,FS3Combat 
 
 &DEFAULT_SOLDIER FS3Combat Hit Locations=Chest
 &CREWHIT_SOLDIER FS3Combat Hit Locations=
-&CONCUSS_SOLDIER FS3Combat Hit Locations=Head
 
 &DMG_VIPER FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Tail:Normal Weapon:Normal Nose:Normal
 
@@ -58,7 +57,6 @@ think install_create(FS3COMBAT_HITLOC,FS3Combat Hit Locations,0,1,8.1,FS3Combat 
 
 &DEFAULT_VIPER FS3Combat Hit Locations=Body
 &CREWHIT_VIPER FS3Combat Hit Locations=Cockpit
-&CONCUSS_VIPER FS3Combat Hit Locations=Body
 
 &DMG_RAPTOR FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Cabin:Normal ECM:Normal
 
@@ -73,7 +71,6 @@ think install_create(FS3COMBAT_HITLOC,FS3Combat Hit Locations,0,1,8.1,FS3Combat 
 
 &DEFAULT_RAPTOR FS3Combat Hit Locations=Body
 &CREWHIT_RAPTOR FS3Combat Hit Locations=Cockpit Cabin
-&CONCUSS_RAPTOR FS3Combat Hit Locations=Body
 
 
 &DMG_HEAVY_RAIDER FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Cabin:Normal Weapon:Normal
@@ -90,7 +87,6 @@ think install_create(FS3COMBAT_HITLOC,FS3Combat Hit Locations,0,1,8.1,FS3Combat 
 
 &DEFAULT_HEAVY_RAIDER FS3Combat Hit Locations=Body
 &CREWHIT_HEAVY_RAIDER FS3Combat Hit Locations=Cockpit
-&CONCUSS_HEAVY_RAIDER FS3Combat Hit Locations=Body
 
 &DMG_RAIDER FS3Combat Hit Locations=Cockpit:Critical Controls:Critical Body:Vital Engine:Vital Right_Wing:Normal Left_Wing:Normal Weapon:Normal 
 
@@ -105,7 +101,6 @@ think install_create(FS3COMBAT_HITLOC,FS3Combat Hit Locations,0,1,8.1,FS3Combat 
 
 &DEFAULT_RAIDER FS3Combat Hit Locations=Body
 &CREWHIT_RAIDER FS3Combat Hit Locations=Cockpit
-&CONCUSS_RAIDER FS3Combat Hit Locations=Body
 
 
 &DMG_AA_BATTERY FS3Combat Hit Locations=Controls:Vital Weapon:Critical Body:Vital
@@ -118,7 +113,6 @@ think install_create(FS3COMBAT_HITLOC,FS3Combat Hit Locations,0,1,8.1,FS3Combat 
 
 &DEFAULT_AA_BATTERY FS3Combat Hit Locations=Body
 &CREWHIT_AA_BATTERY FS3Combat Hit Locations=
-&CONCUSS_AA_BATTERY FS3Combat Hit Locations=Body
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
