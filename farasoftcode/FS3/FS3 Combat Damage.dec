@@ -55,7 +55,9 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,8.1,FS3Comba
 @@   HEALING COMMANDS
 @@  @@@@@@@@@@@@@@@@@@@@@@
 
-&CMD-+DAMAGE-SCAN FS3Combat Damage Commands=$+damage/scan:@pemit %#=[line()]%R[ansi(h,Injured Characters In [name(%l)])]%R[ansi(h,Name[space(16)]Can Treat[space(4)]Healed By[space(5)]Damage Mod[space(5)]Status)][iter(lcon(%l),[setq(0,name(##))]switch(0,or(isplayer(##),isvehicle(%q0)),,damagemod(%q0),,%R[ljust(name(##),20)][ljust(switch(u(fun_any_can_be_treated,##),1,+,-),10)][ljust(u(fun_healed_by,##),15)][ljust(-[damagemod(%q0)],15)]))]%R%RSee [ansi(h,+damage <name>)] for a detailed damage report.%R[line()]
+&CMD-+DAMAGE-SCAN FS3Combat Damage Commands=$+damage/scan:@pemit %#=[line()]%R[ansi(h,Injured Characters)]%R[ansi(h,Name[space(16)]Healed By[space(5)]Damage Mod[space(5)])][iter(real_players(),[u(FUN_SHOW_DAMAGE_SCAN,name(##))])]%R%R[ansi(h,Damaged Vehicles \(In Your Room\))][iter(lcon(%l),[switch(isvehicle(name(##)),1,[u(FUN_SHOW_DAMAGE_SCAN,name(##))])])]%R%RSee [ansi(h,+damage <name>)] for a detailed damage report.%R[line()]
+
+&FUN_SHOW_DAMAGE_SCAN FS3Combat Damage Commands=switch(0,damagemod(%0),,%R[ljust(%0,20)][ljust(u(fun_healed_by,%0),15)][ljust(-[damagemod(%0)],15)])
 
 @@ %q0 = skill
 @@ %q1 = HEAL or REPAIR for attribute name
