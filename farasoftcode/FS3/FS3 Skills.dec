@@ -46,7 +46,10 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.1,Chargen exit pa
 @@ %q2=ruling attr or blank 
 @@ %q3=modifier or 0 
 @@ %q4=roll result
-&CMD-+ROLL FS3 Skill System=$^\+roll ([^-=\+]+)([\+-][^\+-]+)?([\+-].+)?$:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%1,%2,%3))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid skill rating.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),not(isnum(%q3)),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(rest(%0))]: [u(#FS3SKILL_FUN/fun_pretty_success_level,%q4)].))])
+@@
+@@ %qd (set by roll result) - raw dice
+
+&CMD-+ROLL FS3 Skill System=$^\+roll ([^-=\+]+)([\+-][^\+-]+)?([\+-].+)?$:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%1,%2,%3))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(%#,%q1,%q3,%q2))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid skill rating.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),not(isnum(%q3)),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] %N rolls [prettify(rest(%0))]: [u(#FS3SKILL_FUN/fun_pretty_success_level,%q4)]. \([u(#FS3SKILL_FUN/fun_show_raw_dice,%qd)]\)))])
 
 @set FS3 Skill System/CMD-+ROLL=regex
 
@@ -61,8 +64,10 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.1,Chargen exit pa
 @@   %q8 = B modifier  
 @@   %q9 = B result 
 @@ %qa = Opposed result text
+@@ %qd (set by roll result) = B's raw dice
+@@ %qe = A's raw dice
 
-&CMD-+ROLL-OPPOSED FS3 Skill System=$^\+roll ([^=]+)=([^\+-]+)([\+-][^\+-]+)?([\+-].+)? vs ([^=]+)=([^\+-]+)([\+-][^\+-]+)?([\+-].+)?$:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%2,%3,%4))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(pmatch(%1),%q1,%q3,%q2))][setq(5,u(#FS3SKILL_FUN/fun_parse_roll_params,%6,%7,%8))][setq(6,extract(%q5,1,1,|))][setq(7,extract(%q5,2,1,|))][setq(8,extract(%q5,3,1,|))][setq(9,roll_ability(pmatch(%5),%q6,%q8,%q7))][setq(a,u(#FS3SKILL_FUN/FUN_GET_OPPOSED_RESULT,%q4,%q9))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q6),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q6,skill))),pemit(%#,ansi(hr,%q6 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),and(t(%q7),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q7))),pemit(%#,ansi(hr,%q7 is not an attribute.)),and(t(%q8),not(isnum(%q8))),pemit(%#,ansi(hr,%q8 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] Opposed Roll -- [prettify(rest(%0))]%R<%T[capstr(%1)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q4)][space(10)][capstr(%5)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q9)]%R<%T%TNet Result: [u(#FS3SKILL_FUN/FUN_PRETTY_OPPOSED_RESULT,[capstr(%1)],[capstr(%5)],%qa)])]
+&CMD-+ROLL-OPPOSED FS3 Skill System=$^\+roll ([^=]+)=([^\+-]+)([\+-][^\+-]+)?([\+-].+)? vs ([^=]+)=([^\+-]+)([\+-][^\+-]+)?([\+-].+)?$:think [setq(0,u(#FS3SKILL_FUN/fun_parse_roll_params,%2,%3,%4))][setq(1,extract(%q0,1,1,|))][setq(2,extract(%q0,2,1,|))][setq(3,extract(%q0,3,1,|))][setq(4,roll_ability(pmatch(%1),%q1,%q3,%q2))][setq(e,%qd)][setq(5,u(#FS3SKILL_FUN/fun_parse_roll_params,%6,%7,%8))][setq(6,extract(%q5,1,1,|))][setq(7,extract(%q5,2,1,|))][setq(8,extract(%q5,3,1,|))][setq(9,roll_ability(pmatch(%5),%q6,%q8,%q7))][setq(a,u(#FS3SKILL_FUN/FUN_GET_OPPOSED_RESULT,%q4,%q9))][switch(1,and(isnum(%q1),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q1,skill))),pemit(%#,ansi(hr,%q1 is not a valid ability rating number.)),and(isnum(%q6),not(u(#FS3SKILL_FUN/FUN_IS_VALID_RATING,%q6,skill))),pemit(%#,ansi(hr,%q6 is not a valid ability rating number.)),and(t(%q2),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q2))),pemit(%#,ansi(hr,%q2 is not an attribute.)),and(t(%q3),not(isnum(%q3))),pemit(%#,ansi(hr,%q3 is not a valid modifier.)),and(t(%q7),not(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q7))),pemit(%#,ansi(hr,%q7 is not an attribute.)),and(t(%q8),not(isnum(%q8))),pemit(%#,ansi(hr,%q8 is not a valid modifier.)),u(#FS3SKILL_FUN/fun_notify_roll_results,%l,[ansi(hy,<FS3>)] Opposed Roll -- [prettify(rest(%0))]%R<%T[capstr(%1)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q4)] \([u(#109/fun_show_raw_dice,%qe)]\)[space(10)][capstr(%5)]: [u(#FS3SKILL_FUN/FUN_PRETTY_SUCCESS_LEVEL,%q9)] \([u(#109/fun_show_raw_dice,%qd)]\)%R<%T%TNet Result: [u(#FS3SKILL_FUN/FUN_PRETTY_OPPOSED_RESULT,[capstr(%1)],[capstr(%5)],%qa)])]
 
 @set FS3 Skill System/CMD-+ROLL-OPPOSED=regex
 
@@ -109,10 +114,16 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.1,Chargen exit pa
 @@ %2 = modifier
 @@ %3 = attribute (may be blank)
 @@
-@@ %q2 = die roll
+@@ %qd = die roll (available outside this function)
 @@ --------------------------
-&FUN_ROLL_ABILITY FS3 Skill Functions=localize([setq(0,u(FUN_NUM_DICE_TO_ROLL,%0,%1,%2,%3))][setq(2,u(FUN_ROLL_DICE,%q0))][u(fun_roll_result,%q2,%q0)])
+&FUN_ROLL_ABILITY FS3 Skill Functions=[setq(d,u(FUN_ROLL_DICE,u(FUN_NUM_DICE_TO_ROLL,%0,%1,%2,%3)))][u(fun_roll_result,%qd,u(FUN_NUM_DICE_TO_ROLL,%0,%1,%2,%3))]
 
+@@ --------------------------
+@@ FUN_SHOW_RAW_DICE
+@@ Shows the successes and failures.
+@@ %0 = die results
+@@ --------------------------
+&FUN_SHOW_RAW_DICE FS3 Skill Functions=[iter(%0,ansi(switch(##,>6,hg,hx),##))]
 
 @@ --------------------------
 @@ FUN_NUM_DICE_TO_ROLL
