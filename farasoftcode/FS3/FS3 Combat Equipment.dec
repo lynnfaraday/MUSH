@@ -64,10 +64,10 @@ think install_create(FS3COMBAT_DB_EQUIP,FS3Combat Equipment Stats,0,1,8.1,FS3Com
 @@ -------------------------------
 @@  EQUIPMENT STATS
 
-&WEAPON_HANDGRENADE_FRAG FS3Combat Equipment Stats=Fragmentation Hand Grenade|Athletic|Reactive|0|3|Explosive|Personal|0|0|0|40|15|Physical|0|1|0
-&WEAPON_HANDGRENADE_FLASH FS3Combat Equipment Stats=Flashbang Hand Grenade which blinds/deafens human targets for 5 secs.  No effect on Centurions.|Athletic|Reactive|-75|20|Explosive|Personal|0|0|0|40|10|Stun|0|0|0
-&WEAPON_GRENADELAUNCH_FRAG FS3Combat Equipment Stats=Fragmentation Grenade fired from a grenade launcher.|Firearms|Reactive|0|3|Explosive|Personal|0|0|0|150|15|Physical|0|1|0
-&WEAPON_MISSILE_HE  FS3Combat Equipment Stats=High Explosive Anti-Personnel Missile|Gunnery|Reactive|20|3|Explosive|Personal|0|0|0|5000|50|Physical|0|1|0
+&WEAPON_HANDGRENADE_FRAG FS3Combat Equipment Stats=Fragmentation Hand Grenade|Reaction|Reaction|0|3|Explosive|Personal|0|0|0|40|15|Physical|0|1|0
+&WEAPON_HANDGRENADE_FLASH FS3Combat Equipment Stats=Flashbang Hand Grenade which blinds/deafens human targets for 5 secs.  No effect on Centurions.|Reaction|Reaction|-75|20|Explosive|Personal|0|0|0|40|10|Stun|0|0|0
+&WEAPON_GRENADELAUNCH_FRAG FS3Combat Equipment Stats=Fragmentation Grenade fired from a grenade launcher.|Firearms|Reaction|0|3|Explosive|Personal|0|0|0|150|15|Physical|0|1|0
+&WEAPON_MISSILE_HE  FS3Combat Equipment Stats=High Explosive Anti-Personnel Missile|Gunnery|Reaction|20|3|Explosive|Personal|0|0|0|5000|50|Physical|0|1|0
 &WEAPON_MINE_HE FS3Combat Equipment Stats=Antiperssonel mine (such as a Claymore in modern terms)|Demolitions|3|25|3|Explosive|Personal|0|0|0|1|15|Physical|0|1|0
 &WEAPON_IED FS3Combat Equipment Stats=Improvised Explosive Device - aka booby trap|Demolitions|3|10|3|Explosive|Personal|0|0|0|1|15|Physical|0|1|0
 
@@ -96,11 +96,11 @@ think install_create(FS3COMBAT_DB_EQUIP,FS3Combat Equipment Stats,0,1,8.1,FS3Com
 &WEAPON_MISSILE_AA  FS3Combat Equipment Stats=Anti-Aircraft Missile|Gunnery|ECM|75|20|Ranged|Vehicle|0|0|0|10000|0|Physical|0|0|0
 &WEAPON_MISSILE_AP FS3Combat Equipment Stats=Armor Piercing Anti-Tank Missile|Gunnery|Piloting|75|70|Ranged|Vehicle|0|0|0|5000|0|Physical|0|0|0
 &WEAPON_MINE_AP FS3Combat Equipment Stats=Anti-Vehicle mine|Demolitions|3|15|70|Explosive|Vehicle|0|0|0|1|25|Physical|0|1|0
-&WEAPON_GRENADELAUNCH_AP FS3Combat Equipment Stats=Armor piercing Grenade fired from a grenade launcher.  Very effective against an individual Centurion or a vehicle but does not have as big of a blast radius.|Firearms|Reactive|0|20|Explosive|Vehicle|0|0|0|150|5|Physical|0|1|0
+&WEAPON_GRENADELAUNCH_AP FS3Combat Equipment Stats=Armor piercing Grenade fired from a grenade launcher.  Very effective against an individual Centurion or a vehicle but does not have as big of a blast radius.|Firearms|Reaction|0|20|Explosive|Vehicle|0|0|0|150|5|Physical|0|1|0
 &WEAPON_HMG FS3Combat Equipment Stats=Heavy machinegun.  Assumes tripod.|Firearms|Piloting|0|8|Ranged|Vehicle|1|100|1|2000|0|Physical|0|0|0
 &WEAPON_NUKE  FS3Combat Equipment Stats=Nuclear Missile|Gunnery|ECM|100|250|Explosive|Vehicle|0|0|0|10000|10|Physical|0|0|0
 &WEAPON_ECM FS3Combat Equipment Stats=ECM Package|ECM|ECM|0|0|Suppressive|Vehicle|0|0|0|10000|0|Physical|0|0|0
-&WEAPON_HANDGRENADE_AP FS3Combat Equipment Stats=Armor-Piercing Hand Grenade|Athletic|Reactive|0|10|Explosive|Vehicle|0|0|0|40|15|Physical|0|1|0
+&WEAPON_HANDGRENADE_AP FS3Combat Equipment Stats=Armor-Piercing Hand Grenade|Reaction|Reaction|0|10|Explosive|Vehicle|0|0|0|40|15|Physical|0|1|0
 &WEAPON_IED_AP FS3Combat Equipment Stats=Improvised Explosive Device - aka booby trap - designed with shaped charges or whatnot to hit armored targets|Demolitions|3|0|10|Explosive|Vehicle|0|0|0|1|15|Physical|0|1|0
 
 &ARMOR_HEAVY_VEST FS3Combat Equipment Stats=Military-Grade Kevlar Vest|Neck Chest Abdomen Groin|4|Personal
