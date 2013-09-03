@@ -473,6 +473,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.1,Chargen exit pa
 &HATTR_RULING_ATTR FS3 Skill Functions=
 &HATTR_CG_ERRORS FS3 Skill Functions=
 &HATTR_BONUS_POINTS FS3 Skill Functions=0
+&HATTR_BIRTHDATE FS3 Skill Functions=
 
 &HELP_+ROLL FS3 Skill Help=This game uses the [ansi(hg,FS3 Skills System)] by Faraday.%R%R[ansi(h,+roll <skill>[\+<attr>\]\[+/-mod\]>)] - Simple ability roll.%R[ansi(h,+roll <charA>=<skill>[\+<attr>\]\[+/-mod\]> vs <charB>=<skill>[\+<attr>\]\[+/-mod\]>)]%R%TMakes an opposed roll.%R%R[ansi(g,attribute and skill)] may be a name or a number to reflect a NPC's rating.%R[ansi(g,Mod)] is optional, to apply a + or - modifier to the roll.%R%RFor more information, see also: [ansi(h,+help FS3)]
 
@@ -514,7 +515,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.1,Chargen exit pa
 
 &CMD-+RAISE FS3 Chargen Commands=$+raise *:think pemit(%#,u(fun_set,[trim(%0)],1))
 
-&CMD-+RESET FS3 Chargen Commands=$+reset:think pemit(%#,ansi(hg,You reset your abilities.))[set(%#,attributes:[iter(lattr(#FS3SKILL_DB/attribute_*),[capstr(lcstr(after(##,_)))]:2)])][iter(langskills bgskills actionskills quirks,set(%#,##:))][set(%#,langskills:[xget(#FS3SKILL_DB,default_lang)])]
+&CMD-+RESET FS3 Chargen Commands=$+reset:think pemit(%#,ansi(hg,You reset your abilities.))[set(%#,attributes:[iter(lattr(#FS3SKILL_DB/attribute_*),[capstr(lcstr(after(##,_)))]:2)])][iter(langskills bgskills actionskills quirks,set(%#,##:))][set(%#,langskills:[xget(#FS3SKILL_DB,default_lang)])][set(%#,actionskills:[xget(#FS3SKILL_DB,default_actionskills)])]
 
 &CMD-+QUIRK-ADD FS3 Chargen Commands=$+quirk/add *:think [setq(0,xget(%#,quirks))]pemit(%#,switch(1,u(#FS3SKILL_FUN/fun_has_quirk,%#,%0),ansi(hr,You already have that quirk.),match(%0,*|*),ansi(hr,Quirks may not contain the '|' character.),ansi(hg,You add the %0 quirk.)[set(%#,quirks:%q0[switch(words(%q0,|),>0,|)][squish(%0)])][setq(z,u(fun_check_errors,%#))]))
 
@@ -672,6 +673,7 @@ think iter([lattr(FS3 Skill Data/ACTIONSKILL_*)] [lattr(FS3 Skill Data/ATTRIBUTE
 &ATTRIBUTE_PRESENCE FS3 Skill Data=Personality - Charisma and Will
 
 &DEFAULT_LANG FS3 Skill Data=English
+&DEFAULT_ACTIONSKILLS FS3 Skill Data=
 &LANGUAGE_SKILLS FS3 Skill Data=English
 &BACKGROUND_SKILLS FS3 Skill Data=A science - astronomy, biology, chemistry, geology, mathematics, physics, etc.|A humanity - history, literature, psychology, philosophy, poetry, etc.|A profession or trade - cook, waitress, bartender, accountant, programmer, carpenter, brewer, blacksmith, etc.|A game - chess, roleplaying, poker, etc.|An art - sculpting, painting, sketching, photography, etc.|A form of expression - acting, singing, dancing, playing an instrument, writing|A sport - baseball, football, gymnastics, etc.|A craft or hobby - gardening, basketweaving, knitting, etc.|An unusual interest - detective novels, game show hosts, etc. |
 &PLAYER_VISIBLE_SHEETS FS3 Skill Data=1
