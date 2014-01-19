@@ -1,3 +1,0 @@
-# Lines starting with ( or < are usually channels
-^<
-^\(

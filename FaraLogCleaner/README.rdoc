@@ -1,3 +1,0 @@
-== README
-
-Faraday's log cleaner takes raw log files (presumably captured by your favorite MU* client) and strips out junk such as pages, channels, OOC chatter, coming/going messages, and various other soft- and hard-coded command spam. It also adds blank lines as necessary so everything is spaced out nicely.
