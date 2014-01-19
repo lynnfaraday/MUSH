@@ -1,0 +1,35 @@
+# Lines starting with ( or < are usually channels unless they're combat messages
+Replace|^<FS3.+$|     $&
+
+# Attacks
+Replace|^<COMBAT> .+ attacks|     $&
+Replace|^<COMBAT> .+ takes careful aim at|     $&
+Replace|^<COMBAT> .+ fires|     $&
+Replace|^<COMBAT> EXPLOSION|     $&
+Replace|^<COMBAT> CREW HIT|     $&
+Replace|^<COMBAT> SHRAPNEL|     $&
+
+# KOs and medics
+Replace|^<COMBAT> .+ has been \*\*KO'd\*\*|     $&
+Replace|^<COMBAT> .+ treats|     $&
+Replace|^<COMBAT> .+ attempts to treat|     $&
+Replace|^<COMBAT> .+ attempts to rally|     $&
+
+# Suppression
+Replace|^<COMBAT> .+ suppresses|     $&
+Replace|^<COMBAT> .+ tries to suppress|     $&
+
+# Subdue and Escape
+Replace|^<COMBAT> .+ subdues|     $&
+Replace|^<COMBAT> .+ tries to subdue|     $&
+Replace|^<COMBAT> .+ attempts to subdue|     $&
+Replace|^<COMBAT> .+ continues to subdue|     $&
+Replace|^<COMBAT> .+ attempts to escape|     $&
+Replace|^<COMBAT> .+ escapes from|     $&
+
+# Reload
+Replace|^<COMBAT> .+ reloads|     $&
+
+# Make sure standard MUSH configs are after all of the FS3 stuff
+^<
+^\(

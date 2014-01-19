@@ -1,0 +1,5 @@
+*.sqlite3
+tmp
+deploy/
+deploy.rb
+log/

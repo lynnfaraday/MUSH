@@ -1,0 +1,32 @@
+<h1>Faraday's RP Log Cleaner</h1>
+
+The log cleaner takes raw log files (presumably captured by your favorite MU* client) and strips out junk such as pages, channels, OOC chatter, coming/going messages, and various other soft- and hard-coded command spam.  It also adds blank lines as necessary so everything is spaced out nicely.
+
+<p>You can choose a log format, which tells the parser what things to keep and to ignore.  Available formats are:</p>
+
+<ul>
+    <li><strong>MUSH</strong> - Excludes MUSH-style channels. <Public> Faraday says, "Hello."
+    <li><strong>MUX</strong> - Excludes MUX-style channels. [Public] Faraday says, "Hello."
+    <li><strong>FS3 Combat</strong> - Handles logs with FS3 skill or combat messages, omitting spam while keeping important combat messages.
+    <li><strong>FS3 Combat Wiki</strong> - Same as <i>FS3 Combat</i>, but also adds pretty wikidot formatting.
+    <li><strong>TGG Battle </strong>- Handles battle logs from The Greatest Generation MUX, omitting spam while keeping important combat messages.
+    <li><strong>TGG Battle Wiki</strong> - Same as <i>TG Battle</i>, but also adds pretty wikidot formatting.
+</ul>
+
+<p><font color="red">This tool has been well-tested, but there are no guarantees.  If you're worried, keep copies of your original log files.</font></p>
+
+<hr/>
+
+<%= form_tag('parse.html',  multipart: true) do |f| %>
+   <b>Select A Log To Parse</b>
+   <%= file_field_tag "file" %>
+   
+   <br/>   <br/>
+
+   <b>Select A Format</b>
+   <%= select_tag "log_format", options_for_select(['MUSH', 'MUX', 'FS3 Combat', 'FS3 Combat Wiki', 'TGG Battle', 'TGG Battle Wiki']) %>   
+   
+   <br/>
+   <hr/>
+   <%= submit_tag("Parse Log")%>
+<% end %>

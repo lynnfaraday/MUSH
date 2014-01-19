@@ -1,0 +1,27 @@
+# Channels
+^\[
+
+# TGG Command Messages
+^<<OOC>>
+^<<ADMIN>>
+^<<Staff Commands>>
+^<<Game>> You have nommed
+^<<Game>> You have received a \+nom\!
+^<<Game>> That does not appear to be a valid person to \+nom\.
+^<<Illumination>>
+^<<Ground Combat>> You hear the sound of
+^<<Ground Vehicles>> You hear the sound of
+^<<XP Spends>>
+^<<Game>> .+ changes .* style
+
+# Stance modifiers
+Delay\s+[-\d]+\%
+Accuracy\s+[-\d]+\%
+Mods\s+[-\d]+\%
+Modifier\s+[-\d]+\%
+
+# Combag messages not prefaced by brackets
+^Ready to fire!
+^Your accuracy is
+^Not yet reloaded!
+Armageddon Clock
