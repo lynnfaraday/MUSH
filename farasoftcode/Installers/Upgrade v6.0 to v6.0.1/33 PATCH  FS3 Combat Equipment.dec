@@ -1,7 +1,0 @@
-@@ Faraday's FS3 System
-@@ Website: http://www.aresmush.com/
-@@
-@@ Visit the website for documentation, installation instructions, bug reports,
-@@ and more.
-
-+jobs/create CODE=Firearms Defense Ability/Previously in FS3, firearms weapons used a flat ability rating of '5' rather than a particular ability.  This is because there is no skill inherent in dodging bullets.  The same principle applies, but now the rating should be a '3' instead of 5 to avoid having people miss all the time.  Please adjust your defense skills as needed.

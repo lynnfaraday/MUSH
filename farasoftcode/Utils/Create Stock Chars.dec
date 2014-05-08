@@ -1,6 +1,0 @@
-@pcreate GameWiz=wizb00ts
-@set *GameWiz=!unreg
-@set *GameWiz=wiz
-@power *GameWiz=no_pay
-
-@pcreate Testdummy=test

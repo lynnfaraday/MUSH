@@ -1,4 +1,0 @@
-@fo me=@chan/add [ansi(y,Public)]
-@fo me=@chan/add [ansi(g,Newbie)]
-@fo me=@chan/add [ansi(r,Staff)]
-@chan/privs Staff=A
