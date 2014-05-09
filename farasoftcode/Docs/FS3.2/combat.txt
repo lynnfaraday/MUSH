@@ -1,0 +1,269 @@
+Any combat situation could be resolved either through consent or a set of simple Ability Rolls. The only trouble with either of these solutions is that they require a great deal of interpretation. If Harvey shoots Bob, what does he roll? If he gets a good success, what does it mean?
+ 
+If combat scenes are a regular occurrence, or if you have combat scenes involving large numbers of players, it helps to have a system to quickly, fairly, and consistently determine the outcome of the combat. The FS3 combat system is intended to fill that need. 
+ 
+**Always remember that the purpose of a MUSH is to roleplay. The combat system is designed to support roleplay, not replace it.**
+
++ Organizing Combats
+
+One person is the combat **organizer**.  This does not need to be a staff member, though it often is.  The organizer has special commands available, as well as special responsibilities, described in the [[[fs3:combat-organizer|Combat Organizer]]] help file.  
+
++ NPCs in Combat
+
+Typically the organizer will be controlling the NPCs in a combat, so NPC commands are discussed in the [[[fs3:combat-organizer|Combat Organizer]]] help file.  However, you don't have to be an organizer to control a NPC.  NPCs can act and be targeted the same as PCs.
+
++ Joining a Combat
+
+When you join a combat, you choose your **combatant type**.  
+
+* **Soldier** - is a ground trooper on foot. 
+* **Pilot** - is someone piloting or driving a vehicle. 
+* **Passenger** - is anyone inside a vehicle who is not the pilot. 
+* **NPC Master** – is someone there solely to control NPCs.  They cannot act directly or be targeted.
+* **Observer** - is someone just watching.  Technically they can control NPCs too, but it is better to use the NPC Master type for that because it helps the organizer keep track.
+
+Vehicles are special. You don't add them to combat directly; they get added when someone specifies that they are a pilot or passenger in a vehicle.  You may specify a general vehicle type (e.g. "Viper") and the system will generate a temporary vehicle for you, or you may specify a particular vehicle name from the vehicles database (e.g. "Viper-123").
+
+[[code]]
+ +combat/all - Shows all combats going on so you can find the one you need to join.
+ +combat/join <combat #>/<type>[/<vehicle>] – Joins combat 
+ +combat/type <type>[/<vehicle>] – Changes combat type 
+     Type must be one of: soldier, pilot, passenger observer or npcmaster 
+     Vehicle is required for passenger/pilot.  
+ +combat/leave - Leaves combat.
+
+ +gear/vehicles - Lists vehicle types
+ +vehicles - Lists specific vehicles
+[[/code]]
+
++ Combat HUD
+
+The Combat HUD shows the general status of combat at a glance, and can be viewed using +combat. 
+
+[[code]]
+<--------------------------------------------------------------------------------------- 
+< Name          Weapon/Vehicle      Damage    Stance/Action   Target 
+< 
+< Team 1 
+< Jane          Rifle (20)           .....     NOR/attack     Testdummy 
+< Testdummy     Rifle (393)          X....     NOR/attack     Bob Smith 
+< 
+< Team 2 
+< Bob Smith     Viper-9387g (plt)    XXXX.     NOR/pass 
+< J T           Viper-6938c (plt)    X....     NOR/attack     Testdummy 
+< 
+< Observers/NPCMasters: 
+< Faraday 
+<---------------------------------------------------------------------------------------
+[[/code]]
+
+The Combat HUD shows who's involved in the combat, what teams they're on (teams are 
+just a way of grouping characters for easy reference), and other important information.
+
++ Turns
+
+Combat is organized into turns, generally representing a few seconds. Each turn, everyone involved gets to pose and act. The general flow of combat is: 
+ 
+# Pose the results of what happened //last// turn and what you are going to do //this// turn.
+# Enter your action for this turn into the combat system.
+# When everyone has posed and selected their action, the organizer triggers a new turn. 
+# The system rolls the necessary (virtual) dice to figure out what happened, and spits out a summary.
+# Rinse and repeat until the combat is over. 
+
+Actions within a turn are resolved in order based on an Ability Roll for initiative.  Damage takes effect immediately, but knockout is not determined until the end of a turn.  That means even if someone is knocked out, they can still get one last shot off.
+
++ Stance
+
+Stance reflects your general attitude and behavior in the combat, and offers modifiers to attack and defense.
+
+||~ Stance ||~ Description ||~ Effects ||
+||Normal ||The default stance. ||None ||
+||Banzai ||An overly offensive, almost reckless stance. || +3 to attack rolls, -3 to defense rolls ||
+||Evade||Dodging and weaving.||-3 to attack rolls, +3 to defense rolls ||
+||Cautious||Taking it slow and careful.||-1 to attack rolls, +1 to defense rolls ||
+||Cover||You are partially behind cover, such as a wall or tree.||Attacks aimed at you have a chance of hitting the cover instead of you.||
+
+You may change stance at any time during the turn.
+
++ Gear
+
+When you first join a combat, you will be set up with a default weapon and no armor.  Vehicle armor is factored in when a vehicle is targeted; you don't have to do anything special.  If you want to change weapons or armor, use the gear commands.
+
+[[code]]
++gear/weapons - Lists weapon stats 
++gear/armor - Lists armor stats 
+
++combat/weapon <weapon> - Sets weapon. 
++combat/armor <armor> - Sets armor. 
+[[/code]]
+
+You can change gear at any point during the combat, but the organizer will decide whether you can do anything else that turn.  Picking up a gun and shooting it can generally be done in a single turn, but donning a full suit of armor would occupy a character for some time.
+
++ Actions
+
+Characters may take one Basic or Advanced Action per turn, and a number of Free Actions.
+
+++ Basic Actions
+
++++ Attack
+
+The basic attack command hits at a single target with your currently equipped weapon. Special options to the basic attack command allow you to execute a short (3-round) burst if the weapon allows, specify the range, or make a called shot.  A called shot has a greater chance of hitting your intended hit location (or nearby), but also has a higher chance of missing completely.
+
+[[code]]
++combat/attack <target>[/<specials, see below>] 
+
+Specials are optional, and can include: 
+* burst - Fire a short (3-round) burst. 
+* range=<short medium long> - If not specified, system assumes range is short. 
+* called=<location> - Perform a called shot to a particular hit location. 
+   Use +combat/hitlocs <target> to see a list of valid hit locations. 
+
+Use commas to separate multiple options.
+[[/code]]
+
++++ Aim
+
+Spend a turn taking careful aim at a target, and get a bonus to hit them next turn.
+
+[[code]]
++combat/aim <target> - Takes careful aim.
+[[/code]]
+
++++ Reload
+
+Reload a weapon that has run out of ammo.  Some weapons may take multiple turns to reload.
+
+[[code]]
++combat/reload – Reloads a weapon.
+[[/code]]
+
++++ Treat
+
+You can treat an injured person during combat.  You can do this with vehicles too, to represent jury-rigged workarounds.  Treating a KO'd player has a chance of undo-ing the knockout.
+
+[[code]]
++combat/treat <name>
+[[/code]]
+
++++ Pass
+
+If you're not doing anything this turn, set your action to 'pass' so everyone knows.
+
+[[code]]+combat/pass[[/code]]
+
+++ Advanced Actions
+
++++ Full-Auto Fire
+
+If your weapon supports fully automatic fire, you can fire a long (10-round) burst at one or more targets.
+
+[[code]]
++combat/fullauto <list of one or more targets, separated by commas> - Fire a 
+   fully automatic (10-round) burst.  You can list up to 5 separate targets.
+[[/code]]
+
++++ Suppressive Fire
+ 
+You can perform suppressive fire to keep a target’s head down.  You won't hit them, but you'll impose a greater suppression modifier upon them than if you just targeted them directly.  Fully automatic weapons can suppress multiple targets at once.   Some electronic weapons (like the ECM system on a BSG Raptor) can also suppress targets.
+
+[[code]]
++combat/suppress <target> - Use suppressive fire
+    A full-auto weapon can specify a comma-separated list of up to 5 targets.
+[[/code]]
+
++++ Subdue/Disarm
+
+Subdue is a melee attack that does no damage but has a chance of subduing the target.   You can also use this action to simulate an attempted disarm.  Subdued targets may not act until they successfully escape or the attacker stops subduing them. 
+
+[[code]]
++combat/subdue <target> - Subdues a target. 
++combat/escape – Attempts to escape while subdued.
+[[/code]]
+
++++ Explosives
+
+When using an explosive weapon, you need to specify two groups of targets.  The first are those standing right next to the explosion, who get the full force of the blast.  The second group is outside of the most-deadly blast radius, but still in shrapnel range.   The blast radius and shrapnel range will vary from weapon to weapon, so it's up to the organizer's discretion to determine which targets fall into which groups.
+
+[[code]]
++combat/explode <right next to>/<nearby> - Uses an explosive weapon.
+   Each group should specify a comma-separated list of targets.
+[[/code]]
+
++++ Rally
+
+You can attempt to rally a knocked-out character.   This can reflect anything from slapping a lightly-wounded soldier on the face and yelling at him to 'snap out of it' to giving a big morale boosting speech to encourage a badly wounded comrade to keep fighting. This command only cancels the knockout; it doesn't reduce damage modifiers directly.  Thus it works best when you’re only moderately wounded. 
+
+[[code]]
++combat/rally <name>
+[[/code]]
+
+++ Free Actions
+
+Free Actions may be done in addition to your regular action, and typically include non-coded things like moving or speaking.  Changing gear and changing stance may also be considered free actions at the organizer's discretion. Be reasonable about what you can accomplish in a couple seconds; the organizer has final say over whether your actions are too much for one turn.
+
++ Damage
+
+There are no 'hit points' in FS3. Instead each wound is tracked separately, and you are given an overall damage modifier to die rolls based on the accumulated damage you've taken. The more seriously hurt you are (or your vehicle is), the less combat effective you will become, until eventually you won't be capable of doing anything but flailing around aimlessly.  Wounds that have partially healed or been treated with first aid impose a lesser penalty.
+ 
+There are five severity levels of damage.  They are described below using examples from firearms and unarmed combat.
+
+||~ Damage Level ||~ Firearms Example ||~ Unarmed Example || 
+|| Light || Just a graze. || Minor bruise. || 
+|| Moderate || Hollywood hero wound - hurts, but nothing serious. || Nice shiner or bloody nose. || 
+|| Serious ||  Serious bleeding, life-threatening if not treated. ||  Broken nose or mild concussion. || 
+|| Critical ||  Immediately life-threatening, possibly broken bones or organ damage. || Broken bone or serious concussion. || 
+ 
+[[code]]
++damage - Views your damage. 
++damage <name> - Views someone else's damage, PC, NPC or Vehicle 
+[[/code]]
+
+++ Damage Realism
+
+In the real world, combat injuries are often devastating and disabling, but most players don't find it fun to be laid up for weeks after an injury and then spend months in physical therapy.  Combat damage results are deliberately Hollywood-ized.
+
+You have a lot of freedom in terms of how you RP wounds, but please try to be reasonable and consistent.  If you RP having a punctured lung, then you're not going to be up and running a marathon the next day, no matter what the damage system tells you. 
+
+
++ Knockout
+
+The combat code will never kill you. The worst that will happen is you'll be knocked out, or KO'd. You can interpret that as being knocked unconscious, killed, writhing in pain, panicked, subdued, spinning out of control, dead in the water, or any other appropriate result – as long as you’re no longer fighting.  Treating wounds can help keep you from getting KO'd in the first place, by lowering your wound modifiers.
+
+Once you're KO'd, you can no longer use any combat commands. NPCs are automatically removed from combat when KO'd. PCs stay in the fight but can't act or be targeted.   PCs can spend a luck point to undo a KO. The ‘rally’ and 'treat' combat commands also have a chance of undoing a KO.  
+
+[[code]]
++combat/hero - Spends a luck point to undo a KO. 
++combat/treat <name> – Apply first aid or jury-rigging. 
++combat/rally <name> - Rally a KO’d character.
+[[/code]]
+
++ Luck
+
+Each turn, you may spend a luck point to get a bonus to ONE of the following: 
+
+• Attack 
+• Defense 
+• Initiative 
+ 
+These bonuses last only a turn, so don’t waste them. 
+ 
+You can also spend luck to recover from a knockout or move damage from one hit location to another immediately after an injury. Note that recovering from a knockout doesn’t actually reduce your damage modifier, so it works best when you were KO’d after being only moderately wounded. 
+
+[[code]]
++combat/luck <attack, defense or initiative> - Spend a luck point this turn. 
++combat/hero - Stay in the fight after a KO. 
++damage/move <#>=<location> - Spends a luck point to move the hit location of a wound to yourself.  
+      This has no game benefit, but is for cosmetic/RP purposes.
+[[/code]]
+
++ Healing
+
+Wounds heal automatically over time. Doctors can speed the healing process using their medical skill, and wounds heal faster when you’re in a designated hospital room. Vehicles may be 'healed' (repaired) as well.  Some weapons do "stun" damage, which heals much faster than regular damage.
+
+**Note:** The healing times in FS3 are deliberately fast.  See the note on damage realism above.  The healing times specifically do not account for broken bones, organ damage, or other special damage effects that you may inflict.  These must be handled through RP.
+
+[[code]]
++heal <name> - Designates a patient. Continues until they’re fully healed. 
++healing – Shows who you’re healing. 
++stopheal <name> - Stops healing someone.
+[[/code]]

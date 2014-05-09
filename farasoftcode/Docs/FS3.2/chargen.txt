@@ -1,0 +1,90 @@
+The general steps in Character Creation are:
+
+# Describe your background. 
+# Choose your abilities. 
+# Choose your quirks.
+
++ Background
+
+The most important part of a character is their background. We are not looking for a novel, just a paragraph or two describing the character’s backstory.  In particular, your background should cover:
+    
+* Who is your character?
+* Why are they here?
+* Anything else about your character that might serve as a RP hook, or that you want to make note of. 
+
++ Abilities
+
+You start with a pool of 60 ability points to spend on Abilities.  See [[[FS3:Basics|FS3 Basics]]] for more info about abilities.  You will need to choose //Action Skills//, which are important for the action of the game, //Background Skills// to round out your character, and //Language Skills// for the languages you speak.
+
+* Attributes cost 1 point per rating. 
+* Action and Background Skills cost 1 point per rating.
+* Language Skills cost 2 points per language.
+
+**Note**:  Chargen will start you off with recommended attributes, skills and languages automatically, but those come out of your pool of chargen points.  You don't get anything for free.
+
+++ Ability Limits
+
+There are certain restrictions on what abilities you can purchase.
+
+* You must take at least one language.
+* You must take at least 2 background skills.
+* You can't spend more than 12 points on attributes
+* All attributes must be at least level 1.
+* You can't spend more than 32 points on action skills.
+* You can't have more than 3 abilities above level 7.
+
+++ What Skills Should I Pick?
+
+Your character sheet is not meant to be an exhaustive list of everything your character 
+knows. That would be silly. Here is some guidance for what skills to choose: 
+ 
+• Choose any Action or Language Skills that your character would know. They are likely to come up during the course of the game, so take them if they apply. 
+ 
+• Choose Background Skills that are **important** to your character. Just because you played “catch” as a child doesn’t mean you need to take the Baseball skill (unless you went on to play it in college). Take Background Skills to reflect hobbies, interests, education (college major, perhaps), or professional skills not reflected by Action Skills. 
+ 
+• Things that are 'common knowledge' or basic human abilities can be done even with a 0 skill rating.  For example, in a modern setting you would not need to take a point in Computers just to use your smartphone, nor would you need a point in Running to run a footrace or Medicine to put ice on a sprained ankle.  Attributes can be used for these basic tasks.
+
+++ What Levels Should I Pick?
+
+Even rating 1 in FS3 represents a fair amount of training and practice in a skill, and gives you a roughly 57% chance of success on a routine roll.  Ratings 4 and higher indicate professional level of competence, meaning you could conceivably do it for a living.	It would be rare for someone to have a hobby at higher than rating 3 unless he is a really serious hobbyist!
+
+++ Setting Ruling Attributes
+
+Each ability is tied to a particular attribute.  The attribute's level is added to the skill level when you roll.  You can see which attributes are tied to which skills using the +rulingattr command in-game.   Background Skills default to "Mind", but you can change this with the +rulingattr command.  Be sure to do this for any physical or performance-based background skills.
+
+++ Can I Take Social Skills
+
+Yes!  Social skills like leadership, seduction and con are all fair game for skills.  BUT, be aware that people tend to be sensitive when poses and social skill rolls are out of sync:
+
+[[code]]
+Joe says, "Heeeeyyyy baby."   
+<FS3> Joe rolls Seduction:  Amazing Success!
+Everyone eyerolls.
+[[/code]]
+
+Also, social skill rolls are not a form of mind control.  The 'target' of your roll still has free will to determine their own reaction.
+
++ Quirks
+
+Quirks are **little** things that make your character unique and colorful. They can be physical, social, virtues, vices, or other interesting traits. Quirks have no specific game effect. They could provide modifiers to rolls at the Storyteller’s discretion, but mostly they are just there to spur roleplay. Be creative!
+
+Quirks are meant to be personality traits or //trivial// advantages.  They are not for power gaming.  “Photographic Memory” and “God’s Gift To Women” are too powerful to be quirks, but “Never Forgets a Face” and “Girl In Every Port” are legitimate alternatives.
+
+Why would you want to pick "negative" quirks? Well, first of all - it's fun to play flawed characters. You can get a lot of roleplay mileage out of them. Also keep in mind that many quirks are two-edged swords, and can work for you or against you depending on the situation.
+
+++ Choosing Quirks	
+
+* Quirks are free; they do not cost ability points.
+* You must have at least 2 and no more than 4 quirks.
+* There is no list of quirks; you can choose whatever you want.  
+
+Quirks just reflect **notable** qualities of your character. What's notable for one character may not be notable for another. Just because someone picks 'Honest' as a quirk does not mean you have to have that quirk to be honest.
+
+++ Quirk Lists
+
+Good resources for choosing quirks:
+
+* [http://www.darkworldrpg.com/lore/flaws.php Darkworld RPG Flaws List]
+* [http://ideonomy.mit.edu/essays/traits.html Big List of Personality Traits]
+* [http://rpg.ashami.com/ Ash's Guide to Personality and Background]
+* [http://www.personalitypage.com/html/portraits.html Meyers Briggs Personality Types]
