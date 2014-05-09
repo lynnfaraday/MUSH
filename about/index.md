@@ -1,7 +1,6 @@
 ---
 layout: page
 title: About
-permalink: /about/
 ---
 
 I've been MUSHing since the early 90's.  My first big staffing (and coding) break came on **Babylon 5 MUSH**, which is where I first adopted the staff monicker of "Faraday" (a nod to scientist [Michael Faraday](http://en.wikipedia.org/wiki/Michael_Faraday), who I was studying at the time.)  

@@ -7,9 +7,6 @@ copyright: "Copyright 2014 by Linda Naughton"
 baseurl: ""
 siteroot: "/MUSH"
 url: "http://www.aresmush.com"
-pages:
-    - about.md
-    - addons/index.md
 username: lynnfaraday
 category-list: [ install, addons, core, fs3 ]
 
