@@ -9,7 +9,7 @@ title: Addons
   {% if page.resource == true %}
   {% for pc in page.categories %}
   {% if pc == "addons" %}
-  * <a href="{{ page.url }}">{{ page.title }}</a> - {{ page.description }}
+  * <a href="{{site.siteroot}}/{{ page.url }}">{{ page.title }}</a> - {{ page.description }}
   {% endif %}   
   {% endfor %}  
   {% endif %}  

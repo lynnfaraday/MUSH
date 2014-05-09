@@ -9,7 +9,7 @@ The **Core Modules** are the heart of the codebase.  They provide essential func
   {% if page.resource == true %}
   {% for pc in page.categories %}
   {% if pc == "core" %}
-  * <a href="{{ page.url }}">{{ page.title }}</a>
+  * <a href="{{site.siteroot}}/{{ page.url }}">{{ page.title }}</a>
   {% endif %}   
   {% endfor %}  
   {% endif %}  
