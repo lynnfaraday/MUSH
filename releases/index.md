@@ -9,7 +9,7 @@ The pages below describe the available code versions.
   {% if page.resource == true %}
   {% for pc in page.categories %}
   {% if pc == "release" %}
-  * <a href="{{ page.url }}">{{ page.title }}</a>
+  * <a href="{{site.siteroot}}/{{ page.url }}">{{ page.title }}</a>
   {% endif %}   
   {% endfor %}  
   {% endif %}  
