@@ -42,6 +42,8 @@ Some conclusions from the numbers:
 
 ## Detailed Results
 
+Here are the detailed percentages for FS3.
+
 ### Unopposed Rolls
 
 The following table shows the chance of success at various difficulty levels.  For example, a newbie doing a routine task has a 57% chance of success. 
