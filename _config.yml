@@ -1,10 +1,16 @@
 # Site settings
-name: Dat site title tho
-title: Your awesome title
-email: your-email@domain.com
-description: "Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description."
+name: Faraday's Softcode
+title: Code for PennMUSH
+email: faraday@aresmush.com
+description: "Utilities designed for PennMUSH online text-based game servers."
+copyright: "Copyright 2014 by Linda Naughton"
 baseurl: ""
-url: "http://yourdomain.com"
+url: "http://www.aresmush.com"
+pages:
+    - about.md
+    - addons/index.md
+username: lynnfaraday
+category-list: [ install, addons, core, fs3 ]
 
 # Build settings
 markdown: kramdown

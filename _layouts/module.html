@@ -1,0 +1,26 @@
+---
+layout: default
+---
+<div class="post">
+
+  <header class="post-header">
+    <h1>{{ page.title }}</h1>
+  </header>
+
+  <b>{{ page.description }}</b>
+  <article class="post-content">
+  {{ content }}
+  </article>
+
+</div>
+
+{% if page.categories %}
+<hr>
+<p>
+    <b>Categories</b> [
+{% for pc in page.categories %}
+   <a href="/{{pc}}">{{ pc }}</a> 
+{% endfor %}
+]
+</p>
+{% endif %}

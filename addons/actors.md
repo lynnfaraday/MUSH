@@ -1,5 +1,10 @@
-# Actors
-Tracks character actors.
+---
+layout: module
+title: Actors
+resource: true
+categories: [ addons ]
+description: Tracks character actors.
+---
 
 ## Features 
 * Maintains a searchable database of actors that players have chosen for their characters.
@@ -16,9 +21,6 @@ Tracks character actors.
       See +actors2 for more pages.
       ##+ ---------#### --------####+ --------#### --------#### -----+
 
-
-## Requirements 
-* Core Modules
 ## Setup 
 None
 
