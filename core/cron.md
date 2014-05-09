@@ -1,6 +1,6 @@
 ---
 layout: module
-title: Myrddin's Cron
+title: Cron (Myrddin's)
 resource: true
 categories: [ core ]
 description: Runs tasks on a periodic schedule.

@@ -1,6 +1,6 @@
 ---
 layout: module
-title: Myrddin's BBS
+title: BBS (Myrddin's)
 resource: true
 categories: [ core ]
 description: A bulletin board system.
