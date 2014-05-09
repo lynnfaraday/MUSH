@@ -5,7 +5,8 @@ title: Releases
 
 The pages below describe the available code versions.
 
-  {% for page in site.pages %}
+  {% assign sorted_pages = site.pages | sort:"name" %}
+  {% for page in sorted_pages %}
   {% if page.resource == true %}
   {% for pc in page.categories %}
   {% if pc == "release" %}

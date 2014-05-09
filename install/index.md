@@ -5,7 +5,8 @@ title: Installation
 
 These documents talk about how to install and upgrade the code.
 
-  {% for page in site.pages %}
+  {% assign sorted_pages = site.pages | sort:"name" %}
+  {% for page in sorted_pages %}
   {% if page.resource == true %}
   {% for pc in page.categories %}
   {% if pc == "install" %}
