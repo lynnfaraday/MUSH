@@ -5,6 +5,7 @@ email: faraday@aresmush.com
 description: "Utilities designed for PennMUSH online text-based game servers."
 copyright: "Copyright 2014 by Linda Naughton"
 baseurl: ""
+siteroot: "/MUSH"
 url: "http://www.aresmush.com"
 pages:
     - about.md

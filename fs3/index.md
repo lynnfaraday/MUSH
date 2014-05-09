@@ -20,13 +20,13 @@ The FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All right
 
 ## Configuration
 
-There is a lot to customize in FS3.  See the [Configuration Instructions](/fs3/configuration.html).
+There is a lot to customize in FS3.  See the [Configuration Instructions]({{site.siteroot}}/fs3/configuration.html).
 
 ## Mechanics
 
-Want a behind-the-scenes look at FS3 to understand how the code actually works?  Check out the [Mechanics](/fs3/mechanics.html) page.  
+Want a behind-the-scenes look at FS3 to understand how the code actually works?  Check out the [Mechanics]({{site.siteroot}}/fs3/mechanics.html) page.  
 
-You might also be interested in a [Comparison](/fs3/comparison.html) between FS3 and other common dice systems.
+You might also be interested in a [Comparison]({{site.siteroot}}/fs3/comparison.html) between FS3 and other common dice systems.
 
 ## Credits
 

@@ -83,7 +83,7 @@ Now you can login as CodeWiz and continue the installation.
 
 ### Installers 
 
-You can find the installer versions on the [Releases](/releases) page.
+You can find the installer versions on the [Releases]({{site.siteroot}}/releases) page.
 
 The release package contains individual installer files for each code system.  These installers will automatically install the systems onto your game.
 
