@@ -1,4 +1,4 @@
-think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
+think install_create(TESTS,Tests,1,0,8.2,Unit tests.,CREATOR)
 
 @pcreate UnitTestDummy=brigls
 
@@ -52,7 +52,7 @@ think install_create(TESTS,Tests,1,0,5.0,Unit tests.,CREATOR)
 &TEST_CENSUS_01 Tests=Basic Census|+census
 &TEST_CENSUS_02 Tests=Setup Genders|think [set(me,sex:Female)][set(*unittestdummy,sex:male)]
 &TEST_CENSUS_03 Tests=Gender Census|+census/sex
-&TEST_CENSUS_04 Tests=Census Search|+census/search [name(me)]
+&TEST_CENSUS_04 Tests=Census Search|+census/search UnitTestDummy
 &TEST_CENSUS_05 Tests=Census Help|+help +census
 
 &TEST_COOKIE_01 Tests=Give a cookie.|+cookie UnitTestDummy
