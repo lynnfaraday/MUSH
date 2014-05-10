@@ -35,7 +35,7 @@ think install_create(CENSUS_DB,Census DB,1,1,8.1,Census system data.)
 &CMD-+orgs Census Commands=$+orgs:think pemit(%#,[line()]%R[ansi(h,Organizations)]%R[iter(u(fun_orgs),%R[prettify(##)])]%R%RSee [ansi(h,+orgs <name>)] for more info on an organization.%R[line()])
 &CMD-+org-info Census Commands=$+orgs *:think pemit(%#,switch(0,hasattr(#CENSUS_DB,ORG_[unprettify(%0)]),ansi(hr,No such org.),[line()]%R[ansi(h,Organization info for %0)]%R%R[u(#CENSUS_DB/ORG_[unprettify(%0)])]%R[line()]))
 
-&CMD-+positions Census Commands=$+positions:think pemit(%#,[line()]%R[ansi(h,Positions)]%R[iter(u(fun_positions),%R[prettify(##)])]%R%RSee [ansi(h,+positions <name>)] for more info on a position.%R[line()])
+&CMD-+positions Census Commands=$+positions:think pemit(%#,[line()]%R[ansi(h,Positions)]%R[iter(u(fun_positions),[switch(mod(#@,3),1,%R)][ljust(prettify(##),20)])]%R%RSee [ansi(h,+positions <name>)] for more info on a position.%R[line()])
 &CMD-+position-info Census Commands=$+positions *:think pemit(%#,switch(0,hasattr(#CENSUS_DB,POSITION_[unprettify(%0)]),ansi(hr,No such position.),[line()]%R[ansi(h,Position info for %0)]%R%R[u(#CENSUS_DB/POSITION_[unprettify(%0)])]%R[line()]))
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
