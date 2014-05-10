@@ -116,6 +116,10 @@ max # of points they can request.  If you set this to 0 they will not see a mess
 
     &BONUS_POINTS *Bob=5
     &MAX_BONUS_POINTS_REQUEST Skill Data=0
+    
+You can set up some default action skills, so everyone is suggested to start with them.  Nothing stops the player from getting rid of them, though.
+
+    &DEFAULT_ACTIONSKILLS Skill Data=Firearms:2
 
 > **A note about points and chargen:**
 > Players familiar with other systems will tend to highball their ancillary skill ratings when creating FS3 characters. In particular, they will tend to have too many skills in the 4-6 range. This range should be reserved for skills that are truly at a professional level of competence; something a character could make a living at. It would be unusual (but not impossible!) for someone to have that high of a rating in hobbies or casual interests.
