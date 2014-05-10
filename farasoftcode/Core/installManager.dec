@@ -20,16 +20,16 @@ think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\
 @describe Install Object Storage=Stores Faraday system objects.%R[u(credits)]
 
 &CREDITS Install Globals=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
-&VERSION Install Globals=8.1
+&VERSION Install Globals=8.2
 
 &CREDITS Install Manager=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
-&VERSION Install Manager=8.1
+&VERSION Install Manager=8.2
 
 &CREDITS Install DB=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
-&VERSION Install DB=8.1
+&VERSION Install DB=8.2
 
 &CREDITS Install Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
-&VERSION Install Object Storage=8.1
+&VERSION Install Object Storage=8.2
 
 @set Install Globals = WIZARD
 @set Install Globals = SAFE

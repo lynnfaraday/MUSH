@@ -19,7 +19,6 @@ think install_create(CHAN_CMD,Channel Alias Commands,1,0,8.2,Somewhat hacky way 
 &STARTUP Channel Alias Commands=@set me=!no_command
 @set Channel Alias Commands/STARTUP=no_command prefixmatch
 &TEMPLATE Channel Alias Commands=$#ALIAS *:@cemit #CHANNEL=<[ansi(#COLOR,#CHANNEL)]> [u(fun_title,#CHANNEL,%#)][parse_pose(%0,%N)]
-&VERSION Channel Alias Commands=8.1
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

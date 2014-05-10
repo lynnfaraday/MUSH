@@ -62,7 +62,6 @@ think install_create(ROOM_PLACES_PARENT,Max's Table Code Parent,0,0,8.2,Places p
 &TABLEHELP Max's Table Code Parent=$tablehelp:[pemit(%#,[get_eval(me/help_places)])]
 &UPDATEINFO Max's Table Code Parent=[replace(get(%0/PLACE%1),match(NAME MAXPLACES CURPLACES FIXED FULL EMPTY JOIN OJOIN DEPART ODEPART PREFIX DESC,%2),%3,|)]
 &WHICHPLACE Max's Table Code Parent=[match(get(%0/PLACENUMS),*%1%b*,|)]
-&VERSION Max's Table Code Parent=3.0
 @aleave Max's Table Code Parent=think u(fun_cleanup)
 @adisconnect Max's Table Code Parent=think u(fun_cleanup)
 
