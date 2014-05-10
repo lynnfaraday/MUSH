@@ -1,0 +1,56 @@
+@@ Faraday's Channel Alias System
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Channel Alias Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_create(CHAN_CMD,Channel Alias Commands,1,0,8.2,Somewhat hacky way to do channel aliases.)
+
+&CMD-SETUP Channel Alias Commands=$chanalias setup:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is restricted to staff.),ansi(hg,You set up the channel aliases.)[iter(lattr(me/alias_*),set(me,cmd_[after(##,_)]:[edit(v(template),#ALIAS,[after(##,_)],#CHANNEL,v(##),#COLOR,[v(color_[v(##)])])]))])
+&CREDITS Channel Alias Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
+@desc Channel Alias Commands=Somewhat hacky way to do channel aliases.%r\[u\(credits\)\]
+&FUN_TITLE Channel Alias Commands=switch(cflags(%0),*T*,,switch(ctitle(%0,%1),,,[ctitle(%0,%1)]%B))
+&STARTUP Channel Alias Commands=@set me=!no_command
+@set Channel Alias Commands/STARTUP=no_command prefixmatch
+&TEMPLATE Channel Alias Commands=$#ALIAS *:@cemit #CHANNEL=<[ansi(#COLOR,#CHANNEL)]> [u(fun_title,#CHANNEL,%#)][parse_pose(%0,%N)]
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+&ALIAS_=PUB Channel Alias Commands=Public
+&ALIAS_=NEW Channel Alias Commands=Newbie
+&ALIAS_PUB Channel Alias Commands=Public
+&ALIAS_NEW Channel Alias Commands=Newbie
+&COLOR_PUBLIC Channel Alias Commands=y
+&COLOR_NEWBIE Channel Alias Commands=g
+
+
+@wait 2=+jobs/create CODE=Channel Alias/Configure the channel aliases that you want and then run the 'chanalias setup' command.
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@wait 2=+install/updategroup CHAN
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 5=@set me=!quiet

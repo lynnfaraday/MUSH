@@ -1,0 +1,256 @@
+@@ Faraday's Install Manager
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think [ansi(c,[setq(0,install_aliasdb(INSTALL_MGR))][switch(%q0,install_aliasdb\(INSTALL_MGR\),Install Manager created: DB# [create(Install Manager,10)].%RInstall DB created: DB# [create(Install DB,10)].%RInstall Object Storage created: DB# [create(Install Object Storage,10)]%RInstall Globals created: DB# [create(Install Globals,10)],[ansi(c,Install Manager already exists.  Updating.[setq(1,install_aliasdb(INSTALL_STORAGE))][setq(2,install_aliasdb(INSTALL_DB))][setq(3,install_aliasdb(INSTALL_GLOBS))][tel(%q0,%#)][tel(%q1,%#)][tel(%q2,%#)][tel(%q3,%#)])])]
+
+@pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
+
+@describe Install Globals=Manages Faraday system objects.%R[u(credits)]
+@describe Install Manager=Manages Faraday system objects.%R[u(credits)]
+@describe Install DB=Manages Faraday system objects.%R[u(credits)]
+@describe Install Object Storage=Stores Faraday system objects.%R[u(credits)]
+
+&CREDITS Install Globals=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
+&VERSION Install Globals=8.2
+
+&CREDITS Install Manager=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
+&VERSION Install Manager=8.2
+
+&CREDITS Install DB=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
+&VERSION Install DB=8.2
+
+&CREDITS Install Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com
+&VERSION Install Object Storage=8.2
+
+@set Install Globals = WIZARD
+@set Install Globals = SAFE
+@set Install Globals = !NO_COMMAND
+@STARTUP Install Manager=@set me=!no_command
+@lock/use Install Globals=isstaff/1
+&ISSTAFF Install Globals=isstaff(%#)
+
+@set Install Manager = WIZARD
+@set Install Manager = SAFE
+@set Install Manager = !NO_COMMAND
+
+@STARTUP Install Manager=@set me=!no_command;@function INSTALL_CREATE=[num(me)]/FUN_INSTALL_CREATE;@function INSTALL_ALIASDB=[num(me)]/FUN_GET_DBREF;@function INSTALL_PATCH=[num(me)]/FUN_INSTALL_PATCH
+
+
+&CMD-+install-update Install Manager=$+install/update *:@switch/first [setq(0,u(fun_get_dbref,%0))]0=[u(fun_is_registered,%0)],@pemit %#=ansi(hr,I can't find a object named %0.),{@pemit %#=ansi(c,Updating database references on object %0.);think switch(u(fun_is_installed_properly,%0),0,pemit(%#,ansi(hr,It appears object %q0 \([name(%q0)]\) may not be properly installed.  Please double-check.)));@dolist [u(FUN_DEPENDENCIES,%q0)] ALLDONE=@switch ##=ALLDONE,{@fo %#=+install/finalize %0},{think u(FUN_UPDATE,%q0,#{##},xget(#INSTALL_DB,OBJ_##))}}
+
+&CMD-+install-updategroup Install Manager=$+install/updategroup *:@switch [setq(0,u(fun_get_group_attrs,%0))][words(%q0)]=0,@pemit %#=[ansi(hr,Can't find a system group named %0.  Make sure it's been installed properly.)],@dolist %q0={@fo %#=+install/update [after(##,_)]}
+
+&CMD-+install-finalize Install Manager=$+install/finalize *:think [setq(0,u(fun_get_dbref,%0))];@restart %q0;think pemit(%#,[u(fun_INSTALL_CRON,%q0)]%R[u(fun_INSTALL_HELP,%q0)]%R[u(fun_INSTALL_HOOK,%q0)]);@fo %#=+install/attr %q0;@fo %#={@tel %q0=[u(fun_get_destination,%0)]};@pemit %#=ansi(hc,%0 installed.)
+
+&CMD-+INSTALL_ATTR Install Manager=$+install/attr *:@dolist lattr(%0/?ATTR_*)=think pemit(%#,setup_attr(mid(##,0,1),after(##,_),{[xget(%0,##)]}))
+
+&CMD-+UNINSTALL Install Manager=$+uninstall *:@pemit %#=[setq(0,u(fun_get_group_attrs,%0))]switch(0,words(%q0),ansi(hr,I cannot find a group named %0.),ansi(hg,Are you sure you really want to uninstall the %0 system?  Type +uninstall/confirm to confirm.)[set(%#,uninstall:[trim(%0)])])
+
+&CMD-+UNINSTALL-CONFIRM Install Manager=$+uninstall/confirm:@switch 0[setq(0,u(fun_get_group_attrs,xget(%#,uninstall)))]=t(xget(%#,uninstall)),@pemit %#=ansi(hr,You are not uninstalling anything.),{@pemit %#=ansi(hc,You uninstall the [xget(%#,uninstall)] system.  Before reinstalling - you need to make sure the old objects are deleted.  Run the @purge command *TWICE* to clean up purged objects.)[wipe(%#/uninstall)];@dolist %q0={think setq(1,u(fun_get_dbref,after(##,_)));@wipe #INSTALL_DB/##;@tr %q1/tr-uninstall;@set %q1=!safe;@nuke %q1;think %R[u(FUN_UNINSTALL_HELP,%q1)]%R[u(FUN_UNINSTALL_CRON,%q1)]}}
+
+&CMD-+INSTALL-FIND-AND-REGISTER Install Manager=$+install/findreg *=*:@pemit %#=[setq(0,lsearch(all,eobjects,\[strmatch(name(##),%0)\]))][switch(words(%q0),>1,[ansi(hR,More than one object found with name %0.  Picking the first one.)][setq(0,first(%q0))])][switch(%q0,,ansi(hr,Cannot find object %0.  Perhaps it's been renamed or was never installed.),ansi(c,Object %0 found and registered as %1.)[u(fun_register,%1,%q0)])]
+
+&CMD-+INSTALL-DIR Install Globals=$+install/dir:@pemit %#=[line()]%R[ansi(h,Installed Systems)]%R[iter(lattr(#INSTALL_DB/OBJ_*),setq(0,%q0 [extract(##,2,1,_)]),,)][table(iter(setunion(%q0,),[capstr(lcstr(##))]..v[xget(install_aliasdb(after(first(lattr(#INSTALL_DB/OBJ_##*)),_)),version)]),20,78)]%R%R[ansi(h,Use +install/dir <name> for more info about a system.)]%R[line()]
+
+&CMD-+INSTALL-DIR-SYSTEM Install Globals=$+install/dir *:@pemit %#=[setq(0,lattr(#INSTALL_DB/OBJ_[trim(%0)]_*))][switch(words(%q0),0,ansi(hr,Can't find a system named %0.),[line()]%R[ansi(h,[capstr(lcstr(%0))] System Information)]%R%R[ansi(c,Object[space(19)]DB#[space(7)]Version)][iter(sort(%q0),%R[setq(1,install_aliasdb(after(##,_)))][padstr(after(##,_),25)][ljust(%q1,10)][xget(%q1,version)])]%R[line()])]
+
+@@ --------------------------
+@@  FUN_GET_DESTINATION
+@@  Figure out where the object should be placed when it's created.
+@@  Normally command objects go in the master room and other objects go into the install storage object
+@@  but you can override this per object by setting the INSTALL_DESTINATION attribute to be the *ALIAS*
+@@  of another known system object.  For instance, set the INSTALL_DESTINATION to HELP_CMD to place it
+@@  into the help commands object.
+@@  %0 = Object alias
+@@ --------------------------
+
+&FUN_GET_DESTINATION Install Manager=localize([setq(0,u(fun_get_dbref,%0))][setq(1,xget(%q0,install_destination))]switch(1,hasattr(%q0,install_destination),switch(%q1,CREATOR,%#,MASTER_ROOM,v(MASTER_ROOM),#*,%q1,u(fun_get_dbref,%q1)),match(extract(%0,2,1,_),CMD),v(MASTER_ROOM),#INSTALL_STORAGE)
+
+@@ --------------------------
+@@  FUN_DEPENDENCIES
+@@  Determines which installed system objects a given object is dependent on.
+@@  Only works BEFORE database substitutions are performed.
+@@  %0 = Object to check dependencies for.
+@@ --------------------------
+&FUN_DEPENDENCIES Install Manager=localize(squish([setq(0,iter(lattr(#INSTALL_DB/obj_*),after(##,_)))][iter(%q0,switch(words(grepi(%0,*,##)),>0,##))]))
+
+@@ --------------------------
+@@  FUN_GET_GROUP_ATTRS
+@@  Gets a list of the attributes corresponding to the objects in a group.
+@@  %0 = Group prefix
+@@ --------------------------
+&FUN_GET_GROUP_ATTRS Install Manager=lattr(#INSTALL_DB/OBJ_[trim(%0)]_*)
+
+@@ --------------------------
+@@  FUN_INSTALL_CREATE
+@@  Will either create a new object or find the existing one and move it to your inventory.
+@@  %0 = Alias
+@@  %1 = Object name
+@@  %2 = Wizard Flag (0 or 1)
+@@  %3 = No Command Flag (0 or 1)
+@@  %4 = Version
+@@  %5 = Description
+@@  %6 = Install Destination (may be blank)
+@@ --------------------------
+&FUN_INSTALL_CREATE Install Manager=localize(pemit(%#,[switch(0,iswizard(%@),ansi(hr,This function is restricted.),[setq(0,u(fun_check_config))][not(t(%q0))],ansi(hr,Installation failed!  Your MUSH is not properly configured.[iter(rest(revwords(%q0,|),|),%R- ##,|)]),u(fun_is_registered,%0),u(fun_create_and_setup_object,%0,%1,%2,%3,%4,%5,%6),[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(hc,Found object %0.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)])]))
+
+@@ --------------------------
+@@  FUN_INSTALL_PATCH
+@@  Same basic function as install_create but only works for objects that are already installed.
+@@  Same params as FUN_INSTALL_CREATE
+@@ --------------------------
+&FUN_INSTALL_PATCH Install Manager=localize(pemit(%#,[switch(0,iswizard(%@),ansi(hr,This function is restricted.),[setq(0,u(fun_check_config))][not(t(%q0))],ansi(hr,Installation failed!  Your MUSH is not properly configured.[iter(rest(revwords(%q0,|),|),%R- ##,|)]),u(fun_is_registered,%0),ansi(hR,WARNING!  You're attempting to patch object %0 but it was never installed.  Data on the object has not been set up.  You probably want to run the full installer.)[u(fun_create_and_setup_object,%0,%1,%2,%3,%4,%5,%6)],[setq(0,u(fun_get_dbref,%0))][tel(%q0,%#)][ansi(c,Found object %0.  Updating.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)])]))
+
+
+@@ --------------------------
+@@  FUN_CREATE_AND_SETUP_OBJECT
+@@  Creates a new object and then sets up the attributes on it.
+@@  Same params as FUN_INSTALL_CREATE.  Sets %q0 for use by other funs so DO NOT LOCALIZE
+@@ --------------------------
+&FUN_CREATE_AND_SETUP_OBJECT Install Manager=[setq(0,create(%1,10))][u(fun_register,%0,%q0)][tel(%q0,%#)][ansi(hc,Created object %0 with DB# %q0.)][u(fun_setup_object,%0,%1,%2,%3,%4,%5,%6)]
+
+@@ --------------------------
+@@  FUN_WIPE_COMMANDS
+@@  Wipes out commands and help files from objects when upgrading.
+@@     %0 = Object
+@@ --------------------------
+&FUN_WIPE_COMMANDS Install Manager=[iter(lattr(%0/cmd-*),wipe(%0/##))][wipe(%0/aconnect)][wipe(%0/adisconnect)][iter(u([install_aliasdb(HELP_CMD)]/FUN_FIND_ALL_HELP,%0),wipe(%0/##))]
+
+
+@@ --------------------------
+@@  FUN_SETUP_OBJECT
+@@  Sets up basic object attrs 
+@@  Same params as FUN_INSTALL_CREATE.  Relies on %q0 to be set by caller, so DO NOT LOCALIZE
+@@ --------------------------
+&FUN_SETUP_OBJECT Install Manager=switch(strmatch(name(%q0),%1),0,ansi(hR,Object names do not match!  Install will fail!  Rename the old object to %1 and try again.),[u(fun_wipe_commands,%q0)][set(%q0,SAFE)][switch(%2,1,set(%q0,wizard))][switch(%3,0,[set(%q0,!NO_COMMAND)][set(%q0,startup:@set me=!no_command)],set(%q0,NO_COMMAND))][set(%q0,version:%4)][set(%q0,describe:%5%R\[u(credits)\])][switch(%6,,,set(%q0,install_destination:%6))][set(%q0,credits:[v(credits)])]%R[u(fun_uninstall_cron,%q0)]%R[u(fun_uninstall_help,%q0)]%R[u(fun_uninstall_hook,%q0)])
+
+@@ --------------------------
+@@  FUN_CHECK_CONFIG
+@@  Checks to make sure that the proper MUSH config options have been set.
+@@  Returns either '1' for good or a list of |-separated errors if bad.
+@@ --------------------------
+&FUN_CHECK_CONFIG Install Manager=[switch(0,haspower(%#,NO_PAY),The installing wizard must have the NO_PAY power set.|)][u(fun_check_config_option,tiny_math,yes)][u(fun_check_config_option,tiny_booleans,no)][u(fun_check_config_option,null_eq_zero,yes)][u(fun_check_config_option,tiny_trim_fun,yes)][u(fun_check_config_option,function_side_effects,yes)][u(fun_config_check_option,player_name_spaces,no)][switch(0,gte(config(function_invocation_limit),25000),Your function invocation limit is set too low.  It must be at least 25000.|)]
+
+@@ --------------------------
+@@  FUN_CHECK_CONFIG_OPTION
+@@  Checks a particular config() option.
+@@  Returns empty if OK or an error string if not.
+@@   %0 = Option
+@@   %1 = Expected value
+@@ --------------------------
+&FUN_CHECK_CONFIG_OPTION Install Manager=switch(config(%0),%1,,MUSH config option %0 must be set to %1.|)
+
+&MASTER_ROOM install manager=#2
+&INSTALL_DESTINATION install manager=CREATOR
+
+@@ --------------------------
+@@  FUN_INSTALL_CRON
+@@  Installs cron jobs (named CRON*) to the cron system.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_INSTALL_CRON Install Manager=localize([setq(0,lattr(%0/cron_*))][setq(1,install_aliasdb(CRON_OBJ))][switch(0,not(match(name(%0),*CRON*)),ansi(c,Not installing cron jobs from the cron system itself!),words(%q0),,t(%q1),ansi(c,Cron system not installed.  Skipping cron installation.),squish(iter(lattr(%0/cron_*),set(%q1,##:[xget(%0,##)])))[ansi(c,Installed CRON jobs from object %0 \([name(%0)]\).)])])
+
+@@ --------------------------
+@@  FUN_UNINSTALL_CRON
+@@  Uninstalls cron jobs (named CRON*) to the cron system.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_UNINSTALL_CRON Install Manager=localize([setq(0,lattr(%0/cron_*))][setq(1,install_aliasdb(CRON_OBJ))][switch(0,not(match(%0,%q1)),ansi(c,Not installing cron jobs from the cron system itself!),words(%q0),,t(%q1),ansi(r,Cron system not installed.  Could not install cron jobs.),squish(iter(lattr(%0/cron_*),[wipe(%q1/##)][wipe(%0/##)]))[ansi(c,Uninstalled CRON jobs for object %0 \([name(%0)]\).)])])
+
+
+@@ --------------------------
+@@  FUN_INSTALL_HELP
+@@  Installs help files (named HELP*) to the help system.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_INSTALL_HELP Install Manager=localize([setq(1,install_aliasdb(HELP_CMD))][setq(2,install_aliasdb(HELP_DB))][setq(0,u(%q1/FUN_FIND_ALL_HELP,%0))][switch(0,not(match(%0,%q2)),ansi(c,Setting up help files on the help object is redundant!),words(%q0),,and(t(%q1),t(%q1)),ansi(r,Help system not installed.  Could not install help files.),ansi(c,Installed help files from object %0 \([name(%0)]\).)[iter(%q0,set(%q2,##:[xget(%0,##)]))])])
+
+@@ --------------------------
+@@  FUN_UNINSTALL_HELP
+@@  Uninstalls help files (named HELP*) to the help system.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_UNINSTALL_HELP Install Manager=localize([setq(1,install_aliasdb(HELP_CMD))][setq(2,install_aliasdb(HELP_DB))][setq(0,u(%q1/FUN_FIND_ALL_HELP,%0))][switch(0,not(match(%0,%q2)),ansi(c,Setting up help files on the help object is redundant!),words(%q0),,and(t(%q1),t(%q1)),ansi(r,Help system not installed.  Could not uninstall help files.),ansi(c,Uninstalled help files from object %0 \([name(%0)]\).)[iter(%q0,[wipe(%q2/##)][wipe(%0/##)])])])
+
+
+@@ --------------------------
+@@  FUN_INSTALL_HOOK
+@@  Installs hook triggers (named HOOK_*) to the hook system.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_INSTALL_HOOK Install Manager=localize([setq(0,lattr(%0/hook_*))][setq(1,install_aliasdb(HOOK_OBJ))][switch(0,not(match(%0,%q1)),ansi(c,Not installing hook triggers from the hook system itself!),words(%q0),,t(%q1),ansi(c,Hook system not installed.  Skipping hook installation.),squish(iter(lattr(%0/hook_*),set(%q1,##:[xget(%0,##)])))[ansi(c,Installed @hook triggers from object %0 \([name(%0)]\).)])])
+
+@@ --------------------------
+@@  FUN_UNINSTALL_HOOK
+@@  Uninstalls hook triggers (named HOOK*) to the hook system.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_UNINSTALL_HOOK Install Manager=localize([setq(0,lattr(%0/hook_*))][setq(1,install_aliasdb(HOOK_OBJ))][switch(0,not(match(%0,%q1)),ansi(c,Not installing hook jobs from the hook system itself!),words(%q0),,t(%q1),ansi(r,Hook system not installed.  Could not install @hooks.),squish(iter(lattr(%0/hook_*),[wipe(%q1/##)][wipe(%0/##)]))[ansi(c,Uninstalled @hook triggers for object %0 \([name(%0)]\).)])])
+
+
+@@ --------------------------
+@@  FUN_UPDATE
+@@  Updates the DB references for all attributes on an object.
+@@  %0 = Object DB#
+@@  %1 = Alias to replace (e.g., #FOO_DB)
+@@  %2 = DB# to use in place of the alias
+@@ --------------------------
+&FUN_UPDATE Install Manager=iter(lattr(%0),set(%0,##:[edit(xget(%0,##),%1,%2)])
+
+@@ --------------------------
+@@  FUN_IS_INSTALLED_PROPERLY
+@@  Checks to make sure the object in question has at least one attribute, thus indicating that its data was actually installed.
+@@  %0 = Object DB#
+@@ --------------------------
+&FUN_IS_INSTALLED_PROPERLY Install Manager=t(words(lattr([u(fun_get_dbref,%0)]/*)))
+
+@@ --------------------------
+@@  FUN_REGISTER
+@@  Maps an alias to its DB# in the database
+@@  %0 = Alias
+@@  %1 = DB#
+@@ --------------------------
+&FUN_REGISTER Install Manager=localize([setq(0,OBJ_[trim(%0)])][set(#INSTALL_DB,%q0:%1)])
+
+@@ --------------------------
+@@  FUN_IS_REGISTERED
+@@  Checks if an alias is registered with the database.
+@@  %0 = Alias
+@@ --------------------------
+&FUN_IS_REGISTERED Install Manager=hasattr(#INSTALL_DB,OBJ_[trim(%0)])
+
+@@ --------------------------
+@@  FUN_GET_DBREF
+@@  Gets the DB# for a registered alias.
+@@  %0 = Alias
+@@ --------------------------
+&FUN_GET_DBREF Install Manager=switch(u(fun_is_registered,%0),0,#-1,xget(#INSTALL_DB,OBJ_[trim(%0)]))
+
+
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+@wait 2=@fo me=@edit Install Manager/*=#INSTALL_DB,[num(Install DB)]
+@wait 2=@fo me=@edit Install Globals/*=#INSTALL_DB,[num(Install DB)]
+@wait 2=@fo me=@edit Install Manager/*=#INSTALL_STORAGE,[num(Install Object Storage)]
+
+@wait 4=@tr Install Manager/Startup
+
+@wait 5=@fo me=+install/findreg Install DB=INSTALL_DB
+@wait 5=@fo me=+install/findreg Install Manager=INSTALL_MGR
+@wait 5=@fo me=+install/findreg Install Object Storage=INSTALL_STORAGE
+@wait 5=@fo me=+install/findreg Install Globals=INSTALL_GLOBS
+@wait 5=@tel Install DB=Install Object Storage
+@wait 5=@tel Install Globals=#2
+
+@wait 9=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]%R
+
+@wait 9=@set me=!quiet

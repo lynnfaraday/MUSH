@@ -1,0 +1,21 @@
+FS3 is a generic roleplaying game skills system, specifically designed and optimized for online text-based RPGs (MUSHes).  FS3 provides rules for:
+
+* [[[FS3:Basics|Basics]]]
+* [[[FS3:Chargen|Character Creation]]]
+* [[[FS3:XP|Character Improvement (Experience)]]]
+* [[[FS3:Rolls|Generic Conflict Resolution (Ability Rolls)]]]
+* [[[FS3:Combat|Combat]]]
+* [[[FS3:Combat-Organizer|Combat Organizers]]] (for people running combat scenes)
+* [[[FS3:Luck|Luck]]]
+
++ Why FS3?
+
+What makes FS3 different from other skill systems? 
+
+* Differentiating between action skills and background skills, to highlight skills that are relevant to gameplay.
+* Dice rolls that are optimized for MUSH play.
+* A roleplay-friendly combat system.
+
++ Copyright and License
+
+The FS3 system is copyright 2007 by Linda Naughton (aka Faraday). All rights reserved.  You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.

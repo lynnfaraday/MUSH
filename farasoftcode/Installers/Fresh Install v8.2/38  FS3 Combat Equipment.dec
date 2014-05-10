@@ -1,0 +1,144 @@
+@@ Faraday's FS3 System
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+
+@set me=quiet
+@pemit/silent %#=%R%R[ansi(hg,Installing FS3 Combat Equipment module.)]
+
+think install_create(FS3COMBAT_CMD_EQUIP,FS3Combat Equipment Commands,1,0,8.2,FS3 Equipment Commands.  See the FS3Combat Action Commands object for important copyright/license information.)
+think install_create(FS3COMBAT_DB_EQUIP,FS3Combat Equipment Stats,0,1,8.2,FS3Combat Equipment Stats. See the FS3Combat Action Commands object for important copyright/license information.,FS3_STORAGE)
+
+
+@@ -------------------------------------
+@@  EQUIPMENT COMMANDS
+
+
+&ARMORSTATS FS3Combat Equipment Commands=desc hitloc protection class
+&WEAPONSTATS FS3Combat Equipment Commands=desc atkskill defskill lethality pen wpntype class auto ammo recoil range blast dmgtype accuracy shrapnel reloadtime
+&VEHICLESTATS FS3Combat Equipment Commands=desc pilotskill toughness armor hitloc weapons dodge
+
+&CMD-+GEAR FS3Combat Equipment Commands=$+gear:@pemit %#=[line()]%R[ansi(h,Gear Commands)]%R+gear/weapons%R+gear/armor%R+gear/vehicles%R+gear/cover%R[line()]
+&CMD-+GEAR-ARMOR-DETAIL FS3Combat Equipment Commands=$+gear/armor *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(armor(),%q0),ansi(hr,That is not a valid armor type.),[line()]%R[ansi(h,[prettify(%0)] Armor Data)]%R%R[ansi(h,Class:)] [armorstat(%q0,class)] %R[ansi(h,Protection:)] [armorstat(%q0,protection)] %R%R[ansi(h,Covered Locations:)] [armorstat(%q0,hitloc)]%R%R[ansi(h,Description:)]%R[armorstat(%q0,desc)]%R[line()])
+&CMD-+GEAR-ARMOR FS3Combat Equipment Commands=$+gear/armor:@pemit %#=[line()]%R[ansi(h,Armor[space(15)]Class[space(8)]Protection)][iter(sortkey(KEY_ARMOR_SORT,armor()),%R[padstr(prettify(lcstr(##)),20)][ljust(armorstat(##,class),15)][armorstat(##,protection)])]%R%RSee [ansi(h,+gear/armor <type>)] for details.%R[line()]
+&KEY_ARMOR_SORT FS3Combat Equipment Commands=armorstat(%0,class)
+&FUN_ARMOR FS3Combat Equipment Commands=edit(lattr(#FS3COMBAT_DB_EQUIP/armor_*),ARMOR_,)
+&FUN_ARMORSTAT FS3Combat Equipment Commands=extract(xget(#FS3COMBAT_DB_EQUIP,armor_[unprettify(%0)]),match(v(armorstats),%1),1,|)
+
+&CMD-+WEAPONS-REM FS3Combat Equipment Commands=$+weapons:@pemit %#=ansi(hb,Use +gear/weapons.)
+&CMD-+ARMOR-REM FS3Combat Equipment Commands=$+armor:@pemit %#=ansi(hb,Use +gear/armor.)
+
+&CMD-+GEAR-WEAPON-DETAIL FS3Combat Equipment Commands=$+gear/weapon *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(weapons(),%q0),ansi(hr,That is not a valid weapon.),[line()]%R[ansi(h,[prettify(%0)] Weapon Data)]%R%R[ansi(h,Attack Skill:)] [weaponstat(%q0,atkskill)]%R[ansi(h,Defense Skill:)] [weaponstat(%q0,defskill)] %R[ansi(h,Accuracy Modifier:)] [weaponstat(%q0,accuracy)]%R[ansi(h,Lethality Modifier:)] [weaponstat(%q0,lethality)] %R[ansi(h,Penetration:)] [weaponstat(%q0,pen)] %R[ansi(h,Weapon Type:)] [weaponstat(%q0,wpntype)] %R[ansi(h,Damage Type:)] [weaponstat(%q0,dmgtype)] %R[ansi(h,Class:)] [switch(weaponstat(%q0,class),Personal,Anti-Personnel,Anti-Vehicle)] %R[ansi(h,Autofire?:)] [switch(weaponstat(%q0,auto),1,yes%R[ansi(h,Recoil Modifier:)] [weaponstat(%q0,recoil)],no)] %R[ansi(h,Ammo Clip:)] [switch(weaponstat(%q0,reloadtime),0,n/a,weaponstat(%q0,ammo))] %R[ansi(h,Range:)] [weaponstat(%q0,range)]m[switch(weaponstat(%q0,wpntype),explosive,%R[ansi(h,Blast Radius:)] [weaponstat(%q0,blast)]m%r[ansi(h,Shrapnel:)] [switch(weaponstat(%q0,shrapnel),1,Yes,No)])]%R%R[ansi(h,Description:)]%R[weaponstat(%q0,desc)]%R[line()])
+&CMD-+GEAR-WEAPON FS3Combat Equipment Commands=$+gear/weapons:@pemit %#=[line()]%R[ansi(h,Weapon[space(15)]Type[space(20)]FullAuto?%B%BClip[space(4)]Pen[space(2)]Range)]%R[ansi(u,Anti-Personnel Weapons)][iter(sortby(fun_sort_weapons,u(fun_filter_wpn_class,Personal)),%R[u(fun_wpn_detail,##)])]%R[ansi(u,Anti-Vehicle Weapons)][iter(sortby(fun_sort_weapons,u(fun_filter_wpn_class,Vehicle)),%R[u(fun_wpn_detail,##)])]%R%RSee [ansi(h,+gear/weapon <type>)] for details.%R[line()]
+&FUN_SORT_WEAPONS FS3Combat Equipment Commands=switch(comp(weaponstat(%0,wpntype),weaponstat(%1,wpntype)),0,comp(%0,%1),comp(weaponstat(%0, wpntype),weaponstat(%1, wpntype)))
+&FUN_WPN_DETAIL FS3Combat Equipment Commands=[padstr(prettify(lcstr(%0)),20)] [ljust([weaponstat(%0,wpntype)]/[weaponstat(%0,dmgtype)],25)]  [switch(weaponstat(%0,auto),1,yes,no%B)][space(7)][ljust(switch(weaponstat(%0,ammo),0,--,weaponstat(%0,ammo)),8)][ljust(weaponstat(%0,pen),5)][weaponstat(%0,range)]m
+&FUN_WEAPONS FS3Combat Equipment Commands=edit(lattr(#FS3COMBAT_DB_EQUIP/weapon_*),WEAPON_,)
+&FUN_WEAPONSTAT FS3Combat Equipment Commands=extract(xget(#FS3COMBAT_DB_EQUIP,weapon_[unprettify(%0)]),match(v(weaponstats),%1),1,|)
+&FUN_FILTER_WPN_CLASS FS3Combat Equipment Commands=squish(iter(weapons(),switch(strmatch(weaponstat(##,class),%0),1,##)))
+
+&CMD-+GEAR-VEHICLE-DETAIL FS3Combat Equipment Commands=$+gear/vehicle *:@pemit %#=[setq(0,unprettify(%0))]switch(0,match(vehicletypes(),%q0),ansi(hr,That is not a valid vehicle type.),[line()]%R[ansi(h,[prettify(%0)] Vehicle Data)]%R%R[ansi(h,Piloting Skill:)] [vehtypestat(%q0,pilotskill)]%R[ansi(h,Toughness:)] [vehtypestat(%q0,toughness)] %R[ansi(h,Armor Type:)] [vehtypestat(%q0,armor)]%R[ansi(h,Possible Armarment:)] [vehtypestat(%q0,weapons)]%R[ansi(h,Hit Location Chart:)] [vehtypestat(%q0,hitloc)]%R[ansi(h,Dodge Bonus:)] [vehtypestat(%q0,dodge)]%R%R[ansi(h,Description:)]%R[vehtypestat(%q0,desc)]%R[line()])
+&CMD-+GEAR-VEHICLE FS3Combat Equipment Commands=$+gear/vehicles:@pemit %#=[line()]%R[ansi(h,Vehicle[space(13)]Piloting[space(10)]Weapons)][iter(vehicletypes(),%R[padstr(prettify(lcstr(##)),20)][ljust(vehtypestat(##,pilotskill),18)][vehtypestat(##,weapons)])]%R%RSee [ansi(h,+gear/vehicle <type>)] for details.%R[line()]
+&FUN_VEHICLETYPES FS3Combat Equipment Commands=edit(lattr(#FS3COMBAT_DB_EQUIP/vehicle_*),VEHICLE_,)
+&FUN_VEHTYPESTAT FS3Combat Equipment Commands=extract(xget(#FS3COMBAT_DB_EQUIP,vehicle_[unprettify(%0)]),match(v(vehiclestats),%1),1,|)
+
+&CMD-+GEAR-COVER FS3Combat Equipment Commands=$+gear/cover:@pemit %#=[line()]%R[ansi(h,Cover[space(15)]Protection)][iter(sortkey(key_cover_sort,lattr(#FS3COMBAT_DB_EQUIP/cover_*)),%R[padstr(prettify(after(lcstr(##),_)),23)][xget(#FS3COMBAT_DB_EQUIP,##)])]%R%R[ansi(hg,Note:)] These are just sample numbers and are not meant to be all-inclusive.%R[line()]
+&KEY_COVER_SORT FS3Combat Equipment Commands=xget(#FS3COMBAT_DB_EQUIP,%0)
+
+
+@STARTUP FS3Combat Equipment Commands=@set me=!no_command;@fun weaponstat=me,fun_weaponstat;@fun weapons=me,fun_weapons;@fun armor=me,fun_armor;@fun armorstat=me,fun_armorstat;@fun vehicletypes=me,fun_vehicletypes;@fun vehtypestat=me,fun_vehtypestat
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@@ -------------------------------
+@@  EQUIPMENT STATS
+
+&WEAPON_HANDGRENADE_FRAG FS3Combat Equipment Stats=Fragmentation Hand Grenade|Reaction|Reaction|0|3|Explosive|Personal|0|0|0|40|15|Physical|0|1|0
+&WEAPON_HANDGRENADE_FLASH FS3Combat Equipment Stats=Flashbang Hand Grenade which blinds/deafens human targets for 5 secs.  No effect on Centurions.|Reaction|Reaction|-75|20|Explosive|Personal|0|0|0|40|10|Stun|0|0|0
+&WEAPON_GRENADELAUNCH_FRAG FS3Combat Equipment Stats=Fragmentation Grenade fired from a grenade launcher.|Firearms|Reaction|0|3|Explosive|Personal|0|0|0|150|15|Physical|0|1|0
+&WEAPON_MISSILE_HE  FS3Combat Equipment Stats=High Explosive Anti-Personnel Missile|Gunnery|Reaction|20|3|Explosive|Personal|0|0|0|5000|50|Physical|0|1|0
+&WEAPON_MINE_HE FS3Combat Equipment Stats=Antiperssonel mine (such as a Claymore in modern terms)|Demolitions|3|25|3|Explosive|Personal|0|0|0|1|15|Physical|0|1|0
+&WEAPON_IED FS3Combat Equipment Stats=Improvised Explosive Device - aka booby trap|Demolitions|3|10|3|Explosive|Personal|0|0|0|1|15|Physical|0|1|0
+
+
+&WEAPON_PISTOL FS3Combat Equipment Stats=Pistol|Firearms|3|0|3|Ranged|Personal|0|10|0|50|0|Physical|0|0|1
+&WEAPON_PISTOL_AP FS3Combat Equipment Stats=Pistol with armor piercing rounds|Firearms|3|-10|5|Ranged|Personal|0|10|0|50|0|Physical|0|0|1
+&WEAPON_SMG FS3Combat Equipment Stats=Sub-machinegun|Firearms|3|0|3|Ranged|Personal|1|30|2|150|0|Physical|0|0|1
+&WEAPON_RIFLE FS3Combat Equipment Stats=Assault Rifle|Firearms|3|0|4|Ranged|Personal|1|20|2|500|0|Physical|0|0|1
+&WEAPON_RIFLE_AP FS3Combat Equipment Stats=Assault Rifle with armor piercing rounds.|Firearms|3|-10|6|Ranged|Personal|1|20|2|500|0|Physical|0|0|1
+&WEAPON_LMG FS3Combat Equipment Stats=Light machinegun/SAW|Firearms|3|0|4|Ranged|Personal|1|100|3|1000|0|Physical|0|0|1
+&WEAPON_LMG_TRIPOD FS3Combat Equipment Stats=Light machinegun/SAW with bipod|Firearms|3|0|4|Ranged|Personal|1|100|1|1000|0|Physical|0|0|1
+&WEAPON_LMG_AP FS3Combat Equipment Stats=Light machinegun/SAW with armor piercing rounds|Firearms|3|-10|6|Ranged|Personal|1|100|3|1000|0|Physical|0|0|1
+&WEAPON_SHOTGUN FS3Combat Equipment Stats=Shotgun|Firearms|3|10|3|Ranged|Personal|0|8|0|100|0|Physical|0|0|1
+&WEAPON_HUNTING_RIFLE FS3Combat Equipment Stats=Hunting Rifle|Firearms|3|0|3|Ranged|Personal|0|10|0|500|0|Physical|0|0|1
+
+&WEAPON_SHRAPNEL FS3Combat Equipment Stats=Random Shrapnel|3|3|0|2.5|Ranged|Personal|0|0|0|5|5|Physical|0|0|0
+
+
+&WEAPON_UNARMED FS3Combat Equipment Stats=Unarmed|Melee|Melee|0|0|Melee|Personal|0|0|0|0|0|Stun|0|0|0
+&WEAPON_SPARRING FS3Combat Equipment Stats=Unarmed|Melee|Melee|-25|0|Melee|Personal|0|0|0|0|0|Stun|0|0|0
+&WEAPON_CLUB FS3Combat Equipment Stats=Mace/club/baton|Melee|Melee|-10|0|Melee|Personal|0|0|0|0|0|Physical|0|0|0
+&WEAPON_KNIFE FS3Combat Equipment Stats=Knife|Melee|Melee|-5|0|Melee|Personal|0|0|0|0|0|Physical|0|0|0
+&WEAPON_TAZER FS3Combat Equipment Stats=Stun gun|Firearms|Melee|70|0|Ranged|Personal|0|5|0|5|0|Stun|0|0|1
+
+&WEAPON_KEW FS3Combat Equipment Stats=KEW Assault Cannon|Gunnery|Piloting|0|20|Ranged|Vehicle|0|0|0|500|0|Physical|0|0|0
+&WEAPON_MISSILE_AA  FS3Combat Equipment Stats=Anti-Aircraft Missile|Gunnery|ECM|75|20|Ranged|Vehicle|0|0|0|10000|0|Physical|0|0|0
+&WEAPON_MISSILE_AP FS3Combat Equipment Stats=Armor Piercing Anti-Tank Missile|Gunnery|Piloting|75|70|Ranged|Vehicle|0|0|0|5000|0|Physical|0|0|0
+&WEAPON_MINE_AP FS3Combat Equipment Stats=Anti-Vehicle mine|Demolitions|3|15|70|Explosive|Vehicle|0|0|0|1|25|Physical|0|1|0
+&WEAPON_GRENADELAUNCH_AP FS3Combat Equipment Stats=Armor piercing Grenade fired from a grenade launcher.  Very effective against an individual Centurion or a vehicle but does not have as big of a blast radius.|Firearms|Reaction|0|20|Explosive|Vehicle|0|0|0|150|5|Physical|0|1|0
+&WEAPON_HMG FS3Combat Equipment Stats=Heavy machinegun.  Assumes tripod.|Firearms|Piloting|0|8|Ranged|Vehicle|1|100|1|2000|0|Physical|0|0|0
+&WEAPON_NUKE  FS3Combat Equipment Stats=Nuclear Missile|Gunnery|ECM|100|250|Explosive|Vehicle|0|0|0|10000|10|Physical|0|0|0
+&WEAPON_ECM FS3Combat Equipment Stats=ECM Package|ECM|ECM|0|0|Suppressive|Vehicle|0|0|0|10000|0|Physical|0|0|0
+&WEAPON_HANDGRENADE_AP FS3Combat Equipment Stats=Armor-Piercing Hand Grenade|Reaction|Reaction|0|10|Explosive|Vehicle|0|0|0|40|15|Physical|0|1|0
+&WEAPON_IED_AP FS3Combat Equipment Stats=Improvised Explosive Device - aka booby trap - designed with shaped charges or whatnot to hit armored targets|Demolitions|3|0|10|Explosive|Vehicle|0|0|0|1|15|Physical|0|1|0
+
+&ARMOR_HEAVY_VEST FS3Combat Equipment Stats=Military-Grade Kevlar Vest|Neck Chest Abdomen Groin|4|Personal
+&ARMOR_HEAVY_BODYARMOR FS3Combat Equipment Stats=Military-Grade Kevlar Vest and Helmet|Head Neck Chest Abdomen Groin|4|Personal
+&ARMOR_LIGHT_VEST FS3Combat Equipment Stats=Police-Grade Kevlar Vest|Chest Abdomen|3|Personal
+&ARMOR_LIGHT_BODYARMOR FS3Combat Equipment Stats=Police-Grade Kevlar Vest and Helmet|Head Neck Chest Abdomen|3|Personal
+&ARMOR_CENTURION FS3Combat Equipment Stats=Cylon Centurion Armor|Head Neck Chest Abdomen Left_Arm Right_Arm Left_Leg Left_Hand Right_Hand Left_Leg Right_Leg Left_Foot Right_Foot|5|Personal
+&ARMOR_VIPER FS3Combat Equipment Stats=Viper Vehicle Armor|Body Controls Engine Right_Wing Left_Wing Tail Nose|10|Vehicle
+&ARMOR_RAIDER FS3Combat Equipment Stats=Cylon Raider Vehicle Armor|Controls Body Engine Right_Wing Left_Wing|5|Vehicle
+&ARMOR_RAPTOR FS3Combat Equipment Stats=Raptor Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cabin|15|Vehicle
+&ARMOR_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider Vehicle Armor|Controls Body Engine Right_Wing Left_Wing Cabin|10|Vehicle
+&ARMOR_AA_BATTERY FS3Combat Equipment Stats=Anti-Aircraft Battery|Body Controls Weapon|12|Vehicle
+
+
+
+&VEHICLE_VIPER FS3Combat Equipment Stats=Viper space fighter|Piloting|5|Viper|Viper|KEW|0
+&VEHICLE_RAIDER FS3Combat Equipment Stats=Cylon Raider space fighter|Piloting|2|Raider|Raider|KEW MISSILE_AA NUKE|0
+&VEHICLE_RAPTOR FS3Combat Equipment Stats=Raptor space command and control|Piloting|7|Raptor|Raptor|ECM MISSILE_AP MISSILE_HE NUKE|0
+&VEHICLE_HEAVY_RAIDER FS3Combat Equipment Stats=Cylon Heavy Raider space transport/bomber|Piloting|7|Heavy_Raider|Heavy_Raider|KEW MISSILE_AA NUKE|0
+&VEHICLE_AA_BATTERY FS3Combat Equipment Stats=Anti-Aircraft Battery|5|1|AA_Battery|AA_Battery|MISSILE_AA|0
+
+&COVER_PLASTER_WALL FS3Combat Equipment Stats=1
+&COVER_SOFA FS3Combat Equipment Stats=1
+&COVER_CRATES FS3Combat Equipment Stats=2
+&COVER_SOLID_WOOD FS3Combat Equipment Stats=3
+&COVER_BRICK_WALL FS3Combat Equipment Stats=5
+&COVER_STEEL_DOOR FS3Combat Equipment Stats=6
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+@wait 10=@set me=!quiet
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]

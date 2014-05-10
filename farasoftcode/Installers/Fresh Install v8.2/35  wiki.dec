@@ -1,0 +1,47 @@
+@@ Faraday's Wiki System
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Wiki Installation.  Please wait until the Installation Complete message appears...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_create(WIKI_CMD,Wiki System,1,0,8.2,Wiki generation system.)
+
+&CMD-+WIKI Wiki System=$+wiki *:think u(fun_wiki,pmatch(%0))
+&CMD-+WIKI-ME Wiki System=$+wiki:think u(fun_wiki,%#)
+&FUN_WIKI Wiki System=localize([setq(0,pmatch(%0))][setq(1,name(%q0))][setq(2,iter(sort(remove(lattr(%q0/bg*),BGSKILLS)),%R%R[u(%q0/##)]))]pemit(%#,\[\[include CharacterBox%R|image=%q1.jpg%R|title=[xget(%q0,fullname)]%R|name=[xget(%q0,fullname)]%R|nicknames=[switch(alias(%q0),,-,alias(%q0))]%R|age=[age(%q0)]%R|position=[xget(%q0,position)]%R|hometown=-%R|tzone=[switch(xget(%q0,timezone),,-,xget(%q0,timezone))]%R|actor=[actor(%q1)]%R\]\]%R%R+ Background%R[switch(strlen(%q2),<[v(max_bg_length)],%q2,[mid(%q2,1,v(max_bg_length))] ... **background trimmed**)]%R%R+ IC Events%R%RNone Yet%R%R+ Quirks%R[iter(xget(%q0,quirks),%R* ##,|)]%R%R+ Relationships%R%R\[\[include RelationshipsTop\]\]%R\[\[include RelationshipBox%R| name=<mush name here>%R| relationship=<describe relationship>%R\]\]%R\[\[include RelationshipsBottom\]\]%R%R+ Gallery%R\[\[gallery size="thumbnail"\]\][switch(%#,pmatch(Faraday),%R%R\[\[include Castbox %R|mushname=[name(%0)]%R|fullname=[xget(pmatch(%0),fullname)]%R|position=[xget(pmatch(%0),position)]%R\]\])
+
+&MAX_BG_LENGTH Wiki System=6000
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       DATA SECTION           *****
+@@    *****   CHECK BEFORE UPGRADING     *****
+@@    *****   REMOVE OF MODIFY AS NEEDED *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@wait 2=+jobs/create CODE=+Wiki Config/Tweak the appearance of +wiki to suit your game.
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@wait 2=+install/updategroup WIKI
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 5=@set me=!quiet

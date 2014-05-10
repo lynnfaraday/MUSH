@@ -1,0 +1,47 @@
+@@ Faraday's Misc Globals
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=QUIET
+
+@pemit/silent %#=[ansi(hg,Beginning Roster System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+think install_patch(ROSTER_CMD,Roster System,1,0,8.2,Character roster.)
+
+@pemit/silent %#=[ansi(hg,Setting Up Object Attributes...)]%R
+
+
+&CMD-+ROSTER Roster System=$+roster:@pemit %#=[line()]%R[ansi(h,Character Roster)]%R[ansi(h,iter(v(roster_fields),[padstr(capstr(before(##,:)),add(after(##,:),1))]))][iter(sort_names(lsearch(all,eplayer,\[strmatch(xget(##,gone),roster)\])),%R[iter(v(roster_fields),[padstr(u(roster_[before(itext(0),:)],##),after(itext(0),:))]%B)])]%R%R- See [ansi(h,+roster <name>)] for details.%R- Use [ansi(h,+roster/claim <name>)] to claim the character.%R- Approved characters are ready to jump right into RP.%R[line()]
+&CMD-+ROSTER-ADD Roster System=$+roster/add */*:@pemit %#=[setq(0,pmatch(%0))]switch(0,isstaff(%#),ansi(hr,This command is only for staff.),t(%q0),ansi(hr,Can't find a player named %0.),ansi(hg,You add %0 to the roster.)[set(%q0,gone:roster)][set(%q0,roster_contact:%1)]
+&CMD-+ROSTER-ADD-CATCH Roster System=$+roster/add *:@switch %0=*/*,,@pemit %#=ansi(hr,I think you forgot the roster contact.)
+&CMD-+ROSTER-CLAIM Roster System=$+roster/claim *:@switch [setq(0,pmatch(%0))]0=t(%q0),@pemit %#=ansi(hr,Can't find a player named %0.),match(xget(%q0,gone),roster),@pemit %#=ansi(hr,%0 is not on the roster.),{think [u(fun_clear_roster,%q0)][setq(1,u(fun_rand_password))];@fo %#={@newpassword %q0=%q1};@pemit %#=ansi(hg,You claim %0 from the roster.  You can login with the password: %q1);@fo %#={+bbpost New Arrivals/[name(%q0)]=[name(%q0)] has been claimed off the roster.};@fo %#={+mail [name(%q0)]=Roster Claim/[u(ROSTER_WELCOME_MSG,[name(%q0)])]}
+&CMD-+ROSTER-DETAIL Roster System=$+roster *:@pemit %#=[setq(0,pmatch(%0))][setq(1,name(%q0))][switch(0,t(%q0),ansi(hr,No such player.),strmatch(xget(%q0,gone),roster),ansi(hr,No such character on the roster.),[line()]%R[u(roster_name,%q0)]%R%R[ansi(h,Played By:)] [actor(%q1)]%R%R[ansi(h,Wiki Page:)]  [u(WIKI_PAGE,%q1)]%R%R[ansi(h,RP Logs:)] [u(WIKI_RP_LOGS,%q1)]%R%R[switch(hasflag(%q0,unregistered),1,%q1 has not been through Chargen yet\, so you would be able to set their skills and flesh out their background.,%q1 has been through Chargen and is already approved.%RYou can view [poss(%q0)] background and skills using [ansi(hg,+sheet %q1)] and [ansi(hg,+bg %q1)])]%R%RContact [ansi(h,xget(%q0,roster_contact))] for more info about the character.%RUse [ansi(h,+roster/claim <name>)] to claim the character.%R[line()])
+&CMD-+ROSTER-REMOVE Roster System=$+roster/remove *:@pemit %#=[setq(0,pmatch(%0))]switch(0,isstaff(%#),ansi(hr,This command is only for staff.),t(%q0),ansi(hr,Can't find a player named %0.),match(xget(%q0,gone),roster),ansi(hr,%0 is not on the roster.),ansi(hg,You remove %0 from the roster.)[u(fun_clear_roster,%q0)]
+&FUN_CLEAR_ROSTER Roster System=[wipe(%q0/gone)][wipe(%q0/roster_contact)]
+&FUN_RAND_PASSWORD Roster System=[iter(lnum(1,9),first(shuffle(a b c d e f g h i j k l m n o p q r s t u v w x y z 1 2 3 4 5 6 7 8 9 0)),,)]
+&HELP_+ROSTER Roster System=The roster system allows you to jump into RP more quickly with a ready-made character (or character sketch) with ties to other players.  Some characters have been pre-played, while others are former NPCs.%R%R[ansi(h,+roster)] - Views a list of rostered characters.%R[ansi(h,+roster <name>)] - Views details about a character.%R%RIf a character has been through chargen, you can see their stats and background using the +sheet and +bg commands.   The roster system will tell you who to contact if you are interested in playing the character and want to find out more info about them, but you do not need anyone's permission to claim a roster character.  Just use the [ansi(h,+roster/claim <name>)] command to take them.  You will be paged with the login password.
+&SHELP_+ROSTER Roster System=+roster/add <name>/<contact for more info>%R%R+roster/remove <name>%R%RSet the WIKI_PAGE and WIKI_RP_LOGS attributes to your site's format.  \%0 will be passed in with the character name.
+&STARTUP Roster System=@set me=!no_command
+
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup ROSTER
+
+@wait 5=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 5=@set me=!quiet
+

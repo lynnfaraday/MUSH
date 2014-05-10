@@ -1,0 +1,32 @@
+@@ Faraday's FS3 System
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Installing FS3 Luck module.  Please wait...)]%R
+
+@pemit/silent %#=%R%R[ansi(hg,Creating objects.)]
+
+think install_create(FS3LUCK_CMD,FS3 Luck Commands,1,0,8.2,FS3 Luck Commands.)
+
+@pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
+
+&CMD-+LUCK FS3 Luck Commands=$+luck:think pemit(%#,ansi(hg,[line()]%RYou have [xget(%#,luck_points)] luck [switch(xget(%#,luck_points),1,point,points)].%R[line()]))
+&CMD-+LUCK-AWARD FS3 Luck Commands=$+luck/award *=*/*:@switch [setq(0,pmatch(%0))]0=isstaff(%#),@pemit %#=ansi(hr,Restricted to staff.),t(%q0),@pemit %#=ansi(hr,There is no such player.),isnum(%1),@pemit %#=ansi(hr,That is not a number.),{@pemit %#=ansi(hg,You award %0 %1 luck points for %2.);+bbpost Staff Job Notices/Luck Award - [name(%q0)]=%N awarded [name(%q0)] with %1 Luck Points for %2.;@fo %#=+mail [name(%q0)]=Luck Award/Congratulations!  You have received %1 Luck Points for %2.;think set(%q0,luck_points:[add(xget(%q0,luck_points),%1)])
+&CMD-+LUCK-SPEND FS3 Luck Commands=$+luck/spend *=*:think switch(0,gte(xget(%#,luck_points),%0),pemit(%#,ansi(hr,You don't have that many luck points)),isnum(%0),pemit(%#,ansi(hr,That is not a number.)),[remit(%l,ansi(h,%N spends %0 luck points on %1.))][create_job(REQ,Luck - %N,%N has spent %0 luck points on %1,%#)][set(%#,luck_points:[sub(xget(%#,luck_points),%0)])])
+&CMD-+LUCK-SPEND2 FS3 Luck Commands=$+luck/spend *:think pemit(%#,switch(%0,*=*,,ansi(hr,You forgot the reason.)))
+&SHELP_+LUCK FS3 Luck Commands=You can give a bonus luck point award with:  [ansi(h,+luck/award <player>=<# of luck points>/<reason>)]
+&HELP_+LUCK FS3 Luck Commands=Luck Points can be used to generate various lucky effects.  You can use luck for the following:%R- Combat (see +help combat_luck)%R- Ability Rolls (see +help luck_rolls)%R- Other plot hooks at the storyteller's discretion%R%R[ansi(h,+luck)] - Views your luck points.%R[ansi(h,+luck/spend <points>=<reason>)] - Spends luck points.
+&MORE_HELP_+LUCK_ROLLS FS3 Luck Commands=* Before your own roll, spend a point to receive a +50 modifier.%r%r* Before someone elses roll \(friend or enemy\), spend a point to apply a +50 or -59 modifier to their roll.%r%r* After your own roll, spend a point to get a re-roll and choose the better of the two rolls.%r%r* Spend a point to cancel a luck point used against you \(for example: if someone gave you a modifier you can spend a luck point to avoid it\).%r%rOnly one Luck Point can apply to a given roll, so you cant give yourself a bonus and someone else a penalty in the same Opposed Roll.%b%b%bAlso, you cant have multiple people all spending luck to help someone.
+&HATTR_LUCK_POINTS FS3 Luck Commands=0
+
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup FS3LUCK
+
+@wait 10=@set me=!quiet
+@wait 10=@pemit/silent %#=%R%R[ansi(hg,Installation complete.)]

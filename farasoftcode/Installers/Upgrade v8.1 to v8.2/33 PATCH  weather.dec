@@ -1,0 +1,64 @@
+@@ Faraday's Weather System
+@@ Website: http://www.aresmush.com/
+@@
+@@ Visit the website for documentation, installation instructions, bug reports,
+@@ and more.
+
+@set me=quiet
+
+@pemit/silent %#=[ansi(hg,Beginning Weather System Installation.  Please wait until you see the 'Installation Complete' message...)]%R
+
+@pemit/silent %#=[ansi(hg,Creating Objects...)]%R
+
+
+think install_patch(WEATHER_CMD,Weather Generator,1,0,8.2,Weather Generator.)
+think install_patch(WEATHER_HOLDER,Weather Seasons,0,1,8.2,Weather descs.)
+think install_patch(WEATHER_WINTER,Winter,0,1,8.2,Weather descs.,WEATHER_HOLDER)
+think install_patch(WEATHER_SPRING,Spring,0,1,8.2,Weather descs.,WEATHER_HOLDER)
+think install_patch(WEATHER_SUMMER,Summer,0,1,8.2,Weather descs.,WEATHER_HOLDER)
+think install_patch(WEATHER_FALL,Fall,0,1,8.2,Weather descs.,WEATHER_HOLDER)
+
+@set Weather Generator = VISUAL
+&CMD-+WEATHER Weather Generator=$+weather:think pemit(%#,u(fun_weather))
+&CMD-+WEATHER-CLEAR Weather Generator=$+weather/clear:think [pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),ansi(hg,You clear the weather override.)[set(me,override:0)][set(me,type:[u(fun_random_type)])][set(me,temp:[u(fun_random_temp)])]))]
+&CMD-+WEATHER-SET Weather Generator=$+weather/set * and *:think [pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is for staff only.),ansi(hg,You set the weather to %0 and %1.)[set(me,override:1)][set(me,type:[lcstr(trim(%1))])][set(me,temp:[lcstr(trim(%0))])]))]
+&FUN_COMPUTE_TIME Weather Generator=switch(first(extract(ictime(),4,1),:),<5,night,<11,morning,<18,day,<21,evening,night)
+&FUN_DETERMINE_SEASON Weather Generator=switch(extract(ictime(),2,1),Jan,winter,Feb,winter,Mar,switch(extract(ictime(),3,1),>20,spring,winter),Apr,spring,May,spring,Jun,switch(extract(ictime(),3,1),>20,summer,spring),Jul,summer,Aug,summer,Sep,switch(extract(ictime(),3,1),>20,fall,summer),Oct,fall,Nov,fall,Dec,switch(extract(ictime(),3,1),>20,winter,fall))
+
+&FUN_FIND_SEASON Weather Generator=iter(lcon(#WEATHER_HOLDER),switch(name(##),%0,##),,)
+
+&FUN_RANDOM_TEMP Weather Generator=[lcstr(first(shuffle(xget([u(fun_find_season,v(season))],temp))))]
+&FUN_RANDOM_TYPE Weather Generator=localize([setq(0,type-[u(type)])][setq(1,u(fun_find_season,v(season)))][switch(hasattr(%q1,%q0),0,setq(0,first(lattr(%q1/type-*))))][lcstr(pickrand(u(%q1/%q0)))])
+&FUN_WEATHER Weather Generator=u(weatherformat_[switch(%0,,long,%0)])
+&OVERRIDE Weather Generator=0
+&SHELP_WEATHER Weather Generator=Weather is updated every half hour.  If you want it to show up in the room descriptions, add a call to weather() in your room parent to get the current weather.  This assumes the entire game has the same weather.  Multiple weather zones are not permitted in this version of the system.%R%RIf your months/seasons/times are the same as RL (Northern Hemisphere) then the system requires no special setup. If you're using a custom IC time system, you'll need to tweak some of the settings as described in the support article on the wiki (http://www.aresmush.com/index.php?title=Weather)%R%RYou can temporarily override the weather if you need to for a special plot or something.  The weather will stay at what you set until you clear the override.%R%R[ansi(h,+weather/set <temperature> and <weather>)] - Overrides the weather.%R%TExample: +weather/set cold and raining%R%R[ansi(h,+weather/clear)] - Clears the weather override.
+@STARTUP Weather Generator=@set me=!no_command;@fun weather=me/fun_weather
+
+&TR-CHANGEWEATHER Weather Generator=think [u(fun_change_weather)]
+&FUN_CHANGE_WEATHER Weather Generator=[set(me,season:[u(fun_determine_season)])][set(me,time:[u(fun_compute_time)])][switch(v(override),0,[set(me,type:[u(fun_random_type)])][set(me,temp:[u(fun_random_temp)])])][iter(lwho(),switch(xget(%l,show_weather),1,pemit(##,[ansi(hb,<WEATHER>)] [u(FUN_WEATHER)])))]
+
+&WEATHERFORMAT_LONG Weather Generator=It is a [v(season)] [v(time)].  The weather is [v(temp)] and [v(type)].
+&WEATHERFORMAT_SHORT Weather Generator=[capstr(u(temp))] and [u(type)].
+
+&CRON_TIME_WEATHER Weather Generator=||||00 30|
+&CRON_JOB_WEATHER Weather Generator=@tr #WEATHER_CMD/TR-CHANGEWEATHER
+
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@    *****       END DATA SECTION      *****
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+@pemit/silent %#=[ansi(hg,Setting up database numbers...)]%R
+
+@wait 2=+install/updategroup WEATHER
+
+@wait 5=@set me=!quiet
+
+
+@wait 6=@pemit/silent %#=%R%R[ansi(hg,Installation Complete!!)]
+
+@wait 8=@set me=!quiet
+
