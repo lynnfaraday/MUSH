@@ -11,7 +11,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(FRIENDS_CMD,Friends System,1,0,8.1,Friends tracker.)
+think install_create(FRIENDS_CMD,Friends System,1,0,8.2,Friends tracker.)
 
 @ACONNECT Friends System=think switch(hasflag(%#,dark),0,iter(lwho(),u(fun_notify_connect,##,%N))
 @ADISCONNECT Friends System=think switch(hasflag(%#,dark),0,iter(lwho(),u(fun_notify_disconnect,##,%N))

@@ -10,8 +10,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(ACTORS_CMD,Actor Commands,1,0,8.1,Actor tracker.)
-think install_create(ACTORS_DB,Actor DB,0,1,8.1,Actor database.)
+think install_create(ACTORS_CMD,Actor Commands,1,0,8.2,Actor tracker.)
+think install_create(ACTORS_DB,Actor DB,0,1,8.2,Actor database.)
 
 &CMD-+ACTOR-SET Actor Commands=$+actor/set *:think pemit(%#,switch(t(u(fun_find_actors,%0)),1,ansi(hr,That actor is already taken.),ansi(hg,You set your actor to %0.)[u(fun_set_actor,%N,%0)])))
 

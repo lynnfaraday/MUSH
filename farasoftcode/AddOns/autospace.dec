@@ -11,7 +11,7 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think install_create(AUTOSPACE_CMD,Pose Autospacer,1,0,8.1,Automatically puts blank lines between poses.)
+think install_create(AUTOSPACE_CMD,Pose Autospacer,1,0,8.2,Automatically puts blank lines between poses.)
 
 
 &CMD-+AUTOSPACE Pose Autospacer=$+autospace:think [pemit(%#,switch(xget(%#,autospace),1,ansi(hg,You turn autospacing OFF.),ansi(hg,You turn autospacing ON.)))][set(%#,autospace:[not(xget(%#,autospace))])]

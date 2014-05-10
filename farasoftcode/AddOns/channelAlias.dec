@@ -10,7 +10,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(CHAN_CMD,Channel Alias Commands,1,0,8.1,Somewhat hacky way to do channel aliases.)
+think install_create(CHAN_CMD,Channel Alias Commands,1,0,8.2,Somewhat hacky way to do channel aliases.)
 
 &CMD-SETUP Channel Alias Commands=$chanalias setup:think pemit(%#,switch(0,isstaff(%#),ansi(hr,This command is restricted to staff.),ansi(hg,You set up the channel aliases.)[iter(lattr(me/alias_*),set(me,cmd_[after(##,_)]:[edit(v(template),#ALIAS,[after(##,_)],#CHANNEL,v(##),#COLOR,[v(color_[v(##)])])]))])
 &CREDITS Channel Alias Commands=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com

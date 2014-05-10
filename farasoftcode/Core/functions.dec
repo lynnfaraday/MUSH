@@ -10,8 +10,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(GLOBFUN_FUN,Global Utility Functions,1,1,8.1,Useful utility functions.)
-think install_create(GLOBFUN_DB,Global Utility Function Data,1,1,8.1,Customizable utility functions and related data.)
+think install_create(GLOBFUN_FUN,Global Utility Functions,1,1,8.2,Useful utility functions.)
+think install_create(GLOBFUN_DB,Global Utility Function Data,1,1,8.2,Customizable utility functions and related data.)
 
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R

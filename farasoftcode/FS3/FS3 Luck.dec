@@ -10,7 +10,7 @@
 
 @pemit/silent %#=%R%R[ansi(hg,Creating objects.)]
 
-think install_create(FS3LUCK_CMD,FS3 Luck Commands,1,0,8.1,FS3 Luck Commands.)
+think install_create(FS3LUCK_CMD,FS3 Luck Commands,1,0,8.2,FS3 Luck Commands.)
 
 @pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
 

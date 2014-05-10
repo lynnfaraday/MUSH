@@ -11,10 +11,10 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think install_create(MAIL_CMD,FaraMail Commands,1,0,8.1,Faraday's +mail system.)
-think install_create(MAIL_FUN,FaraMail Functions,1,1,8.1,+mail functions.)
-think install_create(MAIL_OBJECTS,FaraMail Objects,0,1,8.1,+mail object storage.)
-think install_create(MAIL_LIST,FaraMail Lists,0,1,8.1,+mail mailing lists.)
+think install_create(MAIL_CMD,FaraMail Commands,1,0,8.2,Faraday's +mail system.)
+think install_create(MAIL_FUN,FaraMail Functions,1,1,8.2,+mail functions.)
+think install_create(MAIL_OBJECTS,FaraMail Objects,0,1,8.2,+mail object storage.)
+think install_create(MAIL_LIST,FaraMail Lists,0,1,8.2,+mail mailing lists.)
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 

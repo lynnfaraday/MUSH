@@ -8,7 +8,7 @@
 
 @pemit/silent %#=[ansi(hg,Beginning IC Time Installation.   Please wait until the Installation Complete message appears...)]%R
 
-think install_create(ICTIME_CMD,IC Time,1,0,8.1,IC time system.)
+think install_create(ICTIME_CMD,IC Time,1,0,8.2,IC time system.)
 
 @pemit/silent %#=[ansi(hg,Setting Object Attributes...)]%R
 

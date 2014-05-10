@@ -11,7 +11,7 @@
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
 
-think install_create(HOOK_OBJ,Hook Manager,1,0,8.1,Manages @hooks.)
+think install_create(HOOK_OBJ,Hook Manager,1,0,8.2,Manages @hooks.)
 
 &SHELP_HOOKS Hook Manager=The Hook Manager (#HOOK_OBJ) makes it easy to have multiple @hooks triggered by poses and emits.  Note that only the say/pose/semipose/@emit commands are affected.  Their respective functions are not.%R%RTo configure a new @hook, simply put a HOOK_POSE_<name> attribute on the hook manager.  Hook attributes are executed like functions.  (In other words, use pemit\() not @pemit)
 

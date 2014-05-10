@@ -10,8 +10,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(MAP_CMD,Map Commands,1,0,8.1,Map commands.)
-think install_create(MAP_DB,Map DB,0,1,8.1,Map data storage.)
+think install_create(MAP_CMD,Map Commands,1,0,8.2,Map commands.)
+think install_create(MAP_DB,Map DB,0,1,8.2,Map data storage.)
 
 &FUN_MAP_FOR_AREA Map Commands=localize([setq(0,unprettify(%0))][switch(hasattr(#MAP_DB,map_%q0),0,ansi(hr,No map available for this area.),u(#MAP_DB/map_%q0))])
 

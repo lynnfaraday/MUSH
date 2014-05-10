@@ -11,8 +11,8 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(MOTD_CMD,MOTD System,1,0,8.1,Message of the day commands.)
-think install_create(MOTD_DB,MOTD Database,0,1,8.1,Message of the day data storage.)
+think install_create(MOTD_CMD,MOTD System,1,0,8.2,Message of the day commands.)
+think install_create(MOTD_DB,MOTD Database,0,1,8.2,Message of the day data storage.)
 
 
 @ACONNECT MOTD System=@fo %#=+motd

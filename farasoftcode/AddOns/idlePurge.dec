@@ -12,7 +12,7 @@
 
 @pemit/silent %#=[ansi(hg,Creating Objects...)]%R
 
-think install_create(IDLE_CMD,Idle Purger,1,0,8.1,Idle purger.)
+think install_create(IDLE_CMD,Idle Purger,1,0,8.2,Idle purger.)
 
 @lock/Use Idle Purger=ISSTAFF/1
 

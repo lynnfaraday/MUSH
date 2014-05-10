@@ -10,17 +10,17 @@
 
 @pemit/silent %#=%R%R[ansi(hg,Creating objects.)]
 
-think install_create(FS3_STORAGE,FS3 Object Storage,0,1,8.1,Stores FS3 objects.)
-think install_create(FS3SKILL_CMD,FS3 Skill System,1,0,8.1,These are the commands for the FS3 skills system.)
+think install_create(FS3_STORAGE,FS3 Object Storage,0,1,8.2,Stores FS3 objects.)
+think install_create(FS3SKILL_CMD,FS3 Skill System,1,0,8.2,These are the commands for the FS3 skills system.)
 
-think install_create(FS3SKILL_HELP,FS3 Skill Help,0,1,8.1,FS3 Help Files.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
-think install_create(FS3SKILL_FUN,FS3 Skill Functions,1,1,8.1,Stores FS3 skill functions.    See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
-think install_create(FS3SKILL_DB,FS3 Skill Data,1,1,8.1,Stores FS3 skill data.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3SKILL_HELP,FS3 Skill Help,0,1,8.2,FS3 Help Files.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3SKILL_FUN,FS3 Skill Functions,1,1,8.2,Stores FS3 skill functions.    See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
+think install_create(FS3SKILL_DB,FS3 Skill Data,1,1,8.2,Stores FS3 skill data.  See the FS3 Skill System object for important copyright/license information.,FS3_STORAGE)
 
-think install_create(FS3SKILL_CGINFO,Chargen Info Functions,1,1,8.1,Functions related to chargen but also useful outside of it.,FS3_STORAGE)
-think install_create(FS3SKILL_CGDEMO,Demographic Commands,1,0,8.1,Chargen Demographic Commands,CREATOR)
-think install_create(FS3SKILL_CGABILITY,FS3 Chargen Commands,1,0,8.1,FS3 Chargen Commands.  See the FS3 Skill System object for important copyright/license information.,CREATOR)
-think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.1,Chargen exit parent.,FS3_STORAGE)
+think install_create(FS3SKILL_CGINFO,Chargen Info Functions,1,1,8.2,Functions related to chargen but also useful outside of it.,FS3_STORAGE)
+think install_create(FS3SKILL_CGDEMO,Demographic Commands,1,0,8.2,Chargen Demographic Commands,CREATOR)
+think install_create(FS3SKILL_CGABILITY,FS3 Chargen Commands,1,0,8.2,FS3 Chargen Commands.  See the FS3 Skill System object for important copyright/license information.,CREATOR)
+think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.2,Chargen exit parent.,FS3_STORAGE)
 
 @pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
 
@@ -448,7 +448,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.1,Chargen exit pa
 @@
 @@ Returns 1 or 0|error message
 @@ --------------------------
-&FUN_SET_ABILITY FS3 Skill Functions=localize([setq(0,ability_level(%0,%2))][setq(1,add(%q0,%3))][setq(2,switch(%1,attribute,attributes,attr,attributes,action,actionskills,act,actionskills,bg,bgskills,background,bgskills))][setq(3,u(FUN_MAP_ABILITY_ABBR,%1))][setq(4,unprettify(%2))][switch(0,t(pmatch(%0)),0|That is not a valid player.,not(strmatch(%2,*\[*)),0|Ability names may not contain the \[ character.,match(v(ability_types),%1),0|That is not a valid type.  Use one of these: [v(ability_types)].,u(#FS3SKILL_FUN/fun_is_valid_%q3,%q4),0|That is not a valid ability name for a %q3 ability.,gte(%q1,0),0|You cannot lower an ability below 0.,lte(%q1,switch(%q2,attributes,4,12)),0|You cannot raise that ability that high.,not(and(match(%q2,attributes),eq(%q1,0))),0|You cannot lower an attribute below 1.,not(and(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q4),not(match(%q2,attributes)))),0|%2 is an attribute.  You can't take it as a skill.,not(and(u(#FS3SKILL_FUN/FUN_IS_VALID_ACTION,%q4),not(match(%q2,actionskills)))),0|%2 is an action skill.  You can't take it as a %q3.,1[switch(%q1,0,set(%0,%q2:[squish(find_and_replace(xget(%0,%q2),%q4:*,))]),switch(t(grab(xget(%0,%q2),%q4:*)),1,set(%0,%q2:[find_and_replace(xget(%0,%q2),%q4:*,%q4:%q1)]),set(%0,%q2:[squish([xget(%0,%q2)]%B%q4:%q1)])))])
+&FUN_SET_ABILITY FS3 Skill Functions=localize([setq(0,ability_level(%0,%2))][setq(1,add(%q0,%3))][setq(2,switch(%1,attribute,attributes,attr,attributes,action,actionskills,act,actionskills,bg,bgskills,background,bgskills))][setq(3,u(FUN_MAP_ABILITY_ABBR,%1))][setq(4,unprettify(%2))][switch(0,t(pmatch(%0)),0|That is not a valid player.,not(strmatch(%2,*\[*)),0|Ability names may not contain the \[ character.,not(strmatch(%2,*-*)),0|Ability names may not contain the - character.,match(v(ability_types),%1),0|That is not a valid type.  Use one of these: [v(ability_types)].,u(#FS3SKILL_FUN/fun_is_valid_%q3,%q4),0|That is not a valid ability name for a %q3 ability.,gte(%q1,0),0|You cannot lower an ability below 0.,lte(%q1,switch(%q2,attributes,4,12)),0|You cannot raise that ability that high.,not(and(match(%q2,attributes),eq(%q1,0))),0|You cannot lower an attribute below 1.,not(and(u(#FS3SKILL_FUN/FUN_IS_VALID_ATTRIBUTE,%q4),not(match(%q2,attributes)))),0|%2 is an attribute.  You can't take it as a skill.,not(and(u(#FS3SKILL_FUN/FUN_IS_VALID_ACTION,%q4),not(match(%q2,actionskills)))),0|%2 is an action skill.  You can't take it as a %q3.,1[switch(%q1,0,set(%0,%q2:[squish(find_and_replace(xget(%0,%q2),%q4:*,))]),switch(t(grab(xget(%0,%q2),%q4:*)),1,set(%0,%q2:[find_and_replace(xget(%0,%q2),%q4:*,%q4:%q1)]),set(%0,%q2:[squish([xget(%0,%q2)]%B%q4:%q1)])))])
 
 &ABILITY_TYPES FS3 Skill Functions=attribute action background language attr act prof bg lang
 
