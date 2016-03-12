@@ -5,7 +5,7 @@
 #
 # Usage:  ruby 7sea.rb <num dice> <explode 10s for rank 5? true or false>  <double raises for rank 4? true or false>
 #
-# Note:  This program uses 'combo' to refer to dice PAIRS that combine to a raise (like 8+2 making 10 or 6+9 making 15) 
+# Note:  This program uses 'pair' to refer to dice PAIRS that combine to a raise (like 8+2 making 10 or 6+9 making 15) 
 #        and 'junk' to refer to any random set of dice that add up to a raise (like 7+1+1+1)
 
 # Rolls the specified number of 10-sided dice.  
@@ -47,12 +47,12 @@ end
 # Returns the number of raises.
 #
 # roll = array containing original die results; after calling, any dice that combine will be removed
-# first = the first number of the combo
-# second = the second number of the combo
+# first = the first number of the pair
+# second = the second number of the pair
 #
 # Example:  Given a roll of [6, 6, 4, 4, 4, 3] and first/second of 6 and 4, it will return 2 raises
 # and 'roll' will be the unmatched numbers [4, 3]
-def countCombos(roll, first, second)
+def countPairs(roll, first, second)
   raises = 0
 
   firsts = roll.select { |d| d == first }
@@ -65,7 +65,7 @@ def countCombos(roll, first, second)
       firsts.pop
       seconds.pop
 
-      puts "Found a combo! #{first}+#{second}"
+      puts "Found a pair! #{first}+#{second}"
       raises += 1
     end
   end
@@ -86,7 +86,7 @@ end
 #
 # Example: Given a roll of [10, 8, 6, 2, 1] and a target of 10, it would return 2 raises
 #   (10 and 8+2) and the 'roll' array would contain the unmatched [6, 1]
-def findRaisesInCombos(roll, target)
+def findRaisesInPairs(roll, target)
   raises = 0
    
   if (target == 10)
@@ -96,20 +96,20 @@ def findRaisesInCombos(roll, target)
      roll.delete_if { |d| d == 10 }
      puts "#{tens.count} tens"
 
-    raises += countCombos(roll, 9, 1)
-    raises += countCombos(roll, 8, 2)
-    raises += countCombos(roll, 7, 3)
-    raises += countCombos(roll, 6, 4)
+    raises += countPairs(roll, 9, 1)
+    raises += countPairs(roll, 8, 2)
+    raises += countPairs(roll, 7, 3)
+    raises += countPairs(roll, 6, 4)
   elsif (target == 15)
     # Count fifteens; they count as double raises
-    raises += (countCombos(roll, 10, 5) * 2)
-    raises += (countCombos(roll, 9, 6) * 2)
-    raises += (countCombos(roll, 8, 7) * 2)
+    raises += (countPairs(roll, 10, 5) * 2)
+    raises += (countPairs(roll, 9, 6) * 2)
+    raises += (countPairs(roll, 8, 7) * 2)
   else
     raise "Invalid target specified - use 10 or 15."
   end
     
-  # Count groups of either 2 or 3 fives.  countCombos doesn't work if the first and second numbers are the same :/
+  # Count groups of either 2 or 3 fives.  countPairs doesn't work if the first and second numbers are the same :/
   divisor = target == 10 ? 2 : 3
   multiplier = target == 10 ? 1 : 2
 
@@ -129,11 +129,11 @@ end
 #
 # Returns the sum, even if no raise happened.
 # 
-# junk = dice that didn't match into combos; any dice that added up to a raise will be removed when it returns.
+# junk = dice that didn't match into pairs; any dice that added up to a raise will be removed when it returns.
 # target = target number for a raise
 #
-# Example:  Given junk dice of [6, 5, 3, 1, 1] it will return a sum of 11 (for the 6+1+1+3) and 'junk' will be the
-#   unmatched [5] afterward.
+# Example:  Given junk dice of [6, 5, 3, 1, 1] it will return a sum of 10 (for the 6+1+3) and 'junk' will be the
+#   unmatched [5, 1] afterward.
 def countJunk(junk, target)
  sum = junk.shift
  diceUsed = [ sum ]
@@ -143,20 +143,52 @@ def countJunk(junk, target)
    sum += die
    diceUsed << die
  end
- puts "Adding up junk: #{diceUsed.inspect}"
+
+ diceUsed = diceUsed.sort.reverse
  
  if (sum < target)
    junk.concat diceUsed
+ else 
+   sum = minimizeJunk(junk, diceUsed, sum, target)
  end
 
+ puts "Adding up junk: #{diceUsed.inspect} to #{sum}"
  return sum
 end
 
-# Loops through all the junk dice (the ones that didn't match into combos) and makes as many raises as possible.
+# Sometimes you end up adding too many dice.  This will see if that's true and remove the extra
+# ones.
+#
+# junk = dice that didn't match into pairs; any extra dice will be put back into this list when it returns
+# diceUsed = dice that made up a raise
+# sum = what the diceUsed added up to
+# target = target number for a raise
+#
+# Example:  Because we add the little numbers first, the algorithm could have come up with [6, 3, 1, 1] 
+# but only needed [6, 3, 1].  We need to put the extra '1' back.
+def minimizeJunk(junk, diceUsed, sum, target)
+  while (true)
+    die = diceUsed.pop
+    return sum if die == nil
+    sum = sum - die
+    if (sum >= target)
+      # Die was unnecessary
+      junk << die
+    else
+      # Die was needed after all
+      diceUsed << die
+      sum += die
+      #puts "Adjusted junk to #{junk.inspect} -- #{diceUsed.inspect} -- #{sum}"
+      return sum
+    end
+  end
+end
+
+# Loops through all the junk dice (the ones that didn't match into pairs) and makes as many raises as possible.
 #
 # Returns the number of raises found.
 #
-# junk = dice that didn't match into combos; any dice that added up to a raise will be removed when it returns.
+# junk = dice that didn't match into pairs; any dice that added up to a raise will be removed when it returns.
 # target = target number for a raise
 def findRaisesInJunk(junk, target)
   raises = 0
@@ -209,16 +241,17 @@ raises = 0
 
 printTitle "Rolling Dice"
 
-roll = rollDice(dice, explode)
+#roll = rollDice(dice, explode)
+roll = [6, 5, 3, 1, 1]
 puts "Final roll: #{roll.sort.inspect}"
 
-# If you're allowing double raises, we have to find all combos and junk adding up to 15 first,
-# then do the same for combos and junk adding up to 10.
+# If you're allowing double raises, we have to find all pairs and junk adding up to 15 first,
+# then do the same for pairs and junk adding up to 10.
 if (double_raises)
 
-   printTitle "Counting Combos Making 15"
+   printTitle "Counting Pairs Making 15"
 
-   raises += findRaisesInCombos(roll, 15)
+   raises += findRaisesInPairs(roll, 15)
    puts "#{raises} raises so far"
 
    printTitle "Counting Junk Making 15"
@@ -230,11 +263,11 @@ if (double_raises)
    puts "#{raises} raises so far"
 end
 
-printTitle "Counting Combos Making 10"
+printTitle "Counting Pairs Making 10"
 
 puts "Left over: #{roll.inspect}"
 
-raises += findRaisesInCombos(roll, 10)
+raises += findRaisesInPairs(roll, 10)
 puts "#{raises} raises so far"
 
 printTitle "Counting Junk Making 10"
@@ -249,3 +282,4 @@ puts "#{raises} raises so far"
 puts "-------------------"
 
 puts "#{raises} Raises Total!"
+puts "#{roll.inspect} left over"
