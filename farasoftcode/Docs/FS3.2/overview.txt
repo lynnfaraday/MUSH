@@ -1,12 +1,11 @@
 FS3 is a generic roleplaying game skills system, specifically designed and optimized for online text-based RPGs (MUSHes).  FS3 provides rules for:
 
-* [[[FS3:Basics|Basics]]]
 * [[[FS3:Chargen|Character Creation]]]
-* [[[FS3:XP|Character Improvement (Experience)]]]
-* [[[FS3:Rolls|Generic Conflict Resolution (Ability Rolls)]]]
+* [[[FS3:Rolls|Ability Rolls]]]
 * [[[FS3:Combat|Combat]]]
 * [[[FS3:Combat-Organizer|Combat Organizers]]] (for people running combat scenes)
 * [[[FS3:Luck|Luck]]]
+* [[[FS3:XP|Experience]]]
 
 + Why FS3?
 

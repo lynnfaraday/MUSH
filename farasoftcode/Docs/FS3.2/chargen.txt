@@ -1,21 +1,35 @@
-The general steps in Character Creation are:
+[[toc]]
 
-# Describe your background. 
-# Choose your abilities. 
-# Choose your quirks.
++ Getting Started
+
+First you will need to create a character from the welcome screen, if you haven't already.  Your name can be your first name, last name, or nickname.  Avoid using callsigns as your mush name.
+
+You can technically access the character creation commands from anywhere - see 'help chargen' for more information.  But there are a series of chargen tutorial rooms that will guide you through step by step.
+
++ Demographics
+
+Demographics are basic pieces of information about your character.  Most are fairly straightforward - name, age, description, etc.
+
+> **TODO** Insert any game-specific demographic instructions.
 
 + Background
-
-The most important part of a character is their background. We are not looking for a novel, just a paragraph or two describing the character’s backstory.  In particular, your background should cover:
+The most important part of a character is their background. We are not looking for a novel, just a couple paragraphs describing the character’s backstory.  In particular, your background should cover:
     
 * Who is your character?
 * Why are they here?
-* Anything else about your character that might serve as a RP hook, or that you want to make note of. 
+* Anything noteworthy about your character, particularly things that could serve as RP hooks.
 
 + Abilities
 
-You start with a pool of 60 ability points to spend on Abilities.  See [[[FS3:Basics|FS3 Basics]]] for more info about abilities.  You will need to choose //Action Skills//, which are important for the action of the game, //Background Skills// to round out your character, and //Language Skills// for the languages you speak.
+This MUSH uses the [[[FS3|FS3 Skills & Combat system]]], which was designed to be a roleplay-friendly conflict resolution system for MUSHes.  
 
+In FS3, you choose Abilities to reflect things that your character is able to do. Running, shooting guns, flying spaceships, talking your way out of a tense situation – these are all things that could be covered by Abilities. 
+
+++ Ability Costs
+
+> **TODO** Update these costs if you have changed the chargen point values.
+
+* You get 60 ability points to spend.
 * Attributes cost 1 point per rating. 
 * Action and Background Skills cost 1 point per rating.
 * Language Skills cost 2 points per language.
@@ -26,6 +40,8 @@ You start with a pool of 60 ability points to spend on Abilities.  See [[[FS3:Ba
 
 There are certain restrictions on what abilities you can purchase.
 
+> **TODO** Update these costs if you have changed the chargen point limits.
+
 * You must take at least one language.
 * You must take at least 2 background skills.
 * You can't spend more than 12 points on attributes
@@ -33,36 +49,86 @@ There are certain restrictions on what abilities you can purchase.
 * You can't spend more than 32 points on action skills.
 * You can't have more than 3 abilities above level 7.
 
-++ What Skills Should I Pick?
++ Attributes
 
-Your character sheet is not meant to be an exhaustive list of everything your character 
-knows. That would be silly. Here is some guidance for what skills to choose: 
+Attributes reflect a character’s natural talents. Attributes influence related skills, giving an advantage (or disadvantage) compared to someone with equivalent training. You can also use them when no particular skill applies to a given situation. 
  
-• Choose any Action or Language Skills that your character would know. They are likely to come up during the course of the game, so take them if they apply. 
- 
-• Choose Background Skills that are **important** to your character. Just because you played “catch” as a child doesn’t mean you need to take the Baseball skill (unless you went on to play it in college). Take Background Skills to reflect hobbies, interests, education (college major, perhaps), or professional skills not reflected by Action Skills. 
- 
-• Things that are 'common knowledge' or basic human abilities can be done even with a 0 skill rating.  For example, in a modern setting you would not need to take a point in Computers just to use your smartphone, nor would you need a point in Running to run a footrace or Medicine to put ice on a sprained ankle.  Attributes can be used for these basic tasks.
+Barring disability or genetic mutation, Attributes never change; they are set in stone when you are born. For example, you may overcome an academic challenge through hard work and study, but you will not change your underlying mind aptitude.  
 
-++ What Levels Should I Pick?
+* **Mind** - Mental fitness - Intelligence and Creativity
+* **Body** - Physical fitness - Strength, Constitution and Agility
+* **Reaction** - Reflexes - Dexterity, Hand-Eye Coordination and Wits
+* **Presence** - Personality - Charisma and Will
 
-Even rating 1 in FS3 represents a fair amount of training and practice in a skill, and gives you a roughly 57% chance of success on a routine roll.  Ratings 4 and higher indicate professional level of competence, meaning you could conceivably do it for a living.	It would be rare for someone to have a hobby at higher than rating 3 unless he is a really serious hobbyist!
+Attributes are rated on a 1-4 scale. The attributes are deliberately broad for simplicity, and do not allow the sort of fine-tuning that you might find in other systems.  Take a rating that corresponds to what you're best at, and leave the rest to RP.
 
-++ Setting Ruling Attributes
+|| Rating ||  Attribute Meaning ||
+||1||Poor||
+||2||Average||
+||3||Good||
+||4||Exceptional||
 
-Each ability is tied to a particular attribute.  The attribute's level is added to the skill level when you roll.  You can see which attributes are tied to which skills using the +rulingattr command in-game.   Background Skills default to "Mind", but you can change this with the +rulingattr command.  Be sure to do this for any physical or performance-based background skills.
+++ Ruling Attributes
 
-++ Can I Take Social Skills
+Each skill is tied to a particular attribute.  The attribute's level is added to the skill level when you roll.  For action skills this is set by the game admin, but for background skills you can pick which attribute is associated with the skill (the default is "Mind").  See 'help rulingattr' for details.
 
-Yes!  Social skills like leadership, seduction and con are all fair game for skills.  BUT, be aware that people tend to be sensitive when poses and social skill rolls are out of sync:
++ Skills
 
-[[code]]
-Joe says, "Heeeeyyyy baby."   
-<FS3> Joe rolls Seduction:  Amazing Success!
-Everyone eyerolls.
-[[/code]]
+Skills reflect a character’s knowledge and training. Skills are fluid, changing over time.  You choose an initial set of skills during character creation, and may improve them or  learn new skills during the course of the game. 
 
-Also, social skill rolls are not a form of mind control.  The 'target' of your roll still has free will to determine their own reaction.
+++ Action Skills
+
+Action skills are related to the game's central "action".   If you think your character would know one of these, you should definitely take some points in it, because they are likely to come up in RP.
+
+> **TODO** Update this list with game-specific action skills.
+
+||Alertness||Noticing things and being aware of your surroundings||
+||Comms||Ship sensors, countermeasures and communications (ECO and CIC type duties).||
+||Demolitions||Blowing stuff up.||
+||Firearms||Shooting guns.||
+||First Aid||Basic first aid/paramedic medicine. Doctors do not necessarily have First Aid, depending on their specialty.  They should have a background skill (or skills) related to their specialty, like Psychiatry or Surgery.||
+||Gunnery||Ship and vehicle weapons.||
+||Melee||Fighting with fists, knives, and hand-to-hand weapons.||
+||Piloting||Flying planes and other airborne vehicles.  Colonial pilot school cross-trains in both Raptors and Vipers, so one piloting skill covers both.||
+||Stealth||Being sneaky||
+||Technician||General mechanics/electronics and fixing things.||
+
+Action Skills are rated on a 0-12 scale.  If you really care, there are [[[fs3:Detailed Skill Ratings]]] with more fine-tuned descriptions, but seriously, don't stress over whether you should have a 4 or a 5 or whatnot.  It's all subjective based on talent and experience.
+
+|| Rating ||  Attribute Meaning ||
+||0||Untrained||
+||1-3||Novice||
+||4-6||Proficient||
+||7-9||Veteran||
+||10-12||Master||
+
+> **Note:** Even rating 1 in FS3 represents a fair amount of training and practice in a skill, and gives you a roughly 57% chance of success on a routine roll.  Ratings 4 and higher indicate professional level of competence, meaning you could conceivably do it for a living.	It would be rare for someone to have a hobby at higher than rating 3 unless he is a really serious hobbyist!
+
+++ Background Skills
+
+There is no fixed list for Background Skills; you can have anything from //Underwater Basket Weaving// to //Soap Opera Trivia//.   
+
+Choose Background Skills that are **important** to your character. Just because you played “catch” as a child doesn’t mean you need to take the Baseball skill (unless you went on to play it in college or something). Take Background Skills to reflect hobbies, interests, education (college major, perhaps), or professional skills not reflected by Action Skills. 
+
+||A science||astronomy, biology, chemistry, geology, mathematics, physics, etc.||
+||A humanity||history, literature, psychology, philosophy, poetry, etc.||
+||A profession or trade||cook, waitress, bartender, accountant, programmer, carpenter, brewer, blacksmith, etc.||
+||A game||chess, roleplaying, poker, etc.||
+||An art||sculpting, painting, sketching, photography, etc.||
+||A form of expression||acting, singing, dancing, playing an instrument, writing||
+||A sport||baseball, football, gymnastics, etc.||
+||A craft or hobby||gardening, basketweaving, knitting, etc.||
+||An unusual interest||detective novels, game show hosts, etc.||
+
+Background Skills are rated on the same 0-12 scale as Action Skills.
+
+Social skills like leadership, seduction and con are all fair game for background skills.  BUT, be aware that people tend to be sensitive when poses and social skill rolls are out of sync.  Also, social skill rolls are not a form of mind control.  The 'target' of your roll still has free will to determine their own reaction.
+
+++ Language Skills
+
+> **TODO** Update with a game-specific language list.
+
+Language Skills don’t have a rating. If you have a language skill, it is assumed you are proficient in speaking, reading and writing.  If you want to RP a lesser degree of proficiency, feel free.
 
 + Quirks
 
@@ -73,6 +139,8 @@ Quirks are meant to be personality traits or //trivial// advantages.  They are n
 Why would you want to pick "negative" quirks? Well, first of all - it's fun to play flawed characters. You can get a lot of roleplay mileage out of them. Also keep in mind that many quirks are two-edged swords, and can work for you or against you depending on the situation.
 
 ++ Choosing Quirks	
+
+> **TODO** Update these numbers if you have changed any of the quirk limits.
 
 * Quirks are free; they do not cost ability points.
 * You must have at least 2 and no more than 4 quirks.

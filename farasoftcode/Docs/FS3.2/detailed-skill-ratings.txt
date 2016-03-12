@@ -1,0 +1,14 @@
+||~ Rating ||~ Title||~ Description ||
+||**0**||Untrained||You have no training.||
+||**1**||Novice||You are a casual hobbyist or beginning student.||
+||**2**||Novice||You are a very interested hobbyist or a mid-level student.||
+||**3**||Novice||You are a serious hobbyist or a senior student.||
+||**4**||Proficient||You are a rookie - competent enough to be considered a professional, but lacking experience and finesse.||
+||**5**||Proficient||You are no longer the 'rook' and have learned some of the tricks of the trade.||
+||**6**||Proficient||You are a thoroughly competent professional with a several years of experience.||
+||**7-9**||Veteran||You are a highly skilled, senior professional with many years of experience.  The subtle differences in these levels speak breadth or depth of knowledge, and greater finesse or efficiency.||
+||**10**||Master||You are elite – highly trained with lots of experience.||
+||**11**||Master||You are a true master in your field.  You probably have some degree of renown.  ||
+||**12**||Master||You are one of the best in the world (alive today, not necessarily ‘best of all time’).||
+
+Note: Although the chart talks about “experience”, talented newcomers can have higher skill levels than their years of training might ordinarily call for, and even someone who's been doing a job for a decade can suck at it.
