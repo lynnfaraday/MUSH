@@ -241,8 +241,7 @@ raises = 0
 
 printTitle "Rolling Dice"
 
-#roll = rollDice(dice, explode)
-roll = [6, 5, 3, 1, 1]
+roll = rollDice(dice, explode)
 puts "Final roll: #{roll.sort.inspect}"
 
 # If you're allowing double raises, we have to find all pairs and junk adding up to 15 first,
