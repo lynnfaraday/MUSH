@@ -20,6 +20,7 @@ think install_create(ICTIME_CMD,IC Time,1,0,8.2,IC time system.)
 &FUN_BIRTHDATE IC Time=[extract(v(months),first(xget(%0,birthdate),/))] [extract(xget(%0,birthdate),2,1,/)]
 &MONTHS IC Time=Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
 &FUN_RANDOM_BIRTHDATE IC Time=[rand(1,12)]/[rand(1,28)]/[sub(last(time()),%0)]
+&FUN_LONG_BIRTHDAY IC Time=[u(month-name,extract(v(months),extract(xget(%0,birthdate),1,1,/)))] [switch(extract(xget(%0,birthdate),2,1,/),01,1st,02,2nd,03,3rd,04,4th,05,5th,06,6th,07,7th,08,8th,09,9th,10,10th,11,11th,12,12th,13,13th,14,14th,15,15th,16,16th,17,17th,18,18th,19,19th,20,20th,21,21st,22,22nd,23,23rd,24,24th,25,25th,26,26th,27,27th,28,28th,29,29th,30,30th,31,31st)], [sub(extract(xget(%0,birthdate),3,1,/),v(year_offset))]
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
