@@ -254,8 +254,6 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,8.2,FS3Comba
 
 &FUN_VALID_DMGSTAT_LASTTREAT FS3Combat Damage Commands=isnum(%0)
 
-&FUN_VALID_DMGSTAT_LASTHEAL FS3Combat Damage Commands=isnum(%0)
-
 &FUN_VALID_DMGSTAT_NOTES FS3Combat Damage Commands=1
 
 
@@ -323,23 +321,13 @@ think install_create(FS3COMBAT_DB_DMG,FS3Combat Damage Database,0,1,8.2,FS3Comba
 
 &FUN_DISPLAY_TIME FS3Combat Damage Commands=switch(%0,,--,convsecs(%0))
 
-
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@@  FUN_HEALED_TODAY
-@@  Whether the char/vehicle was already healed today.
-@@  %0 = Name
-@@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-&FUN_HEALED_TODAY FS3Combat Damage Commands=switch(sub(secs(),u(FUN_DMGSTAT,%0,lastheal)),>86400,0,1)
-
-
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @@  FUN_DMG_DETAIL
 @@  Shows detail for a given damage element.
 @@  %0 = Damage attr name.
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-&FUN_DMG_DETAIL FS3Combat Damage Commands=%R[ansi(h,Wound)]: [u(fun_dmgstat,%0,weapon)] to [prettify(u(fun_dmgstat,%0,hitloc))] [switch(u(fun_dmgstat,%0,real),0,%R[ansi(hg,*** MOCK DAMAGE ***)] %R\(will be removed when combat ends\)%R)]  %R[ansi(h,Time of Injury)]: [u(fun_display_time,before(after(after(%0,_),_),_))]%R[ansi(h,Type)]: [u(fun_dmgstat,%0,type)] %R[ansi(h,Initial Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,initsev))] %R[ansi(h,Current Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,currsev))] %R[ansi(h,Healing Points)]: [u(fun_dmgstat,%0,healing)] %R[ansi(h,Last Treated)]: [u(fun_display_time,u(fun_dmgstat,%0,lasttreat))] %R[ansi(h,Last Healed)]: [u(fun_display_time,u(fun_dmgstat,%0,lastheal))] %R[ansi(h,Notes)]:%R[replace_cr(u(fun_dmgstat,%0,notes))]
+&FUN_DMG_DETAIL FS3Combat Damage Commands=%R[ansi(h,Wound)]: [u(fun_dmgstat,%0,weapon)] to [prettify(u(fun_dmgstat,%0,hitloc))] [switch(u(fun_dmgstat,%0,real),0,%R[ansi(hg,*** MOCK DAMAGE ***)] %R\(will be removed when combat ends\)%R)]  %R[ansi(h,Time of Injury)]: [u(fun_display_time,before(after(after(%0,_),_),_))]%R[ansi(h,Type)]: [u(fun_dmgstat,%0,type)] %R[ansi(h,Initial Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,initsev))] %R[ansi(h,Current Severity)]: [u(fun_print_wound,u(fun_dmgstat,%0,currsev))] %R[ansi(h,Healing Points)]: [u(fun_dmgstat,%0,healing)] %R[ansi(h,Last Treated)]: [u(fun_display_time,u(fun_dmgstat,%0,lasttreat))] %R[ansi(h,Notes)]:%R[replace_cr(u(fun_dmgstat,%0,notes))]
 
 
 @@ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
