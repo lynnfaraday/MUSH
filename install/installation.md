@@ -16,11 +16,11 @@ Each release lists what version of PennMUSH it was tested on, although theoretic
 
 The easiest way to install the softcode is to use the starter database and a compatible version of PennMUSH.  This contains a minimally-configured installation of every system, the necessary configuration options, and a CodeWiz character.
  
-See [Starter Database Installation](/install/starter-db).
+See [Starter Database Installation](http://lynnfaraday.github.io/MUSH/install/starter-db.html).
 
 ## Custom Installation
 
 Doing a custom installation requires more work, but you can use any version of PennMUSH and it gives you more fine-tuned control over which modules you want to install.
 
-See [Custom Installation](/install/custom-install).
+See [Custom Installation](http://lynnfaraday.github.io/MUSH/install/custom-install.html).
 
