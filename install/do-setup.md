@@ -61,41 +61,11 @@ Now exit from the server and log in again with the 'mush' user and the password 
     make update
     make install
 
-> Note: This will install PennMUSH v1.8.6p0, which is the version that the starter DB is based on.  If you specify a different verison, you may have conflicts with the mush.cnf file.  It may work, but it may not.  Try it at your own risk.
+> Note: This will install PennMUSH v1.8.6p0, which is the version that the code was most recently tested with.  You can select any version, but try it at your own risk.
 
-## Installing FS3
+## Installing the Code
 
-    cd game
-    mkdir starterdb
-    cd starterdb
-    wget -O starterdb.zip https://github.com/lynnfaraday/MUSH/blob/master/farasoftcode/Releases/FaraMUSHCode%20Starter%20DB%20-%208.2%20for%201.8.6%20p0.zip?raw=true
-    unzip starterdb.zip
-    cp mush.cnf ..
-    cp restrict.cnf ..
-    cp *.gz ../data
-    cd ..
-
-## Editing the Configuration
-
-Use your favorite unix text editor (pico/emacs/vi) to edit `mush.cnf` and set:
-
-* MUSH name
-* Port number (if you want to change it from the default 4201)
-* Host name
-
-## Starting the Game
-
-From the mush game directory, type:
-
-    ./restart
-
-Your game should be running!
-
-## Default Characters
-
-The starter DB comes with the usual Penn #1 character (One), who has no password.  It also has a Gamewiz character with a default password of `wizb00ts`.  
-
-> You should log in and change both these passwords immediately to something more secure.
+Now your server is set up to install the code as described in [Installation](/install/installation.html).
 
 ## Setting Up the Wiki
 
