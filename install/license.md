@@ -20,7 +20,7 @@ Terms
 Conditions
 ----
 
-1) The program and all documentation are copyright 2010 by Linda Naughton, with the exception of the external systems Myrddin's BBS/Cron, Max's Table Code Parent, Shofari's Idle Purger and the FUDGE RPG rules.  These systems are copyright by their respective owners.
+1) The program and all documentation are copyright 2010 by Faraday, with the exception of the external systems Myrddin's BBS/Cron, Max's Table Code Parent, Shofari's Idle Purger and the FUDGE RPG rules.  These systems are copyright by their respective owners.
 
 2) There is NO WARRANTY for this program, express or implied.  You accept it as-is, and agree that the author is not responsible for any defects in operation or harm to the game.
 
@@ -36,4 +36,4 @@ Conditions
 
 FS3 License
 ----
-The FS3 system is copyright 2007-2011 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
+The FS3 system is copyright 2007-2011 by Faraday. All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.

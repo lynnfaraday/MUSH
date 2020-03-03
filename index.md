@@ -2,6 +2,13 @@
 layout: page
 ---
 
+> ----
+> ----
+> **NO LONGER MAINTAINED**
+> This code is no longer maintained.  It's been stable for years so you're more than welcome to use it, but no more features/fixes are forthcoming.  You might consider [AresMUSH](https://www.aresmush.com) instead.
+> ----
+> ----
+
 This site describes Faraday's Softcode package for PennMUSH.  This package contains a variety of common code systems - everything from simple globals (like +who and +where) to more complex systems (+mail and +events), to a full-fledged skills and combat system (FS3).
 
 > **Important Note** Although this code is probably as close to a "MUSH in a box" as you can get at the moment, it still requires a fair amount of MUSH code knowledge to get it set up and configured properly.

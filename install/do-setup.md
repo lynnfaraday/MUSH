@@ -39,6 +39,7 @@ These instructions will create a 'mush' user for your everyday use, and install 
     apt-get update
     apt-get install gcc
     apt-get install libpcre3a
+        If libpcre3a doesn't work, the next one should cover you.
     apt-get install libpcre3-dev
     apt-get install libssl-dev
     apt-get install make

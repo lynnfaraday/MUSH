@@ -13,7 +13,7 @@ FS3 is a unified skills and combat system designed specifically for MUSHing.
 
 ## Copyright and License
 
-The FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
+The FS3 system is copyright 2007-2008 by Faraday. All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
 ## Documentation
 [Detailed documentation](https://github.com/lynnfaraday/MUSH/tree/master/farasoftcode/Docs/FS3.2) for the FS3 system is available in a format suitable for a Wikidot wiki.
