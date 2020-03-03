@@ -3,15 +3,17 @@ layout: page
 ---
 
 > ----
-> ----
+>
 > **NO LONGER MAINTAINED**
+>
 > This code is no longer maintained.  It's been stable for years so you're more than welcome to use it, but no more features/fixes are forthcoming.  You might consider [AresMUSH](https://www.aresmush.com) instead.
+>
 > ----
-> ----
+
 
 This site describes Faraday's Softcode package for PennMUSH.  This package contains a variety of common code systems - everything from simple globals (like +who and +where) to more complex systems (+mail and +events), to a full-fledged skills and combat system (FS3).
 
-> **Important Note** Although this code is probably as close to a "MUSH in a box" as you can get at the moment, it still requires a fair amount of MUSH code knowledge to get it set up and configured properly.
+> **Important Note** This code requires a fair amount of MUSH code knowledge to get it set up and configured properly.
 
 ## Modules
 The code is designed to be used as a package, but it is modular to an extent.  The **[Core Modules]({{site.siteroot}}/core)** are essential, and it will be very difficult to do away with any of them.  The **[FS3]({{site.siteroot}}/fs3)** character creation system is also pretty central to the package but you can substitute a different chargen system as long as it sets up the basic character attributes.  The rest of the **[Addons]({{site.siteroot}}/addons)**, but the rest are reasonably self-contained and can be uninstalled if you don't want them.
