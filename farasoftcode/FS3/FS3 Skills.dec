@@ -25,7 +25,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.2,Chargen exit pa
 @pemit/silent %#=%R%R[ansi(hg,Setting up object attributes.)]
 
 
-&CREDITS FS3 Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
+&CREDITS FS3 Object Storage=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com%R%RThe FS3 system is copyright 2007-2008 by Faraday. All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
 &CMD-+SUCCESSCHART FS3 Skill System=$+successchart *:@pemit %#=[space(5)]-1%B%B[iter(lnum(0,10),ljust(itext(0),3))];@dolist lnum(1,16)={@wait #@={@pemit %#=[setq(0,iter(lnum(1,300),roll_ability(min(##,%0),max(0,sub(##,%0)))))][setq(2,0)][ljust(##,2)] : [iter(-1 [lnum(0,10)],ljust([setq(1,u(#FS3SKILL_FUN/fun_successchart,%q0,itext(0)))][switch(itext(0),-1,ansi(hm,%q1),0,ansi(hr,%q1),[ansi(hg,%q1)][setq(2,add(%q2,%q1))])],3))]%B[ansi(hc,%q2)]}}
 
@@ -85,7 +85,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.2,Chargen exit pa
 
 @startup FS3 Skill System=@set me=!no_command
 
-&CREDITS FS3 Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com%R%RThe FS3 system is copyright 2007-2008 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
+&CREDITS FS3 Skill System=Version [v(version)]%R%RCoded by Faraday ~ http://www.aresmush.com%R%RThe FS3 system is copyright 2007-2008 by Faraday. All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
 @startup FS3 Skill Functions=@function ability_level=me/fun_ability_level;@function roll_ability=me/fun_roll_ability;@function opposed_result=me/fun_get_opposed_result;@function pretty_opposed_result=me/fun_pretty_opposed_result
 
@@ -487,7 +487,7 @@ think install_create(FS3SKILL_CGEXIT,Chargen Exit Parent,0,0,8.2,Chargen exit pa
 
 &MORE_HELP_FS3_CHARGEN FS3 Skill Help=Generating a character in FS3 is pretty simple. You start with a pool of [ansi(hg,Character Points)] which you use to buy abilities and quirks.  For a description of the ratings and what they mean, see [ansi(hg,+help FS3_Ratings)].%R%RThere are a few limits to keep you from being superhuman, but beyond that it's very freeform.  Use the [ansi(h,+limits)] command to see what the limitations are on what you can spend.%R%RYou may not need all of your character points. It is more important to create a balanced character than to dump your points into silly things just to spend them. %R%RYou do not need skill levels in every single thing your character knows how to do. That would be silly. Skill levels reflect things your character has devoted time to learning and practicing. Many things can just be assumed to be 'common knowledge' and not require a specific skill level.
 
-&MORE_HELP_FS3_COPYRIGHT FS3 Skill Help=The FS3 system is copyright 2007 by Linda Naughton (aka Faraday). All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
+&MORE_HELP_FS3_COPYRIGHT FS3 Skill Help=The FS3 system is copyright 2007 by Faraday. All rights reserved. You may reproduce and distribute part or all of these rules and create derivative works (games using FS3) providing a) You don't make any money from it, and b) You include this FS3 copyright and license notice in the distribution.
 
 &MORE_HELP_FS3_QUIRKS FS3 Skill Help=Quirks are little things that make your character unique. Quirks have no coded effects; all effects are at the discretion of the judge (or other players in a consent-based scene).%R%RQuirks just reflect [ansi(h,notable)] qualities of your character. What's notable for one character may not be notable for another, so just because someone picks 'Honest' as a quirk does not mean you have to have that quirk to be honest.%R%RWhy would you want to pick "negative" quirks? Well, first of all - it's fun to play flawed characters. You can get a lot of RP mileage out of them. But also keep in mind that many quirks are two-edged swords. "Stubborn" can work both for you (in the sense of not giving up when the chips are down) or against you (in the sense of not giving up when you really should).
 
